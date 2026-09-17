@@ -843,4 +843,75 @@ mod tests {
         ));
         assert_eq!(response["details"], json!({"field":"scope"}));
     }
+
+    #[test]
+    fn review_inventory_is_an_exact_projection_of_the_registry() {
+        let queries = [
+            "hello",
+            "discover",
+            "discovery_page",
+            "describe",
+            "resource",
+            "configuration_status",
+            "configuration_properties",
+            "configuration_page",
+            "latest",
+            "measurements_current",
+            "measurements_page",
+            "measurement_window",
+            "controller",
+            "reference",
+            "component",
+            "output",
+            "runtime_snapshot",
+            "operation_status",
+            "snapshot_page",
+            "snapshot_release",
+            "subscribe",
+            "unsubscribe",
+            "recording_status",
+            "history_page",
+            "history_release",
+        ];
+        let mutations = [
+            "reference_configure",
+            "reference_retune",
+            "controller_configure_pid",
+            "controller_configure",
+            "controller_start",
+            "controller_pause",
+            "controller_resume",
+            "controller_reset_failed",
+            "runtime_shutdown",
+            "stage_configuration",
+            "apply_configuration",
+            "reload_configuration",
+            "property_configure",
+            "reload_managed_sources",
+            "emulator_publish",
+            "virtual_models_restart",
+            "reconnect_resource",
+            "recording_start",
+            "recording_stop",
+            "experiment_annotate",
+            "history_read",
+        ];
+        let projected = |kind| {
+            OPERATIONS
+                .iter()
+                .filter(|operation| operation.kind == kind)
+                .map(|operation| operation.name)
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(projected(OperationKind::Query), queries);
+        assert_eq!(projected(OperationKind::Mutation), mutations);
+        assert_eq!(OPERATIONS.len(), 46);
+        assert!(OPERATIONS.iter().all(|operation| {
+            operation
+                .argument_fields
+                .iter()
+                .enumerate()
+                .all(|(index, field)| !operation.argument_fields[..index].contains(field))
+        }));
+    }
 }
