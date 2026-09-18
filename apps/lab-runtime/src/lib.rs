@@ -41,6 +41,8 @@ pub(crate) mod configuration_api;
 pub mod definition;
 /// Staged configuration diff and explicit apply lifecycle.
 pub mod deployment;
+/// Bounded best-effort process diagnostics, separate from scientific recording.
+pub mod diagnostics;
 /// Bounded transient semantic-event projection; not durable Recorder history.
 pub mod events;
 /// Explicit monotonic scheduling and trusted virtual host composition.
