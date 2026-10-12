@@ -326,13 +326,21 @@ These definitions are presentation metadata, not executable API requests.
 
 DGUI-4B4 verification uses the real writable `poll_period_ms` and `display_name`
 from the existing `examples/runtime.virtual.toml`; the compiled `virtual-demo`
-profile has no configuration-property projection. The unmodified example currently
-returns `operation_failed` for property commits with Recorder enabled: the existing
-Recorder lifecycle whitelist does not admit `property_configure`. Successful
-real-process acceptance therefore uses a temporary copy with recording explicitly
-disabled (`best_effort` policy) and an ephemeral loopback port. Runtime/Recorder
-are unchanged; success with recording enabled is not claimed. This needs a separate Runtime
-review and does not weaken Workbench's confirmation or recovery guards.
+profile has no configuration-property projection. After the separately reviewed
+Recorder lifecycle fix, real-process acceptance keeps the example's Required
+Recorder enabled and isolates only its directory and loopback port. It confirms
+both property types in Idle and Recording through the existing OperatorWorkflow,
+checks Cancel against authoritative readback, and observes revisions/durable
+activation generations advancing once per change with new provenance identities.
+The same Application scope handles every action and graceful Recorder shutdown;
+the presentation remains unchanged. Existing negative GUI/workflow regressions
+retain the freshness, revision, observation-only and recovery guards.
+
+Native Windows GUI inspection also exercises the declarative Integer/Text fields,
+Cancel and the separate Confirm, Recorder Start/Stop, and tab/plot rendering with
+Required Recorder. API readback and post-shutdown archive inspection establish
+values and durability separately from visual inspection. Only virtual instruments
+are used; this is not physical-device or power-loss qualification.
 
 ## UI mutation contract
 

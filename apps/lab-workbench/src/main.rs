@@ -1437,14 +1437,54 @@ mod runtime_acceptance {
         dispatcher.take_client().unwrap().shutdown().unwrap();
     }
 
+    fn property_acceptance_query(
+        client: &ClientHandle,
+        model: &mut WorkbenchModel,
+        rebuild: &mut RebuildCoordinator,
+        op: &str,
+    ) -> Value {
+        let submitted = client.query(op, json!({})).unwrap();
+        reply_result(apply_until(client, model, rebuild, |update, _| {
+            matches!(update, ClientUpdate::Reply { command_id, kind: ReplyKind::Result, .. }
+                if *command_id == submitted)
+        }))
+    }
+
+    fn complete_property_acceptance_operator(
+        client: &ClientHandle,
+        model: &mut WorkbenchModel,
+        rebuild: &mut RebuildCoordinator,
+        workflow: &mut OperatorWorkflow,
+    ) -> Value {
+        assert!(matches!(
+            workflow.state,
+            OperatorWorkflowState::AwaitingConfirmation(_)
+        ));
+        let command_id = workflow.confirm(model, client).unwrap();
+        model.track_operator_intent(command_id).unwrap();
+        assert!(workflow.confirm(model, client).is_err());
+        apply_until(client, model, rebuild, |update, model| {
+            workflow.after_update(update);
+            assert!(
+                !matches!(workflow.state, OperatorWorkflowState::Failed { .. }),
+                "{:?}",
+                workflow.state
+            );
+            matches!(workflow.state, OperatorWorkflowState::Completed { .. })
+                && model.observations.freshness == Freshness::Fresh
+        });
+        assert!(workflow.accepted_observed);
+        let OperatorWorkflowState::Completed { envelope, .. } = &workflow.state else {
+            unreachable!()
+        };
+        envelope.clone()
+    }
+
     #[test]
-    #[ignore = "DGUI-4B4 existing virtual configuration acceptance; run after cargo build -p lab-runtime"]
+    #[ignore = "DGUI-4B4 Required Recorder acceptance; run after cargo build -p lab-runtime"]
     fn real_runtime_property_workflow_uses_existing_virtual_configuration() {
-        // The compiled virtual-demo profile has no configuration properties.
-        // Reuse the shipped virtual deployment, isolating its port and disabling
-        // recording in this test copy. The existing Recorder lifecycle whitelist
-        // rejects property_configure; changing that contract is outside DGUI-4B4.
-        // Property metadata and values still come from Runtime's real projection.
+        // Discover real properties from the shipped virtual deployment. Keep its
+        // Required Recorder enabled; only the listener port and directory vary.
         let directory = env::temp_dir().join(format!(
             "lab-workbench-dgui-4b4-{}-{}",
             std::process::id(),
@@ -1458,9 +1498,7 @@ mod runtime_acceptance {
         fs::write(
             &config,
             include_str!("../../../examples/runtime.virtual.toml")
-                .replace("port = 7420", "port = 0")
-                .replace("enabled = true", "enabled = false")
-                .replace("policy = \"required\"", "policy = \"best_effort\""),
+                .replace("port = 7420", "port = 0"),
         )
         .unwrap();
         let (mut runtime, address) =
@@ -1472,26 +1510,93 @@ mod runtime_acceptance {
         apply_until(&client, &mut model, &mut rebuild, |_, model| {
             model.observations.freshness == Freshness::Fresh
         });
+        let targets: Vec<_> = ["integer", "text"]
+            .into_iter()
+            .map(|kind| {
+                model
+                    .observations
+                    .entities
+                    .iter()
+                    .find_map(|(target, observation)| {
+                        (matches!(target, RuntimeRef::ConfigurationProperty { .. })
+                            && observation.value["access"] == "read_write"
+                            && observation.value["value_type"] == kind)
+                            .then(|| target.clone())
+                    })
+                    .expect("existing virtual deployment exposes a writable property of this type")
+            })
+            .collect();
+        model.presentation = serde_json::from_value(json!({
+            "format_version":1,"document_id":"property-operator",
+            "windows":[{"id":"window","title":"Virtual properties","tabs":[{
+                "id":"properties","title":"Properties","panels":[{
+                    "id":"editors","title":"Property editors",
+                    "kind":{"kind":"controls","control_ids":["integer-control","text-control"]}
+                }]
+            }]}],"plots":[],"controls": targets.iter().zip(["integer-control","text-control"])
+                .map(|(target,id)| json!({"id":id,"label":id,"kind":"apply_configuration",
+                    "target":target,"confirm":false})).collect::<Vec<_>>()
+        }))
+        .unwrap();
+        model.presentation.validate().unwrap();
         let presentation = model.presentation.clone();
+        let scope = model.hello.as_ref().unwrap().scope.clone();
+        assert!(scope.ends_with(":1"), "one Runtime Application attachment");
+        let mut recorder =
+            property_acceptance_query(&client, &mut model, &mut rebuild, "recording_status");
+        assert_eq!(recorder["policy"], "required");
+        assert_eq!(recorder["state"], "idle");
+        assert_eq!(recorder["provenance"]["generation"], "1");
+        let mut active_run = Value::Null;
         let mut workflow = OperatorWorkflow::default();
-        for (kind, candidate) in [
-            ("integer", PropertyMutationCandidate::Integer(200)),
+        for (index, target_index, candidate, recording) in [
+            (0, 0, PropertyMutationCandidate::Integer(200), false),
             (
-                "text",
-                PropertyMutationCandidate::Text("DGUI-4B4 virtual plant".into()),
+                1,
+                1,
+                PropertyMutationCandidate::Text("DGUI-4B4 Idle plant".into()),
+                false,
+            ),
+            (2, 0, PropertyMutationCandidate::Integer(250), true),
+            (
+                3,
+                1,
+                PropertyMutationCandidate::Text("DGUI-4B4 Recording plant".into()),
+                true,
             ),
         ] {
-            let target = model
-                .observations
-                .entities
-                .iter()
-                .find_map(|(target, observation)| {
-                    (matches!(target, RuntimeRef::ConfigurationProperty { .. })
-                        && observation.value["access"] == "read_write"
-                        && observation.value["value_type"] == kind)
-                        .then(|| target.clone())
-                })
-                .expect("existing virtual deployment exposes a writable property of this type");
+            if index == 2 {
+                workflow
+                    .begin(
+                        &model,
+                        OperatorIntent::StartRecording {
+                            label: "DGUI-4B4 Required property acceptance".into(),
+                        },
+                    )
+                    .unwrap();
+                let started = complete_property_acceptance_operator(
+                    &client,
+                    &mut model,
+                    &mut rebuild,
+                    &mut workflow,
+                );
+                assert_eq!(
+                    started["result"]["completion"]["provenance_committed"],
+                    true
+                );
+                assert_eq!(started["result"]["completion"]["fact_admission_open"], true);
+                workflow.cancel_or_acknowledge();
+                recorder = property_acceptance_query(
+                    &client,
+                    &mut model,
+                    &mut rebuild,
+                    "recording_status",
+                );
+                assert_eq!(recorder["state"], "recording");
+                active_run = recorder["active_run"].clone();
+                assert!(!active_run.is_null());
+            }
+            let target = targets[target_index].clone();
             let initial = model.observations.entities[&target].value.clone();
             let expected = match &candidate {
                 PropertyMutationCandidate::Integer(value) => json!(value),
@@ -1502,30 +1607,44 @@ mod runtime_acceptance {
                 value: candidate,
             };
             workflow.begin(&model, intent.clone()).unwrap();
+            let recovery_before_cancel = model.recovery.mutations.clone();
             workflow.cancel_or_acknowledge();
+            property_acceptance_query(
+                &client,
+                &mut model,
+                &mut rebuild,
+                "configuration_properties",
+            );
+            assert_eq!(
+                model.recovery.mutations, recovery_before_cancel,
+                "Cancel submits nothing"
+            );
             assert_eq!(
                 model.observations.entities[&target].value["current"],
                 initial["current"]
             );
             workflow.begin(&model, intent).unwrap();
             let mut old_draft = workflow.clone();
-            let command_id = workflow.confirm(&model, &client).unwrap();
-            model.track_operator_intent(command_id).unwrap();
-            assert!(workflow.confirm(&model, &client).is_err());
-            apply_until(&client, &mut model, &mut rebuild, |update, model| {
-                workflow.after_update(update);
-                assert!(
-                    !matches!(workflow.state, OperatorWorkflowState::Failed { .. }),
-                    "{kind} property failed: {:?}",
-                    workflow.state
-                );
-                matches!(workflow.state, OperatorWorkflowState::Completed { .. })
-                    && model.observations.freshness == Freshness::Fresh
-                    && model.observations.entities[&target].freshness == Freshness::Fresh
-                    && model.observations.entities[&target].value["current"] == expected
-            });
-            assert!(workflow.accepted_observed);
+            let terminal = complete_property_acceptance_operator(
+                &client,
+                &mut model,
+                &mut rebuild,
+                &mut workflow,
+            );
+            property_acceptance_query(
+                &client,
+                &mut model,
+                &mut rebuild,
+                "configuration_properties",
+            );
             let after = &model.observations.entities[&target].value;
+            assert_eq!(
+                model.observations.entities[&target].freshness,
+                Freshness::Fresh
+            );
+            assert_eq!(after["current"], expected);
+            assert_eq!(terminal["result"]["revision"], after["revision"]);
+            assert_eq!(terminal["result"]["persisted_to_deployment_source"], false);
             assert_eq!(after["unit"], initial["unit"]);
             assert_eq!(
                 after["revision"].as_str().unwrap().parse::<u64>().unwrap(),
@@ -1541,6 +1660,39 @@ mod runtime_acceptance {
                 Err(super::model::OperatorIntentError::DraftStale)
             );
             assert_eq!(model.presentation, presentation);
+            let previous_root = recorder["provenance"]["identity"].clone();
+            let previous_prefix = recorder["persisted_through_seq"]
+                .as_str()
+                .unwrap()
+                .parse::<u64>()
+                .unwrap();
+            recorder =
+                property_acceptance_query(&client, &mut model, &mut rebuild, "recording_status");
+            assert_eq!(
+                recorder["state"],
+                if recording { "recording" } else { "idle" }
+            );
+            assert_eq!(recorder["accepting_facts"], recording);
+            assert_eq!(
+                recorder["active_run"], active_run,
+                "property edits keep the current run"
+            );
+            assert_eq!(recorder["durability"]["coverage"], "complete");
+            assert!(recorder["failure"].is_null());
+            assert_eq!(recorder["provenance"]["available"], true);
+            assert_eq!(
+                recorder["provenance"]["generation"],
+                (index + 2).to_string()
+            );
+            assert_ne!(recorder["provenance"]["identity"], previous_root);
+            assert!(
+                recorder["persisted_through_seq"]
+                    .as_str()
+                    .unwrap()
+                    .parse::<u64>()
+                    .unwrap()
+                    > previous_prefix
+            );
             workflow.cancel_or_acknowledge();
         }
         assert_eq!(
@@ -1550,11 +1702,49 @@ mod runtime_acceptance {
                 .iter()
                 .filter(|record| record.op == "property_configure")
                 .count(),
-            2
+            4
         );
+        workflow
+            .begin(&model, OperatorIntent::StopRecording)
+            .unwrap();
+        let stopped =
+            complete_property_acceptance_operator(&client, &mut model, &mut rebuild, &mut workflow);
+        for field in [
+            "accepted_facts_drained",
+            "transaction_committed",
+            "interval_sealed",
+            "run_sealed",
+        ] {
+            assert_eq!(stopped["result"]["completion"][field], true, "{field}");
+        }
+        let sealed =
+            property_acceptance_query(&client, &mut model, &mut rebuild, "recording_status");
+        assert_eq!(sealed["state"], "idle");
+        assert!(sealed["active_run"].is_null());
+        assert_eq!(sealed["provenance"], recorder["provenance"]);
+        assert_eq!(model.recovery.mutations.len(), 6);
+        for (index, record) in model.recovery.mutations.iter().enumerate() {
+            assert_eq!(record.identity.scope, scope);
+            assert_eq!(record.identity.seq, index as u64 + 1);
+            assert_eq!(
+                record.admission,
+                super::client::types::KnownAdmission::Completed
+            );
+        }
+        assert!(model.recovery.quarantined.is_empty());
+        assert!(model.recovery.reconciliation_required.is_empty());
         assert_eq!(model.presentation, presentation);
-        client.shutdown().unwrap();
+        assert_eq!(model.hello.as_ref().unwrap().scope, scope);
         assert!(runtime.0.try_wait().unwrap().is_none());
+        // Cleanup uses this same client, then retains the sealed test archive.
+        let shutdown = client.mutation("runtime_shutdown", json!({})).unwrap();
+        let terminal = apply_until(&client, &mut model, &mut rebuild, |update, _| {
+            matches!(update, ClientUpdate::Reply { command_id, kind:ReplyKind::MutationCompleted, .. }
+                if *command_id == shutdown)
+        });
+        assert_eq!(reply_result(terminal)["recorder_flushed"], true);
+        assert!(wait_for_exit(&mut runtime.0, "recorded property Runtime").success());
+        client.shutdown().unwrap();
     }
 
     #[test]
