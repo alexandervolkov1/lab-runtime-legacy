@@ -13,6 +13,125 @@ use crate::{
 use eframe::egui;
 use std::collections::{BTreeMap, HashSet};
 
+use visuals::{IndicatorView, InputKind, InputView, ObservedValue};
+
+/// A frame-local derived view, never a document, draft owner or prepared action.
+/// Only the trusted adapters below construct intents and consult eligibility.
+struct ControlView<'a> {
+    control: &'a Control,
+    observation: Option<IndicatorView>,
+    freshness: super::presentation::SourceState,
+    metadata: Vec<String>,
+    input: Option<InputView>,
+    action_label: &'a str,
+    action: Result<OperatorIntent, OperatorIntentError>,
+}
+
+impl ControlView<'_> {
+    fn show_observation(&self, ui: &mut egui::Ui) {
+        if self.observation.is_some() && !self.control.label.is_empty() {
+            ui.label(&self.control.label);
+        }
+        for line in &self.metadata {
+            ui.label(line);
+        }
+        if let Some(observation) = &self.observation {
+            visuals::indicator(ui, observation);
+            super::presentation::state_label(ui, self.freshness);
+        }
+    }
+
+    fn show_action(self, ui: &mut egui::Ui) -> Option<OperatorIntent> {
+        let reason = self.action.as_ref().err().map(ToString::to_string);
+        // The visual button sees availability and a reason, never an intent or
+        // an operation name. Only this adapter returns the already typed intent.
+        visuals::button(ui, self.action_label, reason.as_deref())
+            .then(|| self.action.ok())
+            .flatten()
+    }
+}
+
+/// Display/input primitives deliberately depend only on egui and plain view data.
+/// They cannot resolve targets, validate operations or enter an operator workflow.
+mod visuals {
+    use eframe::egui;
+
+    pub(super) enum ObservedValue {
+        Number(f64),
+        Text(String),
+    }
+
+    pub(super) struct IndicatorView {
+        pub(super) caption: &'static str,
+        pub(super) value: Option<ObservedValue>,
+        pub(super) unit: Option<String>,
+        pub(super) unavailable: &'static str,
+    }
+
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    pub(super) enum InputKind {
+        Number,
+        Integer,
+        Text,
+    }
+
+    #[derive(Clone, Copy)]
+    pub(super) struct InputView {
+        pub(super) caption: &'static str,
+        pub(super) kind: InputKind,
+        pub(super) enabled: bool,
+        pub(super) max_chars: usize,
+        pub(super) max_bytes: usize,
+    }
+
+    pub(super) fn indicator(ui: &mut egui::Ui, view: &IndicatorView) {
+        let Some(value) = &view.value else {
+            ui.label(view.unavailable);
+            return;
+        };
+        let value = match value {
+            ObservedValue::Number(value) => value.to_string(),
+            ObservedValue::Text(value) => value.clone(),
+        };
+        ui.label(format!(
+            "{}: {value}{}",
+            view.caption,
+            view.unit
+                .as_ref()
+                .map_or(String::new(), |unit| format!(" {unit}"))
+        ));
+    }
+
+    pub(super) fn input(ui: &mut egui::Ui, view: InputView, text: &mut String) -> egui::Response {
+        ui.label(view.caption);
+        let mut response = ui.add_enabled(
+            view.enabled,
+            egui::TextEdit::singleline(text).char_limit(view.max_chars),
+        );
+        if text.len() > view.max_bytes {
+            let mut end = view.max_bytes;
+            while !text.is_char_boundary(end) {
+                end -= 1;
+            }
+            text.truncate(end);
+            response.mark_changed();
+        }
+        response.on_hover_text(match view.kind {
+            InputKind::Number => "Finite number in the Runtime unit",
+            InputKind::Integer => "Exact decimal integer",
+            InputKind::Text => "Text",
+        })
+    }
+
+    pub(super) fn button(ui: &mut egui::Ui, caption: &str, blocked: Option<&str>) -> bool {
+        let mut response = ui.add_enabled(blocked.is_none(), egui::Button::new(caption));
+        if let Some(reason) = blocked {
+            response = response.on_disabled_hover_text(reason);
+        }
+        response.clicked()
+    }
+}
+
 // Match the ordinary fixed-value editor's text bound, without restricting f64 range.
 const REFERENCE_VALUE_BYTES: usize = 64;
 
@@ -173,68 +292,16 @@ impl OperatorControlUi<'_> {
             .iter()
             .filter_map(|id| controls.iter().find(|control| &control.id == id))
         {
-            ui.push_id((&control.id, &control.target), |ui| {
-                if recorder_control_supported(control) {
-                    ui.label(&control.label);
-                    let clicked = self.show(ui);
-                    if intent.is_none() {
-                        intent = clicked;
-                    }
-                } else if reference_control_supported(control) {
-                    ui.label(&control.label);
-                    if let Some(editor) = editors.editor_mut(control) {
-                        let clicked = self.show_reference(ui, &control.target, editor);
-                        if intent.is_none() {
-                            intent = clicked;
-                        }
-                    }
-                } else if controller_control_supported(control) {
-                    ui.label(&control.label);
-                    let clicked = self.show_controller(ui, &control.target);
-                    if intent.is_none() {
-                        intent = clicked;
-                    }
-                } else if property_control_supported(control) {
-                    ui.label(&control.label);
-                    if let Some(editor) = editors.editor_mut(control) {
-                        let clicked = self.show_property(ui, &control.target, editor);
-                        if intent.is_none() {
-                            intent = clicked;
-                        }
-                    }
-                } else {
-                    ui.add_enabled(false, egui::Button::new(&control.label))
-                        .on_disabled_hover_text("This control kind or target is not supported.");
-                }
-            });
+            let clicked = ui
+                .push_id((&control.id, &control.target), |ui| {
+                    self.show_control(ui, control, editors.editor_mut(control))
+                })
+                .inner;
+            if intent.is_none() {
+                intent = clicked;
+            }
         }
         intent
-    }
-
-    fn candidate(&self) -> Option<OperatorIntent> {
-        let observation = self
-            .model
-            .observations
-            .entities
-            .get(&RuntimeRef::Recorder)?;
-        if observation
-            .value
-            .get("active_run")
-            .is_some_and(|run| !run.is_null())
-        {
-            Some(OperatorIntent::StopRecording)
-        } else if observation
-            .value
-            .get("state")
-            .and_then(serde_json::Value::as_str)
-            == Some("idle")
-        {
-            Some(OperatorIntent::StartRecording {
-                label: self.label.clone(),
-            })
-        } else {
-            None
-        }
     }
 
     fn eligibility(&self, intent: OperatorIntent) -> Result<OperatorIntent, OperatorIntentError> {
@@ -254,130 +321,169 @@ impl OperatorControlUi<'_> {
         Ok(intent)
     }
 
-    fn show_reference(
-        &self,
-        ui: &mut egui::Ui,
-        target: &RuntimeRef,
-        editor: &mut ControlEditor,
-    ) -> Option<OperatorIntent> {
-        let RuntimeRef::Reference { reference } = target else {
-            return None;
+    /// Closed v1 adapter selection. A label, kind or descriptor cannot supply an
+    /// operation name, substitute a target category or enable an extra action.
+    fn view<'a>(&self, control: &'a Control, text: &str) -> ControlView<'a> {
+        let mut view = ControlView {
+            control,
+            observation: None,
+            freshness: super::presentation::source_state(&self.model.observations, &control.target),
+            metadata: Vec::new(),
+            input: None,
+            action_label: &control.label,
+            action: Err(OperatorIntentError::InvalidCandidate(
+                "This control kind or target is not supported.",
+            )),
+        };
+        if recorder_control_supported(control) {
+            self.recorder_view(&mut view, text);
+        } else if reference_control_supported(control) {
+            self.reference_view(&mut view, text);
+        } else if controller_control_supported(control) {
+            self.controller_view(&mut view);
+        } else if property_control_supported(control) {
+            self.property_view(&mut view, text);
+        }
+        view.action = view.action.and_then(|intent| self.eligibility(intent));
+        view
+    }
+
+    fn recorder_view(&self, view: &mut ControlView<'_>, text: &str) {
+        let observation = self
+            .model
+            .observations
+            .entities
+            .get(&view.control.target)
+            .map(|item| &item.value);
+        let state = observation
+            .and_then(|item| item.get("state"))
+            .and_then(serde_json::Value::as_str);
+        view.observation = Some(IndicatorView {
+            caption: "Recorder state (cached)",
+            value: state.map(|state| ObservedValue::Text(state.into())),
+            unit: None,
+            unavailable: "Recorder state (cached): unavailable",
+        });
+        if observation
+            .and_then(|item| item.get("active_run"))
+            .is_some_and(|run| !run.is_null())
+        {
+            view.action_label = "Stop recording";
+            view.action = Ok(OperatorIntent::StopRecording);
+        } else if state == Some("idle") {
+            view.input = Some(InputView {
+                caption: "Recording label",
+                kind: InputKind::Text,
+                enabled: true,
+                max_chars: usize::MAX,
+                max_bytes: RECORDING_LABEL_BYTES,
+            });
+            view.action_label = "Start recording";
+            view.action = Ok(OperatorIntent::StartRecording { label: text.into() });
+        } else {
+            view.action_label = "Recorder unavailable";
+            view.action = Err(OperatorIntentError::InvalidCandidate(
+                "Recorder unavailable",
+            ));
+        }
+    }
+
+    fn reference_view(&self, view: &mut ControlView<'_>, text: &str) {
+        let RuntimeRef::Reference { reference } = &view.control.target else {
+            return;
         };
         let observation = self
             .model
             .observations
             .entities
-            .get(target)
-            .map(|observation| &observation.value);
+            .get(&view.control.target)
+            .map(|item| &item.value);
         let value = observation
-            .and_then(|value| value.get("value"))
+            .and_then(|item| item.get("value"))
             .and_then(serde_json::Value::as_f64)
             .filter(|value| value.is_finite());
         let unit = observation
-            .and_then(|value| value.pointer("/unit/symbol"))
+            .and_then(|item| item.pointer("/unit/symbol"))
             .and_then(serde_json::Value::as_str)
             .filter(|unit| !unit.is_empty());
-        ui.label(match value {
-            Some(value) => format!(
-                "Current setpoint (cached): {value} {}",
-                unit.unwrap_or("(unit unknown)")
-            ),
-            None => "Current setpoint: unavailable".into(),
+        view.observation = Some(IndicatorView {
+            caption: "Current setpoint (cached)",
+            value: value.map(ObservedValue::Number),
+            unit: Some(unit.unwrap_or("(unit unknown)").into()),
+            unavailable: "Current setpoint: unavailable",
         });
-        ui.horizontal(|ui| {
-            ui.label("New fixed value");
-            let response = ui.add(
-                egui::TextEdit::singleline(&mut editor.text).char_limit(REFERENCE_VALUE_BYTES),
-            );
-            editor.widget_ids.insert(response.id);
-            super::app::truncate_utf8(&mut editor.text, REFERENCE_VALUE_BYTES);
-            // Input is a raw Reference value in its Runtime unit. Neither the
-            // display metadata nor this editor performs a unit conversion.
-            let eligible = super::app::parse_finite(&editor.text)
-                .map_err(OperatorIntentError::InvalidCandidate)
-                .and_then(|value| {
-                    self.eligibility(OperatorIntent::ConfigureReferenceFixed {
-                        reference: reference.clone(),
-                        value,
-                    })
-                });
-            let mut response =
-                ui.add_enabled(eligible.is_ok(), egui::Button::new("Configure fixed"));
-            if let Err(error) = &eligible {
-                response = response.on_disabled_hover_text(error.to_string());
-            }
-            if response.clicked() {
-                eligible.ok()
-            } else {
-                None
-            }
-        })
-        .inner
+        view.input = Some(InputView {
+            caption: "New fixed value",
+            kind: InputKind::Number,
+            enabled: true,
+            max_chars: REFERENCE_VALUE_BYTES,
+            max_bytes: REFERENCE_VALUE_BYTES,
+        });
+        view.action_label = "Configure fixed";
+        // This candidate is the raw Reference value in its Runtime unit. Display
+        // metadata and input components perform no conversion or mutation parsing.
+        view.action = super::app::parse_finite(text)
+            .map_err(OperatorIntentError::InvalidCandidate)
+            .map(|value| OperatorIntent::ConfigureReferenceFixed {
+                reference: reference.clone(),
+                value,
+            });
     }
 
-    fn show_controller(&self, ui: &mut egui::Ui, target: &RuntimeRef) -> Option<OperatorIntent> {
-        let RuntimeRef::Controller { controller } = target else {
-            return None;
+    fn controller_view(&self, view: &mut ControlView<'_>) {
+        let RuntimeRef::Controller { controller } = &view.control.target else {
+            return;
         };
         let state = self
             .model
             .observations
             .entities
-            .get(target)
-            .and_then(|observation| observation.value.get("state"))
+            .get(&view.control.target)
+            .and_then(|item| item.value.get("state"))
             .and_then(serde_json::Value::as_str);
-        ui.label(format!("Controller: {controller}"));
-        ui.label(format!(
-            "Controller state (cached): {}",
-            state.unwrap_or("unavailable")
-        ));
+        view.metadata.push(format!("Controller: {controller}"));
+        view.observation = Some(IndicatorView {
+            caption: "Controller state (cached)",
+            value: state.map(|state| ObservedValue::Text(state.into())),
+            unit: None,
+            unavailable: "Controller state (cached): unavailable",
+        });
         let (label, action) = match state {
             Some("ready") => ("Start", ControllerLifecycleIntent::Start),
             Some("warming" | "running") => ("Pause", ControllerLifecycleIntent::Pause),
             Some("paused") => ("Resume", ControllerLifecycleIntent::Resume),
             Some("failed") => ("Reset failed", ControllerLifecycleIntent::ResetFailed),
             _ => {
-                ui.add_enabled(false, egui::Button::new("No lifecycle action available"));
-                return None;
+                view.action_label = "No lifecycle action available";
+                view.action = Err(OperatorIntentError::InvalidCandidate(
+                    "No lifecycle action available",
+                ));
+                return;
             }
         };
-        let eligible = self.eligibility(OperatorIntent::ControllerLifecycle {
+        view.action_label = label;
+        view.action = Ok(OperatorIntent::ControllerLifecycle {
             controller: controller.clone(),
             action,
         });
-        let mut response = ui.add_enabled(eligible.is_ok(), egui::Button::new(label));
-        if let Err(error) = &eligible {
-            response = response.on_disabled_hover_text(error.to_string());
-        }
-        // Only the owner may begin the shared workflow, whose separate Confirm
-        // rechecks the captured Runtime state even for Control.confirm = false.
-        if response.clicked() {
-            eligible.ok()
-        } else {
-            None
-        }
     }
 
-    fn show_property(
-        &self,
-        ui: &mut egui::Ui,
-        target: &RuntimeRef,
-        editor: &mut ControlEditor,
-    ) -> Option<OperatorIntent> {
-        let RuntimeRef::ConfigurationProperty { owner, property } = target else {
-            return None;
+    fn property_view(&self, view: &mut ControlView<'_>, text: &str) {
+        let RuntimeRef::ConfigurationProperty { owner, property } = &view.control.target else {
+            return;
         };
         let owner = match owner {
             ConfigurationOwner::Instrument { instrument } => format!("instrument {instrument}"),
             ConfigurationOwner::Component { component } => format!("component {component}"),
             ConfigurationOwner::Resource { resource } => format!("resource {resource}"),
         };
-        ui.label(format!("Owner: {owner}; property: {property}"));
+        view.metadata
+            .push(format!("Owner: {owner}; property: {property}"));
         let observation = self
             .model
             .observations
             .entities
-            .get(target)
+            .get(&view.control.target)
             .map(|item| &item.value);
         let value_type = observation
             .and_then(|item| item.get("value_type"))
@@ -385,7 +491,7 @@ impl OperatorControlUi<'_> {
         let access = observation
             .and_then(|item| item.get("access"))
             .and_then(serde_json::Value::as_str);
-        ui.label(format!(
+        view.metadata.push(format!(
             "type: {}; access: {}",
             value_type.unwrap_or("unknown"),
             access.unwrap_or("unknown")
@@ -393,103 +499,264 @@ impl OperatorControlUi<'_> {
         let current = observation
             .and_then(|item| item.get("current"))
             .map(|value| {
-                value
-                    .as_str()
-                    .map_or_else(|| value.to_string(), str::to_owned)
-            })
-            .unwrap_or_else(|| "unavailable".into());
-        ui.label(format!("Current value (cached): {current}"));
+                ObservedValue::Text(
+                    value
+                        .as_str()
+                        .map_or_else(|| value.to_string(), str::to_owned),
+                )
+            });
+        view.observation = Some(IndicatorView {
+            caption: "Current value (cached)",
+            value: current,
+            unit: None,
+            unavailable: "Current value (cached): unavailable",
+        });
         if let Some(unit) = observation
             .and_then(|item| item.get("unit"))
             .and_then(|unit| unit.get("symbol").or_else(|| unit.get("id")))
             .and_then(serde_json::Value::as_str)
             .filter(|unit| !unit.is_empty())
         {
-            ui.label(format!("Unit: {unit}"));
+            view.metadata.push(format!("Unit: {unit}"));
         }
-        let editable =
-            access == Some("read_write") && matches!(value_type, Some("integer" | "text"));
-        ui.horizontal(|ui| {
-            ui.label("New value");
-            let response = ui.add_enabled(
-                editable,
-                egui::TextEdit::singleline(&mut editor.text).char_limit(PROPERTY_INPUT_CHARS),
-            );
-            editor.widget_ids.insert(response.id);
-            super::app::truncate_utf8(&mut editor.text, PROPERTY_INPUT_CHARS * 4);
-            // Parse the raw value exactly as the ordinary editor does, then let
-            // the existing prepare path enforce access, type, constraints and revision.
-            let eligible = super::app::property_candidate(value_type, &editor.text)
-                .map_err(OperatorIntentError::InvalidCandidate)
-                .and_then(|value| {
-                    self.eligibility(OperatorIntent::ConfigureProperty {
-                        target: target.clone(),
-                        value,
-                    })
-                });
-            let mut response = ui.add_enabled(
-                editable && eligible.is_ok(),
-                egui::Button::new("Configure property"),
-            );
-            if let Err(error) = &eligible {
-                response = response.on_disabled_hover_text(error.to_string());
-            }
-            if response.clicked() {
-                eligible.ok()
+        view.input = Some(InputView {
+            caption: "New value",
+            kind: if value_type == Some("integer") {
+                InputKind::Integer
             } else {
-                None
+                InputKind::Text
+            },
+            enabled: access == Some("read_write") && matches!(value_type, Some("integer" | "text")),
+            max_chars: PROPERTY_INPUT_CHARS,
+            max_bytes: PROPERTY_INPUT_CHARS * 4,
+        });
+        view.action_label = "Configure property";
+        // The existing prepare path enforces access, type, constraints, revision
+        // and warnings. Unsupported observed scalar types never become mutations.
+        view.action = super::app::property_candidate(value_type, text)
+            .map_err(OperatorIntentError::InvalidCandidate)
+            .map(|value| OperatorIntent::ConfigureProperty {
+                target: view.control.target.clone(),
+                value,
+            });
+    }
+
+    fn show_control(
+        &mut self,
+        ui: &mut egui::Ui,
+        control: &Control,
+        mut editor: Option<&mut ControlEditor>,
+    ) -> Option<OperatorIntent> {
+        let text = if recorder_control_supported(control) {
+            self.label.as_str()
+        } else {
+            editor.as_ref().map_or("", |editor| editor.text.as_str())
+        };
+        let mut view = self.view(control, text);
+        view.show_observation(ui);
+        ui.horizontal(|ui| {
+            if let Some(input) = view.input {
+                let response = if recorder_control_supported(control) {
+                    visuals::input(ui, input, self.label)
+                } else if let Some(editor) = editor.as_mut() {
+                    let response = visuals::input(ui, input, &mut editor.text);
+                    editor.widget_ids.insert(response.id);
+                    response
+                } else {
+                    return None;
+                };
+                if response.changed() {
+                    // Re-resolve after this frame's edit, including bounded paste.
+                    // The prepared action is owned elsewhere and never borrows it.
+                    let text = if recorder_control_supported(control) {
+                        self.label.as_str()
+                    } else {
+                        &editor.as_ref().unwrap().text
+                    };
+                    view = self.view(control, text);
+                }
             }
+            // A click returns at most one typed intent. The owner still requires
+            // separate Confirm and rechecks guards, even with control.confirm=false.
+            view.show_action(ui)
         })
         .inner
     }
 
+    /// The ordinary Recorder group consumes the same adapter and primitives.
     pub(super) fn show(&mut self, ui: &mut egui::Ui) -> Option<OperatorIntent> {
-        let state = self
-            .model
-            .observations
-            .entities
-            .get(&RuntimeRef::Recorder)
-            .and_then(|observation| observation.value.get("state"))
-            .and_then(serde_json::Value::as_str)
-            .unwrap_or("unavailable");
-        ui.label(format!("Recorder state (cached): {state}"));
-        ui.horizontal(|ui| {
-            if matches!(
-                self.candidate(),
-                Some(OperatorIntent::StartRecording { .. })
-            ) {
-                ui.label("Recording label");
-                ui.text_edit_singleline(self.label);
-                super::app::truncate_utf8(self.label, RECORDING_LABEL_BYTES);
-            }
-            let candidate = self.candidate();
-            let button = match candidate {
-                Some(OperatorIntent::StartRecording { .. }) => "Start recording",
-                Some(OperatorIntent::StopRecording) => "Stop recording",
-                _ => "Recorder unavailable",
-            };
-            let eligible = candidate.map(|intent| self.eligibility(intent));
-            let enabled = matches!(eligible, Some(Ok(_)));
-            let mut response = ui.add_enabled(enabled, egui::Button::new(button));
-            if let Some(Err(error)) = &eligible {
-                response = response.on_disabled_hover_text(error.to_string());
-            }
-            // A click only returns intent. The owner begins the one workflow;
-            // its separate Confirm remains mandatory regardless of Control.confirm.
-            if response.clicked() {
-                eligible.and_then(Result::ok)
-            } else {
-                None
-            }
-        })
-        .inner
+        self.show_control(
+            ui,
+            &Control {
+                id: "ordinary-recorder".into(),
+                label: String::new(),
+                kind: ControlKind::RecordingLifecycle,
+                target: RuntimeRef::Recorder,
+                confirm: true,
+            },
+            None,
+        )
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::client::types::{ConnectionState, EventCursor, HelloState};
+    use crate::model::PropertyMutationCandidate;
     use serde_json::json;
+
+    #[test]
+    fn shared_views_keep_typed_adapters_identity_metadata_and_input_kinds() {
+        let property = RuntimeRef::ConfigurationProperty {
+            owner: ConfigurationOwner::Resource {
+                resource: "7".into(),
+            },
+            property: "title".into(),
+        };
+        for (kind, target, observation, input, expected_input, expected_intent) in [
+            (
+                ControlKind::RecordingLifecycle,
+                RuntimeRef::Recorder,
+                json!({"state":"idle","active_run":null}),
+                "Run",
+                Some(InputKind::Text),
+                OperatorIntent::StartRecording {
+                    label: "Run".into(),
+                },
+            ),
+            (
+                ControlKind::SetReference,
+                RuntimeRef::Reference {
+                    reference: "7".into(),
+                },
+                json!({"value":12.5,"revision":"9","unit":{"symbol":"K"}}),
+                "25.5",
+                Some(InputKind::Number),
+                OperatorIntent::ConfigureReferenceFixed {
+                    reference: "7".into(),
+                    value: 25.5,
+                },
+            ),
+            (
+                ControlKind::ControllerLifecycle,
+                RuntimeRef::Controller {
+                    controller: "7".into(),
+                },
+                json!({"state":"paused"}),
+                "",
+                None,
+                OperatorIntent::ControllerLifecycle {
+                    controller: "7".into(),
+                    action: ControllerLifecycleIntent::Resume,
+                },
+            ),
+            (
+                ControlKind::ApplyConfiguration,
+                property.clone(),
+                json!({"current":"Old","value_type":"text","access":"read_write","revision":"9","mutation_class":"live_safe"}),
+                "New",
+                Some(InputKind::Text),
+                OperatorIntent::ConfigureProperty {
+                    target: property.clone(),
+                    value: PropertyMutationCandidate::Text("New".into()),
+                },
+            ),
+            (
+                ControlKind::ApplyConfiguration,
+                property.clone(),
+                json!({"current":1,"value_type":"integer","access":"read_write","revision":"9","mutation_class":"ordinary_live"}),
+                "9223372036854775807",
+                Some(InputKind::Integer),
+                OperatorIntent::ConfigureProperty {
+                    target: property,
+                    value: PropertyMutationCandidate::Integer(i64::MAX),
+                },
+            ),
+        ] {
+            let control = Control {
+                id: "control-7".into(),
+                label: "Operator label".into(),
+                kind,
+                target,
+                confirm: false,
+            };
+            let mut model = WorkbenchModel::new(PresentationDocument::empty("views"));
+            model.connection = ConnectionState::Ready;
+            model.hello = Some(HelloState {
+                boot_id: "boot".into(),
+                scope: "scope".into(),
+                next_seq: 1,
+                operations: [
+                    "recording_start",
+                    "reference_configure",
+                    "controller_resume",
+                    "property_configure",
+                ]
+                .map(str::to_owned)
+                .into(),
+                capabilities: json!([]),
+                limits: json!({}),
+                event_oldest: EventCursor {
+                    boot_id: "boot".into(),
+                    seq: 0,
+                },
+                event_latest: EventCursor {
+                    boot_id: "boot".into(),
+                    seq: 0,
+                },
+            });
+            model
+                .observations
+                .observe(control.target.clone(), observation, None);
+            model.observations.complete_rebuild();
+            let before = model.clone();
+            let operator = OperatorWorkflow::default();
+            let mut label = String::new();
+            let adapter = OperatorControlUi {
+                model: &model,
+                operator: &operator,
+                observation_only: false,
+                label: &mut label,
+            };
+            let view = adapter.view(&control, input);
+            assert!(std::ptr::eq(view.control, &control));
+            assert_eq!(view.control.id, "control-7");
+            assert_eq!(view.control.label, "Operator label");
+            assert_eq!(
+                view.freshness,
+                super::super::presentation::SourceState::Fresh
+            );
+            assert_eq!(view.input.map(|input| input.kind), expected_input);
+            assert_eq!(view.action, Ok(expected_intent));
+            if control.kind == ControlKind::SetReference {
+                let observed = view.observation.unwrap();
+                assert_eq!(observed.unit.as_deref(), Some("K"));
+                assert!(matches!(observed.value, Some(ObservedValue::Number(12.5))));
+            }
+            if control.kind == ControlKind::ApplyConfiguration {
+                assert!(
+                    view.metadata
+                        .iter()
+                        .any(|line| line == "Owner: resource 7; property: title")
+                );
+            }
+            assert_eq!(model, before, "resolving a view cannot mutate the owner");
+            model.observations.freshness = crate::model::Freshness::Rebuilding;
+            let adapter = OperatorControlUi {
+                model: &model,
+                operator: &operator,
+                observation_only: false,
+                label: &mut label,
+            };
+            let view = adapter.view(&control, input);
+            assert_eq!(
+                view.freshness,
+                super::super::presentation::SourceState::Rebuilding
+            );
+            assert_eq!(view.action, Err(OperatorIntentError::RebuildNotFresh));
+        }
+    }
 
     #[test]
     fn only_apply_configuration_with_property_target_is_supported() {

@@ -293,6 +293,30 @@ mod operator_boundary_tests {
         let external = include_str!("external.rs");
         let renderer = production_source(include_str!("gui/presentation.rs"));
         let controls = production_source(include_str!("gui/controls.rs"));
+        let visuals = controls
+            .split_once("mod visuals {")
+            .expect("shared visual primitives")
+            .1
+            .split_once("\n}\n")
+            .expect("visual module boundary")
+            .0;
+        for prohibited in [
+            "crate::",
+            "super::super::",
+            "super::app",
+            "super::presentation",
+            "OperatorIntent",
+            "OperatorWorkflow",
+            "WorkbenchModel",
+            "RuntimeRef",
+            "prepare_operator_intent",
+            "serde_json",
+        ] {
+            assert!(
+                !visuals.contains(prohibited),
+                "visual primitive acquired semantics: {prohibited}"
+            );
+        }
         for prohibited in [
             "ClientHandle",
             "WorkbenchDispatcher",
