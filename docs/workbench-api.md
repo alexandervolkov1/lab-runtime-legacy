@@ -72,7 +72,7 @@ Request fields are exact:
 | `v` | integer `1` |
 | `type` | string `"request"` |
 | `call_id` | caller-selected, 1..64 UTF-8 bytes |
-| `op` | one of the 15 names advertised by hello |
+| `op` | one of the 16 names advertised by hello |
 | `args` | strict object for that operation |
 
 Result:
@@ -118,7 +118,7 @@ connection's reservations.
 
 ## Operations
 
-The source-owned v1 registry contains exactly 15 operations. The `Runtime?` column
+The source-owned v1 registry contains exactly 16 operations. The `Runtime?` column
 states whether normal success submits work to the one existing Workbench Runtime
 client; `Presentation?` states whether it can replace the active document.
 
@@ -139,6 +139,7 @@ client; `Presentation?` states whether it can replace the active document.
 | `ui_set_time_window` | `expected`, `plot_id`, `seconds` | new revision | no | yes |
 | `ui_rename_item` | `expected`, `item_id`, `label` | new revision | no | yes |
 | `ui_set_trace_source` | `expected`, `plot_id`, `trace_id`, `source` | new revision | no | yes |
+| `ui_replace_document` | `expected`, `document` | new revision | no | yes |
 
 Unknown argument fields are rejected for every operation.
 
@@ -151,7 +152,7 @@ limit, nested Runtime-hello, and status values are live:
 {
   "protocol":{"id":"lab-runtime.workbench","version":1},
   "workbench_id":"<32 lowercase hex characters>",
-  "operations":["hello","client_status","recovery_get","lab_query","lab_mutation","lab_operation_status","presentation_get","ui_add_plot","ui_remove_plot","ui_add_trace","ui_remove_trace","ui_set_trace_visibility","ui_set_time_window","ui_rename_item","ui_set_trace_source"],
+  "operations":["hello","client_status","recovery_get","lab_query","lab_mutation","lab_operation_status","presentation_get","ui_add_plot","ui_remove_plot","ui_add_trace","ui_remove_trace","ui_set_trace_visibility","ui_set_time_window","ui_rename_item","ui_set_trace_source","ui_replace_document"],
   "limits":{"<source-advertised fields>":"<numbers>"},
   "runtime_client":{"connection":"<state>","freshness":"<state>","hello":null},
   "recovery":{"recovery_generation":"1","active_count":"0","quarantined_count":"0","reconciliation_required_count":"0"},
@@ -359,6 +360,55 @@ The eight edits are:
 Unknown IDs get `unknown_item`; invalid/oversized candidates get
 `invalid_presentation`; stale identity/revision gets `revision_conflict`.
 
+### `ui_replace_document`
+
+This operation replaces the entire current in-memory configuration, including its
+document identity, windows, tabs, panels, plots, traces and control definitions.
+The eight point mutations above edit the current document instead. Replacement
+does not merge with existing items or retain omitted items.
+
+Its exact arguments are:
+
+```json
+{"expected":{"workbench_id":"<id>","revision":"1"},"document":{"format_version":1,"document_id":"configured","windows":[],"plots":[],"controls":[]}}
+```
+
+Both arguments are required; `document` must be an object. Supply every schema
+field, including explicit `null` for absent `y_min`, `y_max`, and `display_unit`.
+Unknown fields are forbidden at every level. The complete v1 document follows the
+schema and bounds described above: unique IDs across the document, no dangling
+presentation references, typed Runtime references, finite valid display numbers,
+cardinality/string limits, and at most 1,048,576 bytes of canonical pretty JSON.
+The ordinary wire JSON depth, value, string, frame and mailbox limits also apply.
+A valid Runtime reference may name an entity not yet discovered by Workbench;
+it remains unresolved and does not trigger a Runtime query.
+
+The single dispatcher checks `expected` before decoding and validating the
+candidate. A wrong Workbench identity or revision returns `revision_conflict`.
+After a valid request shape, a malformed document, unsupported `format_version`,
+or invalid/oversized configuration returns `invalid_presentation`. Envelope,
+argument-shape and bounded-JSON errors use the existing wire validation codes.
+Failure leaves the document and revision unchanged and emits no
+`presentation_changed`. Revision exhaustion uses the existing fail-closed boundary.
+
+Success atomically publishes the validated document, advances the revision exactly
+once, returns `{"workbench_id":"<id>","presentation_revision":"2"}`, and
+broadcasts exactly one `presentation_changed` with
+`{"presentation_revision":"2","operation":"ui_replace_document"}`. Two
+clients replacing from the same revision cannot overwrite each other's success:
+one succeeds and the other must resnapshot and explicitly decide what to submit.
+There is no automatic retry.
+
+Replacement works without a connected Runtime and performs no Runtime query or
+mutation. It does not change the recovery journal or its generation. After a
+successful explicit replacement, the GUI stops implicitly creating a default
+plot, including for a document with no plots; the initial empty Workbench retains
+its ordinary default-plot behavior.
+
+The configuration currently changes **only in memory and is not saved to disk**.
+This operation does not add a window/panel renderer, executable Controls, or
+presentation persistence.
+
 ## Events
 
 Only `lab_update` is caller-routed. Its data is:
@@ -465,7 +515,7 @@ revisions are values returned by the running Workbench.
 
 ```json
 {"v":1,"type":"request","call_id":"hello","op":"hello","args":{}}
-{"v":1,"type":"result","call_id":"hello","result":{"protocol":{"id":"lab-runtime.workbench","version":1},"workbench_id":"<id>","operations":["<15 operations>"],"limits":{"<advertised>":"<bounds>"},"runtime_client":{"connection":"ready","freshness":"fresh","hello":{"<Runtime hello>":"<values>"}},"recovery":{"recovery_generation":"1","active_count":"0","quarantined_count":"0","reconciliation_required_count":"0"},"presentation":{"presentation_revision":"1"}}}
+{"v":1,"type":"result","call_id":"hello","result":{"protocol":{"id":"lab-runtime.workbench","version":1},"workbench_id":"<id>","operations":["<16 operations>"],"limits":{"<advertised>":"<bounds>"},"runtime_client":{"connection":"ready","freshness":"fresh","hello":{"<Runtime hello>":"<values>"}},"recovery":{"recovery_generation":"1","active_count":"0","quarantined_count":"0","reconciliation_required_count":"0"},"presentation":{"presentation_revision":"1"}}}
 {"v":1,"type":"request","call_id":"status","op":"client_status","args":{}}
 {"v":1,"type":"result","call_id":"status","result":{"workbench_id":"<id>","runtime_client":{"connection":"ready","freshness":"fresh","hello":{"<Runtime hello>":"<values>"}},"recovery":{"recovery_generation":"1","active_count":"0","quarantined_count":"0","reconciliation_required_count":"0"},"presentation":{"presentation_revision":"1"}}}
 {"v":1,"type":"request","call_id":"lab","op":"lab_query","args":{"op":"reference","args":{"reference":"1"}}}
@@ -489,7 +539,7 @@ plot or stop Runtime.
 There is no arbitrary raw Runtime request operation, Runtime event relay,
 Workbench-owned Runtime session store, second Runtime socket owner, external Exact
 Retry, Runtime connect/disconnect shortcut, implicit shutdown shortcut,
-presentation-replace/save endpoint, filesystem/serial API, script evaluation,
+presentation-save endpoint, filesystem/serial API, script evaluation,
 subscription, replay, or resumable external caller session.
 
 The [Babashka smoke](../clients/babashka-smoke/README.md) is acceptance/example code,

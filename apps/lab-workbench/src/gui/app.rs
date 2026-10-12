@@ -166,25 +166,8 @@ impl WorkbenchApp {
         let Some(signal) = self.selected.clone() else {
             return;
         };
-        if self.model.presentation.plots.is_empty() {
-            let plot = PresentationPlot {
-                id: "default-live-plot".into(),
-                title: "Live signal".into(),
-                time_window_seconds: 60.0,
-                axes: AxisOptions::default(),
-                traces: vec![Trace {
-                    id: "default-live-trace".into(),
-                    source: signal,
-                    display_label: "Selected signal".into(),
-                    visible: true,
-                    style: TraceStyle {
-                        color: "cyan".into(),
-                        width: 1.5,
-                    },
-                    display_unit: None,
-                }],
-            };
-            match self.model.apply_gui_ui(UiCommand::AddPlot { plot }) {
+        if let Some(command) = default_plot_command(&self.model, signal) {
+            match self.model.apply_gui_ui(command) {
                 Ok(outcome) => {
                     if let Some(endpoint) = &mut self.endpoint {
                         endpoint.route_events(&mut self.model, outcome.events);
@@ -1379,6 +1362,33 @@ impl Drop for WorkbenchApp {
     }
 }
 
+fn default_plot_command<C>(
+    model: &WorkbenchDispatcher<C>,
+    signal: RuntimeRef,
+) -> Option<UiCommand> {
+    model
+        .should_create_default_plot()
+        .then(|| UiCommand::AddPlot {
+            plot: PresentationPlot {
+                id: "default-live-plot".into(),
+                title: "Live signal".into(),
+                time_window_seconds: 60.0,
+                axes: AxisOptions::default(),
+                traces: vec![Trace {
+                    id: "default-live-trace".into(),
+                    source: signal,
+                    display_label: "Selected signal".into(),
+                    visible: true,
+                    style: TraceStyle {
+                        color: "cyan".into(),
+                        width: 1.5,
+                    },
+                    display_unit: None,
+                }],
+            },
+        })
+}
+
 fn drain_bounded<T>(
     mut receive: impl FnMut() -> Result<T, TryRecvError>,
     mut apply: impl FnMut(T),
@@ -1908,6 +1918,42 @@ mod tests {
         model.apply_client_update(update.clone());
         status.after_update(&update);
         retry.after_update(&update, model, status);
+    }
+
+    #[test]
+    fn explicit_empty_replacement_blocks_default_plot_even_after_reconnect() {
+        let mut model = WorkbenchDispatcher::new(
+            WorkbenchModel::new(PresentationDocument::empty("initial")),
+            (),
+        );
+        let signal = RuntimeRef::Signal {
+            instrument: "1".into(),
+            parameter: "2".into(),
+        };
+        let command = default_plot_command(&model, signal.clone())
+            .expect("initial empty GUI gets a default plot");
+        model.apply_gui_ui(command).unwrap();
+        assert_eq!(model.presentation.plots[0].traces[0].source, signal);
+        assert_eq!(model.presentation_revision(), 2);
+        assert!(default_plot_command(&model, signal.clone()).is_none());
+
+        let document = PresentationDocument::empty("explicitly-empty");
+        model
+            .apply_gui_ui(UiCommand::ReplaceDocument {
+                document: document.clone(),
+            })
+            .unwrap();
+        let revision = model.presentation_revision();
+        for state in [
+            ConnectionState::Disconnected,
+            ConnectionState::Connecting,
+            ConnectionState::Ready,
+        ] {
+            model.apply_client_update(ClientUpdate::State(state));
+            assert!(default_plot_command(&model, signal.clone()).is_none());
+            assert_eq!(model.presentation, document);
+            assert_eq!(model.presentation_revision(), revision);
+        }
     }
 
     #[test]
