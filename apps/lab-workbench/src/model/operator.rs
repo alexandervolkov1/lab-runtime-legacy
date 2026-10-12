@@ -889,7 +889,20 @@ fn encode_property_value(
             "property projection omitted value_type",
         ))?;
     let value = match (value_type, candidate) {
-        ("integer", PropertyMutationCandidate::Integer(value)) => json!(value),
+        ("integer", PropertyMutationCandidate::Integer(value)) => {
+            let (minimum, maximum) = integer_property_constraints(observation)?;
+            if minimum.is_some_and(|minimum| value < minimum) {
+                return Err(OperatorIntentError::InvalidCandidate(
+                    "property candidate is below the advertised minimum",
+                ));
+            }
+            if maximum.is_some_and(|maximum| value > maximum) {
+                return Err(OperatorIntentError::InvalidCandidate(
+                    "property candidate is above the advertised maximum",
+                ));
+            }
+            json!(value)
+        }
         ("text", PropertyMutationCandidate::Text(value)) => {
             if value.len() > PROPERTY_TEXT_BYTES {
                 return Err(OperatorIntentError::InvalidCandidate(
@@ -904,25 +917,42 @@ fn encode_property_value(
             ));
         }
     };
-    if let Some(minimum) = observation
-        .pointer("/constraints/minimum")
-        .and_then(Value::as_f64)
-        && value.as_f64().is_some_and(|candidate| candidate < minimum)
-    {
-        return Err(OperatorIntentError::InvalidCandidate(
-            "property candidate is below the advertised minimum",
-        ));
-    }
-    if let Some(maximum) = observation
-        .pointer("/constraints/maximum")
-        .and_then(Value::as_f64)
-        && value.as_f64().is_some_and(|candidate| candidate > maximum)
-    {
-        return Err(OperatorIntentError::InvalidCandidate(
-            "property candidate is above the advertised maximum",
-        ));
-    }
     Ok(value)
+}
+
+fn integer_property_constraints(
+    observation: &Value,
+) -> Result<(Option<i64>, Option<i64>), OperatorIntentError> {
+    let Some(constraints) = observation.get("constraints") else {
+        return Ok((None, None));
+    };
+    if constraints.is_null() {
+        return Ok((None, None));
+    }
+    let constraints = constraints
+        .as_object()
+        .ok_or(OperatorIntentError::InvalidCandidate(
+            "integer property constraints must be an object or null",
+        ))?;
+    let parse = |name| {
+        constraints
+            .get(name)
+            .ok_or(OperatorIntentError::InvalidCandidate(
+                "integer property constraints require minimum and maximum",
+            ))?
+            .as_i64()
+            .ok_or(OperatorIntentError::InvalidCandidate(
+                "integer property constraint must fit i64 exactly",
+            ))
+    };
+    let minimum = parse("minimum")?;
+    let maximum = parse("maximum")?;
+    if minimum > maximum {
+        return Err(OperatorIntentError::InvalidCandidate(
+            "integer property minimum exceeds maximum",
+        ));
+    }
+    Ok((Some(minimum), Some(maximum)))
 }
 
 fn owner_kind(owner: &crate::presentation::ConfigurationOwner) -> &'static str {
@@ -1401,6 +1431,95 @@ mod tests {
                 Err(OperatorIntentError::InvalidCandidate(_))
             ));
         }
+    }
+
+    #[test]
+    fn integer_property_constraints_compare_exact_i64_without_float_conversion() {
+        for (candidate, constraints, accepted) in [
+            (i64::MIN, Value::Null, true),
+            (i64::MAX, Value::Null, true),
+            (
+                i64::MIN,
+                json!({"minimum":i64::MIN,"maximum":i64::MAX}),
+                true,
+            ),
+            (
+                i64::MAX,
+                json!({"minimum":i64::MIN,"maximum":i64::MAX}),
+                true,
+            ),
+            (
+                i64::MIN,
+                json!({"minimum":i64::MIN + 1,"maximum":i64::MAX}),
+                false,
+            ),
+            (
+                i64::MIN + 1,
+                json!({"minimum":i64::MIN + 1,"maximum":i64::MAX}),
+                true,
+            ),
+            (
+                i64::MAX,
+                json!({"minimum":i64::MIN,"maximum":i64::MAX - 1}),
+                false,
+            ),
+            (
+                i64::MAX - 1,
+                json!({"minimum":i64::MIN,"maximum":i64::MAX - 1}),
+                true,
+            ),
+            (0, json!({"minimum":0,"maximum":0}), true),
+            (-1, json!({"minimum":0,"maximum":i64::MAX}), false),
+            (1, json!({"minimum":i64::MIN,"maximum":0}), false),
+        ] {
+            let mut observation = json!({"value_type":"integer"});
+            if !constraints.is_null() {
+                observation["constraints"] = constraints;
+            }
+            let encoded =
+                encode_property_value(&observation, PropertyMutationCandidate::Integer(candidate));
+            assert_eq!(
+                encoded.is_ok(),
+                accepted,
+                "candidate {candidate}: {observation}"
+            );
+            if accepted {
+                assert_eq!(encoded.unwrap(), json!(candidate));
+            }
+        }
+    }
+
+    #[test]
+    fn malformed_or_contradictory_integer_constraints_fail_closed() {
+        for constraints in [
+            json!([]),
+            json!("unbounded"),
+            json!({}),
+            json!({"minimum":0}),
+            json!({"maximum":10}),
+            json!({"minimum":null}),
+            json!({"maximum":null}),
+            json!({"minimum":1.0}),
+            json!({"maximum":"10"}),
+            json!({"minimum":u64::MAX}),
+            json!({"maximum":u64::MAX}),
+            json!({"minimum":2,"maximum":1}),
+        ] {
+            let observation = json!({"value_type":"integer","constraints":constraints});
+            assert!(matches!(
+                encode_property_value(&observation, PropertyMutationCandidate::Integer(1)),
+                Err(OperatorIntentError::InvalidCandidate(_))
+            ));
+        }
+        // Text constraints have no v1 meaning and retain their existing behavior.
+        assert_eq!(
+            encode_property_value(
+                &json!({"value_type":"text","constraints":{"minimum":"unused"}}),
+                PropertyMutationCandidate::Text("value".into()),
+            )
+            .unwrap(),
+            json!("value")
+        );
     }
 
     #[test]

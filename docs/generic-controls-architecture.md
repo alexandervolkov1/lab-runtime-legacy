@@ -1,7 +1,8 @@
 # Generic Controls Architecture
 
 Status: **DGUI-4C architectural direction approved; DGUI-4C1 internal view
-normalization implemented**. The remaining proposal is not implemented.
+normalization and DGUI-4C2 bounded scalar drafts are implemented**. The remaining
+proposal is not implemented.
 Baseline: DGUI-4B4 merged at
 `3a86d0989f6b6ca265126da043a3df4d0f847c7b`, including the separately reviewed
 Recorder property-lifecycle fix. This document changes no running contract.
@@ -11,9 +12,18 @@ and shares indicator, bounded input and disabled-reason button primitives. It
 reuses the existing eligibility, confirmation and operator workflow; the ordinary
 Recorder group uses the same view path. Draft ownership/retirement, additional
 ordinary GUI actions, plots and every v1 external contract remain unchanged.
-This does not implement the later draft/scalar or generic read-binding stages.
+This does not implement the later generic read-binding stages.
 Instance profile versus per-connection negotiation, binding cardinality, exact v2
 limits and descriptor versioning remain open for a separate v2 contract review.
+
+DGUI-4C2 keeps declarative drafts keyed by Control ID and the full Runtime target,
+adds candidate-type invalidation with egui focus/undo retirement, and leaves normal
+observation updates independent of local input. Recorder, Reference and property
+inputs retain a bounded overflowing draft and cannot emit an intent until it is
+explicitly corrected. Integer property bounds are compared exactly as `i64`;
+absent/null constraints are unbounded, while present constraints must contain a
+valid inclusive `i64` pair. These checks are Workbench preflight only: Runtime
+remains the final mutation authority.
 
 ## Decision and scope
 

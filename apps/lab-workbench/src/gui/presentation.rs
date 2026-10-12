@@ -469,7 +469,7 @@ mod tests {
         model::{
             ControllerLifecycleIntent, LivePoint, MutationSubmitter, OperatorWarning,
             OperatorWorkflow, OperatorWorkflowState, PROPERTY_TEXT_BYTES,
-            PropertyMutationCandidate, WorkbenchModel,
+            PropertyMutationCandidate, RECORDING_LABEL_BYTES, WorkbenchModel,
         },
         presentation::{ConfigurationOwner, Control, ControlKind},
     };
@@ -1952,6 +1952,26 @@ mod tests {
         for (input, constraints, expected) in [
             ("-9223372036854775808", Value::Null, Some(i64::MIN)),
             ("9223372036854775807", Value::Null, Some(i64::MAX)),
+            (
+                "-9223372036854775808",
+                json!({"minimum":i64::MIN,"maximum":i64::MAX}),
+                Some(i64::MIN),
+            ),
+            (
+                "9223372036854775807",
+                json!({"minimum":i64::MIN,"maximum":i64::MAX}),
+                Some(i64::MAX),
+            ),
+            (
+                "-9223372036854775808",
+                json!({"minimum":i64::MIN + 1,"maximum":i64::MAX}),
+                None,
+            ),
+            (
+                "9223372036854775807",
+                json!({"minimum":i64::MIN,"maximum":i64::MAX - 1}),
+                None,
+            ),
             ("-9223372036854775809", Value::Null, None),
             ("9223372036854775808", Value::Null, None),
             (" -10 ", json!({"minimum":-10,"maximum":10}), Some(-10)),
@@ -1965,6 +1985,10 @@ mod tests {
             ("Infinity", Value::Null, None),
             ("1 2", Value::Null, None),
             ("", Value::Null, None),
+            ("5", json!({}), None),
+            ("5", json!({"minimum":0}), None),
+            ("5", json!({"minimum":0.0,"maximum":10}), None),
+            ("5", json!({"minimum":10,"maximum":0}), None),
         ] {
             let mut model = property_model();
             let target = model.presentation.controls[0].target.clone();
@@ -2064,6 +2088,57 @@ mod tests {
             assert_eq!(dispatcher.client().unwrap().0.get(), 0);
             assert_eq!(*dispatcher, before);
         }
+    }
+
+    #[test]
+    fn property_type_change_retires_draft_but_observation_updates_do_not() {
+        let mut model = property_model();
+        let target = model.presentation.controls[0].target.clone();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        input_control(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            0,
+            "7",
+        );
+        model.observations.entities.get_mut(&target).unwrap().value["current"] = json!(8);
+        recorder_frame(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            false,
+            &mut String::new(),
+            vec![],
+        );
+        assert_eq!(
+            renderer
+                .editors
+                .editor_mut(&model.presentation.controls[0])
+                .unwrap()
+                .text,
+            "7",
+            "a normal observed-value update cannot overwrite local input"
+        );
+        model.observations.entities.get_mut(&target).unwrap().value["value_type"] = json!("text");
+        recorder_frame(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            false,
+            &mut String::new(),
+            vec![],
+        );
+        let editor = renderer
+            .editors
+            .editor_mut(&model.presentation.controls[0])
+            .unwrap();
+        assert!(editor.text.is_empty());
+        assert!(editor.widget_ids.len() <= 1);
     }
 
     #[test]
@@ -2270,8 +2345,8 @@ mod tests {
     }
 
     #[test]
-    fn property_replacement_retires_edits_and_preserves_prepared_or_ambiguous_workflow() {
-        for ambiguous in [false, true] {
+    fn property_replacement_retires_edits_and_preserves_active_workflow() {
+        for workflow_state in ["prepared", "submitted", "ambiguous"] {
             let mut model = property_model();
             let next_target = RuntimeRef::ConfigurationProperty {
                 owner: ConfigurationOwner::Instrument {
@@ -2310,10 +2385,16 @@ mod tests {
                 .unwrap()
                 .widget_ids
                 .clone();
-            if ambiguous {
+            if workflow_state != "prepared" {
                 operator
                     .confirm(&dispatcher, dispatcher.client().unwrap())
                     .unwrap();
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::Submitted { .. }
+                ));
+            }
+            if workflow_state == "ambiguous" {
                 let mut record = ambiguous_record();
                 record.op = "property_configure".into();
                 record.args = dispatcher.client().unwrap().1.borrow()[0].1.clone();
@@ -2396,7 +2477,7 @@ mod tests {
             assert_eq!(operator, original);
             assert_eq!(dispatcher.recovery, recovery);
             assert_eq!(dispatcher.client().unwrap().0.get(), calls);
-            if !ambiguous {
+            if workflow_state == "prepared" {
                 operator
                     .confirm(&dispatcher, dispatcher.client().unwrap())
                     .unwrap();
@@ -2404,12 +2485,17 @@ mod tests {
                     dispatcher.client().unwrap().1.borrow()[0].1["target"],
                     json!({"kind":"instrument","id":"1"})
                 );
-            } else {
+            } else if workflow_state == "ambiguous" {
                 assert!(
                     operator
                         .confirm(&dispatcher, dispatcher.client().unwrap())
                         .is_err()
                 );
+            } else {
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::Submitted { .. }
+                ));
             }
         }
     }
@@ -3204,7 +3290,23 @@ mod tests {
             &mut label,
             vec![],
         );
-        assert_eq!(label, "é".repeat(64));
+        assert_eq!(label, "é".repeat(100));
+        assert!(label.len() > RECORDING_LABEL_BYTES);
+        assert!(label.len() <= (RECORDING_LABEL_BYTES + 1) * 4);
+        assert!(
+            click_recorder(
+                &context,
+                &mut PresentationRenderer::default(),
+                &model,
+                &OperatorWorkflow::default(),
+                false,
+                &mut label,
+                "Start recording",
+            )
+            .is_none(),
+            "overflowing label stays invalid instead of becoming a truncated candidate"
+        );
+        label = "é".repeat(64);
         assert_eq!(model, before);
         let controls = &super::super::controls::has_recorder_controls;
         assert!(controls(&model.presentation));
@@ -3253,6 +3355,153 @@ mod tests {
         });
         assert!(labels(&painted_text(output)).contains(&"Start recording"));
         assert_eq!(label, "é".repeat(64));
+    }
+
+    #[test]
+    fn oversized_recorder_label_stays_bounded_invalid_until_corrected() {
+        for oversized in [
+            "x".repeat(RECORDING_LABEL_BYTES + 1),
+            "é".repeat(RECORDING_LABEL_BYTES / 2 + 1),
+            "🌡".repeat(10_000),
+        ] {
+            let dispatcher = WorkbenchDispatcher::new(recorder_model(), FakeClient::default());
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut label = oversized;
+            recorder_frame(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                false,
+                &mut label,
+                vec![],
+            );
+            assert!(label.len() > RECORDING_LABEL_BYTES);
+            assert!(label.len() <= (RECORDING_LABEL_BYTES + 1) * 4);
+            assert!(
+                click_recorder(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &OperatorWorkflow::default(),
+                    false,
+                    &mut label,
+                    "Start recording",
+                )
+                .is_none()
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+
+            label = "Corrected label".into();
+            let intent = click_recorder(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                false,
+                &mut label,
+                "Start recording",
+            )
+            .expect("corrected label becomes a typed Recorder intent");
+            assert_eq!(
+                intent,
+                OperatorIntent::StartRecording {
+                    label: "Corrected label".into()
+                }
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+        }
+    }
+
+    #[test]
+    fn oversized_reference_draft_stays_bounded_invalid_until_explicitly_corrected() {
+        const REFERENCE_BYTES: usize = 64;
+        for oversized in [
+            "1".repeat(REFERENCE_BYTES + 1),
+            "é".repeat(REFERENCE_BYTES),
+            "9".repeat(10_000),
+        ] {
+            let dispatcher = WorkbenchDispatcher::new(reference_model(), FakeClient::default());
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            input_control(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &operator,
+                0,
+                &oversized,
+            );
+            let editor = renderer
+                .editors
+                .editor_mut(&dispatcher.presentation.controls[0])
+                .unwrap();
+            assert!(editor.text.len() > REFERENCE_BYTES);
+            assert!(editor.text.len() <= (REFERENCE_BYTES + 1) * 4);
+            assert!(
+                click_fixed(&context, &mut renderer, &dispatcher, &operator, false, 0).is_none()
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+
+            renderer
+                .editors
+                .editor_mut(&dispatcher.presentation.controls[0])
+                .unwrap()
+                .text = "25.5".into();
+            let intent = click_fixed(&context, &mut renderer, &dispatcher, &operator, false, 0)
+                .expect("corrected draft becomes an ordinary typed intent");
+            operator.begin(&dispatcher, intent.clone()).unwrap();
+            operator.cancel_or_acknowledge();
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+            operator.begin(&dispatcher, intent).unwrap();
+            operator
+                .confirm(&dispatcher, dispatcher.client().unwrap())
+                .unwrap();
+            assert_eq!(dispatcher.client().unwrap().0.get(), 1);
+        }
+    }
+
+    #[test]
+    fn distinct_control_ids_keep_independent_drafts_for_the_same_full_target() {
+        let mut model = reference_model();
+        model.presentation.controls[1].target = model.presentation.controls[0].target.clone();
+        model.presentation.validate().unwrap();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        input_control(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            0,
+            "10.5",
+        );
+        input_control(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            1,
+            "20.5",
+        );
+        assert_eq!(
+            renderer
+                .editors
+                .editor_mut(&model.presentation.controls[0])
+                .unwrap()
+                .text,
+            "10.5"
+        );
+        assert_eq!(
+            renderer
+                .editors
+                .editor_mut(&model.presentation.controls[1])
+                .unwrap()
+                .text,
+            "20.5"
+        );
     }
 
     #[test]

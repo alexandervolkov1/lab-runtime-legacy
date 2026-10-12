@@ -80,8 +80,7 @@ mod visuals {
         pub(super) caption: &'static str,
         pub(super) kind: InputKind,
         pub(super) enabled: bool,
-        pub(super) max_chars: usize,
-        pub(super) max_bytes: usize,
+        pub(super) maximum_bytes: usize,
     }
 
     pub(super) fn indicator(ui: &mut egui::Ui, view: &IndicatorView) {
@@ -104,12 +103,17 @@ mod visuals {
 
     pub(super) fn input(ui: &mut egui::Ui, view: InputView, text: &mut String) -> egui::Response {
         ui.label(view.caption);
+        // Retain one excess Unicode scalar so any oversized paste remains
+        // visibly invalid. Four bytes per retained scalar is the finite storage
+        // ceiling; truncation here can never turn the draft into a valid prefix.
+        let retained_chars = view.maximum_bytes + 1;
+        let retained_bytes = retained_chars * 4;
         let mut response = ui.add_enabled(
             view.enabled,
-            egui::TextEdit::singleline(text).char_limit(view.max_chars),
+            egui::TextEdit::singleline(text).char_limit(retained_chars),
         );
-        if text.len() > view.max_bytes {
-            let mut end = view.max_bytes;
+        if text.len() > retained_bytes {
+            let mut end = retained_bytes;
             while !text.is_char_boundary(end) {
                 end -= 1;
             }
@@ -135,10 +139,17 @@ mod visuals {
 // Match the ordinary fixed-value editor's text bound, without restricting f64 range.
 const REFERENCE_VALUE_BYTES: usize = 64;
 
-// Keep one excess scalar so an oversized paste remains invalid, rather than
-// silently turning its prefix into an eligible text mutation. UTF-8 storage is
-// bounded to four bytes per scalar; the existing workflow enforces 512 bytes.
-const PROPERTY_INPUT_CHARS: usize = PROPERTY_TEXT_BYTES + 1;
+fn bounded_candidate<'a>(
+    text: &'a str,
+    maximum_bytes: usize,
+    error: &'static str,
+) -> Result<&'a str, OperatorIntentError> {
+    if text.len() <= maximum_bytes {
+        Ok(text)
+    } else {
+        Err(OperatorIntentError::InvalidCandidate(error))
+    }
+}
 
 pub(super) fn property_control_supported(control: &Control) -> bool {
     control.kind == ControlKind::ApplyConfiguration
@@ -157,6 +168,7 @@ pub(super) fn reference_control_supported(control: &Control) -> bool {
 #[derive(Default)]
 pub(super) struct ControlEditor {
     pub(super) text: String,
+    input_kind: Option<InputKind>,
     // A control can be referenced by multiple panels. Track every current view
     // instance (bounded by the document's panel/reference counts), not just the
     // last rendered editor, so retirement also removes their undo/focus state.
@@ -172,6 +184,15 @@ pub(super) struct ControlEditors {
 }
 
 impl ControlEditors {
+    fn retire(context: &egui::Context, editor: &mut ControlEditor) {
+        editor.text.clear();
+        editor.input_kind = None;
+        for id in editor.widget_ids.drain() {
+            context.data_mut(|data| data.remove::<egui::text_edit::TextEditState>(id));
+            context.memory_mut(|memory| memory.surrender_focus(id));
+        }
+    }
+
     pub(super) fn reconcile(
         &mut self,
         context: &egui::Context,
@@ -189,10 +210,7 @@ impl ControlEditors {
             if !keep {
                 // Retire egui's undo/focus state with the draft so replacement
                 // cannot retain an old edit or deliver it to a different target.
-                for &id in &editor.widget_ids {
-                    context.data_mut(|data| data.remove::<egui::text_edit::TextEditState>(id));
-                    context.memory_mut(|memory| memory.surrender_focus(id));
-                }
+                Self::retire(context, editor);
             }
             keep
         });
@@ -211,6 +229,17 @@ impl ControlEditors {
     pub(super) fn editor_mut(&mut self, control: &Control) -> Option<&mut ControlEditor> {
         self.drafts
             .get_mut(&(control.id.clone(), control.target.clone()))
+    }
+}
+
+impl ControlEditor {
+    fn reconcile_kind(&mut self, context: &egui::Context, kind: InputKind) {
+        if let Some(previous) = self.input_kind
+            && previous != kind
+        {
+            ControlEditors::retire(context, self);
+        }
+        self.input_kind = Some(kind);
     }
 }
 
@@ -375,11 +404,17 @@ impl OperatorControlUi<'_> {
                 caption: "Recording label",
                 kind: InputKind::Text,
                 enabled: true,
-                max_chars: usize::MAX,
-                max_bytes: RECORDING_LABEL_BYTES,
+                maximum_bytes: RECORDING_LABEL_BYTES,
             });
             view.action_label = "Start recording";
-            view.action = Ok(OperatorIntent::StartRecording { label: text.into() });
+            view.action = bounded_candidate(
+                text,
+                RECORDING_LABEL_BYTES,
+                "recording label must contain at most 128 bytes",
+            )
+            .map(|label| OperatorIntent::StartRecording {
+                label: label.into(),
+            });
         } else {
             view.action_label = "Recorder unavailable";
             view.action = Err(OperatorIntentError::InvalidCandidate(
@@ -416,18 +451,23 @@ impl OperatorControlUi<'_> {
             caption: "New fixed value",
             kind: InputKind::Number,
             enabled: true,
-            max_chars: REFERENCE_VALUE_BYTES,
-            max_bytes: REFERENCE_VALUE_BYTES,
+            maximum_bytes: REFERENCE_VALUE_BYTES,
         });
         view.action_label = "Configure fixed";
         // This candidate is the raw Reference value in its Runtime unit. Display
         // metadata and input components perform no conversion or mutation parsing.
-        view.action = super::app::parse_finite(text)
-            .map_err(OperatorIntentError::InvalidCandidate)
-            .map(|value| OperatorIntent::ConfigureReferenceFixed {
-                reference: reference.clone(),
-                value,
-            });
+        view.action = bounded_candidate(
+            text,
+            REFERENCE_VALUE_BYTES,
+            "fixed Reference value exceeds the Workbench editor bound",
+        )
+        .and_then(|text| {
+            super::app::parse_finite(text).map_err(OperatorIntentError::InvalidCandidate)
+        })
+        .map(|value| OperatorIntent::ConfigureReferenceFixed {
+            reference: reference.clone(),
+            value,
+        });
     }
 
     fn controller_view(&self, view: &mut ControlView<'_>) {
@@ -527,18 +567,24 @@ impl OperatorControlUi<'_> {
                 InputKind::Text
             },
             enabled: access == Some("read_write") && matches!(value_type, Some("integer" | "text")),
-            max_chars: PROPERTY_INPUT_CHARS,
-            max_bytes: PROPERTY_INPUT_CHARS * 4,
+            maximum_bytes: PROPERTY_TEXT_BYTES,
         });
         view.action_label = "Configure property";
         // The existing prepare path enforces access, type, constraints, revision
         // and warnings. Unsupported observed scalar types never become mutations.
-        view.action = super::app::property_candidate(value_type, text)
-            .map_err(OperatorIntentError::InvalidCandidate)
-            .map(|value| OperatorIntent::ConfigureProperty {
-                target: view.control.target.clone(),
-                value,
-            });
+        view.action = bounded_candidate(
+            text,
+            PROPERTY_TEXT_BYTES,
+            "property input exceeds the Workbench editor bound",
+        )
+        .and_then(|text| {
+            super::app::property_candidate(value_type, text)
+                .map_err(OperatorIntentError::InvalidCandidate)
+        })
+        .map(|value| OperatorIntent::ConfigureProperty {
+            target: view.control.target.clone(),
+            value,
+        });
     }
 
     fn show_control(
@@ -547,6 +593,11 @@ impl OperatorControlUi<'_> {
         control: &Control,
         mut editor: Option<&mut ControlEditor>,
     ) -> Option<OperatorIntent> {
+        if let Some(kind) = self.editor_kind(control)
+            && let Some(editor) = editor.as_mut()
+        {
+            editor.reconcile_kind(ui.ctx(), kind);
+        }
         let text = if recorder_control_supported(control) {
             self.label.as_str()
         } else {
@@ -581,6 +632,26 @@ impl OperatorControlUi<'_> {
             view.show_action(ui)
         })
         .inner
+    }
+
+    fn editor_kind(&self, control: &Control) -> Option<InputKind> {
+        if reference_control_supported(control) {
+            return Some(InputKind::Number);
+        }
+        if !property_control_supported(control) {
+            return None;
+        }
+        self.model
+            .observations
+            .entities
+            .get(&control.target)
+            .and_then(|item| item.value.get("value_type"))
+            .and_then(serde_json::Value::as_str)
+            .and_then(|kind| match kind {
+                "integer" => Some(InputKind::Integer),
+                "text" => Some(InputKind::Text),
+                _ => None,
+            })
     }
 
     /// The ordinary Recorder group consumes the same adapter and primitives.
@@ -920,6 +991,29 @@ mod tests {
         document.controls.clear();
         editors.reconcile(&context, &document, false);
         assert!(editors.drafts.is_empty());
+    }
+
+    #[test]
+    fn candidate_type_change_retires_text_focus_and_undo_without_changing_the_key() {
+        let context = egui::Context::default();
+        let mut editor = ControlEditor::default();
+        editor.reconcile_kind(&context, InputKind::Integer);
+        editor.text = "42".into();
+        let id = egui::Id::new("typed-editor");
+        editor.widget_ids.insert(id);
+        egui::text_edit::TextEditState::default().store(&context, id);
+        context.memory_mut(|memory| memory.request_focus(id));
+
+        editor.reconcile_kind(&context, InputKind::Integer);
+        assert_eq!(editor.text, "42", "the same candidate type keeps its draft");
+        assert!(egui::text_edit::TextEditState::load(&context, id).is_some());
+
+        editor.reconcile_kind(&context, InputKind::Text);
+        assert!(editor.text.is_empty());
+        assert!(editor.widget_ids.is_empty());
+        assert!(egui::text_edit::TextEditState::load(&context, id).is_none());
+        assert!(!context.memory(|memory| memory.has_focus(id)));
+        assert_eq!(editor.input_kind, Some(InputKind::Text));
     }
 
     #[test]

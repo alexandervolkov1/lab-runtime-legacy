@@ -9,8 +9,8 @@ from the [User manual](../README.md); ordinary users need no source checkout.
 - [Application overview](../application-api.md): the experiment/client boundary.
 - [Workbench API](../workbench-api.md): the local presentation and client endpoint.
 - [Generic Controls Architecture](../generic-controls-architecture.md): DGUI-4C
-  approved direction with DGUI-4C1 internal view normalization; later stages and
-  v2 contracts remain proposals.
+  approved direction with DGUI-4C1 internal view normalization and DGUI-4C2
+  bounded scalar drafts; later stages and v2 contracts remain proposals.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.
