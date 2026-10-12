@@ -431,8 +431,8 @@ mod runtime_acceptance {
         external::{PreparedEndpoint, WorkbenchEndpoint},
         gui::rebuild::RebuildCoordinator,
         model::{
-            ExactRetryWorkflow, Freshness, OperatorIntent, OperatorWorkflow, OperatorWorkflowState,
-            RecoveryStatusTracker, WorkbenchModel,
+            ControllerLifecycleIntent, ExactRetryWorkflow, Freshness, OperatorIntent,
+            OperatorWorkflow, OperatorWorkflowState, RecoveryStatusTracker, WorkbenchModel,
         },
         presentation::{PresentationDocument, RuntimeRef},
         recovery::load_journal,
@@ -1434,6 +1434,108 @@ mod runtime_acceptance {
 
         endpoint.shutdown(&mut dispatcher);
         dispatcher.take_client().unwrap().shutdown().unwrap();
+    }
+
+    #[test]
+    #[ignore = "DGUI-4B3 virtual Controller lifecycle acceptance; run after cargo build -p lab-runtime"]
+    fn real_runtime_controller_lifecycle_confirms_once_and_rechecks_source_state() {
+        let (mut runtime, address) = start_runtime();
+        let client = ClientHandle::spawn(address).unwrap();
+        let mut model = WorkbenchModel::new(PresentationDocument::empty("controller-operator"));
+        let mut rebuild = RebuildCoordinator::default();
+        client.connect(None).unwrap();
+        apply_until(&client, &mut model, &mut rebuild, |_, model| {
+            model.observations.freshness == Freshness::Fresh
+        });
+        let target = model
+            .observations
+            .entities
+            .keys()
+            .find(|target| matches!(target, RuntimeRef::Controller { .. }))
+            .unwrap()
+            .clone();
+        let RuntimeRef::Controller { controller } = &target else {
+            unreachable!()
+        };
+        assert_eq!(model.observations.entities[&target].value["state"], "ready");
+        let presentation = model.presentation.clone();
+        let mut workflow = OperatorWorkflow::default();
+        let start = OperatorIntent::ControllerLifecycle {
+            controller: controller.clone(),
+            action: ControllerLifecycleIntent::Start,
+        };
+        workflow.begin(&model, start).unwrap();
+        workflow.cancel_or_acknowledge();
+        assert!(model.recovery.mutations.is_empty());
+        let mut old_draft = None;
+        for (action, operation, expected_state) in [
+            (
+                ControllerLifecycleIntent::Start,
+                "controller_start",
+                "running",
+            ),
+            (
+                ControllerLifecycleIntent::Pause,
+                "controller_pause",
+                "paused",
+            ),
+            (
+                ControllerLifecycleIntent::Resume,
+                "controller_resume",
+                "running",
+            ),
+            (
+                ControllerLifecycleIntent::Pause,
+                "controller_pause",
+                "paused",
+            ),
+        ] {
+            workflow
+                .begin(
+                    &model,
+                    OperatorIntent::ControllerLifecycle {
+                        controller: controller.clone(),
+                        action,
+                    },
+                )
+                .unwrap();
+            if action == ControllerLifecycleIntent::Start {
+                old_draft = Some(workflow.clone());
+            }
+            let command_id = workflow.confirm(&model, &client).unwrap();
+            model.track_operator_intent(command_id).unwrap();
+            assert!(workflow.confirm(&model, &client).is_err());
+            apply_until(&client, &mut model, &mut rebuild, |update, model| {
+                workflow.after_update(update);
+                matches!(workflow.state, OperatorWorkflowState::Completed { .. })
+                    && model.observations.entities[&target].value["state"] == expected_state
+            });
+            assert!(workflow.accepted_observed, "{operation}");
+            assert_eq!(
+                old_draft.as_mut().unwrap().confirm(&model, &client),
+                Err(super::model::OperatorIntentError::DraftStale)
+            );
+            assert_eq!(model.presentation, presentation);
+            workflow.cancel_or_acknowledge();
+        }
+        for (operation, count) in [
+            ("controller_start", 1),
+            ("controller_pause", 2),
+            ("controller_resume", 1),
+        ] {
+            assert_eq!(
+                model
+                    .recovery
+                    .mutations
+                    .iter()
+                    .filter(|record| record.op == operation)
+                    .count(),
+                count
+            );
+        }
+        assert_eq!(model.recovery.mutations.len(), 4);
+        client.shutdown().unwrap();
+        assert!(runtime.0.try_wait().unwrap().is_none());
     }
 
     #[test]

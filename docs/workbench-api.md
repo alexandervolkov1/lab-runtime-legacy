@@ -299,10 +299,15 @@ Windows are `{"id":...,"title":...,"tabs":[...]}`; tabs are
 `apply_configuration`, or `reconnect_resource`), and boolean `confirm`. IDs are
 unique document-wide and panel references must resolve inside the document.
 The native GUI enables `recording_lifecycle` targeting `{"kind":"recorder"}`
-and `set_reference` targeting `{"kind":"reference","reference":"..."}`.
-They offer Recorder Start/Stop and fixed Reference configuration through the
-existing operator workflow, with a separate mandatory Confirm even when `confirm`
-is false. Reference Ramp/Retune and other declarative kinds remain inactive.
+and `set_reference` targeting `{"kind":"reference","reference":"..."}`,
+plus `controller_lifecycle` targeting `{"kind":"controller","controller":"..."}`.
+They offer Recorder Start/Stop, fixed Reference configuration and Controller
+lifecycle through the existing operator workflow, with a separate mandatory
+Confirm even when `confirm` is false. Controller actions follow the observed state: `ready` → Start,
+`warming`/`running` → Pause, `paused` → Resume, `failed` → Reset failed;
+otherwise no action is available. Confirm rechecks that source state. Replacement
+retains an active prepared intent's original target and does not execute it.
+Reference Ramp/Retune and other declarative kinds remain inactive.
 Reference input is bounded local GUI state keyed by Control ID/target, cleared
 on presentation revision change; it is not part of this document or recovery.
 The existing Runtime revision/freshness/recovery guards apply, and values use the
@@ -417,8 +422,9 @@ its ordinary default-plot behavior.
 
 The configuration currently changes **only in memory and is not saved to disk**.
 Workbench displays configured windows/tabs and Status/Plot panels through its
-[declarative view](workbench.md#view-and-adjust-plots). Recorder and fixed Reference Controls can
-express a local operator intent, followed by the existing confirmation workflow;
+[declarative view](workbench.md#view-and-adjust-plots). Recorder, fixed Reference
+and Controller lifecycle Controls can express a local operator intent, followed
+by the existing confirmation workflow;
 replacement itself does not execute controls or add presentation persistence.
 
 ## Events

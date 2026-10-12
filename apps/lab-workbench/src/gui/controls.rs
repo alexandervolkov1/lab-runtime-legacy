@@ -2,8 +2,8 @@
 
 use crate::{
     model::{
-        OperatorIntent, OperatorIntentError, OperatorWorkflow, RECORDING_LABEL_BYTES,
-        WorkbenchModel, prepare_operator_intent,
+        ControllerLifecycleIntent, OperatorIntent, OperatorIntentError, OperatorWorkflow,
+        RECORDING_LABEL_BYTES, WorkbenchModel, prepare_operator_intent,
     },
     presentation::{
         Control, ControlKind, MAX_CONTROLS, PanelKind, PresentationDocument, RuntimeRef,
@@ -83,6 +83,37 @@ pub(super) fn recorder_control_supported(control: &Control) -> bool {
     control.kind == ControlKind::RecordingLifecycle && control.target == RuntimeRef::Recorder
 }
 
+pub(super) fn controller_control_supported(control: &Control) -> bool {
+    control.kind == ControlKind::ControllerLifecycle
+        && matches!(control.target, RuntimeRef::Controller { .. })
+}
+
+/// Locate a referenced lifecycle control for this target, including hidden tabs.
+/// Ordinary buttons stay suppressed across tab switches; the location explains
+/// where the operator can find the declarative action without duplicating it.
+pub(super) fn controller_control_location(
+    document: &PresentationDocument,
+    controller: &str,
+) -> Option<String> {
+    for window in &document.windows {
+        for tab in &window.tabs {
+            for panel in &tab.panels {
+                let PanelKind::Controls { control_ids } = &panel.kind else {
+                    continue;
+                };
+                if document.controls.iter().any(|control| {
+                    controller_control_supported(control)
+                        && matches!(&control.target, RuntimeRef::Controller { controller: id } if id == controller)
+                        && control_ids.contains(&control.id)
+                }) {
+                    return Some(format!("{} / {} / {}", window.title, tab.title, panel.title));
+                }
+            }
+        }
+    }
+    None
+}
+
 /// Referenced controls in any tab replace the legacy Recorder buttons, even on a hidden tab.
 pub(super) fn has_recorder_controls(document: &PresentationDocument) -> bool {
     document
@@ -140,6 +171,12 @@ impl OperatorControlUi<'_> {
                         if intent.is_none() {
                             intent = clicked;
                         }
+                    }
+                } else if controller_control_supported(control) {
+                    ui.label(&control.label);
+                    let clicked = self.show_controller(ui, &control.target);
+                    if intent.is_none() {
+                        intent = clicked;
                     }
                 } else {
                     ui.add_enabled(false, egui::Button::new(&control.label))
@@ -254,6 +291,49 @@ impl OperatorControlUi<'_> {
         .inner
     }
 
+    fn show_controller(&self, ui: &mut egui::Ui, target: &RuntimeRef) -> Option<OperatorIntent> {
+        let RuntimeRef::Controller { controller } = target else {
+            return None;
+        };
+        let state = self
+            .model
+            .observations
+            .entities
+            .get(target)
+            .and_then(|observation| observation.value.get("state"))
+            .and_then(serde_json::Value::as_str);
+        ui.label(format!("Controller: {controller}"));
+        ui.label(format!(
+            "Controller state (cached): {}",
+            state.unwrap_or("unavailable")
+        ));
+        let (label, action) = match state {
+            Some("ready") => ("Start", ControllerLifecycleIntent::Start),
+            Some("warming" | "running") => ("Pause", ControllerLifecycleIntent::Pause),
+            Some("paused") => ("Resume", ControllerLifecycleIntent::Resume),
+            Some("failed") => ("Reset failed", ControllerLifecycleIntent::ResetFailed),
+            _ => {
+                ui.add_enabled(false, egui::Button::new("No lifecycle action available"));
+                return None;
+            }
+        };
+        let eligible = self.eligibility(OperatorIntent::ControllerLifecycle {
+            controller: controller.clone(),
+            action,
+        });
+        let mut response = ui.add_enabled(eligible.is_ok(), egui::Button::new(label));
+        if let Err(error) = &eligible {
+            response = response.on_disabled_hover_text(error.to_string());
+        }
+        // Only the owner may begin the shared workflow, whose separate Confirm
+        // rechecks the captured Runtime state even for Control.confirm = false.
+        if response.clicked() {
+            eligible.ok()
+        } else {
+            None
+        }
+    }
+
     pub(super) fn show(&mut self, ui: &mut egui::Ui) -> Option<OperatorIntent> {
         let state = self
             .model
@@ -300,6 +380,71 @@ impl OperatorControlUi<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn only_controller_lifecycle_with_controller_target_is_supported() {
+        for kind in [
+            ControlKind::ControllerLifecycle,
+            ControlKind::SetReference,
+            ControlKind::RecordingLifecycle,
+            ControlKind::ApplyConfiguration,
+            ControlKind::ReconnectResource,
+        ] {
+            for target in [
+                RuntimeRef::Controller {
+                    controller: "1".into(),
+                },
+                RuntimeRef::Recorder,
+                RuntimeRef::Reference {
+                    reference: "1".into(),
+                },
+            ] {
+                let control = Control {
+                    id: "control".into(),
+                    label: "Action".into(),
+                    kind: kind.clone(),
+                    target: target.clone(),
+                    confirm: false,
+                };
+                assert_eq!(
+                    controller_control_supported(&control),
+                    kind == ControlKind::ControllerLifecycle
+                        && matches!(target, RuntimeRef::Controller { .. })
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn lifecycle_location_suppresses_only_referenced_matching_controller_in_any_tab() {
+        let mut document: PresentationDocument = serde_json::from_value(json!({
+            "format_version":1,"document_id":"controller-location","plots":[],
+            "controls":[{"id":"control","label":"Heater","kind":"controller_lifecycle",
+                "target":{"kind":"controller","controller":"1"},"confirm":false}],
+            "windows":[{"id":"window","title":"Workbench","tabs":[
+                {"id":"signals","title":"Signals","panels":[]},
+                {"id":"operator","title":"Operator","panels":[{"id":"panel","title":"Heater actions",
+                    "kind":{"kind":"controls","control_ids":["control"]}}]}
+            ]}]
+        })).unwrap();
+        document.validate().unwrap();
+        assert_eq!(
+            controller_control_location(&document, "1").as_deref(),
+            Some("Workbench / Operator / Heater actions")
+        );
+        assert!(controller_control_location(&document, "2").is_none());
+        document.controls[0].kind = ControlKind::SetReference;
+        assert!(controller_control_location(&document, "1").is_none());
+        document.controls[0].kind = ControlKind::ControllerLifecycle;
+        document.windows[0].tabs[1].panels.clear();
+        assert!(
+            controller_control_location(&document, "1").is_none(),
+            "unreferenced control must not hide ordinary buttons"
+        );
+        document.windows.clear();
+        assert!(controller_control_location(&document, "1").is_none());
+    }
 
     #[test]
     fn reference_editor_storage_is_bounded_and_retires_undo_and_focus_on_reset() {
