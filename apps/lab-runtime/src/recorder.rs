@@ -20,6 +20,8 @@
 use std::time::Duration;
 
 mod history;
+#[cfg(test)]
+mod property_lifecycle_tests;
 mod provenance;
 mod sqlite;
 mod time;
@@ -147,8 +149,10 @@ impl ConfigurationLifecycleRecord {
         // the active API. They remain accepted so pre-M9C lifecycle facts can be
         // validated when an existing historical archive is inspected or reopened.
         let revision_valid = match self.operation_kind {
-            "reload_configuration" | "apply_configuration" => {
-                self.committed_revision == self.base_revision.checked_add(1).unwrap_or(0)
+            // Property overlays use the same staged deployment commit and must
+            // produce exactly one new revision, never a wraparound sentinel.
+            "reload_configuration" | "apply_configuration" | "property_configure" => {
+                self.base_revision.checked_add(1) == Some(self.committed_revision)
             }
             "reload_managed_sources"
             | "restart_models"

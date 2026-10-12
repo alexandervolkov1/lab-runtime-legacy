@@ -32,6 +32,10 @@ High-value historical oracles are intentionally retained:
   separation and the no-retry rule after an ambiguous started write;
 - Recorder `writer_barrier_tests` protects the mutex/Condvar predicate against the
   former lost-wake race;
+- `recorder_property_lifecycle` starts the real virtual Runtime with Required
+  Recorder, applies integer/text overlays in Idle and Recording through one TCP
+  scope, and verifies revision fencing, deduplication and durable activation
+  provenance in the closed archive;
 - `recorder_history_api` protects cursor/job cleanup across disconnect and reused
   client capacity.
 

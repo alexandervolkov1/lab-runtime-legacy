@@ -19,6 +19,8 @@
 //! [`lab_core::Runtime`].
 
 mod configuration;
+#[cfg(test)]
+mod property_lifecycle_tests;
 mod reconnect;
 mod shutdown;
 
