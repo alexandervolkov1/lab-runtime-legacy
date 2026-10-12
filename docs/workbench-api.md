@@ -298,6 +298,11 @@ Windows are `{"id":...,"title":...,"tabs":[...]}`; tabs are
 `target`, `kind` (`set_reference`, `controller_lifecycle`, `recording_lifecycle`,
 `apply_configuration`, or `reconnect_resource`), and boolean `confirm`. IDs are
 unique document-wide and panel references must resolve inside the document.
+The native GUI currently enables only `recording_lifecycle` targeting
+`{"kind":"recorder"}`. It offers Start/Stop from the Runtime projection through
+the existing operator workflow, with a separate mandatory Confirm even when
+`confirm` is false. Other kinds and incompatible targets remain inactive.
+These definitions are presentation metadata, not executable API requests.
 
 ## UI mutation contract
 
@@ -407,8 +412,9 @@ its ordinary default-plot behavior.
 
 The configuration currently changes **only in memory and is not saved to disk**.
 Workbench displays configured windows/tabs and Status/Plot panels through its
-[read-only declarative view](workbench.md#view-and-adjust-plots). Controls panels
-remain inactive; replacement does not execute them or add presentation persistence.
+[declarative view](workbench.md#view-and-adjust-plots). Recorder Controls can
+express a local operator intent, followed by the existing confirmation workflow;
+replacement itself does not execute controls or add presentation persistence.
 
 ## Events
 
@@ -555,4 +561,4 @@ Runtime connection. `-GuiHoldSeconds 60` allows a separate visual tab/panel/plot
 inspection, followed by exact readback. Protocol success and a native window handle
 alone are not visual-smoke evidence. See the smoke README for the observed Windows
 result and limits. The applied configuration remains in memory; this acceptance
-check does not implement Controls or presentation persistence.
+check does not exercise operator Controls or presentation persistence.

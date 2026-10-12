@@ -1,6 +1,7 @@
 //! Minimal native Workbench GUI over the one bounded Application client owner.
 
 mod app;
+mod controls;
 mod presentation;
 pub(crate) use crate::rebuild;
 

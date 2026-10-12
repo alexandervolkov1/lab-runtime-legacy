@@ -1,5 +1,6 @@
 //! eframe main-thread owner and thin observational rendering.
 
+use super::controls::{RecorderControlUi, has_recorder_controls};
 use super::presentation::PresentationRenderer;
 use super::rebuild::RebuildCoordinator;
 use crate::{
@@ -12,8 +13,8 @@ use crate::{
         ControllerLifecycleIntent, EXACT_RETRY_WARNING, ExactRetryState, ExactRetryWorkflow,
         Freshness, OperatorIntent, OperatorWarning, OperatorWorkflow, OperatorWorkflowState,
         PROPERTY_TEXT_BYTES, PidCandidate, PreparedExactRetry, PropertyMutationCandidate,
-        RECORDING_LABEL_BYTES, RecoveryAttachment, RecoveryRecordPresentation, RecoveryStatusState,
-        RecoveryStatusTracker, RuntimeObservations, StatusEligibility, UiCommand, WorkbenchModel,
+        RecoveryAttachment, RecoveryRecordPresentation, RecoveryStatusState, RecoveryStatusTracker,
+        RuntimeObservations, StatusEligibility, UiCommand, WorkbenchModel,
     },
     ownership::WorkspaceOwnership,
     presentation::{
@@ -496,16 +497,29 @@ impl WorkbenchApp {
     }
 
     fn render_main(&mut self, ui: &mut egui::Ui) {
-        let declarative = self.presentation_renderer.show(
+        let response = self.presentation_renderer.show(
             ui,
             &self.model.presentation,
             &self.model.observations,
             self.model.presentation_revision(),
+            &mut RecorderControlUi {
+                model: &self.model,
+                operator: &self.operator,
+                observation_only: self.observation_only,
+                label: &mut self.recording_label,
+            },
         );
+        if let Some(intent) = response.intent {
+            self.begin_operator(intent);
+        }
+        // Confirmation remains available even when no signal has been discovered.
+        self.render_operator_workflow(ui);
         let Some(selected) = self.selected.clone() else {
             ui.heading("Live signal");
             ui.label("No discovered signal is available.");
-            self.render_recorder_controls(ui);
+            if !self.operator.state.is_active() {
+                self.render_recorder_controls(ui);
+            }
             return;
         };
         self.ensure_editor_for(&selected);
@@ -529,9 +543,13 @@ impl WorkbenchApp {
         if let Some(observation) = &observation {
             ui.monospace(bounded_value_text(&observation.value));
         }
-        render_selected_live_plot(ui, &selected, &self.model.observations, declarative);
+        render_selected_live_plot(
+            ui,
+            &selected,
+            &self.model.observations,
+            response.declarative,
+        );
         ui.separator();
-        self.render_operator_workflow(ui);
         if matches!(self.operator.state, OperatorWorkflowState::Idle) {
             self.render_target_controls(
                 ui,
@@ -920,49 +938,27 @@ impl WorkbenchApp {
     }
 
     fn render_recorder_controls(&mut self, ui: &mut egui::Ui) {
-        let target = RuntimeRef::Recorder;
-        let Some(observation) = self.model.observations.entities.get(&target).cloned() else {
+        if has_recorder_controls(&self.model.presentation)
+            || !self
+                .model
+                .observations
+                .entities
+                .contains_key(&RuntimeRef::Recorder)
+        {
             return;
-        };
+        }
         ui.separator();
         ui.heading("Recorder");
-        ui.label(format!(
-            "authoritative state: {}",
-            observation
-                .value
-                .get("state")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown")
-        ));
-        ui.horizontal(|ui| {
-            ui.text_edit_singleline(&mut self.recording_label);
-            truncate_utf8(&mut self.recording_label, RECORDING_LABEL_BYTES);
-            let idle = observation.value.get("state").and_then(Value::as_str) == Some("idle");
-            if ui
-                .add_enabled(
-                    idle && self.control_enabled(&target, "recording_start"),
-                    egui::Button::new("Start recording"),
-                )
-                .clicked()
-            {
-                self.begin_operator(OperatorIntent::StartRecording {
-                    label: self.recording_label.clone(),
-                });
-            }
-            let has_run = observation
-                .value
-                .get("active_run")
-                .is_some_and(|run| !run.is_null());
-            if ui
-                .add_enabled(
-                    has_run && self.control_enabled(&target, "recording_stop"),
-                    egui::Button::new("Stop recording"),
-                )
-                .clicked()
-            {
-                self.begin_operator(OperatorIntent::StopRecording);
-            }
-        });
+        let intent = RecorderControlUi {
+            model: &self.model,
+            operator: &self.operator,
+            observation_only: self.observation_only,
+            label: &mut self.recording_label,
+        }
+        .show(ui);
+        if let Some(intent) = intent {
+            self.begin_operator(intent);
+        }
     }
 
     fn control_enabled(&self, target: &RuntimeRef, operation: &str) -> bool {
@@ -1613,7 +1609,7 @@ fn property_candidate(
     }
 }
 
-fn truncate_utf8(value: &mut String, maximum_bytes: usize) {
+pub(super) fn truncate_utf8(value: &mut String, maximum_bytes: usize) {
     if value.len() <= maximum_bytes {
         return;
     }
@@ -1946,9 +1942,21 @@ mod tests {
             let mut selected_plot_id = egui::Id::NULL;
             let output = context.run_ui(Default::default(), |ui| {
                 selected_plot_id = ui.make_persistent_id("selected-live-signal");
-                let active = renderer.show(ui, &model.presentation, &model.observations, 1);
-                assert_eq!(active, declared);
-                render_selected_live_plot(ui, &signal, &model.observations, active);
+                let response = renderer.show(
+                    ui,
+                    &model.presentation,
+                    &model.observations,
+                    1,
+                    &mut RecorderControlUi {
+                        model: &model,
+                        operator: &OperatorWorkflow::default(),
+                        observation_only: false,
+                        label: &mut "Workbench run".to_owned(),
+                    },
+                );
+                assert_eq!(response.declarative, declared);
+                assert!(response.intent.is_none());
+                render_selected_live_plot(ui, &signal, &model.observations, response.declarative);
             });
             output.drop_without_applying_deltas();
             assert_eq!(

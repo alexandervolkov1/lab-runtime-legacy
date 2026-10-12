@@ -292,6 +292,7 @@ mod operator_boundary_tests {
         let dispatcher = include_str!("dispatcher.rs");
         let external = include_str!("external.rs");
         let renderer = production_source(include_str!("gui/presentation.rs"));
+        let controls = production_source(include_str!("gui/controls.rs"));
         for prohibited in [
             "ClientHandle",
             "WorkbenchDispatcher",
@@ -303,11 +304,17 @@ mod operator_boundary_tests {
             ".retry_mutation(",
             "apply_gui_ui",
             "RecoveryJournal",
+            "MutationSubmitter",
+            ".submit_mutation(",
+            ".confirm(",
+            ".begin(",
         ] {
-            assert!(
-                !renderer.contains(prohibited),
-                "declarative renderer contains authority seam {prohibited}"
-            );
+            for view in [&renderer, &controls] {
+                assert!(
+                    !view.contains(prohibited),
+                    "declarative renderer contains authority seam {prohibited}"
+                );
+            }
         }
         assert!(!source.contains(".mutation("));
         assert!(!source.contains(".retry_mutation("));
@@ -1427,6 +1434,78 @@ mod runtime_acceptance {
 
         endpoint.shutdown(&mut dispatcher);
         dispatcher.take_client().unwrap().shutdown().unwrap();
+    }
+
+    #[test]
+    #[ignore = "DGUI-4B1 virtual Recorder acceptance; run after cargo build -p lab-runtime"]
+    fn real_runtime_recording_operator_workflow_confirms_once_and_observes_start_stop() {
+        let (mut runtime, address) = start_runtime_with_recorder();
+        let client = ClientHandle::spawn(address).unwrap();
+        let mut model = WorkbenchModel::new(PresentationDocument::empty("recording-operator"));
+        let mut rebuild = RebuildCoordinator::default();
+        client.connect(None).unwrap();
+        apply_until(&client, &mut model, &mut rebuild, |_, model| {
+            model.observations.freshness == Freshness::Fresh
+        });
+        let presentation = model.presentation.clone();
+        let mut workflow = OperatorWorkflow::default();
+        let start = OperatorIntent::StartRecording {
+            label: "DGUI-4B1 virtual recording".into(),
+        };
+        workflow.begin(&model, start.clone()).unwrap();
+        workflow.cancel_or_acknowledge();
+        assert!(model.recovery.mutations.is_empty());
+        assert_eq!(
+            model.observations.entities[&RuntimeRef::Recorder].value["state"],
+            "idle"
+        );
+        for (intent, operation, expected_state) in [
+            (start, "recording_start", "recording"),
+            (OperatorIntent::StopRecording, "recording_stop", "idle"),
+        ] {
+            workflow.begin(&model, intent).unwrap();
+            assert!(matches!(
+                workflow.state,
+                OperatorWorkflowState::AwaitingConfirmation(_)
+            ));
+            let command_id = workflow.confirm(&model, &client).unwrap();
+            model.track_operator_intent(command_id).unwrap();
+            assert!(workflow.confirm(&model, &client).is_err());
+            let deadline = Instant::now() + ACCEPTANCE_TIMEOUT;
+            loop {
+                assert!(
+                    Instant::now() < deadline,
+                    "{operation} completion/projection deadline"
+                );
+                let update = client
+                    .recv_timeout(deadline.saturating_duration_since(Instant::now()))
+                    .unwrap();
+                model.apply_client_update(update.clone());
+                workflow.after_update(&update);
+                rebuild.after_update(&update, &mut model, &client);
+                if matches!(workflow.state, OperatorWorkflowState::Completed { .. })
+                    && model.observations.entities[&RuntimeRef::Recorder].value["state"]
+                        == expected_state
+                {
+                    break;
+                }
+            }
+            assert!(workflow.accepted_observed);
+            assert_eq!(
+                model
+                    .recovery
+                    .mutations
+                    .iter()
+                    .filter(|record| record.op == operation)
+                    .count(),
+                1
+            );
+            assert_eq!(model.presentation, presentation);
+            workflow.cancel_or_acknowledge();
+        }
+        assert!(runtime.0.try_wait().unwrap().is_none());
+        client.shutdown().unwrap();
+        assert!(runtime.0.try_wait().unwrap().is_none());
     }
 
     #[test]

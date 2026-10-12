@@ -18,10 +18,12 @@ pub(crate) use exact_retry::{
     EXACT_RETRY_WARNING, ExactRetryError, ExactRetryState, ExactRetrySubmitter, ExactRetryWorkflow,
     PreparedExactRetry,
 };
+#[cfg(test)]
+pub(crate) use operator::MutationSubmitter;
 pub(crate) use operator::{
     ControllerLifecycleIntent, OperatorIntent, OperatorIntentError, OperatorWarning,
     OperatorWorkflow, OperatorWorkflowState, PROPERTY_TEXT_BYTES, PidCandidate,
-    PropertyMutationCandidate, RECORDING_LABEL_BYTES,
+    PropertyMutationCandidate, RECORDING_LABEL_BYTES, prepare as prepare_operator_intent,
 };
 pub(crate) use projections::{Freshness, LIVE_TRACE_POINTS, LivePoint, RuntimeObservations};
 pub(crate) use recovery_status::{
