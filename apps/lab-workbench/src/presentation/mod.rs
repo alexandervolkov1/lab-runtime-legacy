@@ -8,6 +8,7 @@
 mod document;
 mod persistence;
 mod reference;
+pub(crate) mod v2;
 
 pub(crate) use document::{
     AxisOptions, Control, ControlKind, DocumentError, MAX_CONTROLS, MAX_PLOTS, MAX_STRING_BYTES,
