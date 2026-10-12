@@ -7,10 +7,25 @@ use serde::{
     de::{self, DeserializeSeed, MapAccess, SeqAccess, Visitor},
 };
 
-pub(super) const INPUT_BYTES: usize = 2_097_152;
-const STRING_BYTES: usize = 512;
-const VALUES: usize = 16_384;
-const DEPTH: usize = 16;
+use super::limits::{
+    JSON_BODY_BYTES, JSON_DEPTH as DEPTH, JSON_STRING_BYTES as STRING_BYTES, JSON_VALUES as VALUES,
+};
+pub(super) const INPUT_BYTES: usize = JSON_BODY_BYTES;
+
+/// Measured lexical usage, with the same counting rules as the current endpoint.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct JsonUsage {
+    pub(crate) body_bytes: usize,
+    pub(crate) max_depth: usize,
+    pub(crate) values_members: usize,
+    pub(crate) max_string_bytes: usize,
+}
+
+struct Budget {
+    remaining: usize,
+    max_depth: usize,
+    max_string_bytes: usize,
+}
 
 /// UTF-8 text with a byte ceiling; IDs and labels additionally forbid empty text.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
@@ -129,12 +144,13 @@ pub(super) fn nullable<'de, D: Deserializer<'de>, T: Deserialize<'de>>(
 
 // No JSON value tree is built. Only bounded object-key sets remain on the stack.
 struct Scan<'a> {
-    remaining: &'a mut usize,
+    budget: &'a mut Budget,
     depth: usize,
 }
 impl Scan<'_> {
     fn charge<E: de::Error>(&mut self) -> Result<(), E> {
-        *self.remaining = self
+        self.budget.remaining = self
+            .budget
             .remaining
             .checked_sub(1)
             .ok_or_else(|| E::custom("JSON value/member limit"))?;
@@ -173,6 +189,7 @@ impl<'de> Visitor<'de> for Scan<'_> {
         Ok(())
     }
     fn visit_str<E: de::Error>(self, value: &str) -> Result<(), E> {
+        self.budget.max_string_bytes = self.budget.max_string_bytes.max(value.len());
         if value.len() <= STRING_BYTES {
             Ok(())
         } else {
@@ -183,9 +200,10 @@ impl<'de> Visitor<'de> for Scan<'_> {
         if self.depth > DEPTH {
             return Err(de::Error::custom("JSON depth limit"));
         }
+        self.budget.max_depth = self.budget.max_depth.max(self.depth);
         while seq
             .next_element_seed(Scan {
-                remaining: self.remaining,
+                budget: self.budget,
                 depth: self.depth + 1,
             })?
             .is_some()
@@ -196,14 +214,16 @@ impl<'de> Visitor<'de> for Scan<'_> {
         if self.depth > DEPTH {
             return Err(de::Error::custom("JSON depth limit"));
         }
+        self.budget.max_depth = self.budget.max_depth.max(self.depth);
         let mut keys = BTreeSet::new();
         while let Some(key) = map.next_key::<Text<false>>()? {
+            self.budget.max_string_bytes = self.budget.max_string_bytes.max(key.0.len());
             self.charge()?;
             if !keys.insert(key) {
                 return Err(de::Error::custom("duplicate JSON key"));
             }
             map.next_value_seed(Scan {
-                remaining: self.remaining,
+                budget: self.budget,
                 depth: self.depth + 1,
             })?;
         }
@@ -212,6 +232,10 @@ impl<'de> Visitor<'de> for Scan<'_> {
 }
 
 pub(super) fn preflight(bytes: &[u8]) -> Result<(), String> {
+    inspect(bytes).map(|_| ())
+}
+
+pub(super) fn inspect(bytes: &[u8]) -> Result<JsonUsage, String> {
     if bytes.len() > INPUT_BYTES {
         return Err("JSON body byte limit".into());
     }
@@ -235,12 +259,22 @@ pub(super) fn preflight(bytes: &[u8]) -> Result<(), String> {
         }
     }
     let mut deserializer = serde_json::Deserializer::from_slice(bytes);
-    let mut remaining = VALUES;
+    let mut budget = Budget {
+        remaining: VALUES,
+        max_depth: 0,
+        max_string_bytes: 0,
+    };
     Scan {
-        remaining: &mut remaining,
+        budget: &mut budget,
         depth: 1,
     }
     .deserialize(&mut deserializer)
     .map_err(|error| error.to_string())?;
-    deserializer.end().map_err(|error| error.to_string())
+    deserializer.end().map_err(|error| error.to_string())?;
+    Ok(JsonUsage {
+        body_bytes: bytes.len(),
+        max_depth: budget.max_depth,
+        values_members: VALUES - budget.remaining,
+        max_string_bytes: budget.max_string_bytes,
+    })
 }

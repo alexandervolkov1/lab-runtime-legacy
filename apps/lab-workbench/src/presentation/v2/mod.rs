@@ -1,18 +1,24 @@
 //! Isolated v2 syntax, local and structural checks. No publication permission.
 //!
-//! Canonical serialization, envelope headroom and measured allocation checks are
-//! still pending. No conversion to the active v1 document exists.
+//! Measured allocation and final combined admission checks are still pending.
+//! No conversion to the active v1 document exists.
 
 mod bounded;
+mod canonical;
 mod dto;
+mod encoding;
 mod graph;
+mod limits;
 mod structure;
 mod validation;
+mod wire;
 
 pub(crate) use bounded::{I64Decimal, U64Decimal};
+pub(crate) use canonical::CanonicalWireCandidate;
 pub(crate) use dto::*;
 pub(crate) use graph::{ViewOccurrence, ViewOccurrenceId};
 pub(crate) use structure::{StaticAvailability, StaticBlocker, StructuralSummary};
+pub(crate) use wire::WireUsage;
 
 /// A closed-shape document, still requiring local checks and full admission.
 #[derive(Debug)]
@@ -55,6 +61,11 @@ impl LocallyCheckedDocument {
 }
 
 impl StructurallyCheckedDocument {
+    /// Proves canonical byte and full wire-envelope limits, still without admission.
+    /// The candidate borrows this immutable source; it is not another document owner.
+    pub(crate) fn check_canonical_wire(&self) -> Result<CanonicalWireCandidate<'_>, String> {
+        canonical::check(self)
+    }
     /// Immutable syntax retained for the future final admission stage.
     pub(crate) fn dto(&self) -> &DocumentDto {
         &self.dto
@@ -88,6 +99,8 @@ pub(crate) fn parse(bytes: &[u8]) -> Result<ParsedDocument, String> {
         .map_err(|error| error.to_string())
 }
 
+#[cfg(test)]
+mod canonical_tests;
 #[cfg(test)]
 mod structure_tests;
 #[cfg(test)]

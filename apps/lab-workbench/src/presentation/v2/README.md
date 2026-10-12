@@ -1,4 +1,4 @@
-# Isolated v2 syntax, local and structural validation
+# Isolated v2 validation, canonical bytes and wire capacity
 
 This module implements the DTO vocabulary in the
 [v2 contract](../../../../../docs/generic-controls-v2-contract.md), sections 2–4
@@ -66,15 +66,118 @@ labels, helper sharing, ordering and defaults) belong to the future migration st
 The checked stage has a private payload, no deserializer/public constructor and
 no mutable DTO accessor. Static success grants no publication or execution rights.
 
+## Canonical serialization (DGUI-4C5C1)
+
+`StructurallyCheckedDocument::check_canonical_wire()` returns a private-constructed
+`CanonicalWireCandidate` borrowing that immutable source. The bytes are derived
+data, not another document owner or a `FullyAdmittedDocument`. A failed size,
+encoding or envelope check returns no candidate and changes no source/summary.
+
+The serializer visits typed fields directly, never the input JSON bytes or an
+intermediate `Value` tree. Object fields follow the contract tables. Components
+start `id,kind,label`, then present `help`, then their row fields; actions start
+`id,family,target`, then their parameter. Optional fields follow required fields
+in table order. Arrays and all identity strings retain their original order/bytes.
+Pretty JSON uses two-space indentation, LF separators and no trailing newline.
+UTF-8 remains literal except JSON-required escaping: quotes/backslash, short
+escapes for backspace/form-feed/newline/CR/tab, and lowercase `\u00xx` for other
+U+0000..U+001F controls. There is no Unicode normalization or slash/HTML escaping.
+
+Canonical defaults are explicit: `settings:{"density":"comfortable"}`,
+`applicability:"always"`, `constraints:{}`, and `expect_kind:null`. Fields whose
+default is absence (`help`, `precision`, `v1_kind`, `v1_control`, constraint members,
+`disabled_reason`) are omitted when absent. Required nullable fields stay present.
+Only these presentation defaults normalize; targets, arrays, literal values,
+disabled reasons and origin annotations are never rewritten.
+
+Number encoding operates on the already-decoded finite binary64. Its reference
+formatter is the existing locked `serde_json 1.0.151` / `zmij 1.0.23` pair in
+[Cargo.lock](../../../../../Cargo.lock): shortest correctly rounded decimal
+significand, fixed notation for decimal exponents -5 through 15 inclusive,
+otherwise scientific notation with lowercase `e`, explicit exponent sign and no
+exponent leading zeros. Integral fixed-notation values have `.0`. Signed zero
+is preserved (`0.0` / `-0.0`); nonfinite values fail instead of becoming null.
+The locked formatter defines shortest-significand selection and tie handling;
+dependency updates must preserve these bytes or receive contract review.
+This rule is locale-independent, round-trips to the same binary64 and does not
+promise more precision than binary64. Integer/unsigned decimal types instead use
+exact i64/u64 decimal JSON strings without any float intermediate.
+
+Representative literal golden bytes (the tests contain exact byte expectations):
+
+| Typed value | JSON bytes |
+|---|---|
+| Number +0 / -0 / integral 42 | `0.0` / `-0.0` / `42.0` |
+| Number 10^-5 / 10^-6 | `0.00001` / `1e-6` |
+| Number 10^15 / 10^16 / 10^30 | `1000000000000000.0` / `1e+16` / `1e+30` |
+| Smallest positive subnormal / normal | `5e-324` / `2.2250738585072014e-308` |
+| Maximum finite Number | `1.7976931348623157e+308` |
+| Number 2^53-1 / 2^53 / next representable | `9007199254740991.0` / `9007199254740992.0` / `9007199254740994.0` |
+| Integer 2^53+1 | `"9007199254740993"` |
+| i64 MIN / MAX | `"-9223372036854775808"` / `"9223372036854775807"` |
+| u64 MAX | `"18446744073709551615"` |
+
+## Full wire headroom
+
+Private serialization-only probes use the proposed v2 replacement-request and
+presentation-result shapes in contract section 6. They do not implement an
+endpoint, protocol negotiation or operation dispatch. Their document object is
+encoded compactly from the same normalized DTO: inserting raw pretty bytes would
+introduce physical LF inside the line-framed message. The existing endpoint
+constants are imported read-only; no active v1 behavior or limits change.
+
+Both probes use a legal worst-case 64-byte call_id consisting of NUL characters
+(384 encoded bytes), a 32-character lowercase-hex workbench_id, and exact
+`"18446744073709551615"` revision. This is capacity evidence, not permission to
+increment a saturated revision. Every emitted body is scanned for depth,
+values/members, key/string byte lengths and LF/CRLF physical-frame sizes.
+
+| Checked resource | Bound / exact overhead |
+|---|---|
+| Canonical pretty document | 1,048,576 bytes, inclusive |
+| Body / LF or CRLF physical frame | 2,097,152 / 2,097,153 bytes |
+| Body fitting both LF and CRLF | At most 2,097,151 bytes |
+| JSON containers / values-members / key or string | 16 levels / 16,384 / 512 decoded UTF-8 bytes |
+| Replacement request | Compact document + 566 bytes, +18 values/members, +2 document depth |
+| Presentation result | Compact document + 540 bytes, +14 values/members, +2 document depth |
+| Effective canonical document value ceiling | 16,366 to fit both exchanges |
+
+Thus the byte ceiling is comfortably below the wire ceiling (request body at
+most 1,049,142 bytes), but a bare document can still fail envelope value headroom.
+Request overhead dominates response overhead: a response-only production failure
+after a successful request check is unreachable under these fixed shapes. Tests
+exercise each probe independently at its exact value boundary and one over.
+The current flat typed schema has maximum container depth 8 bare / 10 enclosed;
+depth-16/17 boundary probes use explicitly scanner-only synthetic JSON fixtures,
+not allegedly valid DTOs. Neither documents nor labels are truncated to fit.
+
+## Buffer ownership and remaining admission
+
+One check reserves a canonical `Vec<u8>` payload capacity of exactly 1 MiB and a
+single reusable wire-body `Vec<u8>` payload capacity of exactly 2 MiB. Reservation
+uses `try_reserve_exact`; writers reject before crossing their ceilings and never
+grow these buffers. The wire buffer is cleared and reused for response after
+request scanning, then dropped before returning. The successful candidate retains
+only the canonical buffer (including its reserved capacity), source borrow and
+small usage records. Failure drops both buffers. There is no retained input-byte
+copy or document clone. These are bounded requested capacities, not a claim about
+allocator bookkeeping/rounding or the final 4 MiB admission budget.
+
+Additional temporary storage is one 64-byte call-ID string per probe, fixed-size
+scalar-formatting scratch, and the existing streaming scan's bounded object-key
+sets/escape scratch (at most 16 nested containers, 512-byte decoded strings with
+at most 3,072 encoded bytes). It builds no JSON value tree. The DTO and structural
+summary remain borrowed for the candidate's lifetime. Final retained allocation,
+staging overlap, GUI-owned state and combined admission accounting belong to C2.
+
 Intentionally pending admission checks:
 
 - Runtime metadata applicability and trusted adapter guards; no authority is
   established by locally valid literal values or presentation constraints.
-- Canonical owner serialization and its 1 MiB bound, envelope round-trip headroom,
-  golden bytes and the measured 4 MiB retained-allocation budget. Input/element
-  ceilings bound decoding work but do not claim that measured admission budget.
+- Measured 4 MiB retained-allocation budget, staging/GUI allocation accounting and
+  final combined admission constraints. Canonical/wire success is not admission.
 
-There is no admitted-document constructor, owner conversion, serializer, migration,
+There is no admitted-document constructor, owner conversion, migration,
 v2 protocol/profile, renderer, observation lookup or execution path in this module.
 Tests load the three complete section-11 examples directly from the contract and
 exercise invalid forms at every nested object level. Fixtures with dangling IDs,
