@@ -1,14 +1,18 @@
-//! Isolated v2 syntax and local checks. Nothing here admits or publishes a document.
+//! Isolated v2 syntax, local and structural checks. No publication permission.
 //!
-//! Cross-registry, graph, expansion, canonical serialization and measured allocation
-//! checks are deliberately pending. No conversion to the active v1 document exists.
+//! Canonical serialization, envelope headroom and measured allocation checks are
+//! still pending. No conversion to the active v1 document exists.
 
 mod bounded;
 mod dto;
+mod graph;
+mod structure;
 mod validation;
 
 pub(crate) use bounded::{I64Decimal, U64Decimal};
 pub(crate) use dto::*;
+pub(crate) use graph::{ViewOccurrence, ViewOccurrenceId};
+pub(crate) use structure::{StaticAvailability, StaticBlocker, StructuralSummary};
 
 /// A closed-shape document, still requiring local checks and full admission.
 #[derive(Debug)]
@@ -19,6 +23,14 @@ pub(crate) struct ParsedDocument(DocumentDto);
 #[derive(Debug)]
 pub(crate) struct LocallyCheckedDocument(DocumentDto);
 
+/// References, graph, expanded counts and static semantics passed. NOT admitted.
+/// Only immutable access is exposed; no public constructor or deserializer exists.
+#[derive(Debug)]
+pub(crate) struct StructurallyCheckedDocument {
+    dto: DocumentDto,
+    summary: StructuralSummary,
+}
+
 impl ParsedDocument {
     /// Checks local constraints only. This is never a publication permit.
     pub(crate) fn check_local(self) -> Result<LocallyCheckedDocument, String> {
@@ -28,9 +40,42 @@ impl ParsedDocument {
 }
 
 impl LocallyCheckedDocument {
+    /// Consumes the local stage; success still grants no Runtime or publication authority.
+    pub(crate) fn check_structure(self) -> Result<StructurallyCheckedDocument, String> {
+        let summary = structure::check(&self.0)?;
+        Ok(StructurallyCheckedDocument {
+            dto: self.0,
+            summary,
+        })
+    }
     /// Read-only syntax for future admission passes, not an admitted document.
     pub(crate) fn dto(&self) -> &DocumentDto {
         &self.0
+    }
+}
+
+impl StructurallyCheckedDocument {
+    /// Immutable syntax retained for the future final admission stage.
+    pub(crate) fn dto(&self) -> &DocumentDto {
+        &self.dto
+    }
+
+    /// Static blockers and exact expanded counts; absence of a blocker is not eligibility.
+    pub(crate) fn summary(&self) -> &StructuralSummary {
+        &self.summary
+    }
+
+    /// Resolves one bounded occurrence address without expanding or allocating views.
+    /// Positions are document-local; a future renderer must also fence its owner epoch.
+    pub(crate) fn occurrence(
+        &self,
+        window: usize,
+        tab: usize,
+        panel: usize,
+        root: usize,
+        children: &[usize],
+    ) -> Option<ViewOccurrence<'_>> {
+        graph::occurrence(&self.dto, &self.summary, window, tab, panel, root, children)
     }
 }
 
@@ -43,5 +88,7 @@ pub(crate) fn parse(bytes: &[u8]) -> Result<ParsedDocument, String> {
         .map_err(|error| error.to_string())
 }
 
+#[cfg(test)]
+mod structure_tests;
 #[cfg(test)]
 mod tests;

@@ -164,7 +164,7 @@ pub(crate) struct Panel {
 
 // Separate v2 reference DTOs enforce bounded nonempty strings during decoding,
 // without changing the acceptance or serde implementation of v1 references.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Deserialize)]
 #[serde(
     remote = "Self",
     tag = "kind",
@@ -197,7 +197,7 @@ pub(crate) enum RuntimeRef {
         property: Id,
     },
 }
-#[derive(Debug, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Deserialize)]
 #[serde(
     remote = "Self",
     tag = "kind",
@@ -208,6 +208,53 @@ pub(crate) enum ConfigurationOwner {
     Instrument { instrument: Id },
     Component { component: Id },
     Resource { resource: Id },
+}
+
+impl Component {
+    pub(super) fn id(&self) -> &Id {
+        match self {
+            Self::Group { id, .. }
+            | Self::Button { id, .. }
+            | Self::Toggle { id, .. }
+            | Self::IntegerInput { id, .. }
+            | Self::NumberInput { id, .. }
+            | Self::TextInput { id, .. }
+            | Self::Select { id, .. }
+            | Self::Indicator { id, .. }
+            | Self::Status { id, .. }
+            | Self::Plot { id, .. } => id,
+        }
+    }
+}
+
+impl ActionBinding {
+    pub(super) fn id(&self) -> &Id {
+        match self {
+            Self::RecorderLifecycle { id, .. }
+            | Self::ReferenceFixed { id, .. }
+            | Self::ControllerLifecycle { id, .. }
+            | Self::PropertyConfigure { id, .. } => id,
+        }
+    }
+
+    pub(super) fn target(&self) -> &RuntimeRef {
+        match self {
+            Self::RecorderLifecycle { target, .. }
+            | Self::ReferenceFixed { target, .. }
+            | Self::ControllerLifecycle { target, .. }
+            | Self::PropertyConfigure { target, .. } => target,
+        }
+    }
+
+    pub(super) fn parameter(&self) -> Option<&Parameter> {
+        match self {
+            Self::RecorderLifecycle { label, .. } => Some(label),
+            Self::ReferenceFixed { value, .. } | Self::PropertyConfigure { value, .. } => {
+                Some(value)
+            }
+            Self::ControllerLifecycle { .. } => None,
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
