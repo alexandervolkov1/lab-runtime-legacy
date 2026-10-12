@@ -2,7 +2,8 @@
 
 This module implements the DTO vocabulary in the
 [v2 contract](../../../../../docs/generic-controls-v2-contract.md), sections 2–4
-and the applicable definition limits in section 8. It has no active consumer.
+and the applicable definition limits in section 8, plus the pure section-7.1
+v1-to-v2 converter. It has no active consumer.
 The running Workbench, its 16 operations and its v1 document remain unchanged.
 
 `parse(&[u8]) -> ParsedDocument` first checks the 2 MiB input-body ceiling,
@@ -60,8 +61,8 @@ button occurrences, including shared and nested groups. Supported origins also
 restrict descendant actions to their original family and exact target. These
 ceilings are occurrence-local and supplement the binding summary; inspecting an
 action definition alone cannot establish applicability. `confirm:false` remains
-provenance. Full converter/exporter normal-form and round-trip proofs (including
-labels, helper sharing, ordering and defaults) belong to the future migration stage.
+provenance. The one-way normal-form converter is described below; exporter and
+round-trip proofs remain future work.
 
 The checked stage has a private payload, no deserializer/public constructor and
 no mutable DTO accessor. Static success grants no publication or execution rights.
@@ -187,8 +188,8 @@ occurrence-local v1 origin restrictions remain unchanged.
 
 This is **offline document admission for a future bounded owner**, not publication,
 Runtime applicability, or operational qualification of a renderer. There is no
-dispatcher consumer, protocol/profile, migration, observation lookup or execution
-path. Actual metadata, readiness, Confirm and trusted adapters remain separate.
+dispatcher consumer, protocol/profile, automatic migration, observation lookup or
+execution path. Actual metadata, readiness, Confirm and trusted adapters remain separate.
 
 ### Retained allocation accounting
 
@@ -294,6 +295,8 @@ Run [test-v2-allocation.ps1](../../../../../scripts/test-v2-allocation.ps1).
 It obtains the exact serde/serde_json rlibs from `cargo test --locked --no-run`,
 then compiles the **same v2 source files** into an isolated single-thread native
 MSVC executable. Wire constants are extracted verbatim from their existing owners.
+The probe also imports the unchanged v1 document/reference source files for the
+offline conversion experiment; it never imports persistence or a running owner.
 There is no second dependency manifest/lockfile or altered production allocator.
 The tiny test-only unsafe GlobalAlloc shim in
 [the probe](../../../../../scripts/support/v2-allocation-probe.rs) only delegates
@@ -337,3 +340,127 @@ definitions/edges, worst visual reservation, previous numeric golden bytes and
 v1/graph/API guards remain covered. The independent ceilings intersect: this is
 not a promise that every registry maximum can occur simultaneously within JSON,
 wire, canonical and allocation limits.
+
+## Deterministic v1 conversion (DGUI-4C6A)
+
+`ValidatedV1Document::check(&source)` borrows a source only after the unchanged
+v1 `validate()` succeeds and the existing pretty serializer fits 1,048,576 bytes.
+A checked counting writer performs the size check without retaining a serialized
+v1 copy. It rejects at the byte ceiling. The proof holds an immutable borrow; it
+has no deserializer, mutable accessor or unchecked constructor.
+
+`convert_v1(proof)` implements contract section 7.1 and returns only an
+`AdmittedV2Document` or an error. `InvalidV1` identifies invalid structure/version,
+strings/numbers/references or source canonical size. A valid source whose expanded
+form cannot satisfy **any** v2 bound fails with `conversion_limit`. Nothing is
+truncated, renamed, dropped, published or saved. There is no reverse/export stub.
+
+### Normal form and identities
+
+Every original document, window, tab, panel, control, plot and trace ID is reserved
+before allocation. Source IDs are borrowed in a `BTreeSet<Cow<str>>`; generated IDs
+are owned there temporarily. Four monotonic checked counters implement the first
+free `v2:data:n`, `v2:editor:n`, `v2:action:n`, `v2:component:n`, starting at zero
+and checking the common namespace. Occupied lower indices are never removed, so
+counter advancement chooses the first free index, including gaps. There is no
+hash iteration, UUID, time, observation or hardware lookup. Runtime identity
+strings are preserved targets, not presentation definitions in this namespace.
+
+Walk order is controls, plots/traces, windows/tabs/panels in original array order.
+Within each control allocate data, editor, action, then children. An absent
+definition consumes no ID. Append the original-ID group before its children.
+At the first supported Recorder control allocate the shared data/editor, even
+if that definition is unused; subsequent Recorder controls reuse only those two
+definitions. Each action remains independent. Trace bindings are always distinct.
+
+| Source control pair | Group children in order | Binding definitions |
+|---|---|---|
+| RecordingLifecycle / Recorder | Status `Recorder state`, TextInput `Recording label`, Button `Action` | RecorderState; shared recording_label/Text; RecorderLifecycle using that editor |
+| SetReference / Reference | Indicator `Current`, NumberInput `New value`, Button `Action` | ReferenceValue; reference_fixed/Number; ReferenceFixed |
+| ControllerLifecycle / Controller | Status `Controller state`, Button `Action` | ControllerState; no editor; ControllerLifecycle |
+| ApplyConfiguration / ConfigurationProperty | Indicator `Current`, IntegerInput `Integer candidate`, TextInput `Text candidate`, Button `Action` | PropertyCurrent; one property_value/property_scalar; both inputs matching_type; PropertyConfigure |
+| ReconnectResource or incompatible pair | Status(entity) `Target`, Button `Unavailable` with null action and reason `Unsupported v1 control kind/target` | No data, editor or action definition |
+
+All groups have column layout and preserve the control's ID, label and complete
+`v1_control {kind,target,confirm}`. Generated help/expect_kind/constraints are
+absent at construction and undergo the existing canonical default normalization.
+The action has no confirm override: false survives only in the origin annotation.
+The converter never selects Start/Pause/Resume/Stop from a state snapshot.
+
+Controls panels preserve ordered roots, including repetition and empty arrays;
+Plot/Status panels each receive one generated leaf, their `v1_kind`, and original
+panel identity/title. Plot leaf labels use the referenced plot title; Status
+leaf labels use the panel title. Windows/tabs and unused definitions retain their
+order. Plots preserve time window, axes, trace style, visibility and display_unit.
+Every trace has its own SignalSample binding with its exact full RuntimeRef,
+including category-incompatible references that remain statically disabled.
+
+### Validation and memory
+
+The converter builds the **closed typed DTO directly**. Required fields and tags
+come from compiled variants; source string/numeric forms were already checked;
+fixed labels/IDs are bounded; every List insertion checks its type's count limit.
+Thus the syntax invariant of `ParsedDocument` is established by construction,
+not by an unchecked caller-provided DTO or raw JSON entry. It then runs the
+existing local, reference/graph, static/origin, canonical/wire, retained allocation
+and visual reservation stages. Both full wire probes run the existing bounded
+JSON scanner, including duplicate keys, depth, string and value/member limits.
+No serializer/parser round-trip is used to reconstruct f64: the exact source bits,
+including signed zero, subnormals and maximum finite axes, survive in the DTO.
+
+There is no intermediate `serde_json::Value`, full serialized v1 buffer or second
+decoded v2 document. One bounded builder owns the output; the ID index and shared
+Recorder helper IDs drop before final admission. At most four children await
+insertion per control. Checked List insertion uses fallible reservation; ordinary
+String/BTree allocations retain the existing process-OOM behavior.
+
+The v1 structural ceilings allow at most 5,345 original definition IDs and 1,536
+generated IDs (6,881 index entries), with at most 384 component definitions, 1,088
+data bindings, 64 editors/actions, 32 plots and 1,024 traces. These are conservative
+construction ceilings, not promises that they fit all intersecting wire/canonical
+budgets. Repeated views are never expanded during construction. The 20,480-instance
+fixture constructs only five component definitions. The existing full admission
+still enforces 4 MiB retained and the separate visual reservation.
+
+The same single-thread native probe measures conversion twice per fixture:
+
+| v1 fixture (canonical bytes) | Source validation peak | Conversion retained requests | Accounted retained | Additional conversion peak |
+|---|---:|---:|---:|---:|
+| Empty (101) | 285 | 1,048,581 | 1,049,280 | 3,147,160 |
+| Six controls / mixed panels (3,992) | 1,575 | 1,060,769 | 1,082,432 | 3,160,192 |
+| 20,480 expanded instances (144,088) | 6,861 | 1,209,572 | 1,746,048 | 3,308,995 |
+| 1,024 traces, long labels (896,571) | 58,545 | 0 (conversion_limit) | — | 3,954,958 |
+
+These are **additional requested heap bytes above the existing borrowed v1
+owner**, not total process memory, allocator overhead or a universal peak bound.
+Source/fixture construction and reporting are outside the measurement window.
+Validation retains no allocations; successful output equals the existing capacity
+walker exactly; failure/drop returns to zero. Converter indices are never retained.
+Tests also admit v1 at exactly 1 MiB while rejecting its amplified v2 result;
+v1 at 1 MiB + 1 fails source validation instead. Large valid v1 does not imply
+that v2 can fit its wire/canonical limits.
+
+### Safety evidence and pending reverse proof
+
+Tests cover all five kinds crossed with all target categories, including all
+three property-owner kinds, independent owners and repeated equal targets.
+Inert templates have no action; shared/nested edited groups retain their inherited
+origin ceiling. A pure occurrence predicate verifies that only referenced,
+structurally supported actions contribute to ordinary-button suppression,
+including hidden tabs; unused/inert definitions do not. This specifies the future
+consumer's behavior without modifying the existing GUI suppression implementation.
+
+A deterministic model checks `eligible_v2 => eligible_v1` over 18,432 combinations
+of freshness, eight blocker flags, property metadata/access and lifecycle
+availability, with twelve candidate fixtures for all six example controls.
+Positive witnesses prevent a vacuous always-disabled result. This proves the
+modeled structural/guard floor only: it is **not** an end-to-end proof of actual
+Runtime readiness, constraints, recovery or the future v2 operator adapter.
+The existing separate Confirm floor and production GUI regressions remain intact.
+
+The future exporter must still prove `E(C(v1)) == v1` and
+`C(E(v2)) == normalize(v2)`: exact template recognition, helper identity/allocation
+order, shared Recorder topology, absent/default fields, all display values and
+rejection of edited/nonrepresentable forms. No hidden v1 payload is kept to fake
+those identities. No public protocol/profile, live migration, new widgets,
+metadata refresh, physical control or persistence is introduced here.

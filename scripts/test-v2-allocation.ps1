@@ -23,14 +23,13 @@ try {
         $_ -match '^pub\(crate\) const (JSON_BODY_BYTES|FRAME_BYTES|JSON_DEPTH|JSON_VALUES|JSON_STRING_BYTES|NAME_BYTES):'
     }
     if ($external.Count -ne 6) { throw 'Unexpected wire constant declarations' }
-    $presentation = Get-Content 'apps/lab-workbench/src/presentation/document.rs' | Where-Object {
-        $_ -match '^pub\(crate\) const PRESENTATION_FILE_BYTES:'
-    }
-    if (@($presentation).Count -ne 1) { throw 'Unexpected presentation constant declaration' }
     $probeDir = Join-Path $repo 'target/v2-allocation-probe'
     New-Item -ItemType Directory -Force -Path $probeDir | Out-Null
     $module = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/mod.rs').Replace('\', '/')
+    $document = (Join-Path $repo 'apps/lab-workbench/src/presentation/document.rs').Replace('\', '/')
+    $reference = (Join-Path $repo 'apps/lab-workbench/src/presentation/reference.rs').Replace('\', '/')
     $fixture = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/admission_fixtures.rs').Replace('\', '/')
+    $conversionFixture = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/conversion_fixtures.rs').Replace('\', '/')
     $probe = (Join-Path $repo 'scripts/support/v2-allocation-probe.rs').Replace('\', '/')
     $wrapper = @"
 #![deny(unsafe_code)]
@@ -39,10 +38,14 @@ mod external {
 $($external -join "`n")
 }
 mod presentation {
-$presentation
+#[path = "$document"] mod document;
+#[path = "$reference"] mod reference;
+pub(crate) use document::*;
+pub(crate) use reference::*;
 }
 #[path = "$module"] mod v2;
 #[path = "$fixture"] mod fixtures;
+#[path = "$conversionFixture"] mod conversion_fixtures;
 #[path = "$probe"] mod probe;
 fn main() { probe::run(); }
 "@
