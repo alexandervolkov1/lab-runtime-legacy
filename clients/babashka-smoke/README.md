@@ -104,6 +104,109 @@ workbench.clj
   -> Runtime
 ```
 
+## Declarative presentation acceptance (DGUI-3)
+
+Use the same runner and Workbench wire client for the complete declarative path:
+
+```powershell
+cargo build -p lab-runtime -p lab-workbench --locked
+pwsh -NoProfile -File clients/babashka-smoke/run-smoke.ps1 -Presentation -Repeat 3
+```
+
+This mode starts the same real `virtual-demo` Runtime and native Glow Workbench,
+with an isolated temporary workspace and ephemeral `127.0.0.1` Workbench endpoint.
+It skips `runtime.clj`: Babashka opens only Workbench connections. Discovery and
+`latest` queries travel through Workbench's existing single Application worker.
+It creates no new Runtime client/session infrastructure.
+
+`workbench.clj PORT --presentation` performs hello, waits for Ready/Fresh, reads
+the presentation revision, follows bounded frozen discovery pages, and chooses up
+to two floating-point measurement sources. Transform instruments are excluded:
+in this fixture the moving mean is derived from the same temperature, not an independent
+second source. The document contains one logical window, `Live signals` and
+`Missing data` tabs, Status panels, and one Plot panel. All traces refer to discovered
+sources. A separate, explicitly labelled absent-reference Status probe exercises
+Unresolved; it never supplies a fake observation or a second plotted source.
+
+The script checks advancing authoritative measurement timestamps, one successful
+`ui_replace_document`, exactly one revision increment and `presentation_changed`,
+exact document readback, and `revision_conflict` on stale replacement with unchanged
+readback. Each replacement is submitted once; the stale request is an explicit
+negative check, not an automatic retry. The allowed Workbench requests exclude
+`lab_mutation`, status/retry recovery actions, and connection controls.
+The Runtime attachment/hello and recovery projections must remain unchanged.
+
+PowerShell samples the OS TCP table during each Babashka run and optional inspection
+interval. After initial attachment it requires exactly one established server-side
+Runtime connection, without opening a probe socket. It also checks the
+recovery-journal fingerprint, no new
+`presentation-v1.json`, the native window handle, and Runtime survival when Workbench
+is terminated. These checks complement the existing dispatcher/renderer source
+guards and no-Runtime-work regressions. TCP sampling is not continuous packet
+tracing, and `hello.next_seq` is a cached attachment observation, not a new
+authoritative sequence query.
+
+Every readiness wait is at most ten seconds; each Babashka process has a fifteen
+second deadline, with a twelve second protocol budget and two second socket
+connect/read timeouts. Discovery has a sixteen-page budget. Cleanup waits at most
+five seconds per owned fixture and terminates only processes started by this run.
+The runner retains JSON summaries (including the exact document and observations),
+stderr logs, and `native-process-evidence.json` under its printed temporary path.
+
+### Native visual inspection
+
+A window handle and passing protocol exchange do **not** prove visual rendering.
+For a separate bounded desktop inspection, keep the fixtures alive for up to 120
+seconds after the protocol checks:
+
+```powershell
+pwsh -NoProfile -File clients/babashka-smoke/run-smoke.ps1 `
+  -Presentation -Repeat 3 -GuiHoldSeconds 60
+```
+
+During the interval, inspect the logical window and the `Live signals` Status/Plot
+panels, switch to `Missing data`, and return. The absent source must show
+`Unresolved — no Runtime observation`. The missing-data tab must not show a fallback
+legacy plot; the live tab must show one configured plot. The stationary safe plant
+normally shows a flat temperature near 20 °C; advancing sample timestamps and the
+live trace, rather than a changing temperature, establish observation progress.
+Do not click operator controls or disconnect during this read-only check.
+
+After the interval, the runner opens another **Workbench** caller and invokes
+`--verify-presentation EVIDENCE.json` using the last summary. It checks the exact
+document/revision and Runtime attachment again, with no Runtime query or mutation.
+This makes tab-navigation inspection reviewable without adding a production
+testing endpoint or changing the renderer. The runner itself does not assert that
+any visual inspection occurred; `visual_assertions` remains false in its evidence.
+If no interactive desktop is available, report the visual check as unperformed.
+
+### Observed Windows result
+
+On 2026-10-12, using the native `x86_64-pc-windows-msvc` toolchain and Babashka
+1.13.220, three consecutive replacements and post-inspection readback passed against
+the DGUI-2A merge `c4f541d0f66069dc32f9c495d945f039e2dd9a90` binaries. Revisions advanced
+from 2 to 3, 4, and 5; each success emitted exactly one replacement event and each
+stale request was rejected. Authoritative discovery reported temperature `1/1` and
+moving-mean output `202/1`. Only `1/1` was plotted; the absent probe was `1/2`.
+Samples remained Good/Available at 20 °C with advancing observation timestamps.
+All 586 OS TCP samples observed one Runtime connection, and recovery state/journal
+and the attachment were unchanged. No presentation file was created.
+
+Separately, native Win32 mouse input and captured Workbench client-area pixels were
+visually inspected: both tab transitions worked, Fresh status/value and the green
+temperature trace appeared, the missing tab showed Unresolved, and no duplicate
+plot appeared. Post-inspection readback still returned revision 5 and the exact
+document with zero presentation events on that readback connection. Fixture cleanup
+completed, and Runtime survived Workbench termination before its own cleanup.
+
+This is a virtual, read-only acceptance check. There is only one independent
+measurement source in this fixture, so this run does not qualify two independent
+temperature curves. Stale/Unknown/Rebuilding behavior is covered by the existing
+deterministic renderer tests; this desktop run did not interrupt Runtime. Controls,
+disk persistence, Arduino integration, and physical-device qualification remain
+outside this check. The older operator GUI smoke deliberately submits a virtual
+Runtime mutation and is a different scenario, not part of this read-only run.
+
 The separate [browser smoke](../clojurescript-smoke/README.md) remains the real-browser
 Runtime WebSocket regression. See the canonical
 [Runtime Application API](../../docs/api/README.md) and
