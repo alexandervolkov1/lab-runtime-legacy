@@ -11,6 +11,9 @@ from the [User manual](../README.md); ordinary users need no source checkout.
 - [Generic Controls Architecture](../generic-controls-architecture.md): DGUI-4C
   approved direction with DGUI-4C1 internal view normalization, DGUI-4C2 bounded
   scalar drafts and DGUI-4C3 typed read bindings; v2 contracts remain proposals.
+- [Generic Presentation v2 contract proposal](../generic-controls-v2-contract.md):
+  DGUI-4C4 design-only DTOs, bindings, version selection, bounded composition and
+  lossless conversion rules for independent architectural review; not implemented.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.

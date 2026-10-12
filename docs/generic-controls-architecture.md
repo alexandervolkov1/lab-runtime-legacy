@@ -3,6 +3,10 @@
 Status: **DGUI-4C architectural direction approved; DGUI-4C1 internal view
 normalization, DGUI-4C2 bounded scalar drafts and DGUI-4C3 typed read bindings are
 implemented**. The external v2 proposal is not implemented.
+The [DGUI-4C4 v2 contract proposal](generic-controls-v2-contract.md) specifies
+candidate DTOs, composition, version negotiation, conversion and limits for
+independent review. Its concrete choices supersede the earlier starting proposals
+below; they do not change any implemented v1 contract.
 Baseline: DGUI-4B4 merged at
 `3a86d0989f6b6ca265126da043a3df4d0f847c7b`, including the separately reviewed
 Recorder property-lifecycle fix. This document changes no running contract.
@@ -347,10 +351,9 @@ Use exact integer parsing and comparisons, including endpoints near i64 min/max.
 Current integer property candidates serialize as JSON numbers, while integer
 measurement values and `describe` integer bounds use decimal strings. A source
 adapter must honor each existing encoding; a generic JSON-to-f64 intermediate
-would lose information. The current property preflight reads min/max as f64;
-replacing that with exact integer-bound comparison needs its own targeted
-regression step. This design does not silently claim that precision improvement
-is already implemented or repair the approved production code.
+would lose information. DGUI-4C2 implemented exact integer-bound comparison and
+regressions for inclusive i64 endpoints, invalid constraints and overflow. That
+client preflight remains separate from Runtime admission and final validation.
 
 For a future presentation schema, prefer tagged decimal strings for integer
 literals/bounds, preserving i64 values in clients whose default JSON numbers lose
@@ -508,12 +511,12 @@ exceed wire value/depth limits. New components must not multiply these limits by
 retaining unbounded per-widget samples, descriptor histories or event queues.
 Keep one shared Runtime worker, bounded command queues and aggregate subscription.
 
-Proposed v2 starting ceilings for review are 64 control groups/drafts, 256 visual
-leaves across those groups, one data and one action binding per group, and 64 enum
-choices per selector, also subject to total JSON/string limits. Repeated view
-references count against a finite total (at most the existing 64 panels times 64
-control references), including egui memory. These are proposed client presentation
-limits, not new restrictions on Runtime values or current v1 acceptance.
+The original v2 starting proposal used 64 control groups/drafts, 256 visual leaves,
+one data and one action per group, and 64 choices per selector. DGUI-4C4 replaces
+the group binding restriction with typed reusable registries and bounded
+composition, and specifies separate definition, expanded-instance and memory
+budgets in the [v2 contract proposal](generic-controls-v2-contract.md). These are
+proposed presentation limits, not new restrictions on current v1 acceptance.
 
 Any future descriptor acquisition must reuse the bounded rebuild coordinator, with
 finite pages, bytes, in-flight work and a replaceable current cache. Reject or mark
