@@ -546,3 +546,13 @@ subscription, replay, or resumable external caller session.
 The [Babashka smoke](../clients/babashka-smoke/README.md) is acceptance/example code,
 not an SDK. See the [Workbench user guide](workbench.md) for GUI workflows and the
 [Runtime API](api/README.md) for direct experiment automation.
+
+For the complete declarative path, its `run-smoke.ps1 -Presentation` mode discovers
+real virtual-demo signals through `lab_query`, applies one full document with
+`ui_replace_document`, and checks revision/event/readback and stale rejection.
+It runs the real native Workbench with a temporary workspace and only its existing
+Runtime connection. `-GuiHoldSeconds 60` allows a separate visual tab/panel/plot
+inspection, followed by exact readback. Protocol success and a native window handle
+alone are not visual-smoke evidence. See the smoke README for the observed Windows
+result and limits. The applied configuration remains in memory; this acceptance
+check does not implement Controls or presentation persistence.
