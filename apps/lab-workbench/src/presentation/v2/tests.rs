@@ -554,6 +554,9 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         include_str!("encoding.rs"),
         include_str!("canonical.rs"),
         include_str!("wire.rs"),
+        include_str!("allocation.rs"),
+        include_str!("admission.rs"),
+        include_str!("visual_budget.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -582,6 +585,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         assert!(!consumer.contains("ParsedDocument"));
         assert!(!consumer.contains("StructurallyCheckedDocument"));
         assert!(!consumer.contains("CanonicalWireCandidate"));
+        assert!(!consumer.contains("AdmittedV2Document"));
     }
     // The only outer-module dependency is this exact read-only constant surface.
     let limits = include_str!("limits.rs").replace("\r\n", "\n");

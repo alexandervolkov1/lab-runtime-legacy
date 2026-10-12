@@ -1,8 +1,10 @@
-//! Isolated v2 syntax, local and structural checks. No publication permission.
+//! Isolated v2 document admission. No publication or execution path.
 //!
-//! Measured allocation and final combined admission checks are still pending.
-//! No conversion to the active v1 document exists.
+//! Offline capacity proofs do not qualify a future renderer. No conversion to
+//! the active v1 document exists.
 
+mod admission;
+mod allocation;
 mod bounded;
 mod canonical;
 mod dto;
@@ -11,8 +13,10 @@ mod graph;
 mod limits;
 mod structure;
 mod validation;
+mod visual_budget;
 mod wire;
 
+pub(crate) use admission::{AdmittedV2Document, admit};
 pub(crate) use bounded::{I64Decimal, U64Decimal};
 pub(crate) use canonical::CanonicalWireCandidate;
 pub(crate) use dto::*;
@@ -61,6 +65,11 @@ impl LocallyCheckedDocument {
 }
 
 impl StructurallyCheckedDocument {
+    /// Consumes this stage and checks serialization, wire and allocation budgets.
+    /// The result is offline admission only; no running owner accepts this type.
+    pub(crate) fn check_admission(self) -> Result<AdmittedV2Document, String> {
+        admission::finish(self)
+    }
     /// Proves canonical byte and full wire-envelope limits, still without admission.
     /// The candidate borrows this immutable source; it is not another document owner.
     pub(crate) fn check_canonical_wire(&self) -> Result<CanonicalWireCandidate<'_>, String> {
@@ -99,6 +108,10 @@ pub(crate) fn parse(bytes: &[u8]) -> Result<ParsedDocument, String> {
         .map_err(|error| error.to_string())
 }
 
+#[cfg(test)]
+mod admission_fixtures;
+#[cfg(test)]
+mod admission_tests;
 #[cfg(test)]
 mod canonical_tests;
 #[cfg(test)]

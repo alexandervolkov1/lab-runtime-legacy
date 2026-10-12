@@ -315,7 +315,7 @@ fn every_dto_variant_and_runtime_ref_survives_encoding_with_schema_field_order()
     assert_eq!(serde_json::to_vec(&action).unwrap(),br#"{"id":"a","family":"property_configure","target":{"kind":"configuration_property","owner":{"kind":"component","component":"001"},"property":"p"},"value":{"kind":"literal","value":{"kind":"integer","value":"-9223372036854775808"}}}"#);
 }
 
-fn byte_sized_document(size: usize) -> Value {
+pub(super) fn byte_sized_document(size: usize) -> Value {
     // Fixed 700 entries, then one bounded pass over three strings per entry.
     // Each ASCII padding byte increases both JSON encodings by exactly one byte.
     let mut doc = empty();
@@ -350,7 +350,7 @@ fn exact_canonical_byte_limit_and_one_byte_over_fail_without_a_proof() {
     assert_eq!(format!("{:?}", too_large.summary()), before);
 }
 
-fn value_sized_document(size: usize) -> StructurallyCheckedDocument {
+pub(super) fn value_sized_document(size: usize) -> StructurallyCheckedDocument {
     // 1,000 unused bindings + 80 shallow groups + one leaf. Each repeated child
     // adds one value; the flattened schema stays well below the byte/depth limits.
     let mut doc = empty();

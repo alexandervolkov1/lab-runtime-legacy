@@ -27,11 +27,14 @@ impl CanonicalWireCandidate<'_> {
     pub(crate) fn response_usage(&self) -> WireUsage {
         self.response
     }
+    pub(super) fn into_parts(self) -> (Vec<u8>, WireUsage, WireUsage) {
+        (self.bytes, self.request, self.response)
+    }
 }
 
 // Reserve one known maximum, never grow it and reject before extending past it.
-// Allocator bookkeeping/rounding and the retained DTO require the later measured
-// allocation gate. An allocation failure here returns an error, not a candidate.
+// Final admission charges capacity and conservative allocator slack separately.
+// An allocation failure here returns an error, not a candidate.
 pub(super) struct CappedBuffer {
     pub(super) bytes: Vec<u8>,
     limit: usize,
