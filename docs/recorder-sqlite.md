@@ -167,6 +167,20 @@ facts, annotations, and gaps enter bounded causal groups. A group is atomic at t
 SQLite transaction boundary. Never infer rows beyond the last receipted checkpoint
 after failure.
 
+With an enabled Recorder, `property_configure` uses the staged configuration
+activation path, in both Idle and Recording. Like `apply_configuration` and
+`reload_configuration`, its lifecycle fact must carry an exact checked
+`base_revision + 1 = committed_revision`; arbitrary operation names are rejected.
+Capacity is reserved before the configuration owner commits. The frozen overlay,
+activation provenance, lifecycle fact, and checkpoint then commit together before
+the owner accepts the durable generation receipt and returns `completed`.
+
+Reservation failure leaves the old configuration intact. A SQL failure or receipt
+timeout after owner commit returns failure and keeps Required control admission
+closed; it does not imply that the in-memory configuration rolled back. A late
+receipt does not automatically rearm control or retry the mutation. Property
+overlays do not rewrite the deployment source file.
+
 ## Provenance
 
 Recorder preserves enough source identity to interpret evidence in the topology that
