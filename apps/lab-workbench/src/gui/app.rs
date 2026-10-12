@@ -1,6 +1,6 @@
 //! eframe main-thread owner and thin observational rendering.
 
-use super::controls::{RecorderControlUi, has_recorder_controls};
+use super::controls::{OperatorControlUi, has_recorder_controls};
 use super::presentation::PresentationRenderer;
 use super::rebuild::RebuildCoordinator;
 use crate::{
@@ -502,7 +502,7 @@ impl WorkbenchApp {
             &self.model.presentation,
             &self.model.observations,
             self.model.presentation_revision(),
-            &mut RecorderControlUi {
+            &mut OperatorControlUi {
                 model: &self.model,
                 operator: &self.operator,
                 observation_only: self.observation_only,
@@ -949,7 +949,7 @@ impl WorkbenchApp {
         }
         ui.separator();
         ui.heading("Recorder");
-        let intent = RecorderControlUi {
+        let intent = OperatorControlUi {
             model: &self.model,
             operator: &self.operator,
             observation_only: self.observation_only,
@@ -1585,7 +1585,7 @@ fn scalar_text(value: Option<&Value>) -> String {
     }
 }
 
-fn parse_finite(value: &str) -> Result<f64, &'static str> {
+pub(super) fn parse_finite(value: &str) -> Result<f64, &'static str> {
     value
         .trim()
         .parse::<f64>()
@@ -1947,7 +1947,7 @@ mod tests {
                     &model.presentation,
                     &model.observations,
                     1,
-                    &mut RecorderControlUi {
+                    &mut OperatorControlUi {
                         model: &model,
                         operator: &OperatorWorkflow::default(),
                         observation_only: false,

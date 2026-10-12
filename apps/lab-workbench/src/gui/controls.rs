@@ -1,13 +1,83 @@
-//! Read-only Recorder controls returning typed intent to the existing operator workflow.
+//! Read-only controls returning typed intent to the existing operator workflow.
 
 use crate::{
     model::{
         OperatorIntent, OperatorIntentError, OperatorWorkflow, RECORDING_LABEL_BYTES,
         WorkbenchModel, prepare_operator_intent,
     },
-    presentation::{Control, ControlKind, PanelKind, PresentationDocument, RuntimeRef},
+    presentation::{
+        Control, ControlKind, MAX_CONTROLS, PanelKind, PresentationDocument, RuntimeRef,
+    },
 };
 use eframe::egui;
+use std::collections::{BTreeMap, HashSet};
+
+// Match the ordinary fixed-value editor's text bound, without restricting f64 range.
+const REFERENCE_VALUE_BYTES: usize = 64;
+
+pub(super) fn reference_control_supported(control: &Control) -> bool {
+    control.kind == ControlKind::SetReference
+        && matches!(control.target, RuntimeRef::Reference { .. })
+}
+
+#[derive(Default)]
+pub(super) struct ReferenceEditor {
+    pub(super) text: String,
+    // A control can be referenced by multiple panels. Track every current view
+    // instance (bounded by the document's panel/reference counts), not just the
+    // last rendered editor, so retirement also removes their undo/focus state.
+    pub(super) widget_ids: HashSet<egui::Id>,
+}
+
+/// At most 64 current control/target drafts, each bounded to 64 UTF-8 bytes.
+/// These are GUI input, not observations, document state or mutation recovery.
+#[derive(Default)]
+pub(super) struct ReferenceEditors {
+    drafts: BTreeMap<(String, RuntimeRef), ReferenceEditor>,
+}
+
+impl ReferenceEditors {
+    pub(super) fn reconcile(
+        &mut self,
+        context: &egui::Context,
+        document: &PresentationDocument,
+        reset: bool,
+    ) {
+        self.drafts.retain(|(id, target), editor| {
+            let keep = !reset
+                && document
+                    .controls
+                    .iter()
+                    .filter(|control| reference_control_supported(control))
+                    .take(MAX_CONTROLS)
+                    .any(|control| &control.id == id && &control.target == target);
+            if !keep {
+                // Retire egui's undo/focus state with the draft so replacement
+                // cannot retain an old edit or deliver it to a different target.
+                for &id in &editor.widget_ids {
+                    context.data_mut(|data| data.remove::<egui::text_edit::TextEditState>(id));
+                    context.memory_mut(|memory| memory.surrender_focus(id));
+                }
+            }
+            keep
+        });
+        for control in document
+            .controls
+            .iter()
+            .filter(|control| reference_control_supported(control))
+            .take(MAX_CONTROLS)
+        {
+            self.drafts
+                .entry((control.id.clone(), control.target.clone()))
+                .or_default();
+        }
+    }
+
+    pub(super) fn editor_mut(&mut self, control: &Control) -> Option<&mut ReferenceEditor> {
+        self.drafts
+            .get_mut(&(control.id.clone(), control.target.clone()))
+    }
+}
 
 pub(super) fn recorder_control_supported(control: &Control) -> bool {
     control.kind == ControlKind::RecordingLifecycle && control.target == RuntimeRef::Recorder
@@ -33,19 +103,20 @@ pub(super) fn has_recorder_controls(document: &PresentationDocument) -> bool {
 
 /// Frame-local read-only authority view plus the shared, client-local label editor.
 /// No client handle or submission/confirmation capability enters this renderer.
-pub(super) struct RecorderControlUi<'a> {
+pub(super) struct OperatorControlUi<'a> {
     pub(super) model: &'a WorkbenchModel,
     pub(super) operator: &'a OperatorWorkflow,
     pub(super) observation_only: bool,
     pub(super) label: &'a mut String,
 }
 
-impl RecorderControlUi<'_> {
+impl OperatorControlUi<'_> {
     pub(super) fn show_panel(
         &mut self,
         ui: &mut egui::Ui,
         controls: &[Control],
         control_ids: &[String],
+        editors: &mut ReferenceEditors,
     ) -> Option<OperatorIntent> {
         if control_ids.is_empty() {
             ui.label("No controls configured.");
@@ -55,12 +126,20 @@ impl RecorderControlUi<'_> {
             .iter()
             .filter_map(|id| controls.iter().find(|control| &control.id == id))
         {
-            ui.push_id(&control.id, |ui| {
+            ui.push_id((&control.id, &control.target), |ui| {
                 if recorder_control_supported(control) {
                     ui.label(&control.label);
                     let clicked = self.show(ui);
                     if intent.is_none() {
                         intent = clicked;
+                    }
+                } else if reference_control_supported(control) {
+                    ui.label(&control.label);
+                    if let Some(editor) = editors.editor_mut(control) {
+                        let clicked = self.show_reference(ui, &control.target, editor);
+                        if intent.is_none() {
+                            intent = clicked;
+                        }
                     }
                 } else {
                     ui.add_enabled(false, egui::Button::new(&control.label))
@@ -114,6 +193,67 @@ impl RecorderControlUi<'_> {
         Ok(intent)
     }
 
+    fn show_reference(
+        &self,
+        ui: &mut egui::Ui,
+        target: &RuntimeRef,
+        editor: &mut ReferenceEditor,
+    ) -> Option<OperatorIntent> {
+        let RuntimeRef::Reference { reference } = target else {
+            return None;
+        };
+        let observation = self
+            .model
+            .observations
+            .entities
+            .get(target)
+            .map(|observation| &observation.value);
+        let value = observation
+            .and_then(|value| value.get("value"))
+            .and_then(serde_json::Value::as_f64)
+            .filter(|value| value.is_finite());
+        let unit = observation
+            .and_then(|value| value.pointer("/unit/symbol"))
+            .and_then(serde_json::Value::as_str)
+            .filter(|unit| !unit.is_empty());
+        ui.label(match value {
+            Some(value) => format!(
+                "Current setpoint (cached): {value} {}",
+                unit.unwrap_or("(unit unknown)")
+            ),
+            None => "Current setpoint: unavailable".into(),
+        });
+        ui.horizontal(|ui| {
+            ui.label("New fixed value");
+            let response = ui.add(
+                egui::TextEdit::singleline(&mut editor.text).char_limit(REFERENCE_VALUE_BYTES),
+            );
+            editor.widget_ids.insert(response.id);
+            super::app::truncate_utf8(&mut editor.text, REFERENCE_VALUE_BYTES);
+            // Input is a raw Reference value in its Runtime unit. Neither the
+            // display metadata nor this editor performs a unit conversion.
+            let eligible = super::app::parse_finite(&editor.text)
+                .map_err(OperatorIntentError::InvalidCandidate)
+                .and_then(|value| {
+                    self.eligibility(OperatorIntent::ConfigureReferenceFixed {
+                        reference: reference.clone(),
+                        value,
+                    })
+                });
+            let mut response =
+                ui.add_enabled(eligible.is_ok(), egui::Button::new("Configure fixed"));
+            if let Err(error) = &eligible {
+                response = response.on_disabled_hover_text(error.to_string());
+            }
+            if response.clicked() {
+                eligible.ok()
+            } else {
+                None
+            }
+        })
+        .inner
+    }
+
     pub(super) fn show(&mut self, ui: &mut egui::Ui) -> Option<OperatorIntent> {
         let state = self
             .model
@@ -160,6 +300,53 @@ impl RecorderControlUi<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn reference_editor_storage_is_bounded_and_retires_undo_and_focus_on_reset() {
+        let context = egui::Context::default();
+        let mut document = PresentationDocument::empty("editors");
+        document.controls = (0..100)
+            .map(|id| Control {
+                id: id.to_string(),
+                label: "Reference".into(),
+                target: RuntimeRef::Reference {
+                    reference: "1".into(),
+                },
+                kind: ControlKind::SetReference,
+                confirm: true,
+            })
+            .collect();
+        let mut editors = ReferenceEditors::default();
+        editors.reconcile(&context, &document, false);
+        assert_eq!(editors.drafts.len(), MAX_CONTROLS);
+        let id = egui::Id::new("retired-editor");
+        let editor = editors.editor_mut(&document.controls[0]).unwrap();
+        editor.text = "20.5".into();
+        editor.widget_ids.insert(id);
+        let second_id = egui::Id::new("second-editor-instance");
+        editor.widget_ids.insert(second_id);
+        egui::text_edit::TextEditState::default().store(&context, second_id);
+        egui::text_edit::TextEditState::default().store(&context, id);
+        context.memory_mut(|memory| memory.request_focus(id));
+        editors.reconcile(&context, &document, true);
+        assert!(
+            editors
+                .editor_mut(&document.controls[0])
+                .unwrap()
+                .text
+                .is_empty()
+        );
+        assert!(egui::text_edit::TextEditState::load(&context, id).is_none());
+        assert!(egui::text_edit::TextEditState::load(&context, second_id).is_none());
+        assert!(!context.memory(|memory| memory.has_focus(id)));
+        // An oversized candidate cannot retain old keys past the first 64.
+        document.controls.rotate_left(MAX_CONTROLS);
+        editors.reconcile(&context, &document, false);
+        assert_eq!(editors.drafts.len(), MAX_CONTROLS);
+        document.controls.clear();
+        editors.reconcile(&context, &document, false);
+        assert!(editors.drafts.is_empty());
+    }
 
     #[test]
     fn only_recording_lifecycle_on_recorder_is_supported() {

@@ -1,6 +1,6 @@
 //! Declarative layout returning operator intent without Runtime submission authority.
 
-use super::controls::RecorderControlUi;
+use super::controls::{OperatorControlUi, ReferenceEditors};
 
 use crate::{
     model::{Freshness, OperatorIntent, RuntimeObservations},
@@ -19,6 +19,7 @@ pub(super) struct PresentationRenderer {
     revision: Option<u64>,
     // At most one ID per current plot panel (64), or per legacy plot (32).
     plot_ids: HashSet<egui::Id>,
+    reference_editors: ReferenceEditors,
 }
 
 pub(super) struct PresentationResponse {
@@ -35,10 +36,13 @@ impl PresentationRenderer {
         document: &PresentationDocument,
         observations: &RuntimeObservations,
         revision: u64,
-        recorder: &mut RecorderControlUi<'_>,
+        recorder: &mut OperatorControlUi<'_>,
     ) -> PresentationResponse {
         let mut intent = None;
-        if self.revision != Some(revision) || self.document_id != document.document_id {
+        let replaced = self.revision != Some(revision) || self.document_id != document.document_id;
+        self.reference_editors
+            .reconcile(ui.ctx(), document, replaced);
+        if replaced {
             // egui_plot retains temporary zoom/legend state by ID. Retire old
             // revisions explicitly so repeated replacements do not retain history.
             ui.ctx().data_mut(|data| {
@@ -123,6 +127,7 @@ impl PresentationRenderer {
                                                     ui,
                                                     &document.controls,
                                                     control_ids,
+                                                    &mut self.reference_editors,
                                                 );
                                                 if intent.is_none() {
                                                     intent = clicked;
@@ -543,7 +548,7 @@ mod tests {
                     &model.presentation,
                     &model.observations,
                     revision,
-                    &mut RecorderControlUi {
+                    &mut OperatorControlUi {
                         model,
                         operator: &OperatorWorkflow::default(),
                         observation_only: false,
@@ -1232,6 +1237,487 @@ mod tests {
         model
     }
 
+    fn reference_model() -> WorkbenchModel {
+        let mut model = recorder_model();
+        model.presentation.controls = (1..=2)
+            .map(|id| Control {
+                id: format!("reference-control-{id}"),
+                label: format!("Setpoint {id}"),
+                target: RuntimeRef::Reference {
+                    reference: id.to_string(),
+                },
+                kind: ControlKind::SetReference,
+                confirm: false,
+            })
+            .collect();
+        model.presentation.windows[0].tabs[0].panels[0].kind = PanelKind::Controls {
+            control_ids: model
+                .presentation
+                .controls
+                .iter()
+                .map(|control| control.id.clone())
+                .collect(),
+        };
+        model
+            .hello
+            .as_mut()
+            .unwrap()
+            .operations
+            .push("reference_configure".into());
+        for (id, value, revision, unit) in [("1", 20.25, "7", "°C"), ("2", 300.5, "12", "K")] {
+            model.observations.observe(RuntimeRef::Reference { reference: id.into() },
+                json!({"reference":id,"value":value,"revision":revision,"unit":{"symbol":unit},"kind":"fixed"}), None);
+        }
+        model.presentation.validate().unwrap();
+        model
+    }
+
+    fn input_reference(
+        context: &egui::Context,
+        renderer: &mut PresentationRenderer,
+        model: &WorkbenchModel,
+        operator: &OperatorWorkflow,
+        index: usize,
+        value: &str,
+    ) {
+        for _ in 0..2 {
+            recorder_frame(
+                context,
+                renderer,
+                model,
+                operator,
+                false,
+                &mut String::new(),
+                vec![],
+            );
+        }
+        let id = *renderer
+            .reference_editors
+            .editor_mut(&model.presentation.controls[index])
+            .unwrap()
+            .widget_ids
+            .iter()
+            .next()
+            .unwrap();
+        let center = context.read_response(id).unwrap().rect.center();
+        for pressed in [true, false] {
+            recorder_frame(
+                context,
+                renderer,
+                model,
+                operator,
+                false,
+                &mut String::new(),
+                vec![
+                    egui::Event::PointerMoved(center),
+                    egui::Event::PointerButton {
+                        pos: center,
+                        button: egui::PointerButton::Primary,
+                        pressed,
+                        modifiers: Default::default(),
+                    },
+                ],
+            );
+        }
+        recorder_frame(
+            context,
+            renderer,
+            model,
+            operator,
+            false,
+            &mut String::new(),
+            vec![
+                egui::Event::Key {
+                    key: egui::Key::A,
+                    physical_key: None,
+                    pressed: true,
+                    repeat: false,
+                    modifiers: egui::Modifiers {
+                        ctrl: true,
+                        command: true,
+                        ..Default::default()
+                    },
+                },
+                egui::Event::Text(value.to_owned()),
+            ],
+        );
+    }
+
+    fn click_fixed(
+        context: &egui::Context,
+        renderer: &mut PresentationRenderer,
+        model: &WorkbenchModel,
+        operator: &OperatorWorkflow,
+        observe: bool,
+        index: usize,
+    ) -> Option<OperatorIntent> {
+        let (_, text) = recorder_frame(
+            context,
+            renderer,
+            model,
+            operator,
+            observe,
+            &mut String::new(),
+            vec![],
+        );
+        let center = text
+            .iter()
+            .filter(|(text, _)| text == "Configure fixed")
+            .nth(index)
+            .unwrap()
+            .1
+            .center();
+        let mut intent = None;
+        for pressed in [true, false] {
+            let (response, _) = recorder_frame(
+                context,
+                renderer,
+                model,
+                operator,
+                observe,
+                &mut String::new(),
+                vec![
+                    egui::Event::PointerMoved(center),
+                    egui::Event::PointerButton {
+                        pos: center,
+                        button: egui::PointerButton::Primary,
+                        pressed,
+                        modifiers: Default::default(),
+                    },
+                ],
+            );
+            if response.intent.is_some() {
+                assert!(intent.is_none());
+                intent = response.intent;
+            }
+        }
+        intent
+    }
+
+    #[test]
+    fn reference_controls_keep_independent_keyboard_editors_and_require_confirm() {
+        for confirm in [false, true] {
+            let mut model = reference_model();
+            for control in &mut model.presentation.controls {
+                control.confirm = confirm;
+            }
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            input_reference(&context, &mut renderer, &dispatcher, &operator, 0, "123.5");
+            input_reference(&context, &mut renderer, &dispatcher, &operator, 1, "-2.25");
+            let (_, text) = recorder_frame(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &operator,
+                false,
+                &mut String::new(),
+                vec![],
+            );
+            assert!(labels(&text).contains(&"Current setpoint (cached): 20.25 °C"));
+            assert!(labels(&text).contains(&"Current setpoint (cached): 300.5 K"));
+            for (index, reference, value, revision) in [(0, "1", 123.5, "7"), (1, "2", -2.25, "12")]
+            {
+                let intent = click_fixed(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    index,
+                )
+                .unwrap();
+                assert_eq!(
+                    intent,
+                    OperatorIntent::ConfigureReferenceFixed {
+                        reference: reference.into(),
+                        value
+                    }
+                );
+                operator.begin(&dispatcher, intent.clone()).unwrap();
+                let OperatorWorkflowState::AwaitingConfirmation(prepared) = &operator.state else {
+                    panic!()
+                };
+                assert_eq!(
+                    prepared.args,
+                    json!({"reference":reference,"expected_revision":revision,"kind":"fixed","value":value})
+                );
+                assert_eq!(dispatcher.client().unwrap().0.get(), index);
+                assert!(
+                    click_fixed(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        index
+                    )
+                    .is_none()
+                );
+                operator.cancel_or_acknowledge();
+                assert_eq!(
+                    dispatcher.client().unwrap().0.get(),
+                    index,
+                    "Cancel sends nothing"
+                );
+                operator.begin(&dispatcher, intent).unwrap();
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+                assert_eq!(dispatcher.client().unwrap().0.get(), index + 1);
+                assert_eq!(
+                    dispatcher.client().unwrap().1.borrow()[index],
+                    (
+                        "reference_configure".to_owned(),
+                        json!({"reference":reference,"expected_revision":revision,"kind":"fixed","value":value})
+                    )
+                );
+                operator.after_update(&ClientUpdate::Reply {
+                    command_id: 1,
+                    msg_id: "1".into(),
+                    op: "reference_configure".into(),
+                    kind: if index == 0 {
+                        ReplyKind::MutationFailed
+                    } else {
+                        ReplyKind::MutationCompleted
+                    },
+                    envelope: json!({"code":"revision_conflict"}),
+                    recovery: None,
+                });
+                if index == 0 {
+                    assert!(matches!(
+                        operator.state,
+                        OperatorWorkflowState::Failed { conflict: true, .. }
+                    ));
+                    assert!(
+                        click_fixed(
+                            &context,
+                            &mut renderer,
+                            &dispatcher,
+                            &operator,
+                            false,
+                            index
+                        )
+                        .is_none()
+                    );
+                    assert_eq!(
+                        dispatcher.client().unwrap().0.get(),
+                        1,
+                        "conflict never retries"
+                    );
+                }
+                operator.cancel_or_acknowledge();
+            }
+            assert_eq!(*dispatcher, before);
+            assert_eq!(dispatcher.presentation_revision(), 1);
+        }
+    }
+
+    #[test]
+    fn reference_invalid_input_and_readiness_fences_never_emit_intent_or_runtime_work() {
+        for scenario in [
+            "NaN",
+            "Infinity",
+            "inf",
+            "-inf",
+            "1e309",
+            "invalid",
+            "",
+            "observe",
+            "stale",
+            "rebuilding",
+            "target_stale",
+            "missing",
+            "unadvertised",
+            "disconnected",
+            "recovery",
+            "quarantine",
+            "reconciliation",
+        ] {
+            let mut model = reference_model();
+            let source = model.presentation.controls[0].target.clone();
+            let mut input = "25.5";
+            match scenario {
+                "observe" => {}
+                "stale" => model.observations.freshness = Freshness::Stale,
+                "rebuilding" => model.observations.freshness = Freshness::Rebuilding,
+                "target_stale" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&source)
+                        .unwrap()
+                        .freshness = Freshness::Stale
+                }
+                "missing" => {
+                    model.observations.entities.remove(&source);
+                }
+                "unadvertised" => model.hello.as_mut().unwrap().operations.clear(),
+                "disconnected" => model.connection = ConnectionState::Stale,
+                "recovery" => model.recovery.mutations.push(ambiguous_record()),
+                "quarantine" => model.recovery.quarantined.push(QuarantinedRecoveryRecord {
+                    record: ambiguous_record(),
+                    reason: RecoveryQuarantineReason::AttachedBootMismatch,
+                }),
+                "reconciliation" => model
+                    .recovery
+                    .reconciliation_required
+                    .push(ambiguous_record().identity),
+                _ => input = scenario,
+            }
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            input_reference(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                0,
+                input,
+            );
+            assert!(
+                click_fixed(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &OperatorWorkflow::default(),
+                    scenario == "observe",
+                    0
+                )
+                .is_none(),
+                "{scenario}"
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+            assert_eq!(*dispatcher, before);
+        }
+    }
+
+    #[test]
+    fn reference_revision_changes_block_confirm_without_retry_or_draft_cross_target_reuse() {
+        let mut model = reference_model();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        let mut operator = OperatorWorkflow::default();
+        input_reference(&context, &mut renderer, &model, &operator, 0, "-1e308");
+        let intent = click_fixed(&context, &mut renderer, &model, &operator, false, 0).unwrap();
+        operator.begin(&model, intent).unwrap();
+        model
+            .observations
+            .entities
+            .get_mut(&RuntimeRef::Reference {
+                reference: "1".into(),
+            })
+            .unwrap()
+            .value["revision"] = json!("8");
+        let client = FakeClient::default();
+        assert_eq!(
+            operator.confirm(&model, &client),
+            Err(crate::model::OperatorIntentError::DraftStale)
+        );
+        assert_eq!(client.0.get(), 0);
+        operator.cancel_or_acknowledge();
+        // Even if a caller supplies a changed target without a revision change,
+        // the control/target key prevents the previous Reference's draft leaking.
+        model.presentation.controls[0].target = RuntimeRef::Reference {
+            reference: "2".into(),
+        };
+        recorder_frame(
+            &context,
+            &mut renderer,
+            &model,
+            &operator,
+            false,
+            &mut String::new(),
+            vec![],
+        );
+        assert!(
+            renderer
+                .reference_editors
+                .editor_mut(&model.presentation.controls[0])
+                .unwrap()
+                .text
+                .is_empty()
+        );
+        assert!(click_fixed(&context, &mut renderer, &model, &operator, false, 0).is_none());
+    }
+
+    #[test]
+    fn reference_api_replacement_clears_edits_and_keeps_the_original_active_workflow() {
+        let mut dispatcher = WorkbenchDispatcher::new(reference_model(), FakeClient::default());
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        let mut operator = OperatorWorkflow::default();
+        input_reference(&context, &mut renderer, &dispatcher, &operator, 0, "25.5");
+        operator
+            .begin(
+                &dispatcher,
+                click_fixed(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &OperatorWorkflow::default(),
+                    false,
+                    0,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        let original = operator.clone();
+        let recovery = dispatcher.recovery.clone();
+        let mut replacement = dispatcher.presentation.clone();
+        replacement.controls[0].target = RuntimeRef::Reference {
+            reference: "2".into(),
+        };
+        dispatcher
+            .dispatch(
+                CallOrigin {
+                    caller_id: CallerId(1),
+                    call_id: "replace-reference".into(),
+                },
+                WorkbenchRequest::UiReplaceDocument {
+                    expected: dispatcher.presentation_expectation(),
+                    document: serde_json::to_value(replacement).unwrap(),
+                },
+            )
+            .unwrap();
+        frame(
+            &context,
+            &mut renderer,
+            &dispatcher,
+            dispatcher.presentation_revision(),
+            vec![],
+        );
+        assert_eq!(operator, original);
+        assert_eq!(dispatcher.recovery, recovery);
+        assert!(
+            renderer
+                .reference_editors
+                .editor_mut(&dispatcher.presentation.controls[0])
+                .unwrap()
+                .text
+                .is_empty()
+        );
+        assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+        operator
+            .confirm(&dispatcher, dispatcher.client().unwrap())
+            .unwrap();
+        assert_eq!(
+            dispatcher.client().unwrap().1.borrow()[0].1["reference"],
+            "1",
+            "prepared intent retains its original target"
+        );
+    }
+
     fn recorder_frame(
         context: &egui::Context,
         renderer: &mut PresentationRenderer,
@@ -1257,7 +1743,7 @@ mod tests {
                     &model.presentation,
                     &model.observations,
                     1,
-                    &mut RecorderControlUi {
+                    &mut OperatorControlUi {
                         model,
                         operator,
                         observation_only: observe,
@@ -1591,7 +2077,7 @@ mod tests {
         // needing a declarative window or a selected signal.
         let output = context.run_ui(Default::default(), |ui| {
             assert!(
-                RecorderControlUi {
+                OperatorControlUi {
                     model: &model,
                     operator: &OperatorWorkflow::default(),
                     observation_only: false,

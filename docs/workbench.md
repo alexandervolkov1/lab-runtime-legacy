@@ -82,16 +82,33 @@ Declarative Controls panels support **RecordingLifecycle** controls targeting
 **Recorder**. The configured label appears above **Start recording** (idle
 Recorder) or **Stop recording** (an active run), according to the cached Runtime
 projection. Start uses Workbench's shared recording-label field: a nonblank label
-of at most 128 UTF-8 bytes is required. Other control kinds and incompatible
-targets remain disabled.
+of at most 128 UTF-8 bytes is required. Fixed Reference controls are also supported;
+other declarative kinds and incompatible targets remain disabled.
 
-Clicking a recording button creates only an operator draft. Review it in the
-existing **Operator action** panel and separately press **Confirm**; **Cancel**
+A **SetReference** control targeting a **Reference** displays its cached current
+setpoint and Runtime unit, a **New fixed value** field and **Configure fixed**.
+Only fixed configuration is supported by this declarative control; Ramp/Retune
+remain available only in the existing ordinary operator workflow. Input uses
+decimal-point/exponent syntax for a finite `f64`, with the same 64-byte editor
+bound as the ordinary fixed-value field and no added numeric range restrictions.
+Unknown units stay unknown. Numbers are sent in the Reference's Runtime unit,
+without implicit conversion; changing a Reference is not a direct power-output
+write.
+
+Each Reference editor belongs to its Control ID and Runtime target. Inputs remain
+local GUI state, independent of observations and recovery. Any presentation
+revision change clears these editors (including egui undo/focus); changing a
+target cannot reuse another Reference's draft. A prepared Operator action keeps
+its original target and revision across replacement until confirmed or cancelled.
+
+Clicking either control's action button creates only an operator draft. Review it
+in the existing **Operator action** panel and separately press **Confirm**; **Cancel**
 sends nothing. Confirmation is mandatory even if the document has `confirm:false`.
 The renderer cannot send Runtime commands. Merely applying or displaying a
-document does not start/stop recording, and controls do not change its revision.
+document neither starts/stops recording nor changes a Reference, and controls do
+not change its revision.
 
-Observation mode, non-Fresh projections, unavailable operations/Recorder, active
+Observation mode, non-Fresh projections, unavailable operations/targets, active
 operator workflows and existing recovery fences disable these buttons. Confirm
 rechecks authoritative identity/readiness through the same OperatorWorkflow and
 ClientHandle as ordinary Workbench controls. Submitted/Accepted are not completed

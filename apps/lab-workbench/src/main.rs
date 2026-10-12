@@ -1437,6 +1437,95 @@ mod runtime_acceptance {
     }
 
     #[test]
+    #[ignore = "DGUI-4B2 virtual fixed Reference acceptance; run after cargo build -p lab-runtime"]
+    fn real_runtime_fixed_reference_operator_workflow_preserves_units_and_revision_fences() {
+        let (mut runtime, address) = start_runtime();
+        let client = ClientHandle::spawn(address).unwrap();
+        let mut model =
+            WorkbenchModel::new(PresentationDocument::empty("fixed-reference-operator"));
+        let mut rebuild = RebuildCoordinator::default();
+        client.connect(None).unwrap();
+        apply_until(&client, &mut model, &mut rebuild, |_, model| {
+            model.observations.freshness == Freshness::Fresh
+        });
+        let target = model
+            .observations
+            .entities
+            .keys()
+            .find(|target| matches!(target, RuntimeRef::Reference { .. }))
+            .unwrap()
+            .clone();
+        let RuntimeRef::Reference { reference } = &target else {
+            unreachable!()
+        };
+        let initial = model.observations.entities[&target].value.clone();
+        let value = initial["value"].as_f64().unwrap() + 0.25;
+        let intent = OperatorIntent::ConfigureReferenceFixed {
+            reference: reference.clone(),
+            value,
+        };
+        let mut workflow = OperatorWorkflow::default();
+        workflow.begin(&model, intent.clone()).unwrap();
+        workflow.cancel_or_acknowledge();
+        assert!(model.recovery.mutations.is_empty());
+        workflow.begin(&model, intent).unwrap();
+        let mut old_draft = workflow.clone();
+        let command_id = workflow.confirm(&model, &client).unwrap();
+        model.track_operator_intent(command_id).unwrap();
+        assert!(workflow.confirm(&model, &client).is_err());
+        let deadline = Instant::now() + ACCEPTANCE_TIMEOUT;
+        loop {
+            assert!(
+                Instant::now() < deadline,
+                "fixed Reference completion/projection deadline"
+            );
+            let update = client
+                .recv_timeout(deadline.saturating_duration_since(Instant::now()))
+                .unwrap();
+            model.apply_client_update(update.clone());
+            workflow.after_update(&update);
+            rebuild.after_update(&update, &mut model, &client);
+            if matches!(workflow.state, OperatorWorkflowState::Completed { .. })
+                && model.observations.entities[&target].value["kind"] == "fixed"
+                && model.observations.entities[&target].value["value"] == value
+            {
+                break;
+            }
+        }
+        assert!(workflow.accepted_observed);
+        let after = &model.observations.entities[&target].value;
+        assert_eq!(after["unit"], initial["unit"]);
+        assert_eq!(
+            after["revision"].as_str().unwrap().parse::<u64>().unwrap(),
+            initial["revision"]
+                .as_str()
+                .unwrap()
+                .parse::<u64>()
+                .unwrap()
+                + 1
+        );
+        assert_eq!(
+            old_draft.confirm(&model, &client),
+            Err(super::model::OperatorIntentError::DraftStale)
+        );
+        assert_eq!(
+            model
+                .recovery
+                .mutations
+                .iter()
+                .filter(|record| record.op == "reference_configure")
+                .count(),
+            1
+        );
+        assert_eq!(
+            model.presentation,
+            PresentationDocument::empty("fixed-reference-operator")
+        );
+        assert!(runtime.0.try_wait().unwrap().is_none());
+        client.shutdown().unwrap();
+    }
+
+    #[test]
     #[ignore = "DGUI-4B1 virtual Recorder acceptance; run after cargo build -p lab-runtime"]
     fn real_runtime_recording_operator_workflow_confirms_once_and_observes_start_stop() {
         let (mut runtime, address) = start_runtime_with_recorder();
