@@ -68,7 +68,7 @@ mod visuals {
         pub(super) unavailable: &'static str,
     }
 
-    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     pub(super) enum InputKind {
         Number,
         Integer,
@@ -136,6 +136,14 @@ mod visuals {
     }
 }
 
+// Applicability is part of editor state: losing typed metadata must retire the
+// prior draft just as changing between supported candidate types does.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+enum CandidateKind {
+    Editable(InputKind),
+    Unsupported,
+}
+
 // Match the ordinary fixed-value editor's text bound, without restricting f64 range.
 const REFERENCE_VALUE_BYTES: usize = 64;
 
@@ -168,7 +176,7 @@ pub(super) fn reference_control_supported(control: &Control) -> bool {
 #[derive(Default)]
 pub(super) struct ControlEditor {
     pub(super) text: String,
-    input_kind: Option<InputKind>,
+    candidate_kind: Option<CandidateKind>,
     // A control can be referenced by multiple panels. Track every current view
     // instance (bounded by the document's panel/reference counts), not just the
     // last rendered editor, so retirement also removes their undo/focus state.
@@ -186,7 +194,7 @@ pub(super) struct ControlEditors {
 impl ControlEditors {
     fn retire(context: &egui::Context, editor: &mut ControlEditor) {
         editor.text.clear();
-        editor.input_kind = None;
+        editor.candidate_kind = None;
         for id in editor.widget_ids.drain() {
             context.data_mut(|data| data.remove::<egui::text_edit::TextEditState>(id));
             context.memory_mut(|memory| memory.surrender_focus(id));
@@ -233,13 +241,13 @@ impl ControlEditors {
 }
 
 impl ControlEditor {
-    fn reconcile_kind(&mut self, context: &egui::Context, kind: InputKind) {
-        if let Some(previous) = self.input_kind
+    fn reconcile_kind(&mut self, context: &egui::Context, kind: CandidateKind) {
+        if let Some(previous) = self.candidate_kind
             && previous != kind
         {
             ControlEditors::retire(context, self);
         }
-        self.input_kind = Some(kind);
+        self.candidate_kind = Some(kind);
     }
 }
 
@@ -593,7 +601,8 @@ impl OperatorControlUi<'_> {
         control: &Control,
         mut editor: Option<&mut ControlEditor>,
     ) -> Option<OperatorIntent> {
-        if let Some(kind) = self.editor_kind(control)
+        let candidate_kind = self.editor_kind(control);
+        if let Some(kind) = candidate_kind
             && let Some(editor) = editor.as_mut()
         {
             editor.reconcile_kind(ui.ctx(), kind);
@@ -610,7 +619,13 @@ impl OperatorControlUi<'_> {
                 let response = if recorder_control_supported(control) {
                     visuals::input(ui, input, self.label)
                 } else if let Some(editor) = editor.as_mut() {
-                    let response = visuals::input(ui, input, &mut editor.text);
+                    // A retired type must not recover its persisted egui undo
+                    // state if typed metadata later returns.
+                    let response = ui
+                        .push_id(candidate_kind, |ui| {
+                            visuals::input(ui, input, &mut editor.text)
+                        })
+                        .inner;
                     editor.widget_ids.insert(response.id);
                     response
                 } else {
@@ -634,24 +649,26 @@ impl OperatorControlUi<'_> {
         .inner
     }
 
-    fn editor_kind(&self, control: &Control) -> Option<InputKind> {
+    fn editor_kind(&self, control: &Control) -> Option<CandidateKind> {
         if reference_control_supported(control) {
-            return Some(InputKind::Number);
+            return Some(CandidateKind::Editable(InputKind::Number));
         }
         if !property_control_supported(control) {
             return None;
         }
-        self.model
-            .observations
-            .entities
-            .get(&control.target)
-            .and_then(|item| item.value.get("value_type"))
-            .and_then(serde_json::Value::as_str)
-            .and_then(|kind| match kind {
-                "integer" => Some(InputKind::Integer),
-                "text" => Some(InputKind::Text),
-                _ => None,
-            })
+        Some(
+            self.model
+                .observations
+                .entities
+                .get(&control.target)
+                .and_then(|item| item.value.get("value_type"))
+                .and_then(serde_json::Value::as_str)
+                .map_or(CandidateKind::Unsupported, |kind| match kind {
+                    "integer" => CandidateKind::Editable(InputKind::Integer),
+                    "text" => CandidateKind::Editable(InputKind::Text),
+                    _ => CandidateKind::Unsupported,
+                }),
+        )
     }
 
     /// The ordinary Recorder group consumes the same adapter and primitives.
@@ -997,23 +1014,23 @@ mod tests {
     fn candidate_type_change_retires_text_focus_and_undo_without_changing_the_key() {
         let context = egui::Context::default();
         let mut editor = ControlEditor::default();
-        editor.reconcile_kind(&context, InputKind::Integer);
+        editor.reconcile_kind(&context, CandidateKind::Editable(InputKind::Integer));
         editor.text = "42".into();
         let id = egui::Id::new("typed-editor");
         editor.widget_ids.insert(id);
         egui::text_edit::TextEditState::default().store(&context, id);
         context.memory_mut(|memory| memory.request_focus(id));
 
-        editor.reconcile_kind(&context, InputKind::Integer);
+        editor.reconcile_kind(&context, CandidateKind::Editable(InputKind::Integer));
         assert_eq!(editor.text, "42", "the same candidate type keeps its draft");
         assert!(egui::text_edit::TextEditState::load(&context, id).is_some());
 
-        editor.reconcile_kind(&context, InputKind::Text);
+        editor.reconcile_kind(&context, CandidateKind::Unsupported);
         assert!(editor.text.is_empty());
         assert!(editor.widget_ids.is_empty());
         assert!(egui::text_edit::TextEditState::load(&context, id).is_none());
         assert!(!context.memory(|memory| memory.has_focus(id)));
-        assert_eq!(editor.input_kind, Some(InputKind::Text));
+        assert_eq!(editor.candidate_kind, Some(CandidateKind::Unsupported));
     }
 
     #[test]

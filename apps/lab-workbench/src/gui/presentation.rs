@@ -2090,8 +2090,112 @@ mod tests {
         }
     }
 
+    fn assert_property_type_transition_retires_editor(
+        index: usize,
+        replacement: Option<&str>,
+        restored: &str,
+    ) {
+        let mut model = property_model();
+        let target = model.presentation.controls[index].target.clone();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        input_control(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            index,
+            "draft before metadata change",
+        );
+
+        let old_id = *renderer
+            .editors
+            .editor_mut(&model.presentation.controls[index])
+            .unwrap()
+            .widget_ids
+            .iter()
+            .next()
+            .unwrap();
+        let cursor = egui::text::CCursorRange::one(egui::text::CCursor::new(0));
+        let mut state = egui::text_edit::TextEditState::load(&context, old_id).unwrap_or_default();
+        state.cursor.set_char_range(Some(cursor));
+        let mut undoer = state.undoer();
+        undoer.add_undo(&(cursor, "older draft".to_owned()));
+        undoer.add_undo(&(cursor, "draft before metadata change".to_owned()));
+        state.set_undoer(undoer);
+        state.store(&context, old_id);
+        context.memory_mut(|memory| memory.request_focus(old_id));
+
+        let value = &mut model.observations.entities.get_mut(&target).unwrap().value;
+        match replacement {
+            Some(kind) => value["value_type"] = json!(kind),
+            None => {
+                value.as_object_mut().unwrap().remove("value_type");
+            }
+        }
+        let (response, _) = recorder_frame(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            false,
+            &mut String::new(),
+            vec![],
+        );
+        assert!(response.intent.is_none());
+        let editor = renderer
+            .editors
+            .editor_mut(&model.presentation.controls[index])
+            .unwrap();
+        assert!(editor.text.is_empty());
+        assert!(!editor.widget_ids.contains(&old_id));
+        assert!(egui::text_edit::TextEditState::load(&context, old_id).is_none());
+        assert!(!context.memory(|memory| memory.has_focus(old_id)));
+
+        model.observations.entities.get_mut(&target).unwrap().value["value_type"] = json!(restored);
+        let (response, _) = recorder_frame(
+            &context,
+            &mut renderer,
+            &model,
+            &OperatorWorkflow::default(),
+            false,
+            &mut String::new(),
+            vec![],
+        );
+        assert!(response.intent.is_none());
+        let editor = renderer
+            .editors
+            .editor_mut(&model.presentation.controls[index])
+            .unwrap();
+        assert!(editor.text.is_empty());
+        assert_eq!(editor.widget_ids.len(), 1);
+        let restored_id = *editor.widget_ids.iter().next().unwrap();
+        assert!(!context.memory(|memory| memory.has_focus(restored_id)));
+        let state = egui::text_edit::TextEditState::load(&context, restored_id).unwrap();
+        let cursor = state
+            .cursor
+            .char_range()
+            .unwrap_or_else(|| egui::text::CCursorRange::one(egui::text::CCursor::new(0)));
+        assert!(
+            !state.undoer().has_undo(&(cursor, String::new())),
+            "the restored editor cannot recover the retired draft through undo"
+        );
+    }
+
     #[test]
-    fn property_type_change_retires_draft_but_observation_updates_do_not() {
+    fn property_type_loss_and_changes_retire_draft_focus_and_undo_in_real_frames() {
+        for (index, replacement, restored) in [
+            (0, Some("boolean"), "integer"),
+            (0, None, "integer"),
+            (1, Some("number"), "text"),
+            (0, Some("text"), "text"),
+        ] {
+            assert_property_type_transition_retires_editor(index, replacement, restored);
+        }
+    }
+
+    #[test]
+    fn property_current_and_freshness_updates_keep_same_type_draft() {
         let mut model = property_model();
         let target = model.presentation.controls[0].target.clone();
         let context = egui::Context::default();
@@ -2104,41 +2208,36 @@ mod tests {
             0,
             "7",
         );
+
         model.observations.entities.get_mut(&target).unwrap().value["current"] = json!(8);
-        recorder_frame(
-            &context,
-            &mut renderer,
-            &model,
-            &OperatorWorkflow::default(),
-            false,
-            &mut String::new(),
-            vec![],
-        );
-        assert_eq!(
-            renderer
-                .editors
-                .editor_mut(&model.presentation.controls[0])
+        for freshness in [Freshness::Fresh, Freshness::Stale, Freshness::Rebuilding] {
+            model.observations.freshness = freshness;
+            model
+                .observations
+                .entities
+                .get_mut(&target)
                 .unwrap()
-                .text,
-            "7",
-            "a normal observed-value update cannot overwrite local input"
-        );
-        model.observations.entities.get_mut(&target).unwrap().value["value_type"] = json!("text");
-        recorder_frame(
-            &context,
-            &mut renderer,
-            &model,
-            &OperatorWorkflow::default(),
-            false,
-            &mut String::new(),
-            vec![],
-        );
-        let editor = renderer
-            .editors
-            .editor_mut(&model.presentation.controls[0])
-            .unwrap();
-        assert!(editor.text.is_empty());
-        assert!(editor.widget_ids.len() <= 1);
+                .freshness = freshness;
+            let (response, _) = recorder_frame(
+                &context,
+                &mut renderer,
+                &model,
+                &OperatorWorkflow::default(),
+                false,
+                &mut String::new(),
+                vec![],
+            );
+            assert!(response.intent.is_none());
+            assert_eq!(
+                renderer
+                    .editors
+                    .editor_mut(&model.presentation.controls[0])
+                    .unwrap()
+                    .text,
+                "7",
+                "current/freshness updates with the same cached type keep local input"
+            );
+        }
     }
 
     #[test]
