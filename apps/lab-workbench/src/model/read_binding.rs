@@ -3,6 +3,7 @@
 use super::{Freshness, RuntimeObservations};
 use crate::presentation::RuntimeRef;
 use serde_json::Value;
+use std::num::NonZeroU64;
 
 const MAX_UNIT_ID_BYTES: usize = 32;
 const MAX_UNIT_SYMBOL_BYTES: usize = 16;
@@ -152,6 +153,7 @@ pub(super) enum DescriptorKind {
 pub(super) struct ReadDescriptor {
     kind: DescriptorKind,
     unit: Result<Option<ReadUnit>, ReadAbsence>,
+    generation: Result<NonZeroU64, ReadAbsence>,
 }
 
 impl ReadDescriptor {
@@ -159,16 +161,51 @@ impl ReadDescriptor {
         Self {
             kind: descriptor_kind(value.get("value_type"), "float"),
             unit: decode_unit(value.get("unit")),
+            generation: signal_generation(value.get("generation")),
         }
     }
 
     pub(super) fn retained_bytes(&self) -> usize {
-        1 + self
-            .unit
-            .as_ref()
-            .ok()
-            .and_then(Option::as_ref)
-            .map_or(0, ReadUnit::retained_bytes)
+        std::mem::size_of::<Self>()
+            + self
+                .unit
+                .as_ref()
+                .ok()
+                .and_then(Option::as_ref)
+                .map_or(0, ReadUnit::retained_bytes)
+    }
+
+    pub(super) fn matches_signal_generation(&self, sample: &Value) -> Result<(), ReadAbsence> {
+        let descriptor = self.generation?;
+        let sample = signal_generation(sample.get("generation"))?;
+        if descriptor == sample {
+            Ok(())
+        } else {
+            Err(ReadAbsence::IncompatibleMetadata)
+        }
+    }
+}
+
+// Runtime DTOs encode replacement generations as positive decimal u64 strings.
+// Retain only the exact integer, never the source string or a floating-point value.
+fn signal_generation(value: Option<&Value>) -> Result<NonZeroU64, ReadAbsence> {
+    let value = value.ok_or(ReadAbsence::MissingMetadata)?;
+    let text = value.as_str().ok_or(ReadAbsence::IncompatibleMetadata)?;
+    if text.is_empty() || text.len() > 20 || !text.bytes().all(|byte| byte.is_ascii_digit()) {
+        return Err(ReadAbsence::IncompatibleMetadata);
+    }
+    text.parse().map_err(|_| ReadAbsence::IncompatibleMetadata)
+}
+
+fn signal_quality(sample: &Value) -> Option<ReadQuality> {
+    match (
+        sample.get("quality").and_then(Value::as_str),
+        sample.get("status").and_then(Value::as_str),
+    ) {
+        (Some("good"), _) => Some(ReadQuality::Good),
+        (Some("unavailable"), Some("not_observed")) => Some(ReadQuality::NotObserved),
+        (Some("unavailable"), _) => Some(ReadQuality::Unavailable),
+        _ => None,
     }
 }
 
@@ -220,6 +257,32 @@ fn resolve_signal(
 ) -> TypedRead {
     let descriptor = observations.read_descriptors.get(target);
     let observation = observations.entities.get(target);
+    // A new sample cannot refresh metadata retained from before a rebuild or a
+    // generation mismatch. Only another discovery projection can confirm it.
+    let freshness = if descriptor.is_some_and(|entry| entry.freshness != Freshness::Fresh) {
+        Freshness::Stale
+    } else {
+        freshness
+    };
+    let quality = observation.and_then(|entry| signal_quality(&entry.value));
+    if let Some(descriptor) = descriptor {
+        let applicability = match observation.filter(|entry| entry.value.get("signal").is_some()) {
+            Some(sample) => descriptor
+                .descriptor
+                .matches_signal_generation(&sample.value),
+            None => descriptor.descriptor.generation.map(|_| ()),
+        };
+        if let Err(reason) = applicability {
+            return absent(
+                ReadBinding::SignalSample,
+                None,
+                reason,
+                None,
+                quality,
+                freshness,
+            );
+        }
+    }
     if descriptor.is_none() && observation.is_none() {
         return absent(
             ReadBinding::SignalSample,
@@ -286,7 +349,7 @@ fn resolve_signal(
                 None,
                 ReadAbsence::MissingMetadata,
                 None,
-                None,
+                quality,
                 freshness,
             );
         }
@@ -747,7 +810,7 @@ fn absent(
 mod tests {
     use super::*;
     use crate::{
-        model::projections::MAX_READ_DESCRIPTORS,
+        model::projections::{MAX_READ_DESCRIPTOR_BYTES, MAX_READ_DESCRIPTORS},
         presentation::{ConfigurationOwner, RuntimeRef},
     };
     use serde_json::json;
@@ -766,6 +829,18 @@ mod tests {
             instrument: "1".into(),
             parameter: parameter.into(),
         }
+    }
+
+    fn signal_descriptor(kind: &str, generation: &str) -> Value {
+        json!({"kind":"signal","id":{"instrument":"1","parameter":"1"},
+            "value_type":kind,"generation":generation,"unit":{"id":"count","symbol":"count"}})
+    }
+
+    fn signal_sample(value: Value, generation: &str) -> Value {
+        json!({"signal":{"instrument":"1","parameter":"1"},"quality":"good",
+            "status":"available","value":value,"generation":generation,
+            "unit":{"id":"count","symbol":"count"},"failure":null,
+            "observed_at_ns":"1000","source_at_ns":null})
     }
 
     fn resolved_property(kind: &str, current: Value) -> TypedRead {
@@ -838,29 +913,32 @@ mod tests {
             let mut observations = RuntimeObservations::default();
             observations.observe_read_descriptor(
                 target.clone(),
-                &json!({"value_type":kind,"unit":{"id":"1","symbol":""}}),
+                &json!({"value_type":kind,"generation":"1","unit":{"id":"1","symbol":""}}),
             );
             observations.observe(
                 target.clone(),
                 json!({"signal":{"instrument":"1","parameter":parameter},"quality":"good",
-                    "status":"available","value":value,"unit":{"id":"1","symbol":""}}),
+                    "status":"available","value":value,"generation":"1","unit":{"id":"1","symbol":""}}),
                 None,
             );
             observations.complete_rebuild();
             let reading = resolve_read(&observations, &target, ReadBinding::SignalSample);
             assert_eq!(reading.payload, ReadPayload::Value(expected));
             assert_eq!(reading.quality, Some(ReadQuality::Good));
+            assert_eq!(reading.freshness, Freshness::Fresh);
             assert_eq!(reading.unit.unwrap().display(), Some("1"));
         }
 
         let target = signal("7");
         let mut observations = RuntimeObservations::default();
-        observations
-            .observe_read_descriptor(target.clone(), &json!({"value_type":"integer","unit":null}));
+        observations.observe_read_descriptor(
+            target.clone(),
+            &json!({"value_type":"integer","generation":"1","unit":null}),
+        );
         observations.observe(
             target.clone(),
             json!({"signal":{"instrument":"1","parameter":"7"},"quality":"good",
-                "value":i64::MAX,"unit":null}),
+                "status":"available","generation":"1","value":i64::MAX,"unit":null}),
             None,
         );
         observations.complete_rebuild();
@@ -877,7 +955,7 @@ mod tests {
         let mut observations = RuntimeObservations::default();
         observations.observe_read_descriptor(
             target.clone(),
-            &json!({"value_type":"boolean","unit":{"id":"ok","symbol":"u"}}),
+            &json!({"value_type":"boolean","generation":"1","unit":{"id":"ok","symbol":"u"}}),
         );
         assert_eq!(
             resolve_read(&observations, &target, ReadBinding::SignalSample).payload,
@@ -887,7 +965,7 @@ mod tests {
         observations.observe(
             target.clone(),
             json!({"signal":{"instrument":"1","parameter":"1"},"quality":"unavailable",
-                "status":"not_observed","failure":"not_observed","value":null,
+                "status":"not_observed","failure":"not_observed","value":null,"generation":"1",
                 "unit":{"id":"ok","symbol":"u"}}),
             None,
         );
@@ -920,7 +998,7 @@ mod tests {
         observations.entities.get_mut(&target).unwrap().freshness = Freshness::Fresh;
         assert_eq!(
             resolve_read(&observations, &target, ReadBinding::SignalSample).freshness,
-            Freshness::Rebuilding
+            Freshness::Stale
         );
 
         let missing_target = signal("missing");
@@ -930,12 +1008,179 @@ mod tests {
         );
         observations.observe_read_descriptor(
             missing_target.clone(),
-            &json!({"value_type":"bytes","unit":null}),
+            &json!({"value_type":"bytes","generation":"1","unit":null}),
         );
         assert_eq!(
             resolve_read(&observations, &missing_target, ReadBinding::SignalSample).payload,
             ReadPayload::Absent(ReadAbsence::Unsupported)
         );
+    }
+
+    #[test]
+    fn signal_generation_mismatch_latches_until_discovery_confirms_metadata() {
+        // Adjacent generations above 2^53 must not collapse through f64. Include
+        // the u64 endpoint; generation and the scalar's i64 range are independent.
+        for (old, new) in [
+            ("1", "2"),
+            ("9007199254740992", "9007199254740993"),
+            ("18446744073709551614", "18446744073709551615"),
+        ] {
+            for (kind, expected) in [
+                ("integer", ScalarValue::Integer(42)),
+                ("text", ScalarValue::Text("42".into())),
+                ("enum", ScalarValue::Enum("42".into())),
+            ] {
+                let target = signal("1");
+                let mut observations = RuntimeObservations::default();
+                observations.observe_read_descriptor(target.clone(), &signal_descriptor(kind, old));
+                observations.observe(target.clone(), signal_sample(json!("42"), old), None);
+                observations.complete_rebuild();
+                let reading = resolve_read(&observations, &target, ReadBinding::SignalSample);
+                assert_eq!(reading.payload, ReadPayload::Value(expected.clone()));
+                assert_eq!(reading.freshness, Freshness::Fresh);
+
+                observations.observe(target.clone(), signal_sample(json!("42"), new), Some(10));
+                let mismatch = resolve_read(&observations, &target, ReadBinding::SignalSample);
+                assert_eq!(
+                    mismatch.payload,
+                    ReadPayload::Absent(ReadAbsence::IncompatibleMetadata)
+                );
+                assert_eq!(
+                    mismatch.kind, None,
+                    "the old type does not describe this generation"
+                );
+                assert_eq!(mismatch.quality, Some(ReadQuality::Good));
+                assert_eq!(mismatch.freshness, Freshness::Stale);
+                assert_eq!(
+                    observations.freshness,
+                    Freshness::Fresh,
+                    "connection freshness is separate"
+                );
+
+                // A late sample of the previous generation cannot repair metadata.
+                observations.observe(target.clone(), signal_sample(json!("42"), old), None);
+                assert_eq!(
+                    resolve_read(&observations, &target, ReadBinding::SignalSample).freshness,
+                    Freshness::Stale
+                );
+                observations.observe(target.clone(), signal_sample(json!("42"), new), None);
+                observations.observe_read_descriptor(target.clone(), &signal_descriptor(kind, new));
+                let confirmed = resolve_read(&observations, &target, ReadBinding::SignalSample);
+                assert_eq!(confirmed.payload, ReadPayload::Value(expected));
+                assert_eq!(confirmed.freshness, Freshness::Fresh);
+            }
+        }
+    }
+
+    #[test]
+    fn signal_generations_require_bounded_positive_decimal_u64_strings() {
+        let target = signal("1");
+        for invalid in [
+            None,
+            Some(Value::Null),
+            Some(json!(true)),
+            Some(json!(1)),
+            Some(json!(1.0)),
+            Some(json!("")),
+            Some(json!("0")),
+            Some(json!("-1")),
+            Some(json!("+1")),
+            Some(json!("1.0")),
+            Some(json!("1e0")),
+            Some(json!(" 1")),
+            Some(json!("１")),
+            Some(json!("18446744073709551616")),
+            Some(json!("9".repeat(4096))),
+        ] {
+            for in_descriptor in [true, false] {
+                let mut descriptor = signal_descriptor("integer", "1");
+                let mut sample = signal_sample(json!("42"), "1");
+                let destination = if in_descriptor {
+                    &mut descriptor
+                } else {
+                    &mut sample
+                };
+                if let Some(value) = &invalid {
+                    destination["generation"] = value.clone();
+                } else {
+                    destination.as_object_mut().unwrap().remove("generation");
+                }
+                let mut observations = RuntimeObservations::default();
+                observations.observe_read_descriptor(target.clone(), &descriptor);
+                observations.observe(target.clone(), sample, None);
+                let reading = resolve_read(&observations, &target, ReadBinding::SignalSample);
+                assert_eq!(
+                    reading.payload,
+                    ReadPayload::Absent(if invalid.is_none() {
+                        ReadAbsence::MissingMetadata
+                    } else {
+                        ReadAbsence::IncompatibleMetadata
+                    }),
+                    "{in_descriptor}: {invalid:?}"
+                );
+                assert_eq!(reading.kind, None);
+                assert_eq!(reading.quality, Some(ReadQuality::Good));
+                assert_eq!(
+                    observations.read_descriptors[&target]
+                        .descriptor
+                        .retained_bytes(),
+                    ReadDescriptor::from_signal_discovery(&signal_descriptor("integer", "1"))
+                        .retained_bytes(),
+                    "invalid generation source strings are never retained in metadata"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn signal_absence_and_quality_remain_explicit_with_generation_mismatch() {
+        let target = signal("1");
+        for (status, quality, absence) in [
+            (
+                "not_observed",
+                ReadQuality::NotObserved,
+                ReadAbsence::NotObserved,
+            ),
+            (
+                "unavailable",
+                ReadQuality::Unavailable,
+                ReadAbsence::Unavailable,
+            ),
+        ] {
+            for generation in ["1", "2"] {
+                let mut observations = RuntimeObservations::default();
+                observations
+                    .observe_read_descriptor(target.clone(), &signal_descriptor("integer", "1"));
+                let mut sample = signal_sample(Value::Null, generation);
+                sample["quality"] = json!("unavailable");
+                sample["status"] = json!(status);
+                sample["failure"] = json!(if status == "not_observed" {
+                    status
+                } else {
+                    "sensor_fault"
+                });
+                observations.observe(target.clone(), sample, None);
+                let reading = resolve_read(&observations, &target, ReadBinding::SignalSample);
+                assert_eq!(
+                    reading.payload,
+                    ReadPayload::Absent(if generation == "1" {
+                        absence
+                    } else {
+                        ReadAbsence::IncompatibleMetadata
+                    })
+                );
+                assert_eq!(reading.quality, Some(quality));
+                if generation == "2" {
+                    observations.complete_rebuild();
+                    let retired = resolve_read(&observations, &target, ReadBinding::SignalSample);
+                    assert_eq!(
+                        retired.payload,
+                        ReadPayload::Absent(ReadAbsence::MissingMetadata)
+                    );
+                    assert_eq!(retired.quality, Some(quality));
+                }
+            }
+        }
     }
 
     #[test]
@@ -1045,7 +1290,7 @@ mod tests {
         for index in 0..=MAX_READ_DESCRIPTORS {
             observations.observe_read_descriptor(
                 signal(&index.to_string()),
-                &json!({"value_type":"float","unit":{"id":"V","symbol":"V"}}),
+                &json!({"value_type":"float","generation":"1","unit":{"id":"V","symbol":"V"}}),
             );
         }
         assert_eq!(observations.read_descriptors.len(), MAX_READ_DESCRIPTORS);
@@ -1056,7 +1301,7 @@ mod tests {
         let replacement = signal("replacement");
         observations.observe_read_descriptor(
             replacement.clone(),
-            &json!({"value_type":"boolean","unit":null}),
+            &json!({"value_type":"boolean","generation":"1","unit":null}),
         );
         observations.complete_rebuild();
         assert_eq!(observations.read_descriptors.len(), 1);
@@ -1065,5 +1310,44 @@ mod tests {
         observations.clear_read_descriptors();
         assert!(observations.read_descriptors.is_empty());
         assert!(!observations.read_descriptor_overflowed);
+    }
+
+    #[test]
+    fn descriptor_generation_storage_respects_the_aggregate_byte_budget() {
+        let mut observations = RuntimeObservations::default();
+        let descriptor = signal_descriptor("integer", "18446744073709551615");
+        // Deliberately oversized identities exercise the independent byte bound,
+        // which ordinary Runtime numeric IDs cannot exhaust before the count cap.
+        for index in 0..MAX_READ_DESCRIPTORS {
+            observations.observe_read_descriptor(
+                signal(&format!("{index:04}{}", "x".repeat(1024))),
+                &descriptor,
+            );
+        }
+        assert!(observations.read_descriptor_overflowed);
+        assert!(observations.read_descriptors.len() < MAX_READ_DESCRIPTORS);
+        let retained: usize = observations
+            .read_descriptors
+            .iter()
+            .map(|(target, entry)| {
+                let RuntimeRef::Signal {
+                    instrument,
+                    parameter,
+                } = target
+                else {
+                    unreachable!()
+                };
+                entry.descriptor.retained_bytes() + instrument.len() + parameter.len()
+            })
+            .sum();
+        assert!(retained <= MAX_READ_DESCRIPTOR_BYTES);
+        let before = observations.read_descriptors.len();
+        observations
+            .observe_read_descriptor(signal(&"x".repeat(MAX_READ_DESCRIPTOR_BYTES)), &descriptor);
+        assert_eq!(observations.read_descriptors.len(), before);
+        observations.begin_rebuild();
+        observations.observe_read_descriptor(signal("1"), &descriptor);
+        observations.complete_rebuild();
+        assert_eq!(observations.read_descriptors.len(), 1);
     }
 }

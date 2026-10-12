@@ -114,7 +114,7 @@ pub(crate) struct RuntimeObservations {
     pub(crate) controller_details: BTreeMap<String, ControllerDetail>,
     /// Full resource-detail authority, separate from narrow transport events.
     pub(crate) resource_details: BTreeMap<String, ResourceDetail>,
-    /// Minimal signal type/unit metadata, separate from current measurements.
+    /// Minimal signal type/unit/generation metadata, separate from current measurements.
     pub(super) read_descriptors: BTreeMap<RuntimeRef, DescriptorObservation>,
     read_descriptor_bytes: usize,
     /// Set when a decoded descriptor could not fit the fixed cache budget.
@@ -175,9 +175,22 @@ impl RuntimeObservations {
         self.freshness = Freshness::Fresh;
     }
 
-    /// Retains only decoded signal type/unit metadata within an aggregate budget.
+    /// Retains decoded signal metadata within an aggregate budget.
     pub(crate) fn observe_read_descriptor(&mut self, target: RuntimeRef, value: &Value) {
         let descriptor = ReadDescriptor::from_signal_discovery(value);
+        // A discovery reply can interleave with newer samples/events. It cannot
+        // confirm metadata for a different generation already observed this epoch.
+        let freshness = if self.entities.get(&target).is_some_and(|observation| {
+            observation.freshness == Freshness::Fresh
+                && observation.value.get("signal").is_some()
+                && descriptor
+                    .matches_signal_generation(&observation.value)
+                    .is_err()
+        }) {
+            Freshness::Stale
+        } else {
+            Freshness::Fresh
+        };
         let retained_bytes = descriptor.retained_bytes()
             + match &target {
                 RuntimeRef::Signal {
@@ -222,7 +235,7 @@ impl RuntimeObservations {
             target,
             DescriptorObservation {
                 descriptor,
-                freshness: Freshness::Fresh,
+                freshness,
                 retained_bytes,
             },
         );
@@ -237,6 +250,16 @@ impl RuntimeObservations {
 
     /// Inserts or replaces one fresh observed projection.
     pub(crate) fn observe(&mut self, target: RuntimeRef, value: Value, cursor: Option<u64>) {
+        if value.get("signal").is_some()
+            && let Some(descriptor) = self.read_descriptors.get_mut(&target)
+            && descriptor
+                .descriptor
+                .matches_signal_generation(&value)
+                .is_err()
+        {
+            // Latch invalidation: another sample alone cannot restore metadata.
+            descriptor.freshness = Freshness::Stale;
+        }
         self.entities.insert(
             target,
             Observation {

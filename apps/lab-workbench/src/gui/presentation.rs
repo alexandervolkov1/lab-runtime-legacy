@@ -188,6 +188,10 @@ pub(super) fn source_state(observations: &RuntimeObservations, source: &RuntimeR
     } else {
         observation.freshness
     };
+    freshness_state(freshness)
+}
+
+fn freshness_state(freshness: Freshness) -> SourceState {
     match freshness {
         Freshness::Fresh => SourceState::Fresh,
         Freshness::Stale => SourceState::Stale,
@@ -212,18 +216,19 @@ pub(super) fn state_label(ui: &mut egui::Ui, state: SourceState) {
 
 fn render_status(ui: &mut egui::Ui, source: &RuntimeRef, observations: &RuntimeObservations) {
     ui.label(super::app::runtime_ref_label(source));
+    let mut state = source_state(observations, source);
     if let Some(binding) = ReadBinding::for_target(source) {
-        show_typed_read(
-            ui,
-            "Value (cached)",
-            resolve_read(observations, source, binding),
-        );
+        let reading = resolve_read(observations, source, binding);
+        if state != SourceState::Unresolved {
+            state = freshness_state(reading.freshness);
+        }
+        show_typed_read(ui, "Value (cached)", reading);
     } else if let Some(observation) = observations.entities.get(source) {
         ui.monospace(super::app::bounded_value_text(&observation.value));
     } else {
         ui.label("Value (cached): no Runtime observation");
     }
-    state_label(ui, source_state(observations, source));
+    state_label(ui, state);
 }
 
 fn trace_points(observations: &RuntimeObservations, trace: &Trace, seconds: f64) -> Vec<PlotPoint> {
@@ -514,7 +519,7 @@ mod tests {
             let offset = if trace.id == "trace-1" { 0.0 } else { 10.0 };
             model.observations.observe_read_descriptor(
                 trace.source.clone(),
-                &json!({"value_type":"float","unit":{"id":"kelvin","symbol":"K"}}),
+                &json!({"value_type":"float","generation":"1","unit":{"id":"kelvin","symbol":"K"}}),
             );
             let RuntimeRef::Signal {
                 instrument,
@@ -526,7 +531,7 @@ mod tests {
             model.observations.observe(
                 trace.source.clone(),
                 json!({"signal":{"instrument":instrument,"parameter":parameter},
-                    "quality":"good","status":"available","value":293.0 + offset,
+                    "quality":"good","status":"available","value":293.0 + offset,"generation":"1",
                     "unit":{"id":"kelvin","symbol":"K"}}),
                 None,
             );
@@ -1129,6 +1134,60 @@ mod tests {
         ] {
             assert!(text.contains(&expected), "missing {expected}");
         }
+        assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+        assert_eq!(*dispatcher, before);
+    }
+
+    #[test]
+    fn signal_generation_mismatch_renders_no_scalar_and_sends_no_runtime_calls() {
+        let mut model = model();
+        let target = model.presentation.plots[0].traces[0].source.clone();
+        model.observations.observe_read_descriptor(target.clone(),
+            &json!({"value_type":"integer","generation":"1","unit":{"id":"count","symbol":"count"}}));
+        model.observations.observe(target.clone(),
+            json!({"signal":{"instrument":"1","parameter":"1"},"generation":"2",
+                "quality":"good","status":"available","value":"42","unit":{"id":"count","symbol":"count"},
+                "observed_at_ns":"1000","source_at_ns":null,"failure":null}), Some(5));
+        model.presentation.windows[0].tabs[0].panels = vec![Panel {
+            id: "generation-status".into(),
+            title: "Signal status".into(),
+            kind: PanelKind::Status { source: target },
+        }];
+        let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+        let before = (*dispatcher).clone();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        frame(&context, &mut renderer, &dispatcher, 1, vec![]);
+        let (_, text) = frame(&context, &mut renderer, &dispatcher, 1, vec![]);
+        let text = labels(&text);
+        assert!(
+            text.iter()
+                .any(|label| label.contains("value and metadata are incompatible"))
+        );
+        assert!(
+            !text
+                .iter()
+                .any(|label| label.contains("Value (cached): 42"))
+        );
+        assert!(text.contains(&"Stale — cached observation"));
+        assert!(!text.contains(&"Fresh"));
+        assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+        assert_eq!(*dispatcher, before);
+
+        let mut model = before;
+        let target = model.presentation.plots[0].traces[0].source.clone();
+        let mut sample = model.observations.entities[&target].value.clone();
+        sample["generation"] = json!("1");
+        model.observations.observe(target, sample, None);
+        let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+        let before = (*dispatcher).clone();
+        let (_, text) = frame(&context, &mut renderer, &dispatcher, 1, vec![]);
+        let text = labels(&text);
+        assert!(text.contains(&"Stale — cached observation"));
+        assert!(
+            !text.contains(&"Fresh"),
+            "an old sample cannot refresh typed metadata"
+        );
         assert_eq!(dispatcher.client().unwrap().0.get(), 0);
         assert_eq!(*dispatcher, before);
     }

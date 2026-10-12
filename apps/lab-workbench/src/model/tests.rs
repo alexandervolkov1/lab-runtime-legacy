@@ -77,13 +77,13 @@ fn typed_read_metadata_survives_same_boot_rebuild_and_is_invalidated_by_new_boot
         1,
         "discover",
         json!({"records":[{"kind":"signal","id":{"instrument":"1","parameter":"1"},
-            "value_type":"integer","unit":{"id":"count","symbol":"count"}}]}),
+            "value_type":"integer","generation":"1","unit":{"id":"count","symbol":"count"}}]}),
     ));
     model.apply_client_update(result_reply(
         2,
         "measurements_current",
         json!({"records":[{"signal":{"instrument":"1","parameter":"1"},
-            "quality":"good","status":"available","value":i64::MAX.to_string(),
+            "quality":"good","status":"available","value":i64::MAX.to_string(),"generation":"1",
             "unit":{"id":"count","symbol":"count"}}]}),
     ));
     model.complete_rebuild();

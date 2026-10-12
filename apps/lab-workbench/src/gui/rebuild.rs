@@ -815,6 +815,168 @@ mod tests {
     }
 
     #[test]
+    fn typed_signal_generation_mismatch_stays_absent_across_the_fresh_barrier() {
+        use crate::{
+            model::{ReadAbsence, ReadBinding, ReadPayload, ScalarValue, resolve_read},
+            presentation::RuntimeRef,
+        };
+
+        for event_before_fence_reply in [true, false] {
+            let target = RuntimeRef::Signal {
+                instrument: "1".into(),
+                parameter: "1".into(),
+            };
+            let retired = RuntimeRef::Signal {
+                instrument: "1".into(),
+                parameter: "2".into(),
+            };
+            let descriptor = |generation: &str| {
+                json!({"kind":"signal",
+                "id":{"instrument":"1","parameter":"1"},"value_type":"integer",
+                "generation":generation,"unit":{"id":"count","symbol":"count"}})
+            };
+            let sample = |generation: &str| {
+                json!({"signal":{"instrument":"1","parameter":"1"},
+                "generation":generation,"value":"42","quality":"good","status":"available",
+                "unit":{"id":"count","symbol":"count"},"failure":null,
+                "observed_at_ns":"1000","source_at_ns":null})
+            };
+            let reading = |model: &WorkbenchModel| {
+                resolve_read(&model.observations, &target, ReadBinding::SignalSample)
+            };
+            let client = FakeClient::default();
+            let mut model = WorkbenchModel::new(PresentationDocument::empty("doc"));
+            let mut coordinator = RebuildCoordinator::default();
+            model
+                .observations
+                .observe_read_descriptor(target.clone(), &descriptor("1"));
+            let mut old_descriptor = descriptor("1");
+            old_descriptor["id"]["parameter"] = json!("2");
+            model
+                .observations
+                .observe_read_descriptor(retired.clone(), &old_descriptor);
+            model
+                .observations
+                .observe(target.clone(), sample("1"), None);
+            model.complete_rebuild();
+
+            // The second same-boot rebuild confirms generation 2 through the
+            // ordinary finite discovery/current/fence/subscription sequence.
+            for generation in ["1", "2"] {
+                apply(
+                    &mut coordinator,
+                    &mut model,
+                    &client,
+                    ClientUpdate::State(ConnectionState::Stale),
+                );
+                assert_ne!(reading(&model).freshness, Freshness::Fresh);
+                apply(
+                    &mut coordinator,
+                    &mut model,
+                    &client,
+                    ClientUpdate::Hello(hello()),
+                );
+                assert_ne!(reading(&model).freshness, Freshness::Fresh);
+                let event = ClientUpdate::Event {
+                    cursor: EventCursor {
+                        boot_id: "boot".into(),
+                        seq: 6,
+                    },
+                    envelope: json!({"kind":"signal","target":{"instrument":"1","parameter":"1"},
+                        "data":sample("2")}),
+                };
+                for (index, expected_op) in ["discover", "measurements_current", "discover"]
+                    .into_iter()
+                    .enumerate()
+                {
+                    let Sent::Query(command, op, _) = client.sent.borrow_mut().pop_front().unwrap()
+                    else {
+                        panic!()
+                    };
+                    assert_eq!(op, expected_op);
+                    if generation == "1" && index == 2 && event_before_fence_reply {
+                        apply(&mut coordinator, &mut model, &client, event.clone());
+                    }
+                    let records = if index == 1 {
+                        vec![sample(generation)]
+                    } else {
+                        vec![descriptor(generation)]
+                    };
+                    apply(
+                        &mut coordinator,
+                        &mut model,
+                        &client,
+                        reply(
+                            command,
+                            &op,
+                            json!({"projection":format!("p-{index}"),"revision":{"boot_id":"boot",
+                            "event_seq":(index + 2).to_string()},"records":records,"next_index":null,"complete":true}),
+                        ),
+                    );
+                    assert_ne!(reading(&model).freshness, Freshness::Fresh);
+                }
+                let Sent::Subscribe(command, after, _) =
+                    client.sent.borrow_mut().pop_front().unwrap()
+                else {
+                    panic!()
+                };
+                assert_eq!(after.seq, 2);
+                apply(
+                    &mut coordinator,
+                    &mut model,
+                    &client,
+                    reply(
+                        command,
+                        "subscribe",
+                        json!({"subscription":"s","accepted_cursor":{"boot_id":"boot","seq":"2"}}),
+                    ),
+                );
+                if generation == "1" && !event_before_fence_reply {
+                    apply(&mut coordinator, &mut model, &client, event.clone());
+                }
+                apply(
+                    &mut coordinator,
+                    &mut model,
+                    &client,
+                    ClientUpdate::SubscriptionProgress(
+                        json!({"cursor":{"boot_id":"boot","seq":"6"}}),
+                    ),
+                );
+                assert_eq!(model.observations.freshness, Freshness::Fresh);
+                if generation == "1" {
+                    assert_eq!(
+                        reading(&model).payload,
+                        ReadPayload::Absent(ReadAbsence::MissingMetadata)
+                    );
+                    // Replayed old data alone cannot restore the retired descriptor.
+                    model
+                        .observations
+                        .observe(target.clone(), sample("1"), None);
+                    assert_eq!(
+                        reading(&model).payload,
+                        ReadPayload::Absent(ReadAbsence::MissingMetadata)
+                    );
+                } else {
+                    assert_eq!(
+                        reading(&model).payload,
+                        ReadPayload::Value(ScalarValue::Integer(42))
+                    );
+                    assert_eq!(reading(&model).freshness, Freshness::Fresh);
+                }
+                assert_eq!(
+                    resolve_read(&model.observations, &retired, ReadBinding::SignalSample).payload,
+                    ReadPayload::Absent(ReadAbsence::MissingObservation),
+                    "unseen descriptors retire at the barrier"
+                );
+                assert!(
+                    client.sent.borrow().is_empty(),
+                    "no new refresh queries or subscription"
+                );
+            }
+        }
+    }
+
+    #[test]
     fn global_freshness_requires_snapshot_subscription_and_cursor_barrier() {
         let client = FakeClient::default();
         let mut model = WorkbenchModel::new(PresentationDocument::empty("doc"));

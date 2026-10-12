@@ -28,13 +28,33 @@ remains the final mutation authority.
 DGUI-4C3 derives Boolean, exact Integer, Number, Text and Enum read values through
 five closed internal selectors: SignalSample, ConfigurationPropertyCurrent,
 ReferenceValue, ControllerState and RecorderState. Signal decoding joins the
-existing current measurement with minimal type/unit metadata already received in
+existing current measurement with minimal type/unit/generation metadata already received in
 bounded discovery; it issues no new query. Property type comes from the existing
 property projection, while the other three selectors use their fixed Application
 semantics. Value absence, sample quality and observation freshness remain separate.
 The descriptor cache retains at most 1,024 decoded signal entries and 1 MiB of
 decoded payload, becomes stale during rebuild, retires unseen entries at the fresh
 barrier and is cleared on Runtime boot change. No decoded-value history is added.
+Signal generations must be positive decimal `u64` strings of at most 20 ASCII
+digits, parsed exactly without `f64`. Discovery and sample generations must match
+before typed decoding. Missing generation yields missing metadata; malformed,
+zero, overflowed or mismatched generation yields incompatible metadata, without
+a scalar or an inferred type. Sample quality (including not-observed/unavailable)
+remains visible independently. A mismatching sample invalidates cached metadata;
+later samples alone cannot restore its Fresh status. Discovery interleaved with a
+different fresh sample generation is likewise retained only as stale metadata.
+Typed status indicators include descriptor freshness in their displayed state.
+
+This follows the current Runtime DTO producers: ordinary virtual signals use 1,
+restartable virtual models use their model generation, managed signals use the
+component generation, and SimpleDevice/Metakon signals use binding generation.
+Events and current measurements carry decimal-string generations. No per-widget
+or automatic generation-triggered discovery refresh is added. A generation
+change can leave typed reads unavailable until compatible metadata is obtained by
+the existing bounded rebuild (for example after reconnect/resnapshot); the fresh
+barrier removes unconfirmed descriptors. Automatic refresh during an otherwise
+healthy connection remains outside this corrective change.
+
 Current discovery confirms an enum signal's type but does not carry its choice
 list; the read layer displays only the exact observed token and invents neither an
 index nor a label. Boolean/number/enum property reads are covered by deterministic
