@@ -66,6 +66,53 @@ fn result_reply(command_id: u64, op: &str, result: serde_json::Value) -> ClientU
 }
 
 #[test]
+fn typed_read_metadata_survives_same_boot_rebuild_and_is_invalidated_by_new_boot() {
+    let target = RuntimeRef::Signal {
+        instrument: "1".into(),
+        parameter: "1".into(),
+    };
+    let mut model = WorkbenchModel::new(presentation());
+    model.apply_client_update(ClientUpdate::Hello(hello("boot-a")));
+    model.apply_client_update(result_reply(
+        1,
+        "discover",
+        json!({"records":[{"kind":"signal","id":{"instrument":"1","parameter":"1"},
+            "value_type":"integer","unit":{"id":"count","symbol":"count"}}]}),
+    ));
+    model.apply_client_update(result_reply(
+        2,
+        "measurements_current",
+        json!({"records":[{"signal":{"instrument":"1","parameter":"1"},
+            "quality":"good","status":"available","value":i64::MAX.to_string(),
+            "unit":{"id":"count","symbol":"count"}}]}),
+    ));
+    model.complete_rebuild();
+    assert_eq!(
+        resolve_read(&model.observations, &target, ReadBinding::SignalSample).payload,
+        ReadPayload::Value(ScalarValue::Integer(i64::MAX))
+    );
+
+    model.apply_client_update(ClientUpdate::State(ConnectionState::Reattaching));
+    let retained = resolve_read(&model.observations, &target, ReadBinding::SignalSample);
+    assert_eq!(
+        retained.payload,
+        ReadPayload::Value(ScalarValue::Integer(i64::MAX))
+    );
+    assert_eq!(retained.freshness, Freshness::Stale);
+    model.apply_client_update(ClientUpdate::Hello(hello("boot-a")));
+    assert_eq!(
+        resolve_read(&model.observations, &target, ReadBinding::SignalSample).payload,
+        ReadPayload::Value(ScalarValue::Integer(i64::MAX))
+    );
+
+    model.apply_client_update(ClientUpdate::Hello(hello("boot-b")));
+    assert_eq!(
+        resolve_read(&model.observations, &target, ReadBinding::SignalSample).payload,
+        ReadPayload::Absent(ReadAbsence::MissingMetadata)
+    );
+}
+
+#[test]
 fn only_instance_changed_hello_requires_explicit_new_scope_until_authoritative_hello() {
     let mut model = WorkbenchModel::new(presentation());
     model.apply_client_update(ClientUpdate::Hello(hello("old-boot")));

@@ -9,6 +9,7 @@ mod command;
 mod exact_retry;
 mod operator;
 mod projections;
+mod read_binding;
 mod recovery_status;
 
 pub(crate) use command::{
@@ -26,6 +27,10 @@ pub(crate) use operator::{
     PropertyMutationCandidate, RECORDING_LABEL_BYTES, prepare as prepare_operator_intent,
 };
 pub(crate) use projections::{Freshness, LIVE_TRACE_POINTS, LivePoint, RuntimeObservations};
+pub(crate) use read_binding::{
+    ReadAbsence, ReadBinding, ReadPayload, ReadQuality, ScalarKind, ScalarValue, TypedRead,
+    resolve_read,
+};
 pub(crate) use recovery_status::{
     RecoveryAttachment, RecoveryRecordPresentation, RecoveryStatusError, RecoveryStatusState,
     RecoveryStatusSubmitter, RecoveryStatusTracker, StatusEligibility,
@@ -375,6 +380,7 @@ impl WorkbenchModel {
             .is_some_and(|boot| boot != &hello.boot_id);
         if changed_boot {
             self.observations.mark_stale();
+            self.observations.clear_read_descriptors();
         }
         self.recovery.boot_id = Some(hello.boot_id.clone());
         self.recovery.scope = Some(hello.scope.clone());
@@ -609,6 +615,10 @@ impl WorkbenchModel {
                 _ => None,
             };
             if let Some(identity) = identity {
+                if kind == "signal" {
+                    self.observations
+                        .observe_read_descriptor(identity.clone(), record);
+                }
                 // Discovery descriptors establish identity, but a later event-sequence
                 // fence must not overwrite a fresher current projection obtained in
                 // the same rebuild (for example a signal sample or Reference state).

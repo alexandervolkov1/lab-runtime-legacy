@@ -1,11 +1,23 @@
 //! Rebuildable observations and bounded live display data.
 
+use super::read_binding::ReadDescriptor;
 use crate::presentation::RuntimeRef;
 use serde_json::Value;
 use std::collections::{BTreeMap, VecDeque};
 
 /// Maximum live display points retained for one trace.
 pub(crate) const LIVE_TRACE_POINTS: usize = 4_096;
+/// Current Runtime maximum: 64 instruments with 16 parameters each.
+pub(crate) const MAX_READ_DESCRIPTORS: usize = 64 * 16;
+/// Aggregate decoded descriptor payload retained by Workbench.
+pub(crate) const MAX_READ_DESCRIPTOR_BYTES: usize = 1024 * 1024;
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub(super) struct DescriptorObservation {
+    pub(super) descriptor: ReadDescriptor,
+    pub(super) freshness: Freshness,
+    retained_bytes: usize,
+}
 
 /// Freshness of a rebuildable observation set.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -102,6 +114,11 @@ pub(crate) struct RuntimeObservations {
     pub(crate) controller_details: BTreeMap<String, ControllerDetail>,
     /// Full resource-detail authority, separate from narrow transport events.
     pub(crate) resource_details: BTreeMap<String, ResourceDetail>,
+    /// Minimal signal type/unit metadata, separate from current measurements.
+    pub(super) read_descriptors: BTreeMap<RuntimeRef, DescriptorObservation>,
+    read_descriptor_bytes: usize,
+    /// Set when a decoded descriptor could not fit the fixed cache budget.
+    pub(super) read_descriptor_overflowed: bool,
     /// Overall freshness of the observation set.
     pub(crate) freshness: Freshness,
 }
@@ -119,6 +136,9 @@ impl RuntimeObservations {
         for detail in self.resource_details.values_mut() {
             detail.freshness = Freshness::Stale;
         }
+        for descriptor in self.read_descriptors.values_mut() {
+            descriptor.freshness = Freshness::Stale;
+        }
     }
 
     /// Starts a new observation epoch while preserving stale entity projections.
@@ -127,6 +147,7 @@ impl RuntimeObservations {
     /// continuity; joining the prior and later points would fabricate a line.
     pub(crate) fn begin_rebuild(&mut self) {
         self.freshness = Freshness::Rebuilding;
+        self.read_descriptor_overflowed = false;
         for observation in self.entities.values_mut() {
             observation.freshness = Freshness::Stale;
         }
@@ -136,12 +157,82 @@ impl RuntimeObservations {
         for detail in self.resource_details.values_mut() {
             detail.freshness = Freshness::Stale;
         }
+        for descriptor in self.read_descriptors.values_mut() {
+            descriptor.freshness = Freshness::Stale;
+        }
         self.live.clear();
     }
 
     /// Marks an explicitly completed multi-projection rebuild fresh.
     pub(crate) fn complete_rebuild(&mut self) {
+        self.read_descriptors
+            .retain(|_, descriptor| descriptor.freshness == Freshness::Fresh);
+        self.read_descriptor_bytes = self
+            .read_descriptors
+            .values()
+            .map(|descriptor| descriptor.retained_bytes)
+            .sum();
         self.freshness = Freshness::Fresh;
+    }
+
+    /// Retains only decoded signal type/unit metadata within an aggregate budget.
+    pub(crate) fn observe_read_descriptor(&mut self, target: RuntimeRef, value: &Value) {
+        let descriptor = ReadDescriptor::from_signal_discovery(value);
+        let retained_bytes = descriptor.retained_bytes()
+            + match &target {
+                RuntimeRef::Signal {
+                    instrument,
+                    parameter,
+                } => instrument.len() + parameter.len(),
+                _ => return,
+            };
+        let previous_bytes = self
+            .read_descriptors
+            .remove(&target)
+            .map_or(0, |previous| previous.retained_bytes);
+        self.read_descriptor_bytes = self.read_descriptor_bytes.saturating_sub(previous_bytes);
+        if retained_bytes > MAX_READ_DESCRIPTOR_BYTES {
+            self.read_descriptor_overflowed = true;
+            return;
+        }
+        while self.read_descriptors.len() == MAX_READ_DESCRIPTORS
+            || self
+                .read_descriptor_bytes
+                .checked_add(retained_bytes)
+                .is_none_or(|bytes| bytes > MAX_READ_DESCRIPTOR_BYTES)
+        {
+            let stale = self
+                .read_descriptors
+                .iter()
+                .find_map(|(target, descriptor)| {
+                    (descriptor.freshness != Freshness::Fresh).then(|| target.clone())
+                });
+            let Some(stale) = stale else {
+                self.read_descriptor_overflowed = true;
+                return;
+            };
+            if let Some(retired) = self.read_descriptors.remove(&stale) {
+                self.read_descriptor_bytes = self
+                    .read_descriptor_bytes
+                    .saturating_sub(retired.retained_bytes);
+            }
+        }
+        self.read_descriptor_bytes += retained_bytes;
+        self.read_descriptors.insert(
+            target,
+            DescriptorObservation {
+                descriptor,
+                freshness: Freshness::Fresh,
+                retained_bytes,
+            },
+        );
+    }
+
+    /// A changed Runtime boot cannot reuse descriptors from the prior instance.
+    pub(crate) fn clear_read_descriptors(&mut self) {
+        self.read_descriptors.clear();
+        self.read_descriptor_bytes = 0;
+        self.read_descriptor_overflowed = false;
     }
 
     /// Inserts or replaces one fresh observed projection.

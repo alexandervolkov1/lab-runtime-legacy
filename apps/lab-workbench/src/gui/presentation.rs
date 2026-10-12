@@ -1,9 +1,9 @@
 //! Declarative layout returning operator intent without Runtime submission authority.
 
-use super::controls::{ControlEditors, OperatorControlUi};
+use super::controls::{ControlEditors, OperatorControlUi, show_typed_read};
 
 use crate::{
-    model::{Freshness, OperatorIntent, RuntimeObservations},
+    model::{Freshness, OperatorIntent, ReadBinding, RuntimeObservations, resolve_read},
     presentation::{PanelKind, Plot, PresentationDocument, RuntimeRef, Trace},
 };
 use eframe::egui::{self, Color32};
@@ -212,10 +212,18 @@ pub(super) fn state_label(ui: &mut egui::Ui, state: SourceState) {
 
 fn render_status(ui: &mut egui::Ui, source: &RuntimeRef, observations: &RuntimeObservations) {
     ui.label(super::app::runtime_ref_label(source));
-    state_label(ui, source_state(observations, source));
-    if let Some(observation) = observations.entities.get(source) {
+    if let Some(binding) = ReadBinding::for_target(source) {
+        show_typed_read(
+            ui,
+            "Value (cached)",
+            resolve_read(observations, source, binding),
+        );
+    } else if let Some(observation) = observations.entities.get(source) {
         ui.monospace(super::app::bounded_value_text(&observation.value));
+    } else {
+        ui.label("Value (cached): no Runtime observation");
     }
+    state_label(ui, source_state(observations, source));
 }
 
 fn trace_points(observations: &RuntimeObservations, trace: &Trace, seconds: f64) -> Vec<PlotPoint> {
@@ -471,7 +479,7 @@ mod tests {
             OperatorWorkflow, OperatorWorkflowState, PROPERTY_TEXT_BYTES,
             PropertyMutationCandidate, RECORDING_LABEL_BYTES, WorkbenchModel,
         },
-        presentation::{ConfigurationOwner, Control, ControlKind},
+        presentation::{ConfigurationOwner, Control, ControlKind, Panel},
     };
     use serde_json::{Value, json};
     use std::cell::{Cell, RefCell};
@@ -504,9 +512,22 @@ mod tests {
         model.presentation.validate().unwrap();
         for trace in model.presentation.plots[0].traces.clone() {
             let offset = if trace.id == "trace-1" { 0.0 } else { 10.0 };
+            model.observations.observe_read_descriptor(
+                trace.source.clone(),
+                &json!({"value_type":"float","unit":{"id":"kelvin","symbol":"K"}}),
+            );
+            let RuntimeRef::Signal {
+                instrument,
+                parameter,
+            } = &trace.source
+            else {
+                unreachable!();
+            };
             model.observations.observe(
                 trace.source.clone(),
-                json!({"value":293.0 + offset,"unit":{"id":"kelvin","symbol":"K"}}),
+                json!({"signal":{"instrument":instrument,"parameter":parameter},
+                    "quality":"good","status":"available","value":293.0 + offset,
+                    "unit":{"id":"kelvin","symbol":"K"}}),
                 None,
             );
             for (time_seconds, value) in [(0.0, 270.0), (40.0, 292.0), (60.0, 293.0)] {
@@ -1058,6 +1079,58 @@ mod tests {
             );
         }
         assert_eq!(model, before);
+    }
+
+    #[test]
+    fn typed_status_indicators_render_all_scalars_without_changing_the_owner() {
+        let mut model = model();
+        let values = [
+            ("boolean", json!(false)),
+            ("integer", json!(0)),
+            ("number", json!(0.0)),
+            ("text", json!("free text")),
+            ("enum", json!("idle")),
+        ];
+        let mut panels = Vec::new();
+        for (index, (kind, current)) in values.into_iter().enumerate() {
+            let target = RuntimeRef::ConfigurationProperty {
+                owner: ConfigurationOwner::Instrument {
+                    instrument: "1".into(),
+                },
+                property: format!("typed-{index}"),
+            };
+            model.observations.observe(
+                target.clone(),
+                json!({"value_type":kind,"current":current,"unit":null}),
+                None,
+            );
+            panels.push(Panel {
+                id: format!("typed-panel-{index}"),
+                title: format!("Typed {kind}"),
+                kind: PanelKind::Status { source: target },
+            });
+        }
+        model.presentation.windows[0].tabs[0].panels = panels;
+        model.presentation.validate().unwrap();
+        model.observations.complete_rebuild();
+        let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+        let before = (*dispatcher).clone();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        frame(&context, &mut renderer, &dispatcher, 1, vec![]);
+        let (_, text) = frame(&context, &mut renderer, &dispatcher, 1, vec![]);
+        let text = labels(&text);
+        for expected in [
+            "Value (cached): false",
+            "Value (cached): 0",
+            "Value (cached): 0.0",
+            "Value (cached): free text",
+            "Value (cached): idle",
+        ] {
+            assert!(text.contains(&expected), "missing {expected}");
+        }
+        assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+        assert_eq!(*dispatcher, before);
     }
 
     #[test]
@@ -1831,7 +1904,7 @@ mod tests {
                 "Property editor 0",
                 "Owner: instrument 1; property: limit",
                 "Owner: component 1; property: limit",
-                "Current value (cached): 4",
+                "Current value (cached): 4 ms",
                 "Current value (cached): Old title",
                 "type: integer; access: read_write",
                 "Unit: ms",

@@ -1,8 +1,8 @@
 # Generic Controls Architecture
 
 Status: **DGUI-4C architectural direction approved; DGUI-4C1 internal view
-normalization and DGUI-4C2 bounded scalar drafts are implemented**. The remaining
-proposal is not implemented.
+normalization, DGUI-4C2 bounded scalar drafts and DGUI-4C3 typed read bindings are
+implemented**. The external v2 proposal is not implemented.
 Baseline: DGUI-4B4 merged at
 `3a86d0989f6b6ca265126da043a3df4d0f847c7b`, including the separately reviewed
 Recorder property-lifecycle fix. This document changes no running contract.
@@ -24,6 +24,22 @@ explicitly corrected. Integer property bounds are compared exactly as `i64`;
 absent/null constraints are unbounded, while present constraints must contain a
 valid inclusive `i64` pair. These checks are Workbench preflight only: Runtime
 remains the final mutation authority.
+
+DGUI-4C3 derives Boolean, exact Integer, Number, Text and Enum read values through
+five closed internal selectors: SignalSample, ConfigurationPropertyCurrent,
+ReferenceValue, ControllerState and RecorderState. Signal decoding joins the
+existing current measurement with minimal type/unit metadata already received in
+bounded discovery; it issues no new query. Property type comes from the existing
+property projection, while the other three selectors use their fixed Application
+semantics. Value absence, sample quality and observation freshness remain separate.
+The descriptor cache retains at most 1,024 decoded signal entries and 1 MiB of
+decoded payload, becomes stale during rebuild, retires unseen entries at the fresh
+barrier and is cleared on Runtime boot change. No decoded-value history is added.
+Current discovery confirms an enum signal's type but does not carry its choice
+list; the read layer displays only the exact observed token and invents neither an
+index nor a label. Boolean/number/enum property reads are covered by deterministic
+projection fixtures because the shipped virtual deployment does not expose every
+read-only kind. They do not enable a new property mutation.
 
 ## Decision and scope
 
@@ -579,7 +595,7 @@ DGUI-4C. Preserve negative tests and architecture source guards throughout.
 |---|---|---|
 | 1. Shared internal view model | Workbench-only widget mechanics and four typed adapters; retain v1 schema/wire | Existing v1 snapshots/registry remain exact; headless click/Cancel/Confirm tests send zero/zero/one mutation; all four controls and ordinary GUI behave identically |
 | 2. Draft and scalar primitives | Common editor identity/retirement, bounded validation and exact integer-bound comparison | Two owners/same property, repeated views, replacement and reconnect cannot leak drafts; i64 endpoints, finite numbers, UTF-8 overflow and read-only types are covered; presentation/recovery unchanged by editing |
-| 3. Generic read bindings | Typed decoding of already available bool/integer/number/text/enum observations; bounded acquisition through existing rebuild only when needed | Existing virtual observations demonstrate available kinds; deterministic fixtures cover absent kinds without claiming real-process support; absent/stale/quality states, unknown enum and units stay truthful; no renderer queries/mutations |
+| 3. Generic read bindings (implemented by DGUI-4C3) | Typed decoding of already available bool/integer/number/text/enum observations; bounded acquisition through the existing rebuild | Existing virtual observations demonstrate available kinds; deterministic fixtures cover absent kinds without claiming real-process support; absent/stale/quality states and units stay truthful; no renderer queries/mutations |
 | 4. v2 contract and conversion review | Freeze schema, version selection, bounds, compatibility and lossless import/export rules before implementation | Old-client/new-instance matrix, invalid-version rejection, deterministic v1 conversion including disabled pairs, no mixed-format responses, preserved single-owner atomicity |
 | 5. v2 presentation implementation | External composition of universal groups and explicit bindings to existing actions only | Independent client supplies neutral layouts; one dispatcher/worker/workflow; two clients cannot lose updates; Required Recorder virtual acceptance covers existing controls and new presentation path |
 | 6. Runtime metadata extension, if justified | Separate Application proposal for gaps: coherent descriptors/invalidation, property type limits/choices, confirmation/effect/fence metadata | Bounded frozen projections and stale-descriptor rejection; advertised actions agree with authoritative validation; descriptors cannot introduce unknown executors or bypass confirmation |
