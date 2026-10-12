@@ -170,7 +170,7 @@ impl PresentationRenderer {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum SourceState {
+pub(super) enum SourceState {
     Fresh,
     Stale,
     Unknown,
@@ -178,7 +178,7 @@ enum SourceState {
     Unresolved,
 }
 
-fn source_state(observations: &RuntimeObservations, source: &RuntimeRef) -> SourceState {
+pub(super) fn source_state(observations: &RuntimeObservations, source: &RuntimeRef) -> SourceState {
     let Some(observation) = observations.entities.get(source) else {
         return SourceState::Unresolved;
     };
@@ -196,7 +196,7 @@ fn source_state(observations: &RuntimeObservations, source: &RuntimeRef) -> Sour
     }
 }
 
-fn state_label(ui: &mut egui::Ui, state: SourceState) {
+pub(super) fn state_label(ui: &mut egui::Ui, state: SourceState) {
     let (text, color) = match state {
         SourceState::Fresh => ("Fresh", Color32::LIGHT_GREEN),
         SourceState::Stale => ("Stale — cached observation", Color32::YELLOW),
@@ -3348,6 +3348,130 @@ mod tests {
             assert!(intent.is_none(), "scenario {scenario}");
             assert_eq!(dispatcher.client().unwrap().0.get(), 0);
             assert_eq!(*dispatcher, before);
+        }
+    }
+
+    #[test]
+    fn repeated_control_views_share_drafts_and_only_enter_the_single_confirmed_workflow() {
+        for (mut model, button) in [
+            (recorder_model(), "Start recording"),
+            (reference_model(), "Configure fixed"),
+            (controller_model(Some("ready")), "Start"),
+            (property_model(), "Configure property"),
+        ] {
+            model.presentation.controls.truncate(1);
+            model.presentation.controls[0].confirm = false;
+            let panel = &mut model.presentation.windows[0].tabs[0].panels[0];
+            panel.kind = PanelKind::Controls {
+                control_ids: vec![model.presentation.controls[0].id.clone()],
+            };
+            let mut repeated = panel.clone();
+            repeated.id = "repeated-panel".into();
+            model.presentation.windows[0].tabs[0].panels.push(repeated);
+            model.presentation.validate().unwrap();
+            // Exercise either view as the source of the one operator gesture.
+            for clicked_view in [0, 1] {
+                let dispatcher = WorkbenchDispatcher::new(model.clone(), FakeClient::default());
+                let before = serde_json::to_vec(&dispatcher.presentation).unwrap();
+                let context = egui::Context::default();
+                let mut renderer = PresentationRenderer::default();
+                let mut operator = OperatorWorkflow::default();
+                let mut label = "Repeated run".into();
+                recorder_frame(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut label,
+                    vec![],
+                );
+                if let Some(editor) = renderer
+                    .editors
+                    .editor_mut(&dispatcher.presentation.controls[0])
+                {
+                    assert_eq!(
+                        editor.widget_ids.len(),
+                        2,
+                        "one draft, two bounded view identities"
+                    );
+                    editor.text = "5".into();
+                }
+                let (_, text) = recorder_frame(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut label,
+                    vec![],
+                );
+                let center = text
+                    .iter()
+                    .filter(|(text, _)| text == button)
+                    .nth(clicked_view)
+                    .unwrap()
+                    .1
+                    .center();
+                let mut intent = None;
+                for pressed in [true, false] {
+                    let (response, _) = recorder_frame(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        &mut label,
+                        vec![
+                            egui::Event::PointerMoved(center),
+                            egui::Event::PointerButton {
+                                pos: center,
+                                button: egui::PointerButton::Primary,
+                                pressed,
+                                modifiers: Default::default(),
+                            },
+                        ],
+                    );
+                    if let Some(clicked) = response.intent {
+                        assert!(intent.replace(clicked).is_none());
+                    }
+                }
+                let intent = intent.expect("either repeated view emits the same typed intent");
+                operator.begin(&dispatcher, intent.clone()).unwrap();
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::AwaitingConfirmation(_)
+                ));
+                assert!(
+                    click_recorder(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        &mut label,
+                        button
+                    )
+                    .is_none()
+                );
+                operator.cancel_or_acknowledge();
+                assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+                operator.begin(&dispatcher, intent).unwrap();
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+                assert_eq!(dispatcher.client().unwrap().0.get(), 1);
+                assert_eq!(
+                    serde_json::to_vec(&dispatcher.presentation).unwrap(),
+                    before
+                );
+                assert_eq!(dispatcher.presentation_revision(), 1);
+            }
         }
     }
 
