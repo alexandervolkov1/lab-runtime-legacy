@@ -3,7 +3,8 @@
 use crate::{
     model::{
         ControllerLifecycleIntent, OperatorIntent, OperatorIntentError, OperatorWorkflow,
-        PROPERTY_TEXT_BYTES, RECORDING_LABEL_BYTES, WorkbenchModel, prepare_operator_intent,
+        PROPERTY_TEXT_BYTES, RECORDING_LABEL_BYTES, ReadBinding, ReadPayload, ReadQuality,
+        ScalarValue, TypedRead, WorkbenchModel, prepare_operator_intent, resolve_read,
     },
     presentation::{
         ConfigurationOwner, Control, ControlKind, MAX_CONTROLS, PanelKind, PresentationDocument,
@@ -13,7 +14,7 @@ use crate::{
 use eframe::egui;
 use std::collections::{BTreeMap, HashSet};
 
-use visuals::{IndicatorView, InputKind, InputView, ObservedValue};
+use visuals::{IndicatorQuality, IndicatorView, InputKind, InputView, ObservedValue};
 
 /// A frame-local derived view, never a document, draft owner or prepared action.
 /// Only the trusted adapters below construct intents and consult eligibility.
@@ -57,15 +58,26 @@ mod visuals {
     use eframe::egui;
 
     pub(super) enum ObservedValue {
+        Boolean(bool),
+        Integer(i64),
         Number(f64),
         Text(String),
+        Enum(String),
+    }
+
+    #[derive(Clone, Copy)]
+    pub(super) enum IndicatorQuality {
+        Good,
+        Unavailable,
+        NotObserved,
     }
 
     pub(super) struct IndicatorView {
         pub(super) caption: &'static str,
         pub(super) value: Option<ObservedValue>,
         pub(super) unit: Option<String>,
-        pub(super) unavailable: &'static str,
+        pub(super) unavailable: String,
+        pub(super) quality: Option<IndicatorQuality>,
     }
 
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -85,12 +97,17 @@ mod visuals {
 
     pub(super) fn indicator(ui: &mut egui::Ui, view: &IndicatorView) {
         let Some(value) = &view.value else {
-            ui.label(view.unavailable);
+            ui.label(format!("{}: {}", view.caption, view.unavailable));
+            show_quality(ui, view.quality);
             return;
         };
         let value = match value {
-            ObservedValue::Number(value) => value.to_string(),
-            ObservedValue::Text(value) => value.clone(),
+            ObservedValue::Boolean(value) => value.to_string(),
+            ObservedValue::Integer(value) => value.to_string(),
+            // Debug formatting keeps the f64 identity visible (`0.0` versus
+            // integer `0`) while remaining a shortest round-trippable value.
+            ObservedValue::Number(value) => format!("{value:?}"),
+            ObservedValue::Text(value) | ObservedValue::Enum(value) => value.clone(),
         };
         ui.label(format!(
             "{}: {value}{}",
@@ -99,6 +116,17 @@ mod visuals {
                 .as_ref()
                 .map_or(String::new(), |unit| format!(" {unit}"))
         ));
+        show_quality(ui, view.quality);
+    }
+
+    fn show_quality(ui: &mut egui::Ui, quality: Option<IndicatorQuality>) {
+        if let Some(quality) = quality {
+            ui.label(match quality {
+                IndicatorQuality::Good => "Quality: good",
+                IndicatorQuality::Unavailable => "Quality: unavailable",
+                IndicatorQuality::NotObserved => "Quality: not observed",
+            });
+        }
     }
 
     pub(super) fn input(ui: &mut egui::Ui, view: InputView, text: &mut String) -> egui::Response {
@@ -134,6 +162,46 @@ mod visuals {
         }
         response.clicked()
     }
+}
+
+fn indicator_view(caption: &'static str, reading: TypedRead) -> IndicatorView {
+    let (value, unavailable) = match reading.payload {
+        ReadPayload::Value(ScalarValue::Boolean(value)) => {
+            (Some(ObservedValue::Boolean(value)), String::new())
+        }
+        ReadPayload::Value(ScalarValue::Integer(value)) => {
+            (Some(ObservedValue::Integer(value)), String::new())
+        }
+        ReadPayload::Value(ScalarValue::Number(value)) => {
+            (Some(ObservedValue::Number(value)), String::new())
+        }
+        ReadPayload::Value(ScalarValue::Text(value)) => {
+            (Some(ObservedValue::Text(value)), String::new())
+        }
+        ReadPayload::Value(ScalarValue::Enum(value)) => {
+            (Some(ObservedValue::Enum(value)), String::new())
+        }
+        ReadPayload::Absent(reason) => (None, reason.label().to_owned()),
+    };
+    IndicatorView {
+        caption,
+        value,
+        unit: reading
+            .unit
+            .as_ref()
+            .and_then(|unit| unit.display())
+            .map(str::to_owned),
+        unavailable,
+        quality: reading.quality.map(|quality| match quality {
+            ReadQuality::Good => IndicatorQuality::Good,
+            ReadQuality::Unavailable => IndicatorQuality::Unavailable,
+            ReadQuality::NotObserved => IndicatorQuality::NotObserved,
+        }),
+    }
+}
+
+pub(super) fn show_typed_read(ui: &mut egui::Ui, caption: &'static str, reading: TypedRead) {
+    visuals::indicator(ui, &indicator_view(caption, reading));
 }
 
 // Applicability is part of editor state: losing typed metadata must retire the
@@ -395,12 +463,14 @@ impl OperatorControlUi<'_> {
         let state = observation
             .and_then(|item| item.get("state"))
             .and_then(serde_json::Value::as_str);
-        view.observation = Some(IndicatorView {
-            caption: "Recorder state (cached)",
-            value: state.map(|state| ObservedValue::Text(state.into())),
-            unit: None,
-            unavailable: "Recorder state (cached): unavailable",
-        });
+        view.observation = Some(indicator_view(
+            "Recorder state (cached)",
+            resolve_read(
+                &self.model.observations,
+                &view.control.target,
+                ReadBinding::RecorderState,
+            ),
+        ));
         if observation
             .and_then(|item| item.get("active_run"))
             .is_some_and(|run| !run.is_null())
@@ -435,26 +505,14 @@ impl OperatorControlUi<'_> {
         let RuntimeRef::Reference { reference } = &view.control.target else {
             return;
         };
-        let observation = self
-            .model
-            .observations
-            .entities
-            .get(&view.control.target)
-            .map(|item| &item.value);
-        let value = observation
-            .and_then(|item| item.get("value"))
-            .and_then(serde_json::Value::as_f64)
-            .filter(|value| value.is_finite());
-        let unit = observation
-            .and_then(|item| item.pointer("/unit/symbol"))
-            .and_then(serde_json::Value::as_str)
-            .filter(|unit| !unit.is_empty());
-        view.observation = Some(IndicatorView {
-            caption: "Current setpoint (cached)",
-            value: value.map(ObservedValue::Number),
-            unit: Some(unit.unwrap_or("(unit unknown)").into()),
-            unavailable: "Current setpoint: unavailable",
-        });
+        view.observation = Some(indicator_view(
+            "Current setpoint (cached)",
+            resolve_read(
+                &self.model.observations,
+                &view.control.target,
+                ReadBinding::ReferenceValue,
+            ),
+        ));
         view.input = Some(InputView {
             caption: "New fixed value",
             kind: InputKind::Number,
@@ -490,12 +548,14 @@ impl OperatorControlUi<'_> {
             .and_then(|item| item.value.get("state"))
             .and_then(serde_json::Value::as_str);
         view.metadata.push(format!("Controller: {controller}"));
-        view.observation = Some(IndicatorView {
-            caption: "Controller state (cached)",
-            value: state.map(|state| ObservedValue::Text(state.into())),
-            unit: None,
-            unavailable: "Controller state (cached): unavailable",
-        });
+        view.observation = Some(indicator_view(
+            "Controller state (cached)",
+            resolve_read(
+                &self.model.observations,
+                &view.control.target,
+                ReadBinding::ControllerState,
+            ),
+        ));
         let (label, action) = match state {
             Some("ready") => ("Start", ControllerLifecycleIntent::Start),
             Some("warming" | "running") => ("Pause", ControllerLifecycleIntent::Pause),
@@ -544,21 +604,14 @@ impl OperatorControlUi<'_> {
             value_type.unwrap_or("unknown"),
             access.unwrap_or("unknown")
         ));
-        let current = observation
-            .and_then(|item| item.get("current"))
-            .map(|value| {
-                ObservedValue::Text(
-                    value
-                        .as_str()
-                        .map_or_else(|| value.to_string(), str::to_owned),
-                )
-            });
-        view.observation = Some(IndicatorView {
-            caption: "Current value (cached)",
-            value: current,
-            unit: None,
-            unavailable: "Current value (cached): unavailable",
-        });
+        view.observation = Some(indicator_view(
+            "Current value (cached)",
+            resolve_read(
+                &self.model.observations,
+                &view.control.target,
+                ReadBinding::ConfigurationPropertyCurrent,
+            ),
+        ));
         if let Some(unit) = observation
             .and_then(|item| item.get("unit"))
             .and_then(|unit| unit.get("symbol").or_else(|| unit.get("id")))

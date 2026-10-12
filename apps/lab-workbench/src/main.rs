@@ -293,6 +293,7 @@ mod operator_boundary_tests {
         let external = include_str!("external.rs");
         let renderer = production_source(include_str!("gui/presentation.rs"));
         let controls = production_source(include_str!("gui/controls.rs"));
+        let read_bindings = production_source(include_str!("model/read_binding.rs"));
         let visuals = controls
             .split_once("mod visuals {")
             .expect("shared visual primitives")
@@ -333,7 +334,7 @@ mod operator_boundary_tests {
             ".confirm(",
             ".begin(",
         ] {
-            for view in [&renderer, &controls] {
+            for view in [&renderer, &controls, &read_bindings] {
                 assert!(
                     !view.contains(prohibited),
                     "declarative renderer contains authority seam {prohibited}"
