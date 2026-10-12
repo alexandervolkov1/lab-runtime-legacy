@@ -13,7 +13,7 @@ fn check(value: &Value) -> Result<LocallyCheckedDocument, String> {
     parse(&serde_json::to_vec(value).unwrap())?.check_local()
 }
 
-fn examples() -> Vec<Value> {
+pub(super) fn examples() -> Vec<Value> {
     let contract = include_str!("../../../../../docs/generic-controls-v2-contract.md");
     let section = contract
         .split("## 11. Neutral complete document examples")
@@ -538,7 +538,8 @@ fn unresolved_references_and_cycles_are_only_locally_checked() {
     assert_eq!(local.dto().components.0.len(), 2);
     assert!(std::any::type_name_of_val(&local).ends_with("LocallyCheckedDocument"));
     // There is deliberately no FullyValidatedDocument constructor or conversion
-    // into the v1 owner document. Future admission must reject this fixture.
+    // into the v1 owner document. The structural stage must reject this fixture.
+    assert!(local.check_structure().is_err());
 }
 
 #[test]
@@ -548,6 +549,8 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         include_str!("bounded.rs"),
         include_str!("dto.rs"),
         include_str!("validation.rs"),
+        include_str!("structure.rs"),
+        include_str!("graph.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -574,6 +577,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         assert!(!consumer.contains("presentation::v2"));
         assert!(!consumer.contains("LocallyCheckedDocument"));
         assert!(!consumer.contains("ParsedDocument"));
+        assert!(!consumer.contains("StructurallyCheckedDocument"));
     }
 }
 
