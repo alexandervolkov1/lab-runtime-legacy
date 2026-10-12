@@ -82,8 +82,9 @@ Declarative Controls panels support **RecordingLifecycle** controls targeting
 **Recorder**. The configured label appears above **Start recording** (idle
 Recorder) or **Stop recording** (an active run), according to the cached Runtime
 projection. Start uses Workbench's shared recording-label field: a nonblank label
-of at most 128 UTF-8 bytes is required. Fixed Reference controls are also supported;
-other declarative kinds and incompatible targets remain disabled.
+of at most 128 UTF-8 bytes is required. Fixed Reference and Controller lifecycle
+controls are also supported; other declarative kinds and incompatible targets
+remain disabled.
 
 A **SetReference** control targeting a **Reference** displays its cached current
 setpoint and Runtime unit, a **New fixed value** field and **Configure fixed**.
@@ -101,12 +102,21 @@ revision change clears these editors (including egui undo/focus); changing a
 target cannot reuse another Reference's draft. A prepared Operator action keeps
 its original target and revision across replacement until confirmed or cancelled.
 
-Clicking either control's action button creates only an operator draft. Review it
+A **ControllerLifecycle** control targeting a **Controller** displays its configured
+caption, controller ID and cached Runtime state. Its one action follows that state:
+**Start** for `ready`, **Pause** for `warming`/`running`, **Resume** for `paused`,
+and **Reset failed** for `failed`. Other states or missing observations offer no
+action. Freshness, connection, advertised operation and recovery guards still apply.
+Confirm checks the exact source state again; even `warming` changing to `running`
+invalidates the prepared draft. Replacement keeps its original target and never
+executes it. Declarative PID configuration and direct output writes are not supported.
+
+Clicking a control's action button creates only an operator draft. Review it
 in the existing **Operator action** panel and separately press **Confirm**; **Cancel**
 sends nothing. Confirmation is mandatory even if the document has `confirm:false`.
 The renderer cannot send Runtime commands. Merely applying or displaying a
-document neither starts/stops recording nor changes a Reference, and controls do
-not change its revision.
+document does not start/stop recording, change a Reference or change controller
+lifecycle, and controls do not change its revision.
 
 Observation mode, non-Fresh projections, unavailable operations/targets, active
 operator workflows and existing recovery fences disable these buttons. Confirm
@@ -120,6 +130,11 @@ standard Recorder button group is suppressed; select that tab to use its control
 Unreferenced control definitions do not hide standard buttons. Without a
 declarative Recorder control, ordinary Recorder controls remain available. Other
 existing operator controls and the shared confirmation/recovery panels remain.
+For a Controller with a referenced declarative lifecycle control, the ordinary
+lifecycle buttons are suppressed across tabs. The ordinary Controller section
+names its window, tab and panel so the action can be found on a hidden tab too.
+Unreferenced definitions and controls for other Controllers do not suppress them.
+Existing ordinary PID controls are unchanged.
 
 Drag inside a plot to pan. Double-click the plot to restore automatic bounds.
 These changes affect only your view, not measurement or recording.

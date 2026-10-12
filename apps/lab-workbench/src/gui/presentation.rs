@@ -36,7 +36,7 @@ impl PresentationRenderer {
         document: &PresentationDocument,
         observations: &RuntimeObservations,
         revision: u64,
-        recorder: &mut OperatorControlUi<'_>,
+        controls: &mut OperatorControlUi<'_>,
     ) -> PresentationResponse {
         let mut intent = None;
         let replaced = self.revision != Some(revision) || self.document_id != document.document_id;
@@ -123,7 +123,7 @@ impl PresentationRenderer {
                                                 }
                                             }
                                             PanelKind::Controls { control_ids } => {
-                                                let clicked = recorder.show_panel(
+                                                let clicked = controls.show_panel(
                                                     ui,
                                                     &document.controls,
                                                     control_ids,
@@ -468,7 +468,8 @@ mod tests {
         },
         dispatcher::{CallOrigin, CallerId, LabClient, WorkbenchDispatcher, WorkbenchRequest},
         model::{
-            LivePoint, MutationSubmitter, OperatorWorkflow, OperatorWorkflowState, WorkbenchModel,
+            ControllerLifecycleIntent, LivePoint, MutationSubmitter, OperatorWorkflow,
+            OperatorWorkflowState, WorkbenchModel,
         },
         presentation::{Control, ControlKind},
     };
@@ -1237,6 +1238,463 @@ mod tests {
         model
     }
 
+    fn controller_model(state: Option<&str>) -> WorkbenchModel {
+        let mut model = recorder_model();
+        model.presentation.controls[0] = Control {
+            id: "record".into(),
+            label: "Heater controller".into(),
+            target: RuntimeRef::Controller {
+                controller: "1".into(),
+            },
+            kind: ControlKind::ControllerLifecycle,
+            confirm: false,
+        };
+        model.hello.as_mut().unwrap().operations.extend(
+            [
+                "controller_start",
+                "controller_pause",
+                "controller_resume",
+                "controller_reset_failed",
+            ]
+            .map(str::to_owned),
+        );
+        model.observations.observe(
+            model.presentation.controls[0].target.clone(),
+            json!({"controller":"1", "state":state}),
+            None,
+        );
+        model.presentation.validate().unwrap();
+        model
+    }
+
+    #[test]
+    fn controller_buttons_follow_runtime_state_and_require_separate_confirmation() {
+        for confirm in [false, true] {
+            for (state, button, action, operation) in [
+                (
+                    "ready",
+                    "Start",
+                    ControllerLifecycleIntent::Start,
+                    "controller_start",
+                ),
+                (
+                    "warming",
+                    "Pause",
+                    ControllerLifecycleIntent::Pause,
+                    "controller_pause",
+                ),
+                (
+                    "running",
+                    "Pause",
+                    ControllerLifecycleIntent::Pause,
+                    "controller_pause",
+                ),
+                (
+                    "paused",
+                    "Resume",
+                    ControllerLifecycleIntent::Resume,
+                    "controller_resume",
+                ),
+                (
+                    "failed",
+                    "Reset failed",
+                    ControllerLifecycleIntent::ResetFailed,
+                    "controller_reset_failed",
+                ),
+            ] {
+                let mut model = controller_model(Some(state));
+                model.presentation.controls[0].confirm = confirm;
+                let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+                let before = (*dispatcher).clone();
+                let context = egui::Context::default();
+                let mut renderer = PresentationRenderer::default();
+                let mut operator = OperatorWorkflow::default();
+                let (_, text) = recorder_frame(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut String::new(),
+                    vec![],
+                );
+                let text = labels(&text);
+                assert!(text.contains(&"Heater controller"));
+                assert!(text.contains(&"Controller: 1"));
+                assert!(text.contains(&format!("Controller state (cached): {state}").as_str()));
+                for label in ["Start", "Pause", "Resume", "Reset failed"] {
+                    assert_eq!(text.contains(&label), label == button);
+                }
+                let intent = click_recorder(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut String::new(),
+                    button,
+                )
+                .unwrap();
+                assert_eq!(
+                    intent,
+                    OperatorIntent::ControllerLifecycle {
+                        controller: "1".into(),
+                        action
+                    }
+                );
+                operator.begin(&dispatcher, intent.clone()).unwrap();
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::AwaitingConfirmation(_)
+                ));
+                assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+                assert!(
+                    click_recorder(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        &mut String::new(),
+                        button
+                    )
+                    .is_none()
+                );
+                operator.cancel_or_acknowledge();
+                assert_eq!(
+                    dispatcher.client().unwrap().0.get(),
+                    0,
+                    "Cancel sends nothing"
+                );
+                operator.begin(&dispatcher, intent).unwrap();
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+                assert_eq!(dispatcher.client().unwrap().0.get(), 1);
+                assert_eq!(
+                    dispatcher.client().unwrap().1.borrow().as_slice(),
+                    [(operation.to_owned(), json!({"controller":"1"}))]
+                );
+                assert!(
+                    click_recorder(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        &mut String::new(),
+                        button
+                    )
+                    .is_none()
+                );
+                assert_eq!(
+                    *dispatcher, before,
+                    "render/click/prepare does not mutate the model"
+                );
+                assert_eq!(dispatcher.presentation_revision(), 1);
+            }
+        }
+    }
+
+    #[test]
+    fn controller_unavailable_states_and_readiness_fences_send_nothing() {
+        for scenario in [
+            "unknown",
+            "missing_state",
+            "disabled",
+            "stopped",
+            "starting",
+            "observe",
+            "stale",
+            "rebuilding",
+            "target_stale",
+            "target_rebuilding",
+            "missing",
+            "unadvertised",
+            "disconnected",
+            "recovery",
+            "quarantine",
+            "reconciliation",
+            "journal_failure",
+            "capacity",
+        ] {
+            let mut model = controller_model(Some("ready"));
+            let target = model.presentation.controls[0].target.clone();
+            let mut button = "Start";
+            match scenario {
+                "observe" => {}
+                "stale" => model.observations.freshness = Freshness::Stale,
+                "rebuilding" => model.observations.freshness = Freshness::Rebuilding,
+                "target_stale" | "target_rebuilding" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&target)
+                        .unwrap()
+                        .freshness = if scenario == "target_stale" {
+                        Freshness::Stale
+                    } else {
+                        Freshness::Rebuilding
+                    }
+                }
+                "missing" => {
+                    model.observations.entities.remove(&target);
+                    button = "No lifecycle action available";
+                }
+                "unadvertised" => model.hello.as_mut().unwrap().operations.clear(),
+                "disconnected" => model.connection = ConnectionState::Stale,
+                "recovery" => model.recovery.mutations.push(ambiguous_record()),
+                "quarantine" => model.recovery.quarantined.push(QuarantinedRecoveryRecord {
+                    record: ambiguous_record(),
+                    reason: RecoveryQuarantineReason::AttachedBootMismatch,
+                }),
+                "reconciliation" => model
+                    .recovery
+                    .reconciliation_required
+                    .push(ambiguous_record().identity),
+                "journal_failure" => model.recovery_problem = Some("journal unavailable".into()),
+                "capacity" => {
+                    for id in 0..crate::model::MAX_OPERATOR_ACTIONS as u64 {
+                        model.track_operator_intent(id).unwrap();
+                    }
+                }
+                _ => {
+                    model.observations.entities.get_mut(&target).unwrap().value =
+                        if scenario == "missing_state" {
+                            json!({})
+                        } else {
+                            json!({"state":scenario})
+                        };
+                    button = "No lifecycle action available";
+                }
+            }
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            assert!(
+                click_recorder(
+                    &egui::Context::default(),
+                    &mut PresentationRenderer::default(),
+                    &dispatcher,
+                    &OperatorWorkflow::default(),
+                    scenario == "observe",
+                    &mut String::new(),
+                    button
+                )
+                .is_none(),
+                "{scenario}"
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0, "{scenario}");
+            assert_eq!(*dispatcher, before, "{scenario}");
+        }
+    }
+
+    #[test]
+    fn controller_confirm_rechecks_exact_source_state_and_never_retries_failure() {
+        for (state, changed, button) in [
+            ("ready", "failed", "Start"),
+            ("warming", "running", "Pause"),
+            ("running", "paused", "Pause"),
+            ("paused", "running", "Resume"),
+            ("failed", "ready", "Reset failed"),
+        ] {
+            let mut model = controller_model(Some(state));
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            let intent = click_recorder(
+                &context,
+                &mut renderer,
+                &model,
+                &operator,
+                false,
+                &mut String::new(),
+                button,
+            )
+            .unwrap();
+            operator.begin(&model, intent).unwrap();
+            let target = model.presentation.controls[0].target.clone();
+            model.observations.entities.get_mut(&target).unwrap().value["state"] = json!(changed);
+            let client = FakeClient::default();
+            assert_eq!(
+                operator.confirm(&model, &client),
+                Err(crate::model::OperatorIntentError::DraftStale)
+            );
+            assert_eq!(client.0.get(), 0);
+        }
+        let model = controller_model(Some("ready"));
+        let client = FakeClient::default();
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        let mut operator = OperatorWorkflow::default();
+        operator
+            .begin(
+                &model,
+                click_recorder(
+                    &context,
+                    &mut renderer,
+                    &model,
+                    &OperatorWorkflow::default(),
+                    false,
+                    &mut String::new(),
+                    "Start",
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        operator.confirm(&model, &client).unwrap();
+        operator.after_update(&ClientUpdate::Reply {
+            command_id: 1,
+            msg_id: "1".into(),
+            op: "controller_start".into(),
+            kind: ReplyKind::MutationFailed,
+            envelope: json!({"code":"revision_conflict"}),
+            recovery: None,
+        });
+        assert!(matches!(
+            operator.state,
+            OperatorWorkflowState::Failed { conflict: true, .. }
+        ));
+        assert!(
+            click_recorder(
+                &context,
+                &mut renderer,
+                &model,
+                &operator,
+                false,
+                &mut String::new(),
+                "Start"
+            )
+            .is_none()
+        );
+        assert_eq!(client.0.get(), 1, "failure never retries");
+    }
+
+    #[test]
+    fn controller_replacement_preserves_prepared_target_and_ambiguous_workflow() {
+        for ambiguous in [false, true] {
+            let mut model = controller_model(Some("ready"));
+            model.observations.observe(
+                RuntimeRef::Controller {
+                    controller: "2".into(),
+                },
+                json!({"controller":"2", "state":"ready"}),
+                None,
+            );
+            let mut dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            operator
+                .begin(
+                    &dispatcher,
+                    click_recorder(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &OperatorWorkflow::default(),
+                        false,
+                        &mut String::new(),
+                        "Start",
+                    )
+                    .unwrap(),
+                )
+                .unwrap();
+            if ambiguous {
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                let mut record = ambiguous_record();
+                record.op = "controller_start".into();
+                record.args = json!({"controller":"1"});
+                operator.after_update(&ClientUpdate::ReconciliationRequired {
+                    records: vec![record.clone()],
+                });
+                dispatcher.apply_client_update(ClientUpdate::RecoveryProjection {
+                    active: vec![record.clone()],
+                    quarantined: vec![],
+                });
+                dispatcher.apply_client_update(ClientUpdate::ReconciliationRequired {
+                    records: vec![record],
+                });
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::Ambiguous { .. }
+                ));
+            }
+            let original = operator.clone();
+            let recovery = dispatcher.recovery.clone();
+            let calls = dispatcher.client().unwrap().0.get();
+            let mut replacement = dispatcher.presentation.clone();
+            replacement.controls[0].target = RuntimeRef::Controller {
+                controller: "2".into(),
+            };
+            dispatcher
+                .dispatch(
+                    CallOrigin {
+                        caller_id: CallerId(1),
+                        call_id: "replace-controller".into(),
+                    },
+                    WorkbenchRequest::UiReplaceDocument {
+                        expected: dispatcher.presentation_expectation(),
+                        document: serde_json::to_value(replacement).unwrap(),
+                    },
+                )
+                .unwrap();
+            let output = context.run_ui(Default::default(), |ui| {
+                let response = renderer.show(
+                    ui,
+                    &dispatcher.presentation,
+                    &dispatcher.observations,
+                    dispatcher.presentation_revision(),
+                    &mut OperatorControlUi {
+                        model: &dispatcher,
+                        operator: &operator,
+                        observation_only: false,
+                        label: &mut String::new(),
+                    },
+                );
+                assert!(response.intent.is_none());
+            });
+            output.drop_without_applying_deltas();
+            assert_eq!(renderer.revision, Some(dispatcher.presentation_revision()));
+            assert!(
+                click_recorder(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut String::new(),
+                    "Start"
+                )
+                .is_none()
+            );
+            assert_eq!(operator, original);
+            assert_eq!(dispatcher.recovery, recovery);
+            assert_eq!(dispatcher.client().unwrap().0.get(), calls);
+            if !ambiguous {
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert_eq!(
+                    dispatcher.client().unwrap().1.borrow()[0],
+                    ("controller_start".into(), json!({"controller":"1"}))
+                );
+            } else {
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+            }
+        }
+    }
+
     fn reference_model() -> WorkbenchModel {
         let mut model = recorder_model();
         model.presentation.controls = (1..=2)
@@ -1728,6 +2186,8 @@ mod tests {
         events: Vec<egui::Event>,
     ) -> (PresentationResponse, Vec<(String, egui::Rect)>) {
         let mut response = None;
+        // Follow the last explicit document epoch (initial fixtures start at 1).
+        let revision = renderer.revision.unwrap_or(1);
         let output = context.run_ui(
             egui::RawInput {
                 screen_rect: Some(egui::Rect::from_min_size(
@@ -1742,7 +2202,7 @@ mod tests {
                     ui,
                     &model.presentation,
                     &model.observations,
-                    1,
+                    revision,
                     &mut OperatorControlUi {
                         model,
                         operator,
@@ -2194,6 +2654,36 @@ mod tests {
             (ControlKind::ControllerLifecycle, RuntimeRef::Recorder),
             (ControlKind::ApplyConfiguration, RuntimeRef::Recorder),
             (ControlKind::ReconnectResource, RuntimeRef::Recorder),
+            (
+                ControlKind::SetReference,
+                RuntimeRef::Controller {
+                    controller: "1".into(),
+                },
+            ),
+            (
+                ControlKind::RecordingLifecycle,
+                RuntimeRef::Controller {
+                    controller: "1".into(),
+                },
+            ),
+            (
+                ControlKind::ApplyConfiguration,
+                RuntimeRef::Controller {
+                    controller: "1".into(),
+                },
+            ),
+            (
+                ControlKind::ReconnectResource,
+                RuntimeRef::Controller {
+                    controller: "1".into(),
+                },
+            ),
+            (
+                ControlKind::ControllerLifecycle,
+                RuntimeRef::Reference {
+                    reference: "1".into(),
+                },
+            ),
             (
                 ControlKind::RecordingLifecycle,
                 RuntimeRef::Reference {

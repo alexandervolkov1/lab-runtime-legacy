@@ -1,6 +1,6 @@
 //! eframe main-thread owner and thin observational rendering.
 
-use super::controls::{OperatorControlUi, has_recorder_controls};
+use super::controls::{OperatorControlUi, controller_control_location, has_recorder_controls};
 use super::presentation::PresentationRenderer;
 use super::rebuild::RebuildCoordinator;
 use crate::{
@@ -787,52 +787,58 @@ impl WorkbenchApp {
                 let state = observation
                     .and_then(|value| value.get("state"))
                     .and_then(Value::as_str);
-                ui.horizontal(|ui| {
-                    for (label, action, required_state, operation) in [
-                        (
-                            "Start",
-                            ControllerLifecycleIntent::Start,
-                            "ready",
-                            "controller_start",
-                        ),
-                        (
-                            "Pause",
-                            ControllerLifecycleIntent::Pause,
-                            "running",
-                            "controller_pause",
-                        ),
-                        (
-                            "Resume",
-                            ControllerLifecycleIntent::Resume,
-                            "paused",
-                            "controller_resume",
-                        ),
-                        (
-                            "Reset failed",
-                            ControllerLifecycleIntent::ResetFailed,
-                            "failed",
-                            "controller_reset_failed",
-                        ),
-                    ] {
-                        let state_ok = if action == ControllerLifecycleIntent::Pause {
-                            matches!(state, Some("running" | "warming"))
-                        } else {
-                            state == Some(required_state)
-                        };
-                        if ui
-                            .add_enabled(
-                                state_ok && self.control_enabled(selected, operation),
-                                egui::Button::new(label),
-                            )
-                            .clicked()
-                        {
-                            self.begin_operator(OperatorIntent::ControllerLifecycle {
-                                controller: controller.clone(),
-                                action,
-                            });
+                if let Some(location) =
+                    controller_control_location(&self.model.presentation, controller)
+                {
+                    ui.label(format!("Controller lifecycle controls: {location}"));
+                } else {
+                    ui.horizontal(|ui| {
+                        for (label, action, required_state, operation) in [
+                            (
+                                "Start",
+                                ControllerLifecycleIntent::Start,
+                                "ready",
+                                "controller_start",
+                            ),
+                            (
+                                "Pause",
+                                ControllerLifecycleIntent::Pause,
+                                "running",
+                                "controller_pause",
+                            ),
+                            (
+                                "Resume",
+                                ControllerLifecycleIntent::Resume,
+                                "paused",
+                                "controller_resume",
+                            ),
+                            (
+                                "Reset failed",
+                                ControllerLifecycleIntent::ResetFailed,
+                                "failed",
+                                "controller_reset_failed",
+                            ),
+                        ] {
+                            let state_ok = if action == ControllerLifecycleIntent::Pause {
+                                matches!(state, Some("running" | "warming"))
+                            } else {
+                                state == Some(required_state)
+                            };
+                            if ui
+                                .add_enabled(
+                                    state_ok && self.control_enabled(selected, operation),
+                                    egui::Button::new(label),
+                                )
+                                .clicked()
+                            {
+                                self.begin_operator(OperatorIntent::ControllerLifecycle {
+                                    controller: controller.clone(),
+                                    action,
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 ui.label("PID (kp, ki, kd, output min, output max)");
                 ui.horizontal(|ui| {
                     for field in &mut self.pid_fields {
