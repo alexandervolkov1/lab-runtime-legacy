@@ -21,7 +21,6 @@ use crate::{
     },
 };
 use eframe::egui::{self, Color32, RichText};
-use egui_plot::{Line, Plot as EguiPlot, PlotPoints};
 use serde_json::{Value, json};
 use std::{
     path::PathBuf,
@@ -1303,17 +1302,7 @@ fn render_selected_live_plot(
         return;
     }
     if let Some(buffer) = observations.live.get(selected) {
-        let points = buffer
-            .points()
-            .iter()
-            .map(|point| [point.time_seconds, point.value])
-            .collect::<Vec<_>>();
-        EguiPlot::new("selected-live-signal")
-            .id(ui.make_persistent_id("selected-live-signal"))
-            .height(360.0)
-            .show(ui, |plot_ui| {
-                plot_ui.line(Line::new("observed", PlotPoints::from(points)));
-            });
+        super::presentation::render_signal_plot(ui, selected, observations);
         if buffer.dropped() > 0 {
             ui.colored_label(
                 Color32::YELLOW,

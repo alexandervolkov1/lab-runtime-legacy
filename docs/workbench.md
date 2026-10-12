@@ -85,6 +85,30 @@ from the read-only layout.
 Drag inside a plot to pan. Double-click the plot to restore automatic bounds.
 These changes affect only your view, not measurement or recording.
 
+Hover inside any live plot to see one **Nearest observed samples** tooltip. For
+each visible curve it shows the nearest retained sample by distance along the
+time axis, its name, raw numeric value, unit and its own sample time. Equal time
+distances choose the earlier sample. It does not interpolate between samples.
+Traces hidden by configuration or by the legend are omitted, as are curves without
+usable live samples. The lookup uses the same trailing window as the plotted line.
+
+Times use **T+HH:mm:ss.SSS**: elapsed monotonic time from the Runtime process clock
+origin, not local calendar time or time since opening Workbench. Hours continue
+past 24. Times normally round to milliseconds; nearby asynchronous samples use
+six or nine fractional digits when needed to keep their timestamps distinct.
+Each curve retains its own timestamp rather than implying a simultaneous reading.
+The underlying live time is stored as floating-point seconds; extra display digits
+do not recover precision already lost there.
+
+The tooltip prefers the unit in the cached Runtime observation. If only the
+presentation's display-unit metadata is available, it explicitly says **display
+label; no conversion**. An unknown unit stays **unit unknown**. Values are never
+converted to another unit by the renderer. **Fresh view** describes the source
+cache/attachment, not a claim that a historical sample was measured just now or
+is valid for physical control. Stale, Unknown, Rebuilding and Unresolved remain
+explicit. Hovering neither contacts Runtime nor edits the document, revision,
+recovery information or recording, and adds no retained sample history.
+
 This GUI has no arbitrary plot/trace editor or **Save Layout** button. You cannot
 use GUI menus to compose dashboards or edit trace colors and stored axis settings;
 declarative dashboards are supplied through the document/API instead.
