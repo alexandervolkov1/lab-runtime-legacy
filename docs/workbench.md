@@ -78,9 +78,31 @@ state when the presentation revision changes. Explicit replacements and
 declarative layouts do not implicitly acquire a default plot. The API does not
 save the layout to disk.
 
-Declarative Controls panels currently display an inactive placeholder. Existing
-operator controls, confirmation, recovery and reconnect workflows remain separate
-from the read-only layout.
+Declarative Controls panels support **RecordingLifecycle** controls targeting
+**Recorder**. The configured label appears above **Start recording** (idle
+Recorder) or **Stop recording** (an active run), according to the cached Runtime
+projection. Start uses Workbench's shared recording-label field: a nonblank label
+of at most 128 UTF-8 bytes is required. Other control kinds and incompatible
+targets remain disabled.
+
+Clicking a recording button creates only an operator draft. Review it in the
+existing **Operator action** panel and separately press **Confirm**; **Cancel**
+sends nothing. Confirmation is mandatory even if the document has `confirm:false`.
+The renderer cannot send Runtime commands. Merely applying or displaying a
+document does not start/stop recording, and controls do not change its revision.
+
+Observation mode, non-Fresh projections, unavailable operations/Recorder, active
+operator workflows and existing recovery fences disable these buttons. Confirm
+rechecks authoritative identity/readiness through the same OperatorWorkflow and
+ClientHandle as ordinary Workbench controls. Submitted/Accepted are not completed
+work; ambiguous outcomes require manual reconciliation, with no automatic retry.
+Replacing a document neither cancels a draft nor clears active recovery.
+
+When a compatible Recorder control is referenced by any configured tab, the
+standard Recorder button group is suppressed; select that tab to use its control.
+Unreferenced control definitions do not hide standard buttons. Without a
+declarative Recorder control, ordinary Recorder controls remain available. Other
+existing operator controls and the shared confirmation/recovery panels remain.
 
 Drag inside a plot to pan. Double-click the plot to restore automatic bounds.
 These changes affect only your view, not measurement or recording.

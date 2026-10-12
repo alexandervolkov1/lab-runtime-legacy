@@ -1,7 +1,9 @@
-//! Read-only declarative layout over the committed document and observation cache.
+//! Declarative layout returning operator intent without Runtime submission authority.
+
+use super::controls::RecorderControlUi;
 
 use crate::{
-    model::{Freshness, RuntimeObservations},
+    model::{Freshness, OperatorIntent, RuntimeObservations},
     presentation::{PanelKind, Plot, PresentationDocument, RuntimeRef, Trace},
 };
 use eframe::egui::{self, Color32};
@@ -19,16 +21,23 @@ pub(super) struct PresentationRenderer {
     plot_ids: HashSet<egui::Id>,
 }
 
+pub(super) struct PresentationResponse {
+    pub(super) declarative: bool,
+    pub(super) intent: Option<OperatorIntent>,
+}
+
 impl PresentationRenderer {
     /// Renders logical windows, or the legacy plot list when no windows exist.
-    /// Returns whether declarative windows replace the legacy signal graphs.
+    /// Returns view mode and at most one intent; the owner must request confirmation.
     pub(super) fn show(
         &mut self,
         ui: &mut egui::Ui,
         document: &PresentationDocument,
         observations: &RuntimeObservations,
         revision: u64,
-    ) -> bool {
+        recorder: &mut RecorderControlUi<'_>,
+    ) -> PresentationResponse {
+        let mut intent = None;
         if self.revision != Some(revision) || self.document_id != document.document_id {
             // egui_plot retains temporary zoom/legend state by ID. Retire old
             // revisions explicitly so repeated replacements do not retain history.
@@ -54,7 +63,10 @@ impl PresentationRenderer {
                 );
                 self.plot_ids.insert(response.inner);
             }
-            return false;
+            return PresentationResponse {
+                declarative: false,
+                intent,
+            };
         }
 
         // Revision scopes egui's zoom/legend memory so replaced plot definitions
@@ -106,10 +118,15 @@ impl PresentationRenderer {
                                                     ));
                                                 }
                                             }
-                                            PanelKind::Controls { .. } => {
-                                                ui.label(
-                                                    "Controls are not available in this view.",
+                                            PanelKind::Controls { control_ids } => {
+                                                let clicked = recorder.show_panel(
+                                                    ui,
+                                                    &document.controls,
+                                                    control_ids,
                                                 );
+                                                if intent.is_none() {
+                                                    intent = clicked;
+                                                }
                                             }
                                         }
                                     });
@@ -120,7 +137,10 @@ impl PresentationRenderer {
                 });
             }
         });
-        true
+        PresentationResponse {
+            declarative: true,
+            intent,
+        }
     }
 
     fn reconcile(&mut self, document: &PresentationDocument) {
@@ -433,12 +453,22 @@ fn render_plot(ui: &mut egui::Ui, plot: &Plot, observations: &RuntimeObservation
 mod tests {
     use super::*;
     use crate::{
-        client::types::{CommandSendError, MutationIdentity},
+        client::{
+            ClientUpdate,
+            types::{
+                CommandSendError, ConnectionState, EventCursor, HelloState, KnownAdmission,
+                MutationIdentity, QuarantinedRecoveryRecord, RecoveryQuarantineReason,
+                RecoveryRecord, ReplyKind,
+            },
+        },
         dispatcher::{CallOrigin, CallerId, LabClient, WorkbenchDispatcher, WorkbenchRequest},
-        model::{LivePoint, WorkbenchModel},
+        model::{
+            LivePoint, MutationSubmitter, OperatorWorkflow, OperatorWorkflowState, WorkbenchModel,
+        },
+        presentation::{Control, ControlKind},
     };
     use serde_json::{Value, json};
-    use std::cell::Cell;
+    use std::cell::{Cell, RefCell};
 
     fn document() -> PresentationDocument {
         serde_json::from_value(json!({
@@ -508,7 +538,20 @@ mod tests {
                 ..Default::default()
             },
             |ui| {
-                declared = renderer.show(ui, &model.presentation, &model.observations, revision);
+                let response = renderer.show(
+                    ui,
+                    &model.presentation,
+                    &model.observations,
+                    revision,
+                    &mut RecorderControlUi {
+                        model,
+                        operator: &OperatorWorkflow::default(),
+                        observation_only: false,
+                        label: &mut "Workbench run".to_owned(),
+                    },
+                );
+                declared = response.declarative;
+                assert!(response.intent.is_none());
             },
         );
         (declared, painted_text(output))
@@ -1012,7 +1055,7 @@ mod tests {
     }
 
     #[test]
-    fn clicking_tabs_changes_only_navigation_and_controls_remain_inactive() {
+    fn clicking_tabs_changes_only_navigation_and_empty_controls_stay_inert() {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
         let model = model();
@@ -1044,7 +1087,7 @@ mod tests {
         let (_, text) = frame(&context, &mut renderer, &model, 1, vec![]);
         let text = labels(&text);
         assert!(text.contains(&"Inactive controls"));
-        assert!(text.contains(&"Controls are not available in this view."));
+        assert!(text.contains(&"No controls configured."));
         assert!(!text.contains(&"Sensor status"));
         assert!(!text.contains(&"Two temperature curves"));
         assert_eq!(renderer.selected_tabs["window"], "other");
@@ -1121,21 +1164,658 @@ mod tests {
     }
 
     #[derive(Default)]
-    struct FakeClient(Cell<usize>);
+    struct FakeClient(Cell<usize>, RefCell<Vec<(String, Value)>>);
 
     impl LabClient for FakeClient {
         fn query(&self, _op: &str, _args: Value) -> Result<u64, CommandSendError> {
             self.0.set(self.0.get() + 1);
             Ok(1)
         }
-        fn mutation(&self, _op: &str, _args: Value) -> Result<u64, CommandSendError> {
+        fn mutation(&self, op: &str, args: Value) -> Result<u64, CommandSendError> {
             self.0.set(self.0.get() + 1);
+            self.1.borrow_mut().push((op.to_owned(), args));
             Ok(1)
         }
         fn operation_status(&self, _identity: MutationIdentity) -> Result<u64, CommandSendError> {
             self.0.set(self.0.get() + 1);
             Ok(1)
         }
+    }
+
+    impl MutationSubmitter for FakeClient {
+        fn submit_mutation(&self, op: &str, args: Value) -> Result<u64, CommandSendError> {
+            LabClient::mutation(self, op, args)
+        }
+    }
+
+    fn recorder_model() -> WorkbenchModel {
+        let mut model = model();
+        model.presentation.windows[0].tabs.truncate(1);
+        model.presentation.windows[0].tabs[0].panels = vec![crate::presentation::Panel {
+            id: "record-panel".into(),
+            title: "Recording panel".into(),
+            kind: PanelKind::Controls {
+                control_ids: vec!["record".into()],
+            },
+        }];
+        model.presentation.controls = vec![Control {
+            id: "record".into(),
+            label: "Dashboard recording".into(),
+            target: RuntimeRef::Recorder,
+            kind: ControlKind::RecordingLifecycle,
+            confirm: true,
+        }];
+        model.presentation.validate().unwrap();
+        model.connection = ConnectionState::Ready;
+        model.hello = Some(HelloState {
+            boot_id: "boot".into(),
+            scope: "scope".into(),
+            next_seq: 1,
+            operations: vec!["recording_start".into(), "recording_stop".into()],
+            capabilities: json!([]),
+            limits: json!({}),
+            event_oldest: EventCursor {
+                boot_id: "boot".into(),
+                seq: 0,
+            },
+            event_latest: EventCursor {
+                boot_id: "boot".into(),
+                seq: 0,
+            },
+        });
+        model.observations.observe(
+            RuntimeRef::Recorder,
+            json!({"state":"idle","active_run":null}),
+            None,
+        );
+        model.observations.complete_rebuild();
+        model
+    }
+
+    fn recorder_frame(
+        context: &egui::Context,
+        renderer: &mut PresentationRenderer,
+        model: &WorkbenchModel,
+        operator: &OperatorWorkflow,
+        observe: bool,
+        label: &mut String,
+        events: Vec<egui::Event>,
+    ) -> (PresentationResponse, Vec<(String, egui::Rect)>) {
+        let mut response = None;
+        let output = context.run_ui(
+            egui::RawInput {
+                screen_rect: Some(egui::Rect::from_min_size(
+                    egui::Pos2::ZERO,
+                    egui::vec2(1100.0, 1600.0),
+                )),
+                events,
+                ..Default::default()
+            },
+            |ui| {
+                response = Some(renderer.show(
+                    ui,
+                    &model.presentation,
+                    &model.observations,
+                    1,
+                    &mut RecorderControlUi {
+                        model,
+                        operator,
+                        observation_only: observe,
+                        label,
+                    },
+                ));
+            },
+        );
+        (response.unwrap(), painted_text(output))
+    }
+
+    fn click_recorder(
+        context: &egui::Context,
+        renderer: &mut PresentationRenderer,
+        model: &WorkbenchModel,
+        operator: &OperatorWorkflow,
+        observe: bool,
+        label: &mut String,
+        button: &str,
+    ) -> Option<OperatorIntent> {
+        let (response, _) =
+            recorder_frame(context, renderer, model, operator, observe, label, vec![]);
+        assert!(response.intent.is_none());
+        let (_, text) = recorder_frame(context, renderer, model, operator, observe, label, vec![]);
+        let center = text
+            .iter()
+            .find(|(text, _)| text == button)
+            .unwrap()
+            .1
+            .center();
+        let mut intent = None;
+        for pressed in [true, false] {
+            let (response, _) = recorder_frame(
+                context,
+                renderer,
+                model,
+                operator,
+                observe,
+                label,
+                vec![
+                    egui::Event::PointerMoved(center),
+                    egui::Event::PointerButton {
+                        pos: center,
+                        button: egui::PointerButton::Primary,
+                        pressed,
+                        modifiers: Default::default(),
+                    },
+                ],
+            );
+            if response.intent.is_some() {
+                assert!(intent.is_none());
+                intent = response.intent;
+            }
+        }
+        intent
+    }
+
+    #[test]
+    fn declarative_recorder_click_requires_separate_confirmation_even_when_confirm_is_false() {
+        for confirm in [true, false] {
+            for stopping in [false, true] {
+                let mut model = recorder_model();
+                model.presentation.controls[0].confirm = confirm;
+                let run_id = json!({"boot_id":"0123456789abcdef0123456789abcdef","run_no":"4"});
+                if stopping {
+                    model.observations.observe(
+                        RuntimeRef::Recorder,
+                        json!({"state":"recording","active_run":run_id}),
+                        None,
+                    );
+                }
+                let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+                let before = (*dispatcher).clone();
+                let context = egui::Context::default();
+                let mut renderer = PresentationRenderer::default();
+                let mut operator = OperatorWorkflow::default();
+                let mut label = "Operator run".to_owned();
+                let button = if stopping {
+                    "Stop recording"
+                } else {
+                    "Start recording"
+                };
+                let (response, text) = recorder_frame(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut label,
+                    vec![],
+                );
+                assert!(response.declarative && response.intent.is_none());
+                assert!(labels(&text).contains(&"Dashboard recording"));
+                assert!(super::super::controls::has_recorder_controls(
+                    &dispatcher.presentation
+                ));
+                let intent = click_recorder(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut label,
+                    button,
+                )
+                .unwrap();
+                operator.begin(&dispatcher, intent).unwrap();
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::AwaitingConfirmation(_)
+                ));
+                assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+                assert!(
+                    click_recorder(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        &mut label,
+                        button
+                    )
+                    .is_none()
+                );
+                operator.cancel_or_acknowledge();
+                assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+                let intent = click_recorder(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    &mut label,
+                    button,
+                )
+                .unwrap();
+                operator.begin(&dispatcher, intent).unwrap();
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::Submitted { .. }
+                ));
+                let op = if stopping {
+                    "recording_stop"
+                } else {
+                    "recording_start"
+                };
+                let args = if stopping {
+                    json!({"run_id":run_id})
+                } else {
+                    json!({"label":"Operator run"})
+                };
+                assert_eq!(
+                    *dispatcher.client().unwrap().1.borrow(),
+                    vec![(op.to_owned(), args)]
+                );
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+                assert!(
+                    click_recorder(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        &mut label,
+                        button
+                    )
+                    .is_none()
+                );
+                for (kind, accepted) in [
+                    (ReplyKind::MutationAccepted, true),
+                    (ReplyKind::MutationCompleted, false),
+                ] {
+                    operator.after_update(&ClientUpdate::Reply {
+                        command_id: 1,
+                        msg_id: "1".into(),
+                        op: op.into(),
+                        kind,
+                        envelope: json!({}),
+                        recovery: None,
+                    });
+                    assert!(if accepted {
+                        matches!(operator.state, OperatorWorkflowState::Accepted { .. })
+                    } else {
+                        matches!(operator.state, OperatorWorkflowState::Completed { .. })
+                    });
+                }
+                assert_eq!(dispatcher.client().unwrap().0.get(), 1);
+                assert_eq!(*dispatcher, before);
+                assert_eq!(dispatcher.presentation_revision(), 1);
+            }
+        }
+    }
+
+    fn ambiguous_record() -> RecoveryRecord {
+        RecoveryRecord {
+            boot_id: "boot".into(),
+            identity: MutationIdentity {
+                scope: "scope".into(),
+                seq: 1,
+            },
+            op: "recording_start".into(),
+            args: json!({"label":"Operator run"}),
+            admission: KnownAdmission::Ambiguous,
+        }
+    }
+
+    #[test]
+    fn recorder_confirmation_revalidates_fences_and_active_run_before_submission() {
+        for change in [
+            "stale",
+            "rebuilding",
+            "unadvertised",
+            "recovery",
+            "changed_state",
+            "changed_run",
+        ] {
+            let mut model = recorder_model();
+            let stopping = change == "changed_run";
+            if stopping {
+                model.observations.observe(
+                    RuntimeRef::Recorder,
+                    json!({"state":"recording","active_run":{"boot_id":"boot","run_no":"4"}}),
+                    None,
+                );
+            }
+            let mut operator = OperatorWorkflow::default();
+            let intent = click_recorder(
+                &egui::Context::default(),
+                &mut PresentationRenderer::default(),
+                &model,
+                &operator,
+                false,
+                &mut "Operator run".into(),
+                if stopping {
+                    "Stop recording"
+                } else {
+                    "Start recording"
+                },
+            )
+            .unwrap();
+            operator.begin(&model, intent).unwrap();
+            match change {
+                "stale" => model.observations.freshness = Freshness::Stale,
+                "rebuilding" => model.observations.freshness = Freshness::Rebuilding,
+                "unadvertised" => model.hello.as_mut().unwrap().operations.clear(),
+                "recovery" => model.recovery.mutations.push(ambiguous_record()),
+                "changed_state" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&RuntimeRef::Recorder)
+                        .unwrap()
+                        .value["state"] = json!("recording")
+                }
+                "changed_run" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&RuntimeRef::Recorder)
+                        .unwrap()
+                        .value["active_run"]["run_no"] = json!("5")
+                }
+                _ => unreachable!(),
+            }
+            let client = FakeClient::default();
+            assert!(operator.confirm(&model, &client).is_err(), "{change}");
+            assert_eq!(client.0.get(), 0);
+            assert!(matches!(
+                operator.state,
+                OperatorWorkflowState::AwaitingConfirmation(_)
+            ));
+        }
+    }
+
+    #[test]
+    fn recorder_control_references_suppress_legacy_buttons_and_share_the_bounded_label() {
+        let mut model = recorder_model();
+        let context = egui::Context::default();
+        let mut label = "é".repeat(100);
+        let before = model.clone();
+        recorder_frame(
+            &context,
+            &mut PresentationRenderer::default(),
+            &model,
+            &OperatorWorkflow::default(),
+            false,
+            &mut label,
+            vec![],
+        );
+        assert_eq!(label, "é".repeat(64));
+        assert_eq!(model, before);
+        let controls = &super::super::controls::has_recorder_controls;
+        assert!(controls(&model.presentation));
+        model.presentation.windows[0].tabs.insert(
+            0,
+            crate::presentation::PresentationTab {
+                id: "empty-tab".into(),
+                title: "Empty tab".into(),
+                panels: vec![],
+            },
+        );
+        let (_, text) = recorder_frame(
+            &context,
+            &mut PresentationRenderer::default(),
+            &model,
+            &OperatorWorkflow::default(),
+            false,
+            &mut label,
+            vec![],
+        );
+        assert!(!labels(&text).contains(&"Start recording"));
+        assert!(
+            controls(&model.presentation),
+            "control on a hidden tab still replaces legacy buttons"
+        );
+        model.presentation.windows[0].tabs.pop();
+        assert!(
+            !controls(&model.presentation),
+            "an unreferenced definition leaves legacy controls available"
+        );
+        model.presentation.windows.clear();
+        assert!(!controls(&model.presentation));
+        // The standard Recorder group uses this same widget and label, without
+        // needing a declarative window or a selected signal.
+        let output = context.run_ui(Default::default(), |ui| {
+            assert!(
+                RecorderControlUi {
+                    model: &model,
+                    operator: &OperatorWorkflow::default(),
+                    observation_only: false,
+                    label: &mut label
+                }
+                .show(ui)
+                .is_none()
+            );
+        });
+        assert!(labels(&painted_text(output)).contains(&"Start recording"));
+        assert_eq!(label, "é".repeat(64));
+    }
+
+    #[test]
+    fn recorder_buttons_block_observe_nonfresh_unavailable_and_existing_recovery_fences() {
+        for scenario in [
+            "observe",
+            "stale",
+            "rebuilding",
+            "unknown",
+            "stale_recorder",
+            "missing_recorder",
+            "unadvertised",
+            "disconnected",
+            "journal_failure",
+            "reconciliation",
+            "ambiguous",
+            "quarantined",
+            "blank_label",
+            "capacity",
+            "disabled_recorder",
+            "rebuilding_recorder",
+        ] {
+            let mut model = recorder_model();
+            let mut label = "Operator run".to_owned();
+            match scenario {
+                "observe" => {} // observation mode
+                "stale" => model.observations.freshness = Freshness::Stale,
+                "rebuilding" => model.observations.freshness = Freshness::Rebuilding,
+                "unknown" => model.observations.freshness = Freshness::Unknown,
+                "stale_recorder" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&RuntimeRef::Recorder)
+                        .unwrap()
+                        .freshness = Freshness::Stale
+                }
+                "missing_recorder" => {
+                    model.observations.entities.remove(&RuntimeRef::Recorder);
+                }
+                "unadvertised" => model.hello.as_mut().unwrap().operations.clear(),
+                "disconnected" => model.connection = ConnectionState::Stale,
+                "journal_failure" => model.recovery_problem = Some("journal unavailable".into()),
+                "reconciliation" => model
+                    .recovery
+                    .reconciliation_required
+                    .push(ambiguous_record().identity),
+                "ambiguous" => model.recovery.mutations.push(ambiguous_record()),
+                "quarantined" => model.recovery.quarantined.push(QuarantinedRecoveryRecord {
+                    record: ambiguous_record(),
+                    reason: RecoveryQuarantineReason::AttachedBootMismatch,
+                }),
+                "blank_label" => label = "   ".into(),
+                "capacity" => {
+                    for id in 0..crate::model::MAX_OPERATOR_ACTIONS as u64 {
+                        model.track_operator_intent(id).unwrap();
+                    }
+                }
+                "disabled_recorder" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&RuntimeRef::Recorder)
+                        .unwrap()
+                        .value = json!({"state":"disabled","active_run":null})
+                }
+                "rebuilding_recorder" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&RuntimeRef::Recorder)
+                        .unwrap()
+                        .freshness = Freshness::Rebuilding
+                }
+                _ => unreachable!(),
+            }
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            let button = if ["missing_recorder", "disabled_recorder"].contains(&scenario) {
+                "Recorder unavailable"
+            } else {
+                "Start recording"
+            };
+            let intent = click_recorder(
+                &egui::Context::default(),
+                &mut PresentationRenderer::default(),
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                scenario == "observe",
+                &mut label,
+                button,
+            );
+            assert!(intent.is_none(), "scenario {scenario}");
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+            assert_eq!(*dispatcher, before);
+        }
+    }
+
+    #[test]
+    fn unsupported_controls_and_mismatched_targets_remain_inactive() {
+        for (kind, target) in [
+            (ControlKind::SetReference, RuntimeRef::Recorder),
+            (ControlKind::ControllerLifecycle, RuntimeRef::Recorder),
+            (ControlKind::ApplyConfiguration, RuntimeRef::Recorder),
+            (ControlKind::ReconnectResource, RuntimeRef::Recorder),
+            (
+                ControlKind::RecordingLifecycle,
+                RuntimeRef::Reference {
+                    reference: "1".into(),
+                },
+            ),
+        ] {
+            let mut model = recorder_model();
+            model.presentation.controls[0].kind = kind;
+            model.presentation.controls[0].target = target;
+            model.presentation.validate().unwrap();
+            assert!(!super::super::controls::has_recorder_controls(
+                &model.presentation
+            ));
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            assert!(
+                click_recorder(
+                    &egui::Context::default(),
+                    &mut PresentationRenderer::default(),
+                    &dispatcher,
+                    &OperatorWorkflow::default(),
+                    false,
+                    &mut "Operator run".into(),
+                    "Dashboard recording"
+                )
+                .is_none()
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+        }
+    }
+
+    #[test]
+    fn presentation_replacement_preserves_ambiguous_recorder_workflow_and_recovery() {
+        let mut model = recorder_model();
+        let mut operator = OperatorWorkflow::default();
+        operator
+            .begin(
+                &model,
+                OperatorIntent::StartRecording {
+                    label: "Operator run".into(),
+                },
+            )
+            .unwrap();
+        let client = FakeClient::default();
+        operator.confirm(&model, &client).unwrap();
+        let record = ambiguous_record();
+        operator.after_update(&ClientUpdate::ReconciliationRequired {
+            records: vec![record.clone()],
+        });
+        assert!(matches!(
+            operator.state,
+            OperatorWorkflowState::Ambiguous { .. }
+        ));
+        model.recovery.mutations.push(record.clone());
+        model.recovery.reconciliation_required.push(record.identity);
+        let mut dispatcher = WorkbenchDispatcher::new(model, client);
+        let before_operator = operator.clone();
+        let before_recovery = dispatcher.recovery.clone();
+        let before_generation = dispatcher.recovery_generation();
+        for document in [
+            PresentationDocument::empty("removed-controls"),
+            recorder_model().presentation,
+        ] {
+            dispatcher
+                .dispatch(
+                    CallOrigin {
+                        caller_id: CallerId(1),
+                        call_id: document.document_id.clone(),
+                    },
+                    WorkbenchRequest::UiReplaceDocument {
+                        expected: dispatcher.presentation_expectation(),
+                        document: serde_json::to_value(document).unwrap(),
+                    },
+                )
+                .unwrap();
+            let (response, _) = recorder_frame(
+                &egui::Context::default(),
+                &mut PresentationRenderer::default(),
+                &dispatcher,
+                &operator,
+                false,
+                &mut "Operator run".into(),
+                vec![],
+            );
+            assert!(response.intent.is_none());
+            assert_eq!(operator, before_operator);
+            assert_eq!(dispatcher.recovery, before_recovery);
+            assert_eq!(dispatcher.recovery_generation(), before_generation);
+        }
+        assert!(
+            click_recorder(
+                &egui::Context::default(),
+                &mut PresentationRenderer::default(),
+                &dispatcher,
+                &operator,
+                false,
+                &mut "Operator run".into(),
+                "Start recording"
+            )
+            .is_none()
+        );
+        assert!(
+            operator
+                .confirm(&dispatcher, dispatcher.client().unwrap())
+                .is_err()
+        );
+        assert_eq!(dispatcher.client().unwrap().0.get(), 1);
+        assert_eq!(operator, before_operator);
     }
 
     #[test]
