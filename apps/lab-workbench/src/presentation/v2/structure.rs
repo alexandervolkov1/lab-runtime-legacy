@@ -28,7 +28,7 @@ pub(crate) enum StaticAvailability {
 }
 
 /// Finite document-local results. No executable action or authority is retained.
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub(crate) struct StructuralSummary {
     pub(crate) expanded_components: usize,
     pub(crate) expanded_plots: usize,

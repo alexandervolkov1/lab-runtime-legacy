@@ -35,7 +35,7 @@ fn editor(purpose: &str, kind: &str, constraints: Value) -> Value {
 
 // Contains every nested object shape, variant, nullable and non-null optional.
 // Deliberately unresolved: a local check is not document admission.
-fn vocabulary() -> Value {
+pub(super) fn vocabulary() -> Value {
     let mut doc = examples().pop().unwrap();
     doc["settings"] = json!({"density":"compact"});
     doc["windows"][0]["tabs"][0]["panels"][0]["v1_kind"] = json!("controls");
@@ -551,6 +551,9 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         include_str!("validation.rs"),
         include_str!("structure.rs"),
         include_str!("graph.rs"),
+        include_str!("encoding.rs"),
+        include_str!("canonical.rs"),
+        include_str!("wire.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -578,7 +581,14 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         assert!(!consumer.contains("LocallyCheckedDocument"));
         assert!(!consumer.contains("ParsedDocument"));
         assert!(!consumer.contains("StructurallyCheckedDocument"));
+        assert!(!consumer.contains("CanonicalWireCandidate"));
     }
+    // The only outer-module dependency is this exact read-only constant surface.
+    let limits = include_str!("limits.rs").replace("\r\n", "\n");
+    assert_eq!(
+        limits.split_once("\n\n").unwrap().1,
+        "pub(super) use crate::external::{\n    FRAME_BYTES, JSON_BODY_BYTES, JSON_DEPTH, JSON_STRING_BYTES, JSON_VALUES, NAME_BYTES,\n};\npub(super) use crate::presentation::PRESENTATION_FILE_BYTES;\n"
+    );
 }
 
 #[test]
