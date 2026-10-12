@@ -18,7 +18,7 @@ use crate::{
     presentation::{Plot, PresentationDocument, RuntimeRef, Trace},
     rebuild::RebuildCoordinator,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::{
     collections::BTreeMap,
@@ -28,7 +28,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-pub(crate) const WORKBENCH_OPERATIONS: [&str; 15] = [
+pub(crate) const WORKBENCH_OPERATIONS: [&str; 16] = [
     "hello",
     "client_status",
     "recovery_get",
@@ -44,6 +44,7 @@ pub(crate) const WORKBENCH_OPERATIONS: [&str; 15] = [
     "ui_set_time_window",
     "ui_rename_item",
     "ui_set_trace_source",
+    "ui_replace_document",
 ];
 
 const MAX_DISPATCH_LAB_CALLS: usize = 32;
@@ -112,6 +113,11 @@ pub(crate) enum WorkbenchRequest {
         target: RecoveryStatusTarget,
     },
     PresentationGet,
+    /// Bounded wire JSON; only the dispatcher decodes the complete document.
+    UiReplaceDocument {
+        expected: PresentationExpectation,
+        document: Value,
+    },
     UiAddPlot {
         expected: PresentationExpectation,
         plot: Plot,
@@ -164,6 +170,7 @@ impl WorkbenchRequest {
             Self::LabMutation { .. } => "lab_mutation",
             Self::LabOperationStatus { .. } => "lab_operation_status",
             Self::PresentationGet => "presentation_get",
+            Self::UiReplaceDocument { .. } => "ui_replace_document",
             Self::UiAddPlot { .. } => "ui_add_plot",
             Self::UiRemovePlot { .. } => "ui_remove_plot",
             Self::UiAddTrace { .. } => "ui_add_trace",
@@ -538,6 +545,9 @@ pub(crate) struct WorkbenchDispatcher<C> {
     client: Option<C>,
     workbench_id: String,
     presentation_revision: u64,
+    // A successful explicit replacement disables implicit GUI plot creation for
+    // this Workbench lifetime, including after later edits remove all plots.
+    presentation_replaced: bool,
     recovery_generation: u64,
     pending_lab: BTreeMap<u64, PendingLabCall>,
     boundary_failed: bool,
@@ -559,6 +569,7 @@ impl<C> WorkbenchDispatcher<C> {
             client: Some(client),
             workbench_id,
             presentation_revision: 1,
+            presentation_replaced: false,
             recovery_generation: 1,
             pending_lab: BTreeMap::new(),
             boundary_failed: false,
@@ -603,6 +614,10 @@ impl<C> WorkbenchDispatcher<C> {
 
     pub(crate) fn presentation_revision(&self) -> u64 {
         self.presentation_revision
+    }
+
+    pub(crate) fn should_create_default_plot(&self) -> bool {
+        !self.presentation_replaced && self.model.presentation.plots.is_empty()
     }
 
     pub(crate) fn recovery_generation(&self) -> u64 {
@@ -860,12 +875,10 @@ impl<C> WorkbenchDispatcher<C> {
         }
     }
 
-    fn apply_presentation(
-        &mut self,
-        expected: PresentationExpectation,
-        command: UiCommand,
-        operation: &'static str,
-    ) -> Result<(PresentationMutationResult, RoutedWorkbenchEvent), WorkbenchDispatchError> {
+    fn check_presentation_expectation(
+        &self,
+        expected: &PresentationExpectation,
+    ) -> Result<(), WorkbenchDispatchError> {
         self.ensure_open()?;
         if expected.workbench_id != self.workbench_id
             || expected.revision != self.presentation_revision
@@ -875,6 +888,16 @@ impl<C> WorkbenchDispatcher<C> {
                 "presentation expectation is stale",
             ));
         }
+        Ok(())
+    }
+
+    fn apply_presentation(
+        &mut self,
+        expected: PresentationExpectation,
+        command: UiCommand,
+        operation: &'static str,
+    ) -> Result<(PresentationMutationResult, RoutedWorkbenchEvent), WorkbenchDispatchError> {
+        self.check_presentation_expectation(&expected)?;
         let Some(next_revision) = self.presentation_revision.checked_add(1) else {
             self.fail_boundary("Workbench presentation revision exhausted");
             return Err(WorkbenchDispatchError::new(
@@ -882,7 +905,9 @@ impl<C> WorkbenchDispatcher<C> {
                 "Workbench presentation revision exhausted",
             ));
         };
+        let replacement = matches!(command, UiCommand::ReplaceDocument { .. });
         apply_ui_command(&mut self.model.presentation, command).map_err(map_ui_error)?;
+        self.presentation_replaced |= replacement;
         self.model.refresh_unresolved();
         self.presentation_revision = next_revision;
         let result = PresentationMutationResult {
@@ -1125,6 +1150,15 @@ impl<C: LabClient> WorkbenchDispatcher<C> {
                     document: self.model.presentation.clone(),
                 },
             ))),
+            WorkbenchRequest::UiReplaceDocument { expected, document } => {
+                self.check_presentation_expectation(&expected)?;
+                let document = decode_replacement_document(document)?;
+                self.ui_outcome(
+                    expected,
+                    UiCommand::ReplaceDocument { document },
+                    "ui_replace_document",
+                )
+            }
             WorkbenchRequest::UiAddPlot { expected, plot } => {
                 self.ui_outcome(expected, UiCommand::AddPlot { plot }, "ui_add_plot")
             }
@@ -1374,8 +1408,34 @@ fn lab_update_kind(kind: ReplyKind) -> LabUpdateKind {
     }
 }
 
+fn decode_replacement_document(
+    document: Value,
+) -> Result<PresentationDocument, WorkbenchDispatchError> {
+    let invalid = || {
+        WorkbenchDispatchError::new(
+            WorkbenchErrorCode::InvalidPresentation,
+            "replacement document is invalid",
+        )
+    };
+    let candidate = PresentationDocument::deserialize(&document).map_err(|_| invalid())?;
+    // Existing point edits allow omitted Option fields through Serde. Complete
+    // replacement requires explicit nullable fields without changing those edits.
+    for plot in document["plots"].as_array().into_iter().flatten() {
+        if plot["axes"].get("y_min").is_none() || plot["axes"].get("y_max").is_none() {
+            return Err(invalid());
+        }
+        for trace in plot["traces"].as_array().into_iter().flatten() {
+            if trace.get("display_unit").is_none() {
+                return Err(invalid());
+            }
+        }
+    }
+    Ok(candidate)
+}
+
 fn ui_command_operation(command: &UiCommand) -> &'static str {
     match command {
+        UiCommand::ReplaceDocument { .. } => "ui_replace_document",
         UiCommand::AddPlot { .. } => "ui_add_plot",
         UiCommand::RemovePlot { .. } => "ui_remove_plot",
         UiCommand::AddTrace { .. } => "ui_add_trace",
@@ -1533,6 +1593,27 @@ mod tests {
             },
             display_unit: None,
         }
+    }
+
+    fn replacement_document() -> Value {
+        let mut second_trace = trace();
+        second_trace.id = "second-trace".into();
+        second_trace.source = RuntimeRef::Signal {
+            instrument: "unobserved".into(),
+            parameter: "temperature".into(),
+        };
+        json!({
+            "format_version":1,"document_id":"replacement",
+            "windows":[{"id":"window","title":"Workbench","tabs":[{
+                "id":"tab","title":"Live","panels":[
+                    {"id":"status","title":"Status","kind":{
+                        "kind":"status","source":{"kind":"instrument","instrument":"unobserved"}}},
+                    {"id":"panel","title":"Plot","kind":{"kind":"plot","plot_id":"plot"}}
+                ]
+            }]}],
+            "plots":[Plot { traces: vec![trace(), second_trace], ..plot() }],
+            "controls":[]
+        })
     }
 
     fn exact_bound_document() -> PresentationDocument {
@@ -1716,6 +1797,13 @@ mod tests {
                 trace_id: "t".to_owned(),
                 source: RuntimeRef::Recorder,
             },
+            WorkbenchRequest::UiReplaceDocument {
+                expected: PresentationExpectation {
+                    workbench_id: "w".to_owned(),
+                    revision: 1,
+                },
+                document: json!({}),
+            },
         ];
         assert_eq!(
             requests
@@ -1821,8 +1909,18 @@ mod tests {
     }
 
     #[test]
-    fn all_ui_variants_share_revision_owner_and_advance_once() {
+    fn all_point_ui_variants_work_after_replacement_and_advance_once() {
         let mut dispatcher = dispatcher();
+        dispatcher
+            .dispatch(
+                origin("replace"),
+                WorkbenchRequest::UiReplaceDocument {
+                    expected: dispatcher.presentation_expectation(),
+                    document: serde_json::to_value(PresentationDocument::empty("replaced"))
+                        .unwrap(),
+                },
+            )
+            .unwrap();
         let requests = [
             WorkbenchRequest::UiAddPlot {
                 expected: dispatcher.presentation_expectation(),
@@ -1831,7 +1929,7 @@ mod tests {
             WorkbenchRequest::UiAddTrace {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 2,
+                    revision: 3,
                 },
                 plot_id: "plot".to_owned(),
                 trace: trace(),
@@ -1839,7 +1937,7 @@ mod tests {
             WorkbenchRequest::UiSetTraceVisibility {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 3,
+                    revision: 4,
                 },
                 plot_id: "plot".to_owned(),
                 trace_id: "trace".to_owned(),
@@ -1848,7 +1946,7 @@ mod tests {
             WorkbenchRequest::UiSetTimeWindow {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 4,
+                    revision: 5,
                 },
                 plot_id: "plot".to_owned(),
                 seconds: 120.0,
@@ -1856,7 +1954,7 @@ mod tests {
             WorkbenchRequest::UiRenameItem {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 5,
+                    revision: 6,
                 },
                 item_id: "trace".to_owned(),
                 label: "Renamed".to_owned(),
@@ -1864,7 +1962,7 @@ mod tests {
             WorkbenchRequest::UiSetTraceSource {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 6,
+                    revision: 7,
                 },
                 plot_id: "plot".to_owned(),
                 trace_id: "trace".to_owned(),
@@ -1873,7 +1971,7 @@ mod tests {
             WorkbenchRequest::UiRemoveTrace {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 7,
+                    revision: 8,
                 },
                 plot_id: "plot".to_owned(),
                 trace_id: "trace".to_owned(),
@@ -1881,7 +1979,7 @@ mod tests {
             WorkbenchRequest::UiRemovePlot {
                 expected: PresentationExpectation {
                     workbench_id: dispatcher.workbench_id.clone(),
-                    revision: 8,
+                    revision: 9,
                 },
                 plot_id: "plot".to_owned(),
             },
@@ -1889,8 +1987,210 @@ mod tests {
         for (index, request) in requests.into_iter().enumerate() {
             let outcome = dispatcher.dispatch(origin("ui"), request).unwrap();
             assert_eq!(outcome.events.len(), 1);
-            assert_eq!(dispatcher.presentation_revision(), index as u64 + 2);
+            assert_eq!(dispatcher.presentation_revision(), index as u64 + 3);
         }
+        assert!(!dispatcher.should_create_default_plot());
+    }
+
+    #[test]
+    fn replacement_is_exact_atomic_runtime_silent_and_recovery_independent() {
+        for state in [
+            ConnectionState::Disconnected,
+            ConnectionState::Ready,
+            ConnectionState::Stopped,
+        ] {
+            let mut dispatcher = dispatcher();
+            if state == ConnectionState::Ready {
+                ready(&mut dispatcher);
+            } else {
+                dispatcher.apply_client_update(ClientUpdate::State(state));
+            }
+            dispatcher.apply_client_update(ClientUpdate::RecoveryProjection {
+                active: vec![record(1)],
+                quarantined: vec![],
+            });
+            let recovery = dispatcher.recovery.clone();
+            let generation = dispatcher.recovery_generation();
+            let document = replacement_document();
+            let outcome = dispatcher
+                .dispatch(
+                    origin("replace"),
+                    WorkbenchRequest::UiReplaceDocument {
+                        expected: dispatcher.presentation_expectation(),
+                        document: document.clone(),
+                    },
+                )
+                .unwrap();
+            assert_eq!(
+                serde_json::to_value(outcome.result).unwrap(),
+                json!({
+                    "workbench_id":dispatcher.workbench_id,"presentation_revision":"2"
+                })
+            );
+            assert_eq!(outcome.events.len(), 1);
+            assert_eq!(outcome.events[0].route, EventRoute::Broadcast);
+            assert_eq!(outcome.events[0].workbench_id, dispatcher.workbench_id);
+            assert_eq!(
+                serde_json::to_value(&outcome.events[0].event).unwrap(),
+                json!({
+                    "event":"presentation_changed",
+                    "data":{"presentation_revision":"2","operation":"ui_replace_document"}
+                })
+            );
+            let snapshot = dispatcher
+                .dispatch(origin("get"), WorkbenchRequest::PresentationGet)
+                .unwrap();
+            assert!(snapshot.events.is_empty());
+            assert_eq!(
+                serde_json::to_value(snapshot.result).unwrap()["document"],
+                document
+            );
+            assert_eq!(dispatcher.presentation_revision(), 2);
+            assert_eq!(dispatcher.unresolved.len(), 3);
+            assert_eq!(dispatcher.recovery, recovery);
+            assert_eq!(dispatcher.recovery_generation(), generation);
+            assert!(dispatcher.client().unwrap().submitted.borrow().is_empty());
+            assert!(dispatcher.pending_lab.is_empty());
+            assert!(!dispatcher.should_create_default_plot());
+        }
+        let mut dispatcher = dispatcher();
+        let client = dispatcher.take_client().unwrap();
+        dispatcher
+            .dispatch(
+                origin("no-worker"),
+                WorkbenchRequest::UiReplaceDocument {
+                    expected: dispatcher.presentation_expectation(),
+                    document: replacement_document(),
+                },
+            )
+            .unwrap();
+        assert!(client.submitted.borrow().is_empty());
+    }
+
+    #[test]
+    fn replacement_conflicts_invalid_candidates_and_overflow_never_publish() {
+        let mut dispatcher = dispatcher();
+        let original = dispatcher.model.clone();
+        for expected in [
+            PresentationExpectation {
+                workbench_id: "wrong".into(),
+                revision: 1,
+            },
+            PresentationExpectation {
+                workbench_id: dispatcher.workbench_id.clone(),
+                revision: 0,
+            },
+        ] {
+            let error = dispatcher
+                .dispatch(
+                    origin("conflict"),
+                    WorkbenchRequest::UiReplaceDocument {
+                        expected,
+                        document: json!({"invalid":"even with a stale expectation"}),
+                    },
+                )
+                .unwrap_err();
+            assert_eq!(error.code, WorkbenchErrorCode::RevisionConflict);
+            assert_eq!(dispatcher.model, original);
+            assert_eq!(dispatcher.presentation_revision(), 1);
+            assert!(dispatcher.should_create_default_plot());
+        }
+        let valid = replacement_document();
+        let mut invalid = Vec::new();
+        for (pointer, value) in [
+            ("/plots/0/traces/1/id", json!("window")),
+            ("/windows/0/tabs/0/panels/1/kind/plot_id", json!("missing")),
+            ("/format_version", json!(2)),
+            ("/plots/0/time_window_seconds", json!(0)),
+            ("/plots/0/time_window_seconds", json!(604801)),
+            ("/plots/0/traces/0/style/width", json!(-1)),
+            ("/plots/0/axes/y_min", json!(2)),
+            ("/plots/0/traces/0/source/reference", json!("")),
+            ("/plots/0/traces/0/source/kind", json!("unknown")),
+            ("/document_id", json!("")),
+            ("/document_id", json!("x".repeat(MAX_STRING_BYTES + 1))),
+        ] {
+            let mut candidate = valid.clone();
+            *candidate.pointer_mut(pointer).unwrap() = value;
+            if pointer == "/plots/0/axes/y_min" {
+                candidate["plots"][0]["axes"]["y_max"] = json!(1);
+            }
+            invalid.push(candidate);
+        }
+        for pointer in [
+            "",
+            "/windows/0",
+            "/plots/0/axes",
+            "/plots/0/traces/0/source",
+        ] {
+            let mut candidate = valid.clone();
+            candidate
+                .pointer_mut(pointer)
+                .unwrap()
+                .as_object_mut()
+                .unwrap()
+                .insert("unknown".into(), json!(true));
+            invalid.push(candidate);
+        }
+        for (pointer, field) in [
+            ("", "controls"),
+            ("/plots/0/axes", "y_min"),
+            ("/plots/0/axes", "y_max"),
+            ("/plots/0/traces/0", "display_unit"),
+        ] {
+            let mut candidate = valid.clone();
+            candidate
+                .pointer_mut(pointer)
+                .unwrap()
+                .as_object_mut()
+                .unwrap()
+                .remove(field);
+            invalid.push(candidate);
+        }
+        let mut over_bytes = exact_bound_document();
+        over_bytes.plots[MAX_PLOTS - 1].traces[MAX_TRACES_PER_PLOT - 1]
+            .display_label
+            .push('x');
+        over_bytes.validate().unwrap();
+        assert!(over_bytes.validate_serialized_size().is_err());
+        invalid.push(serde_json::to_value(over_bytes).unwrap());
+        for document in invalid {
+            let error = dispatcher
+                .dispatch(
+                    origin("invalid"),
+                    WorkbenchRequest::UiReplaceDocument {
+                        expected: dispatcher.presentation_expectation(),
+                        document,
+                    },
+                )
+                .unwrap_err();
+            assert_eq!(error.code, WorkbenchErrorCode::InvalidPresentation);
+            assert_eq!(dispatcher.model, original);
+            assert_eq!(dispatcher.presentation_revision(), 1);
+            assert!(dispatcher.should_create_default_plot());
+        }
+        dispatcher.set_presentation_revision_for_test(u64::MAX);
+        let error = dispatcher
+            .dispatch(
+                origin("overflow"),
+                WorkbenchRequest::UiReplaceDocument {
+                    expected: dispatcher.presentation_expectation(),
+                    document: valid,
+                },
+            )
+            .unwrap_err();
+        assert_eq!(error.code, WorkbenchErrorCode::InternalError);
+        assert_eq!(dispatcher.presentation, original.presentation);
+        assert_eq!(dispatcher.presentation_revision(), u64::MAX);
+        assert!(!dispatcher.presentation_replaced);
+        assert!(dispatcher.boundary_failed);
+        assert_eq!(
+            dispatcher
+                .dispatch(origin("closed"), WorkbenchRequest::PresentationGet)
+                .unwrap_err()
+                .code,
+            WorkbenchErrorCode::InternalError
+        );
     }
 
     #[test]

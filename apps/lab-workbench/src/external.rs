@@ -197,6 +197,13 @@ struct AddPlotWire {
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
+struct ReplaceDocumentWire {
+    expected: ExpectedWire,
+    document: Value,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
 struct RemovePlotWire {
     expected: ExpectedWire,
     plot_id: String,
@@ -402,6 +409,19 @@ fn decode_request(body: &[u8]) -> Result<DecodedRequest, DecodeError> {
         "presentation_get" => {
             let _: EmptyArgs = strict_args(envelope.args, &call_id)?;
             WorkbenchRequest::PresentationGet
+        }
+        "ui_replace_document" => {
+            let args: ReplaceDocumentWire = strict_args(envelope.args, &call_id)?;
+            if !args.document.is_object() {
+                return invalid_args(call_id);
+            }
+            WorkbenchRequest::UiReplaceDocument {
+                expected: args
+                    .expected
+                    .into_dispatch()
+                    .map_err(|_| invalid_args_value(&call_id))?,
+                document: args.document,
+            }
         }
         "ui_add_plot" => {
             let args: AddPlotWire = strict_args(envelope.args, &call_id)?;
@@ -2249,17 +2269,109 @@ mod tests {
                 "ui_set_trace_source",
                 json!({"expected":expected(),"plot_id":"plot","trace_id":"trace","source":{"kind":"reference","reference":"2"}}),
             ),
+            (
+                "ui_replace_document",
+                json!({"expected":expected(),"document":PresentationDocument::empty("replaced")}),
+            ),
         ]
     }
 
     #[test]
-    fn all_fifteen_operations_decode_to_the_accepted_typed_surface() {
+    fn all_sixteen_operations_decode_to_the_accepted_typed_surface() {
         let samples = operation_samples();
-        assert_eq!(samples.len(), 15);
+        assert_eq!(samples.len(), 16);
+        assert_eq!(
+            samples.iter().map(|(op, _)| *op).collect::<Vec<_>>(),
+            crate::dispatcher::WORKBENCH_OPERATIONS
+        );
         for (index, (op, args)) in samples.into_iter().enumerate() {
             let decoded = decode_request(&envelope(&format!("call-{index}"), op, args)).unwrap();
             assert_eq!(decoded.request.operation(), op);
         }
+    }
+
+    #[test]
+    fn replacement_wire_shape_is_strict_and_document_validation_belongs_to_dispatcher() {
+        let document = serde_json::to_value(PresentationDocument::empty("replaced")).unwrap();
+        for args in [
+            json!({}),
+            json!({"expected":expected()}),
+            json!({"document":document}),
+            json!({"expected":expected(),"document":null}),
+            json!({"expected":expected(),"document":[]}),
+            json!({"expected":expected(),"document":document,"unknown":true}),
+            json!({"expected":{"workbench_id":"id","revision":1},"document":document}),
+            json!({"expected":{"workbench_id":"id","revision":"01"},"document":document}),
+            json!({"expected":{"workbench_id":"id","revision":"1","unknown":true},"document":document}),
+        ] {
+            let error = decode_request(&envelope("bad", "ui_replace_document", args)).unwrap_err();
+            assert_eq!(error.code, WireErrorCode::InvalidArgs);
+            assert_eq!(error.call_id.as_deref(), Some("bad"));
+        }
+        let mut dispatcher = dispatcher();
+        let expectation = dispatcher.presentation_expectation();
+        let malformed_document = json!({"format_version":1,"unknown":true});
+        let decoded = decode_request(&envelope(
+            "invalid",
+            "ui_replace_document",
+            json!({
+                "expected":{"workbench_id":expectation.workbench_id,"revision":"1"},
+                "document":malformed_document
+            }),
+        ))
+        .unwrap();
+        assert!(!decoded.lab);
+        assert!(
+            matches!(&decoded.request, WorkbenchRequest::UiReplaceDocument { document, .. }
+            if document == &malformed_document)
+        );
+        let error = dispatcher
+            .dispatch(
+                CallOrigin {
+                    caller_id: CallerId(1),
+                    call_id: decoded.call_id,
+                },
+                decoded.request,
+            )
+            .unwrap_err();
+        assert_eq!(error.code, WorkbenchErrorCode::InvalidPresentation);
+        assert_eq!(dispatcher.presentation_revision(), 1);
+        assert_eq!(dispatcher.presentation, PresentationDocument::empty("main"));
+        assert!(dispatcher.client().unwrap().submitted.borrow().is_empty());
+    }
+
+    #[test]
+    fn replacement_canonical_byte_limit_is_checked_after_bounded_wire_decode() {
+        let mut dispatcher = dispatcher();
+        let expectation = dispatcher.presentation_expectation();
+        let document = json!({
+            "format_version":1,"document_id":"large","plots":[],"controls":[],
+            "windows":(0..20).map(|window| json!({
+                "id":format!("w{window}"),"title":"Window",
+                "tabs":(0..64).map(|tab| json!({
+                    "id":format!("tab-{window}-{tab}-{}", "x".repeat(480)),
+                    "title":"x".repeat(512),"panels":[]
+                })).collect::<Vec<_>>()
+            })).collect::<Vec<_>>()
+        });
+        let candidate: PresentationDocument = serde_json::from_value(document.clone()).unwrap();
+        candidate.validate().unwrap();
+        assert!(candidate.validate_serialized_size().is_err());
+        let decoded = decode_request(&envelope("large", "ui_replace_document", json!({
+            "expected":{"workbench_id":expectation.workbench_id,"revision":"1"},"document":document
+        }))).unwrap();
+        let error = dispatcher
+            .dispatch(
+                CallOrigin {
+                    caller_id: CallerId(1),
+                    call_id: decoded.call_id,
+                },
+                decoded.request,
+            )
+            .unwrap_err();
+        assert_eq!(error.code, WorkbenchErrorCode::InvalidPresentation);
+        assert_eq!(dispatcher.presentation_revision(), 1);
+        assert_eq!(dispatcher.presentation, PresentationDocument::empty("main"));
     }
 
     #[test]
@@ -3487,7 +3599,10 @@ mod tests {
             .unwrap();
         let hello = read_frame_with_pump(&mut stream, &mut endpoint, &mut dispatcher);
         assert_eq!(hello["type"], "result");
-        assert_eq!(hello["result"]["operations"].as_array().unwrap().len(), 15);
+        assert_eq!(
+            hello["result"]["operations"],
+            json!(crate::dispatcher::WORKBENCH_OPERATIONS)
+        );
 
         stream
             .write_all(&[envelope("again", "hello", json!({})), b"\n".to_vec()].concat())
@@ -3766,6 +3881,132 @@ mod tests {
             frame["call_id"] == "still-healthy"
         });
         assert_eq!(healthy["result"]["presentation_revision"], "2");
+        endpoint.shutdown(&mut dispatcher);
+    }
+
+    #[test]
+    fn replacement_two_external_clients_share_one_revision_and_exact_snapshot() {
+        let prepared = PreparedEndpoint::bind(SocketAddrV4::new(Ipv4Addr::LOCALHOST, 0)).unwrap();
+        let address = prepared.address();
+        let mut endpoint = WorkbenchEndpoint::start(prepared, Arc::new(|| {})).unwrap();
+        let mut dispatcher = dispatcher();
+        dispatcher.apply_client_update(ClientUpdate::State(ConnectionState::Disconnected));
+        let recovery = dispatcher.recovery.clone();
+        let mut callers = [
+            AcceptanceCaller::connect(address),
+            AcceptanceCaller::connect(address),
+        ];
+        let hello =
+            complete_acceptance_hello(&mut callers[0], &mut endpoint, &mut dispatcher, "hello");
+        complete_acceptance_hello(&mut callers[1], &mut endpoint, &mut dispatcher, "hello");
+        assert_eq!(
+            hello["result"]["runtime_client"]["connection"],
+            "disconnected"
+        );
+        assert_eq!(
+            hello["result"]["operations"],
+            json!(crate::dispatcher::WORKBENCH_OPERATIONS)
+        );
+        let workbench_id = hello["result"]["workbench_id"].as_str().unwrap().to_owned();
+        let first = json!({
+            "format_version":1,"document_id":"first",
+            "windows":[{"id":"window","title":"Window","tabs":[{
+                "id":"tab","title":"Tab","panels":[
+                    {"id":"status","title":"Status","kind":{"kind":"status","source":{"kind":"recorder"}}},
+                    {"id":"panel","title":"Plot","kind":{"kind":"plot","plot_id":"plot"}}
+                ]
+            }]}],
+            "plots":[{"id":"plot","title":"Plot","time_window_seconds":60.0,
+                "axes":{"y_min":null,"y_max":null},"traces":[
+                    {"id":"trace-1","source":{"kind":"reference","reference":"1"},
+                        "display_label":"Reference","visible":true,"style":{"color":"cyan","width":1.0},"display_unit":null},
+                    {"id":"trace-2","source":{"kind":"signal","instrument":"unobserved","parameter":"temperature"},
+                        "display_label":"Temperature","visible":false,"style":{"color":"red","width":2.0},"display_unit":"K"}
+                ]}],"controls":[]
+        });
+        let mut second = first.clone();
+        second["document_id"] = json!("second");
+        second["plots"][0]["title"] = json!("Other configuration");
+        let documents = [first, second];
+        for (caller, document) in callers.iter_mut().zip(&documents) {
+            caller.send(
+                "replace",
+                "ui_replace_document",
+                json!({
+                    "expected":{"workbench_id":workbench_id,"revision":"1"},"document":document
+                }),
+            );
+        }
+        let results = callers
+            .iter_mut()
+            .map(|caller| {
+                wait_for_frame(caller, &mut endpoint, &mut dispatcher, |frame| {
+                    frame["call_id"] == "replace"
+                })
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            results
+                .iter()
+                .filter(|frame| frame["type"] == "result")
+                .count(),
+            1
+        );
+        let winner = results
+            .iter()
+            .position(|frame| frame["type"] == "result")
+            .unwrap();
+        assert_eq!(
+            results[winner]["result"],
+            json!({"workbench_id":workbench_id,"presentation_revision":"2"})
+        );
+        assert_eq!(results[1 - winner]["error"]["code"], "revision_conflict");
+        assert_eq!(results[1 - winner]["error"]["resync_required"], true);
+        for caller in &mut callers {
+            let event = wait_for_frame(caller, &mut endpoint, &mut dispatcher, |frame| {
+                frame["event"] == "presentation_changed"
+            });
+            assert_eq!(
+                event["data"],
+                json!({"presentation_revision":"2","operation":"ui_replace_document"})
+            );
+            caller.send("get", "presentation_get", json!({}));
+            let snapshot = wait_for_frame(caller, &mut endpoint, &mut dispatcher, |frame| {
+                frame["call_id"] == "get"
+            });
+            assert_eq!(snapshot["result"]["document"], documents[winner]);
+            assert_eq!(snapshot["result"]["presentation_revision"], "2");
+            assert!(
+                !caller
+                    .frames
+                    .iter()
+                    .any(|frame| frame["event"] == "presentation_changed")
+            );
+        }
+        callers[0].send("invalid", "ui_replace_document", json!({
+            "expected":{"workbench_id":workbench_id,"revision":"2"},"document":{"format_version":2}
+        }));
+        let invalid = wait_for_frame(&mut callers[0], &mut endpoint, &mut dispatcher, |frame| {
+            frame["call_id"] == "invalid"
+        });
+        assert_eq!(invalid["error"]["code"], "invalid_presentation");
+        for caller in &mut callers {
+            caller.send("after-error", "presentation_get", json!({}));
+            let snapshot = wait_for_frame(caller, &mut endpoint, &mut dispatcher, |frame| {
+                frame["call_id"] == "after-error"
+            });
+            assert_eq!(snapshot["result"]["document"], documents[winner]);
+            assert_eq!(snapshot["result"]["presentation_revision"], "2");
+            assert!(
+                !caller
+                    .frames
+                    .iter()
+                    .any(|frame| frame["event"] == "presentation_changed")
+            );
+        }
+        assert_eq!(dispatcher.recovery, recovery);
+        assert_eq!(dispatcher.presentation_revision(), 2);
+        assert!(dispatcher.client().unwrap().submitted.borrow().is_empty());
         endpoint.shutdown(&mut dispatcher);
     }
 

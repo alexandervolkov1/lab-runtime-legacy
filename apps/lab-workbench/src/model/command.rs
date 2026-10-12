@@ -26,6 +26,8 @@ pub(crate) enum LabCommand {
 /// Renderer-neutral presentation mutation used by future GUI and `ui/*` bindings.
 #[derive(Clone, Debug, PartialEq)]
 pub(crate) enum UiCommand {
+    /// Replace the complete presentation after document-wide validation.
+    ReplaceDocument { document: PresentationDocument },
     /// Add a fully specified plot after document-wide validation.
     AddPlot { plot: Plot },
     /// Remove an unreferenced plot.
@@ -57,8 +59,14 @@ pub(crate) fn apply_ui_command(
     document: &mut PresentationDocument,
     command: UiCommand,
 ) -> Result<(), UiCommandError> {
-    let mut candidate = document.clone();
-    apply_unvalidated(&mut candidate, command)?;
+    let candidate = match command {
+        UiCommand::ReplaceDocument { document } => document,
+        command => {
+            let mut candidate = document.clone();
+            apply_unvalidated(&mut candidate, command)?;
+            candidate
+        }
+    };
     candidate
         .validate()
         .map_err(UiCommandError::InvalidCandidate)?;
@@ -74,6 +82,9 @@ fn apply_unvalidated(
     command: UiCommand,
 ) -> Result<(), UiCommandError> {
     match command {
+        UiCommand::ReplaceDocument {
+            document: replacement,
+        } => *document = replacement,
         UiCommand::AddPlot { plot } => document.plots.push(plot),
         UiCommand::RemovePlot { plot_id } => {
             let before = document.plots.len();
