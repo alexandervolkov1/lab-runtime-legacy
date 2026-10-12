@@ -307,12 +307,32 @@ Confirm even when `confirm` is false. Controller actions follow the observed sta
 `warming`/`running` → Pause, `paused` → Resume, `failed` → Reset failed;
 otherwise no action is available. Confirm rechecks that source state. Replacement
 retains an active prepared intent's original target and does not execute it.
-Reference Ramp/Retune and other declarative kinds remain inactive.
-Reference input is bounded local GUI state keyed by Control ID/target, cleared
-on presentation revision change; it is not part of this document or recovery.
+The GUI also supports `apply_configuration` targeting a
+`configuration_property` (owner kind/ID and property name). It displays the Runtime
+value, unit, type and access, and accepts only writable `integer` (`i64`) and `text`
+(at most 512 UTF-8 bytes) candidates. Read-only, missing and other types stay
+disabled. The button returns only `OperatorIntent::ConfigureProperty`; the existing
+OperatorWorkflow requires a separate Confirm even when `confirm` is false. Access,
+type, advertised constraints, property revision, readiness and recovery fences
+are rechecked before submission through the existing ClientHandle. Runtime
+mutation-class warnings are preserved; conflicts are never retried automatically.
+Reference Ramp/Retune and remaining declarative kinds remain inactive.
+Reference/property input is bounded local GUI state keyed by Control ID/full target,
+cleared on presentation revision change; it is not part of this document or recovery.
 The existing Runtime revision/freshness/recovery guards apply, and values use the
-Runtime Reference unit without conversion. Incompatible targets stay inactive.
+Runtime unit without conversion. Replacement preserves a prepared action's original
+target/revision and never executes it. Incompatible targets stay inactive.
 These definitions are presentation metadata, not executable API requests.
+
+DGUI-4B4 verification uses the real writable `poll_period_ms` and `display_name`
+from the existing `examples/runtime.virtual.toml`; the compiled `virtual-demo`
+profile has no configuration-property projection. The unmodified example currently
+returns `operation_failed` for property commits with Recorder enabled: the existing
+Recorder lifecycle whitelist does not admit `property_configure`. Successful
+real-process acceptance therefore uses a temporary copy with recording explicitly
+disabled (`best_effort` policy) and an ephemeral loopback port. Runtime/Recorder
+are unchanged; success with recording enabled is not claimed. This needs a separate Runtime
+review and does not weaken Workbench's confirmation or recovery guards.
 
 ## UI mutation contract
 

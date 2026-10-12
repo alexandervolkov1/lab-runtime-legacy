@@ -432,7 +432,8 @@ mod runtime_acceptance {
         gui::rebuild::RebuildCoordinator,
         model::{
             ControllerLifecycleIntent, ExactRetryWorkflow, Freshness, OperatorIntent,
-            OperatorWorkflow, OperatorWorkflowState, RecoveryStatusTracker, WorkbenchModel,
+            OperatorWorkflow, OperatorWorkflowState, PropertyMutationCandidate,
+            RecoveryStatusTracker, WorkbenchModel,
         },
         presentation::{PresentationDocument, RuntimeRef},
         recovery::load_journal,
@@ -1434,6 +1435,126 @@ mod runtime_acceptance {
 
         endpoint.shutdown(&mut dispatcher);
         dispatcher.take_client().unwrap().shutdown().unwrap();
+    }
+
+    #[test]
+    #[ignore = "DGUI-4B4 existing virtual configuration acceptance; run after cargo build -p lab-runtime"]
+    fn real_runtime_property_workflow_uses_existing_virtual_configuration() {
+        // The compiled virtual-demo profile has no configuration properties.
+        // Reuse the shipped virtual deployment, isolating its port and disabling
+        // recording in this test copy. The existing Recorder lifecycle whitelist
+        // rejects property_configure; changing that contract is outside DGUI-4B4.
+        // Property metadata and values still come from Runtime's real projection.
+        let directory = env::temp_dir().join(format!(
+            "lab-workbench-dgui-4b4-{}-{}",
+            std::process::id(),
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        fs::create_dir(&directory).unwrap();
+        let config = directory.join("runtime.virtual.toml");
+        fs::write(
+            &config,
+            include_str!("../../../examples/runtime.virtual.toml")
+                .replace("port = 7420", "port = 0")
+                .replace("enabled = true", "enabled = false")
+                .replace("policy = \"required\"", "policy = \"best_effort\""),
+        )
+        .unwrap();
+        let (mut runtime, address) =
+            start_runtime_with_args(&["--serve", "--config", config.to_str().unwrap()], None);
+        let client = ClientHandle::spawn(address).unwrap();
+        let mut model = WorkbenchModel::new(PresentationDocument::empty("property-operator"));
+        let mut rebuild = RebuildCoordinator::default();
+        client.connect(None).unwrap();
+        apply_until(&client, &mut model, &mut rebuild, |_, model| {
+            model.observations.freshness == Freshness::Fresh
+        });
+        let presentation = model.presentation.clone();
+        let mut workflow = OperatorWorkflow::default();
+        for (kind, candidate) in [
+            ("integer", PropertyMutationCandidate::Integer(200)),
+            (
+                "text",
+                PropertyMutationCandidate::Text("DGUI-4B4 virtual plant".into()),
+            ),
+        ] {
+            let target = model
+                .observations
+                .entities
+                .iter()
+                .find_map(|(target, observation)| {
+                    (matches!(target, RuntimeRef::ConfigurationProperty { .. })
+                        && observation.value["access"] == "read_write"
+                        && observation.value["value_type"] == kind)
+                        .then(|| target.clone())
+                })
+                .expect("existing virtual deployment exposes a writable property of this type");
+            let initial = model.observations.entities[&target].value.clone();
+            let expected = match &candidate {
+                PropertyMutationCandidate::Integer(value) => json!(value),
+                PropertyMutationCandidate::Text(value) => json!(value),
+            };
+            let intent = OperatorIntent::ConfigureProperty {
+                target: target.clone(),
+                value: candidate,
+            };
+            workflow.begin(&model, intent.clone()).unwrap();
+            workflow.cancel_or_acknowledge();
+            assert_eq!(
+                model.observations.entities[&target].value["current"],
+                initial["current"]
+            );
+            workflow.begin(&model, intent).unwrap();
+            let mut old_draft = workflow.clone();
+            let command_id = workflow.confirm(&model, &client).unwrap();
+            model.track_operator_intent(command_id).unwrap();
+            assert!(workflow.confirm(&model, &client).is_err());
+            apply_until(&client, &mut model, &mut rebuild, |update, model| {
+                workflow.after_update(update);
+                assert!(
+                    !matches!(workflow.state, OperatorWorkflowState::Failed { .. }),
+                    "{kind} property failed: {:?}",
+                    workflow.state
+                );
+                matches!(workflow.state, OperatorWorkflowState::Completed { .. })
+                    && model.observations.freshness == Freshness::Fresh
+                    && model.observations.entities[&target].freshness == Freshness::Fresh
+                    && model.observations.entities[&target].value["current"] == expected
+            });
+            assert!(workflow.accepted_observed);
+            let after = &model.observations.entities[&target].value;
+            assert_eq!(after["unit"], initial["unit"]);
+            assert_eq!(
+                after["revision"].as_str().unwrap().parse::<u64>().unwrap(),
+                initial["revision"]
+                    .as_str()
+                    .unwrap()
+                    .parse::<u64>()
+                    .unwrap()
+                    + 1
+            );
+            assert_eq!(
+                old_draft.confirm(&model, &client),
+                Err(super::model::OperatorIntentError::DraftStale)
+            );
+            assert_eq!(model.presentation, presentation);
+            workflow.cancel_or_acknowledge();
+        }
+        assert_eq!(
+            model
+                .recovery
+                .mutations
+                .iter()
+                .filter(|record| record.op == "property_configure")
+                .count(),
+            2
+        );
+        assert_eq!(model.presentation, presentation);
+        client.shutdown().unwrap();
+        assert!(runtime.0.try_wait().unwrap().is_none());
     }
 
     #[test]

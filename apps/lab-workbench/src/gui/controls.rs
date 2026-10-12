@@ -3,10 +3,11 @@
 use crate::{
     model::{
         ControllerLifecycleIntent, OperatorIntent, OperatorIntentError, OperatorWorkflow,
-        RECORDING_LABEL_BYTES, WorkbenchModel, prepare_operator_intent,
+        PROPERTY_TEXT_BYTES, RECORDING_LABEL_BYTES, WorkbenchModel, prepare_operator_intent,
     },
     presentation::{
-        Control, ControlKind, MAX_CONTROLS, PanelKind, PresentationDocument, RuntimeRef,
+        ConfigurationOwner, Control, ControlKind, MAX_CONTROLS, PanelKind, PresentationDocument,
+        RuntimeRef,
     },
 };
 use eframe::egui;
@@ -15,13 +16,27 @@ use std::collections::{BTreeMap, HashSet};
 // Match the ordinary fixed-value editor's text bound, without restricting f64 range.
 const REFERENCE_VALUE_BYTES: usize = 64;
 
+// Keep one excess scalar so an oversized paste remains invalid, rather than
+// silently turning its prefix into an eligible text mutation. UTF-8 storage is
+// bounded to four bytes per scalar; the existing workflow enforces 512 bytes.
+const PROPERTY_INPUT_CHARS: usize = PROPERTY_TEXT_BYTES + 1;
+
+pub(super) fn property_control_supported(control: &Control) -> bool {
+    control.kind == ControlKind::ApplyConfiguration
+        && matches!(control.target, RuntimeRef::ConfigurationProperty { .. })
+}
+
+fn edited_control_supported(control: &Control) -> bool {
+    reference_control_supported(control) || property_control_supported(control)
+}
+
 pub(super) fn reference_control_supported(control: &Control) -> bool {
     control.kind == ControlKind::SetReference
         && matches!(control.target, RuntimeRef::Reference { .. })
 }
 
 #[derive(Default)]
-pub(super) struct ReferenceEditor {
+pub(super) struct ControlEditor {
     pub(super) text: String,
     // A control can be referenced by multiple panels. Track every current view
     // instance (bounded by the document's panel/reference counts), not just the
@@ -29,14 +44,15 @@ pub(super) struct ReferenceEditor {
     pub(super) widget_ids: HashSet<egui::Id>,
 }
 
-/// At most 64 current control/target drafts, each bounded to 64 UTF-8 bytes.
+/// At most 64 current control/target drafts: 64 bytes for References, at most
+/// 2052 UTF-8 bytes for property input (valid text candidates stay <= 512 bytes).
 /// These are GUI input, not observations, document state or mutation recovery.
 #[derive(Default)]
-pub(super) struct ReferenceEditors {
-    drafts: BTreeMap<(String, RuntimeRef), ReferenceEditor>,
+pub(super) struct ControlEditors {
+    drafts: BTreeMap<(String, RuntimeRef), ControlEditor>,
 }
 
-impl ReferenceEditors {
+impl ControlEditors {
     pub(super) fn reconcile(
         &mut self,
         context: &egui::Context,
@@ -48,7 +64,7 @@ impl ReferenceEditors {
                 && document
                     .controls
                     .iter()
-                    .filter(|control| reference_control_supported(control))
+                    .filter(|control| edited_control_supported(control))
                     .take(MAX_CONTROLS)
                     .any(|control| &control.id == id && &control.target == target);
             if !keep {
@@ -64,7 +80,7 @@ impl ReferenceEditors {
         for control in document
             .controls
             .iter()
-            .filter(|control| reference_control_supported(control))
+            .filter(|control| edited_control_supported(control))
             .take(MAX_CONTROLS)
         {
             self.drafts
@@ -73,7 +89,7 @@ impl ReferenceEditors {
         }
     }
 
-    pub(super) fn editor_mut(&mut self, control: &Control) -> Option<&mut ReferenceEditor> {
+    pub(super) fn editor_mut(&mut self, control: &Control) -> Option<&mut ControlEditor> {
         self.drafts
             .get_mut(&(control.id.clone(), control.target.clone()))
     }
@@ -147,7 +163,7 @@ impl OperatorControlUi<'_> {
         ui: &mut egui::Ui,
         controls: &[Control],
         control_ids: &[String],
-        editors: &mut ReferenceEditors,
+        editors: &mut ControlEditors,
     ) -> Option<OperatorIntent> {
         if control_ids.is_empty() {
             ui.label("No controls configured.");
@@ -177,6 +193,14 @@ impl OperatorControlUi<'_> {
                     let clicked = self.show_controller(ui, &control.target);
                     if intent.is_none() {
                         intent = clicked;
+                    }
+                } else if property_control_supported(control) {
+                    ui.label(&control.label);
+                    if let Some(editor) = editors.editor_mut(control) {
+                        let clicked = self.show_property(ui, &control.target, editor);
+                        if intent.is_none() {
+                            intent = clicked;
+                        }
                     }
                 } else {
                     ui.add_enabled(false, egui::Button::new(&control.label))
@@ -234,7 +258,7 @@ impl OperatorControlUi<'_> {
         &self,
         ui: &mut egui::Ui,
         target: &RuntimeRef,
-        editor: &mut ReferenceEditor,
+        editor: &mut ControlEditor,
     ) -> Option<OperatorIntent> {
         let RuntimeRef::Reference { reference } = target else {
             return None;
@@ -334,6 +358,91 @@ impl OperatorControlUi<'_> {
         }
     }
 
+    fn show_property(
+        &self,
+        ui: &mut egui::Ui,
+        target: &RuntimeRef,
+        editor: &mut ControlEditor,
+    ) -> Option<OperatorIntent> {
+        let RuntimeRef::ConfigurationProperty { owner, property } = target else {
+            return None;
+        };
+        let owner = match owner {
+            ConfigurationOwner::Instrument { instrument } => format!("instrument {instrument}"),
+            ConfigurationOwner::Component { component } => format!("component {component}"),
+            ConfigurationOwner::Resource { resource } => format!("resource {resource}"),
+        };
+        ui.label(format!("Owner: {owner}; property: {property}"));
+        let observation = self
+            .model
+            .observations
+            .entities
+            .get(target)
+            .map(|item| &item.value);
+        let value_type = observation
+            .and_then(|item| item.get("value_type"))
+            .and_then(serde_json::Value::as_str);
+        let access = observation
+            .and_then(|item| item.get("access"))
+            .and_then(serde_json::Value::as_str);
+        ui.label(format!(
+            "type: {}; access: {}",
+            value_type.unwrap_or("unknown"),
+            access.unwrap_or("unknown")
+        ));
+        let current = observation
+            .and_then(|item| item.get("current"))
+            .map(|value| {
+                value
+                    .as_str()
+                    .map_or_else(|| value.to_string(), str::to_owned)
+            })
+            .unwrap_or_else(|| "unavailable".into());
+        ui.label(format!("Current value (cached): {current}"));
+        if let Some(unit) = observation
+            .and_then(|item| item.get("unit"))
+            .and_then(|unit| unit.get("symbol").or_else(|| unit.get("id")))
+            .and_then(serde_json::Value::as_str)
+            .filter(|unit| !unit.is_empty())
+        {
+            ui.label(format!("Unit: {unit}"));
+        }
+        let editable =
+            access == Some("read_write") && matches!(value_type, Some("integer" | "text"));
+        ui.horizontal(|ui| {
+            ui.label("New value");
+            let response = ui.add_enabled(
+                editable,
+                egui::TextEdit::singleline(&mut editor.text).char_limit(PROPERTY_INPUT_CHARS),
+            );
+            editor.widget_ids.insert(response.id);
+            super::app::truncate_utf8(&mut editor.text, PROPERTY_INPUT_CHARS * 4);
+            // Parse the raw value exactly as the ordinary editor does, then let
+            // the existing prepare path enforce access, type, constraints and revision.
+            let eligible = super::app::property_candidate(value_type, &editor.text)
+                .map_err(OperatorIntentError::InvalidCandidate)
+                .and_then(|value| {
+                    self.eligibility(OperatorIntent::ConfigureProperty {
+                        target: target.clone(),
+                        value,
+                    })
+                });
+            let mut response = ui.add_enabled(
+                editable && eligible.is_ok(),
+                egui::Button::new("Configure property"),
+            );
+            if let Err(error) = &eligible {
+                response = response.on_disabled_hover_text(error.to_string());
+            }
+            if response.clicked() {
+                eligible.ok()
+            } else {
+                None
+            }
+        })
+        .inner
+    }
+
     pub(super) fn show(&mut self, ui: &mut egui::Ui) -> Option<OperatorIntent> {
         let state = self
             .model
@@ -381,6 +490,46 @@ impl OperatorControlUi<'_> {
 mod tests {
     use super::*;
     use serde_json::json;
+
+    #[test]
+    fn only_apply_configuration_with_property_target_is_supported() {
+        for kind in [
+            ControlKind::ApplyConfiguration,
+            ControlKind::SetReference,
+            ControlKind::RecordingLifecycle,
+            ControlKind::ControllerLifecycle,
+            ControlKind::ReconnectResource,
+        ] {
+            for target in [
+                RuntimeRef::ConfigurationProperty {
+                    owner: ConfigurationOwner::Instrument {
+                        instrument: "1".into(),
+                    },
+                    property: "limit".into(),
+                },
+                RuntimeRef::Recorder,
+                RuntimeRef::Reference {
+                    reference: "1".into(),
+                },
+                RuntimeRef::Controller {
+                    controller: "1".into(),
+                },
+            ] {
+                let control = Control {
+                    id: "control".into(),
+                    label: "Action".into(),
+                    kind: kind.clone(),
+                    target: target.clone(),
+                    confirm: false,
+                };
+                assert_eq!(
+                    property_control_supported(&control),
+                    kind == ControlKind::ApplyConfiguration
+                        && matches!(target, RuntimeRef::ConfigurationProperty { .. })
+                );
+            }
+        }
+    }
 
     #[test]
     fn only_controller_lifecycle_with_controller_target_is_supported() {
@@ -447,21 +596,34 @@ mod tests {
     }
 
     #[test]
-    fn reference_editor_storage_is_bounded_and_retires_undo_and_focus_on_reset() {
+    fn control_editor_storage_is_bounded_and_retires_undo_and_focus_on_reset() {
         let context = egui::Context::default();
         let mut document = PresentationDocument::empty("editors");
         document.controls = (0..100)
             .map(|id| Control {
                 id: id.to_string(),
                 label: "Reference".into(),
-                target: RuntimeRef::Reference {
-                    reference: "1".into(),
+                target: if id % 2 == 0 {
+                    RuntimeRef::Reference {
+                        reference: "1".into(),
+                    }
+                } else {
+                    RuntimeRef::ConfigurationProperty {
+                        owner: ConfigurationOwner::Instrument {
+                            instrument: "1".into(),
+                        },
+                        property: "limit".into(),
+                    }
                 },
-                kind: ControlKind::SetReference,
+                kind: if id % 2 == 0 {
+                    ControlKind::SetReference
+                } else {
+                    ControlKind::ApplyConfiguration
+                },
                 confirm: true,
             })
             .collect();
-        let mut editors = ReferenceEditors::default();
+        let mut editors = ControlEditors::default();
         editors.reconcile(&context, &document, false);
         assert_eq!(editors.drafts.len(), MAX_CONTROLS);
         let id = egui::Id::new("retired-editor");
