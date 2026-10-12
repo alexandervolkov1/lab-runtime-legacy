@@ -1,6 +1,6 @@
 //! Declarative layout returning operator intent without Runtime submission authority.
 
-use super::controls::{OperatorControlUi, ReferenceEditors};
+use super::controls::{ControlEditors, OperatorControlUi};
 
 use crate::{
     model::{Freshness, OperatorIntent, RuntimeObservations},
@@ -19,7 +19,7 @@ pub(super) struct PresentationRenderer {
     revision: Option<u64>,
     // At most one ID per current plot panel (64), or per legacy plot (32).
     plot_ids: HashSet<egui::Id>,
-    reference_editors: ReferenceEditors,
+    editors: ControlEditors,
 }
 
 pub(super) struct PresentationResponse {
@@ -40,8 +40,7 @@ impl PresentationRenderer {
     ) -> PresentationResponse {
         let mut intent = None;
         let replaced = self.revision != Some(revision) || self.document_id != document.document_id;
-        self.reference_editors
-            .reconcile(ui.ctx(), document, replaced);
+        self.editors.reconcile(ui.ctx(), document, replaced);
         if replaced {
             // egui_plot retains temporary zoom/legend state by ID. Retire old
             // revisions explicitly so repeated replacements do not retain history.
@@ -127,7 +126,7 @@ impl PresentationRenderer {
                                                     ui,
                                                     &document.controls,
                                                     control_ids,
-                                                    &mut self.reference_editors,
+                                                    &mut self.editors,
                                                 );
                                                 if intent.is_none() {
                                                     intent = clicked;
@@ -468,10 +467,11 @@ mod tests {
         },
         dispatcher::{CallOrigin, CallerId, LabClient, WorkbenchDispatcher, WorkbenchRequest},
         model::{
-            ControllerLifecycleIntent, LivePoint, MutationSubmitter, OperatorWorkflow,
-            OperatorWorkflowState, WorkbenchModel,
+            ControllerLifecycleIntent, LivePoint, MutationSubmitter, OperatorWarning,
+            OperatorWorkflow, OperatorWorkflowState, PROPERTY_TEXT_BYTES,
+            PropertyMutationCandidate, WorkbenchModel,
         },
-        presentation::{Control, ControlKind},
+        presentation::{ConfigurationOwner, Control, ControlKind},
     };
     use serde_json::{Value, json};
     use std::cell::{Cell, RefCell};
@@ -1730,7 +1730,691 @@ mod tests {
         model
     }
 
-    fn input_reference(
+    fn property_model() -> WorkbenchModel {
+        let mut model = reference_model();
+        let properties = [
+            (
+                ConfigurationOwner::Instrument {
+                    instrument: "1".into(),
+                },
+                "limit",
+                "integer",
+                json!(4),
+                "7",
+                "ordinary_live",
+            ),
+            (
+                ConfigurationOwner::Instrument {
+                    instrument: "1".into(),
+                },
+                "title",
+                "text",
+                json!("Old title"),
+                "8",
+                "live_safe",
+            ),
+            (
+                ConfigurationOwner::Component {
+                    component: "1".into(),
+                },
+                "limit",
+                "integer",
+                json!(9),
+                "12",
+                "reinitialize",
+            ),
+        ];
+        model.presentation.controls = properties
+            .into_iter()
+            .enumerate()
+            .map(|(index, (owner, property, kind, current, revision, class))| {
+                let target = RuntimeRef::ConfigurationProperty { owner, property: property.into() };
+                model.observations.observe(
+                    target.clone(),
+                    json!({
+                        "current":current, "value_type":kind, "access":"read_write", "revision":revision,
+                        "mutation_class":class,
+                        "unit":if index == 0 { json!({"id":"ms","symbol":"ms"}) } else { Value::Null },
+                        "constraints":if index == 0 { json!({"minimum":-10,"maximum":10}) } else { Value::Null },
+                    }),
+                    None,
+                );
+                Control {
+                    id:format!("property-{index}"), label:format!("Property editor {index}"), target,
+                    kind:ControlKind::ApplyConfiguration, confirm:false,
+                }
+            })
+            .collect();
+        model.presentation.windows[0].tabs[0].panels[0].kind = PanelKind::Controls {
+            control_ids: model
+                .presentation
+                .controls
+                .iter()
+                .map(|control| control.id.clone())
+                .collect(),
+        };
+        model
+            .hello
+            .as_mut()
+            .unwrap()
+            .operations
+            .push("property_configure".into());
+        model.presentation.validate().unwrap();
+        model
+    }
+
+    #[test]
+    fn property_editors_keep_independent_full_targets_and_require_confirmation() {
+        for confirm in [false, true] {
+            let mut model = property_model();
+            for control in &mut model.presentation.controls {
+                control.confirm = confirm;
+            }
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            for (index, text) in [(0, "-10"), (1, "New µm title"), (2, "9223372036854775807")] {
+                input_control(&context, &mut renderer, &dispatcher, &operator, index, text);
+            }
+            let (_, text) = recorder_frame(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &operator,
+                false,
+                &mut String::new(),
+                vec![],
+            );
+            for label in [
+                "Property editor 0",
+                "Owner: instrument 1; property: limit",
+                "Owner: component 1; property: limit",
+                "Current value (cached): 4",
+                "Current value (cached): Old title",
+                "type: integer; access: read_write",
+                "Unit: ms",
+            ] {
+                assert!(labels(&text).contains(&label), "{label}");
+            }
+            for (index, candidate, owner_kind, property, revision, class) in [
+                (
+                    0,
+                    PropertyMutationCandidate::Integer(-10),
+                    "instrument",
+                    "limit",
+                    "7",
+                    "ordinary_live",
+                ),
+                (
+                    1,
+                    PropertyMutationCandidate::Text("New µm title".into()),
+                    "instrument",
+                    "title",
+                    "8",
+                    "live_safe",
+                ),
+                (
+                    2,
+                    PropertyMutationCandidate::Integer(i64::MAX),
+                    "component",
+                    "limit",
+                    "12",
+                    "reinitialize",
+                ),
+            ] {
+                let intent = click_editor(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    index,
+                    "Configure property",
+                )
+                .unwrap();
+                assert_eq!(
+                    intent,
+                    OperatorIntent::ConfigureProperty {
+                        target: dispatcher.presentation.controls[index].target.clone(),
+                        value: candidate.clone(),
+                    }
+                );
+                operator.begin(&dispatcher, intent.clone()).unwrap();
+                let OperatorWorkflowState::AwaitingConfirmation(prepared) = &operator.state else {
+                    panic!()
+                };
+                assert_eq!(
+                    prepared.warning,
+                    Some(OperatorWarning::PropertyMutationClass(class.into()))
+                );
+                let value = match candidate {
+                    PropertyMutationCandidate::Integer(value) => json!(value),
+                    PropertyMutationCandidate::Text(value) => json!(value),
+                };
+                let args = json!({"target":{"kind":owner_kind,"id":"1"}, "property":property,
+                    "expected_revision":revision,"value":value});
+                assert_eq!(prepared.args, args);
+                assert_eq!(dispatcher.client().unwrap().0.get(), index);
+                assert!(
+                    click_editor(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &operator,
+                        false,
+                        (index + 1) % 3,
+                        "Configure property"
+                    )
+                    .is_none()
+                );
+                operator.cancel_or_acknowledge();
+                assert_eq!(
+                    dispatcher.client().unwrap().0.get(),
+                    index,
+                    "Cancel sends nothing"
+                );
+                operator.begin(&dispatcher, intent).unwrap();
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+                assert_eq!(dispatcher.client().unwrap().0.get(), index + 1);
+                assert_eq!(
+                    dispatcher.client().unwrap().1.borrow()[index],
+                    ("property_configure".into(), args)
+                );
+                operator.after_update(&ClientUpdate::Reply {
+                    command_id: 1,
+                    msg_id: "1".into(),
+                    op: "property_configure".into(),
+                    kind: ReplyKind::MutationCompleted,
+                    envelope: json!({}),
+                    recovery: None,
+                });
+                operator.cancel_or_acknowledge();
+            }
+            assert_eq!(
+                *dispatcher, before,
+                "typing/rendering/operator preparation preserves the model"
+            );
+            assert_eq!(dispatcher.presentation_revision(), 1);
+        }
+    }
+
+    #[test]
+    fn property_integer_parser_and_advertised_bounds_preserve_exact_i64_values() {
+        for (input, constraints, expected) in [
+            ("-9223372036854775808", Value::Null, Some(i64::MIN)),
+            ("9223372036854775807", Value::Null, Some(i64::MAX)),
+            ("-9223372036854775809", Value::Null, None),
+            ("9223372036854775808", Value::Null, None),
+            (" -10 ", json!({"minimum":-10,"maximum":10}), Some(-10)),
+            ("+10", json!({"minimum":-10,"maximum":10}), Some(10)),
+            ("-11", json!({"minimum":-10,"maximum":10}), None),
+            ("11", json!({"minimum":-10,"maximum":10}), None),
+            ("1.0", Value::Null, None),
+            ("1e3", Value::Null, None),
+            ("0x10", Value::Null, None),
+            ("NaN", Value::Null, None),
+            ("Infinity", Value::Null, None),
+            ("1 2", Value::Null, None),
+            ("", Value::Null, None),
+        ] {
+            let mut model = property_model();
+            let target = model.presentation.controls[0].target.clone();
+            model.observations.entities.get_mut(&target).unwrap().value["constraints"] =
+                constraints;
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            input_control(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                0,
+                input,
+            );
+            let intent = click_editor(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                false,
+                0,
+                "Configure property",
+            );
+            assert_eq!(
+                intent,
+                expected.map(|value| OperatorIntent::ConfigureProperty {
+                    target,
+                    value: PropertyMutationCandidate::Integer(value),
+                }),
+                "{input}"
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+            assert_eq!(*dispatcher, before);
+        }
+    }
+
+    #[test]
+    fn property_text_uses_utf8_byte_limit_without_submitting_truncated_prefixes() {
+        for (input, valid) in [
+            (String::new(), true),
+            ("x".repeat(PROPERTY_TEXT_BYTES), true),
+            ("x".repeat(PROPERTY_TEXT_BYTES + 1), false),
+            ("é".repeat(256), true),
+            ("é".repeat(257), false),
+            ("🌡".repeat(128), true),
+            ("🌡".repeat(129), false),
+            ("x".repeat(10_000), false),
+            ("🌡".repeat(10_000), false),
+        ] {
+            let dispatcher = WorkbenchDispatcher::new(property_model(), FakeClient::default());
+            let before = (*dispatcher).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            input_control(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                1,
+                &input,
+            );
+            let stored = renderer
+                .editors
+                .editor_mut(&dispatcher.presentation.controls[1])
+                .unwrap()
+                .text
+                .clone();
+            assert!(stored.len() <= (PROPERTY_TEXT_BYTES + 1) * 4);
+            let intent = click_editor(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                false,
+                1,
+                "Configure property",
+            );
+            if valid {
+                assert_eq!(stored, input);
+                assert_eq!(
+                    intent,
+                    Some(OperatorIntent::ConfigureProperty {
+                        target: dispatcher.presentation.controls[1].target.clone(),
+                        value: PropertyMutationCandidate::Text(input),
+                    })
+                );
+            } else {
+                assert!(
+                    stored.len() > PROPERTY_TEXT_BYTES,
+                    "overflow stays visible and invalid"
+                );
+                assert!(intent.is_none());
+            }
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+            assert_eq!(*dispatcher, before);
+        }
+    }
+
+    #[test]
+    fn property_access_type_and_readiness_fences_block_mutation_and_unsupported_editing() {
+        for scenario in [
+            "read_only",
+            "deployment_only",
+            "boolean",
+            "number",
+            "float",
+            "bytes",
+            "missing_type",
+            "missing",
+            "stale",
+            "rebuilding",
+            "unknown",
+            "target_stale",
+            "target_rebuilding",
+            "observe",
+            "unadvertised",
+            "disconnected",
+            "recovery",
+            "quarantine",
+            "reconciliation",
+            "journal_failure",
+            "capacity",
+        ] {
+            let mut model = property_model();
+            let target = model.presentation.controls[0].target.clone();
+            match scenario {
+                "read_only" | "deployment_only" => {
+                    model.observations.entities.get_mut(&target).unwrap().value["access"] =
+                        json!(scenario)
+                }
+                "boolean" | "number" | "float" | "bytes" | "missing_type" => {
+                    model.observations.entities.get_mut(&target).unwrap().value["value_type"] =
+                        if scenario == "missing_type" {
+                            Value::Null
+                        } else {
+                            json!(scenario)
+                        }
+                }
+                "missing" => {
+                    model.observations.entities.remove(&target);
+                }
+                "stale" => model.observations.freshness = Freshness::Stale,
+                "rebuilding" => model.observations.freshness = Freshness::Rebuilding,
+                "unknown" => model.observations.freshness = Freshness::Unknown,
+                "target_stale" | "target_rebuilding" => {
+                    model
+                        .observations
+                        .entities
+                        .get_mut(&target)
+                        .unwrap()
+                        .freshness = if scenario == "target_stale" {
+                        Freshness::Stale
+                    } else {
+                        Freshness::Rebuilding
+                    }
+                }
+                "observe" => {}
+                "unadvertised" => model
+                    .hello
+                    .as_mut()
+                    .unwrap()
+                    .operations
+                    .retain(|op| op != "property_configure"),
+                "disconnected" => model.connection = ConnectionState::Stale,
+                "recovery" => model.recovery.mutations.push(ambiguous_record()),
+                "quarantine" => model.recovery.quarantined.push(QuarantinedRecoveryRecord {
+                    record: ambiguous_record(),
+                    reason: RecoveryQuarantineReason::AttachedBootMismatch,
+                }),
+                "reconciliation" => model
+                    .recovery
+                    .reconciliation_required
+                    .push(ambiguous_record().identity),
+                "journal_failure" => model.recovery_problem = Some("journal unavailable".into()),
+                "capacity" => {
+                    for id in 0..crate::model::MAX_OPERATOR_ACTIONS as u64 {
+                        model.track_operator_intent(id).unwrap();
+                    }
+                }
+                _ => unreachable!(),
+            }
+            let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let before = (*dispatcher).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            input_control(
+                &context,
+                &mut renderer,
+                &dispatcher,
+                &OperatorWorkflow::default(),
+                0,
+                "5",
+            );
+            if [
+                "read_only",
+                "deployment_only",
+                "boolean",
+                "number",
+                "float",
+                "bytes",
+                "missing_type",
+                "missing",
+            ]
+            .contains(&scenario)
+            {
+                assert!(
+                    renderer
+                        .editors
+                        .editor_mut(&dispatcher.presentation.controls[0])
+                        .unwrap()
+                        .text
+                        .is_empty(),
+                    "{scenario}"
+                );
+            }
+            assert!(
+                click_editor(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &OperatorWorkflow::default(),
+                    scenario == "observe",
+                    0,
+                    "Configure property"
+                )
+                .is_none(),
+                "{scenario}"
+            );
+            assert_eq!(dispatcher.client().unwrap().0.get(), 0);
+            assert_eq!(*dispatcher, before, "{scenario}");
+        }
+    }
+
+    #[test]
+    fn property_revision_change_blocks_confirm_and_failure_never_retries() {
+        for index in [0, 1] {
+            let mut model = property_model();
+            let target = model.presentation.controls[index].target.clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            input_control(&context, &mut renderer, &model, &operator, index, "5");
+            let intent = click_editor(
+                &context,
+                &mut renderer,
+                &model,
+                &operator,
+                false,
+                index,
+                "Configure property",
+            )
+            .unwrap();
+            operator.begin(&model, intent).unwrap();
+            model.observations.entities.get_mut(&target).unwrap().value["revision"] = json!("99");
+            let client = FakeClient::default();
+            assert_eq!(
+                operator.confirm(&model, &client),
+                Err(crate::model::OperatorIntentError::DraftStale)
+            );
+            assert_eq!(client.0.get(), 0);
+            operator.cancel_or_acknowledge();
+            let intent = click_editor(
+                &context,
+                &mut renderer,
+                &model,
+                &operator,
+                false,
+                index,
+                "Configure property",
+            )
+            .unwrap();
+            operator.begin(&model, intent).unwrap();
+            operator.confirm(&model, &client).unwrap();
+            operator.after_update(&ClientUpdate::Reply {
+                command_id: 1,
+                msg_id: "1".into(),
+                op: "property_configure".into(),
+                kind: ReplyKind::MutationFailed,
+                envelope: json!({"code":"revision_conflict"}),
+                recovery: None,
+            });
+            assert!(matches!(
+                operator.state,
+                OperatorWorkflowState::Failed { conflict: true, .. }
+            ));
+            assert!(
+                click_editor(
+                    &context,
+                    &mut renderer,
+                    &model,
+                    &operator,
+                    false,
+                    index,
+                    "Configure property"
+                )
+                .is_none()
+            );
+            assert_eq!(client.0.get(), 1);
+        }
+    }
+
+    #[test]
+    fn property_replacement_retires_edits_and_preserves_prepared_or_ambiguous_workflow() {
+        for ambiguous in [false, true] {
+            let mut model = property_model();
+            let next_target = RuntimeRef::ConfigurationProperty {
+                owner: ConfigurationOwner::Instrument {
+                    instrument: "2".into(),
+                },
+                property: "limit".into(),
+            };
+            model.observations.observe(
+                next_target.clone(),
+                json!({"value_type":"integer", "access":"read_write", "revision":"7"}),
+                None,
+            );
+            let mut dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut operator = OperatorWorkflow::default();
+            input_control(&context, &mut renderer, &dispatcher, &operator, 0, "5");
+            operator
+                .begin(
+                    &dispatcher,
+                    click_editor(
+                        &context,
+                        &mut renderer,
+                        &dispatcher,
+                        &OperatorWorkflow::default(),
+                        false,
+                        0,
+                        "Configure property",
+                    )
+                    .unwrap(),
+                )
+                .unwrap();
+            let old_ids = renderer
+                .editors
+                .editor_mut(&dispatcher.presentation.controls[0])
+                .unwrap()
+                .widget_ids
+                .clone();
+            if ambiguous {
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                let mut record = ambiguous_record();
+                record.op = "property_configure".into();
+                record.args = dispatcher.client().unwrap().1.borrow()[0].1.clone();
+                operator.after_update(&ClientUpdate::ReconciliationRequired {
+                    records: vec![record.clone()],
+                });
+                dispatcher.apply_client_update(ClientUpdate::RecoveryProjection {
+                    active: vec![record.clone()],
+                    quarantined: vec![],
+                });
+                dispatcher.apply_client_update(ClientUpdate::ReconciliationRequired {
+                    records: vec![record],
+                });
+                assert!(matches!(
+                    operator.state,
+                    OperatorWorkflowState::Ambiguous { .. }
+                ));
+            }
+            let original = operator.clone();
+            let recovery = dispatcher.recovery.clone();
+            let calls = dispatcher.client().unwrap().0.get();
+            let mut replacement = dispatcher.presentation.clone();
+            replacement.controls[0].target = next_target;
+            dispatcher
+                .dispatch(
+                    CallOrigin {
+                        caller_id: CallerId(1),
+                        call_id: "replace-property".into(),
+                    },
+                    WorkbenchRequest::UiReplaceDocument {
+                        expected: dispatcher.presentation_expectation(),
+                        document: serde_json::to_value(replacement).unwrap(),
+                    },
+                )
+                .unwrap();
+            let output = context.run_ui(Default::default(), |ui| {
+                assert!(
+                    renderer
+                        .show(
+                            ui,
+                            &dispatcher.presentation,
+                            &dispatcher.observations,
+                            dispatcher.presentation_revision(),
+                            &mut OperatorControlUi {
+                                model: &dispatcher,
+                                operator: &operator,
+                                observation_only: false,
+                                label: &mut String::new(),
+                            }
+                        )
+                        .intent
+                        .is_none()
+                );
+            });
+            output.drop_without_applying_deltas();
+            for id in old_ids {
+                assert!(egui::text_edit::TextEditState::load(&context, id).is_none());
+                assert!(!context.memory(|memory| memory.has_focus(id)));
+            }
+            assert!(
+                renderer
+                    .editors
+                    .editor_mut(&dispatcher.presentation.controls[0])
+                    .unwrap()
+                    .text
+                    .is_empty()
+            );
+            assert!(
+                click_editor(
+                    &context,
+                    &mut renderer,
+                    &dispatcher,
+                    &operator,
+                    false,
+                    0,
+                    "Configure property"
+                )
+                .is_none()
+            );
+            assert_eq!(operator, original);
+            assert_eq!(dispatcher.recovery, recovery);
+            assert_eq!(dispatcher.client().unwrap().0.get(), calls);
+            if !ambiguous {
+                operator
+                    .confirm(&dispatcher, dispatcher.client().unwrap())
+                    .unwrap();
+                assert_eq!(
+                    dispatcher.client().unwrap().1.borrow()[0].1["target"],
+                    json!({"kind":"instrument","id":"1"})
+                );
+            } else {
+                assert!(
+                    operator
+                        .confirm(&dispatcher, dispatcher.client().unwrap())
+                        .is_err()
+                );
+            }
+        }
+    }
+
+    fn input_control(
         context: &egui::Context,
         renderer: &mut PresentationRenderer,
         model: &WorkbenchModel,
@@ -1750,7 +2434,7 @@ mod tests {
             );
         }
         let id = *renderer
-            .reference_editors
+            .editors
             .editor_mut(&model.presentation.controls[index])
             .unwrap()
             .widget_ids
@@ -1809,6 +2493,26 @@ mod tests {
         observe: bool,
         index: usize,
     ) -> Option<OperatorIntent> {
+        click_editor(
+            context,
+            renderer,
+            model,
+            operator,
+            observe,
+            index,
+            "Configure fixed",
+        )
+    }
+
+    fn click_editor(
+        context: &egui::Context,
+        renderer: &mut PresentationRenderer,
+        model: &WorkbenchModel,
+        operator: &OperatorWorkflow,
+        observe: bool,
+        index: usize,
+        button: &str,
+    ) -> Option<OperatorIntent> {
         let (_, text) = recorder_frame(
             context,
             renderer,
@@ -1820,7 +2524,7 @@ mod tests {
         );
         let center = text
             .iter()
-            .filter(|(text, _)| text == "Configure fixed")
+            .filter(|(text, _)| text == button)
             .nth(index)
             .unwrap()
             .1
@@ -1864,8 +2568,8 @@ mod tests {
             let context = egui::Context::default();
             let mut renderer = PresentationRenderer::default();
             let mut operator = OperatorWorkflow::default();
-            input_reference(&context, &mut renderer, &dispatcher, &operator, 0, "123.5");
-            input_reference(&context, &mut renderer, &dispatcher, &operator, 1, "-2.25");
+            input_control(&context, &mut renderer, &dispatcher, &operator, 0, "123.5");
+            input_control(&context, &mut renderer, &dispatcher, &operator, 1, "-2.25");
             let (_, text) = recorder_frame(
                 &context,
                 &mut renderer,
@@ -2035,7 +2739,7 @@ mod tests {
             let before = (*dispatcher).clone();
             let context = egui::Context::default();
             let mut renderer = PresentationRenderer::default();
-            input_reference(
+            input_control(
                 &context,
                 &mut renderer,
                 &dispatcher,
@@ -2066,7 +2770,7 @@ mod tests {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
         let mut operator = OperatorWorkflow::default();
-        input_reference(&context, &mut renderer, &model, &operator, 0, "-1e308");
+        input_control(&context, &mut renderer, &model, &operator, 0, "-1e308");
         let intent = click_fixed(&context, &mut renderer, &model, &operator, false, 0).unwrap();
         operator.begin(&model, intent).unwrap();
         model
@@ -2100,7 +2804,7 @@ mod tests {
         );
         assert!(
             renderer
-                .reference_editors
+                .editors
                 .editor_mut(&model.presentation.controls[0])
                 .unwrap()
                 .text
@@ -2115,7 +2819,7 @@ mod tests {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
         let mut operator = OperatorWorkflow::default();
-        input_reference(&context, &mut renderer, &dispatcher, &operator, 0, "25.5");
+        input_control(&context, &mut renderer, &dispatcher, &operator, 0, "25.5");
         operator
             .begin(
                 &dispatcher,
@@ -2159,7 +2863,7 @@ mod tests {
         assert_eq!(dispatcher.recovery, recovery);
         assert!(
             renderer
-                .reference_editors
+                .editors
                 .editor_mut(&dispatcher.presentation.controls[0])
                 .unwrap()
                 .text

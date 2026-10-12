@@ -82,9 +82,9 @@ Declarative Controls panels support **RecordingLifecycle** controls targeting
 **Recorder**. The configured label appears above **Start recording** (idle
 Recorder) or **Stop recording** (an active run), according to the cached Runtime
 projection. Start uses Workbench's shared recording-label field: a nonblank label
-of at most 128 UTF-8 bytes is required. Fixed Reference and Controller lifecycle
-controls are also supported; other declarative kinds and incompatible targets
-remain disabled.
+of at most 128 UTF-8 bytes is required. Fixed Reference, Controller lifecycle and
+writable Integer/Text property controls are also supported; other declarative
+kinds and incompatible targets remain disabled.
 
 A **SetReference** control targeting a **Reference** displays its cached current
 setpoint and Runtime unit, a **New fixed value** field and **Configure fixed**.
@@ -111,12 +111,31 @@ Confirm checks the exact source state again; even `warming` changing to `running
 invalidates the prepared draft. Replacement keeps its original target and never
 executes it. Declarative PID configuration and direct output writes are not supported.
 
+An **ApplyConfiguration** control targeting a **ConfigurationProperty** displays
+its configured caption, owner kind/ID, property name, cached value, Runtime unit
+(when supplied), type and access. **New value** and **Configure property** support
+only `read_write` Integer and Text properties. Integer input is parsed as an exact
+signed `i64` (including negative values and its endpoints); Runtime's advertised
+minimum/maximum still apply. Text uses the existing 512-byte UTF-8 limit, not a
+512-character limit. Oversized input remains invalid; it cannot submit a silently
+truncated valid prefix. Read-only, unsupported types and missing observations
+disable editing. Values are sent unchanged in the Runtime unit, without conversion.
+
+Property editors are bounded local GUI state keyed by Control ID and the complete
+owner/property target. They do not share drafts with another property or owner.
+Any presentation revision change clears drafts and their egui undo/focus state,
+as for Reference editors. A prepared action keeps its original target and property
+revision. Confirm checks the current revision again, along with access, type,
+constraints and the common readiness/recovery guards. Mutation-class warnings
+remain in the existing confirmation panel. No property changes occur during input,
+rendering or document replacement, and drafts are not saved to recovery or disk.
+
 Clicking a control's action button creates only an operator draft. Review it
 in the existing **Operator action** panel and separately press **Confirm**; **Cancel**
 sends nothing. Confirmation is mandatory even if the document has `confirm:false`.
 The renderer cannot send Runtime commands. Merely applying or displaying a
-document does not start/stop recording, change a Reference or change controller
-lifecycle, and controls do not change its revision.
+document does not start/stop recording, change a Reference, change controller
+lifecycle or configure a property, and controls do not change its revision.
 
 Observation mode, non-Fresh projections, unavailable operations/targets, active
 operator workflows and existing recovery fences disable these buttons. Confirm

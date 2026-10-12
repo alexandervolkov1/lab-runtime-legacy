@@ -1600,7 +1600,7 @@ pub(super) fn parse_finite(value: &str) -> Result<f64, &'static str> {
         .ok_or("numeric field requires a finite value")
 }
 
-fn property_candidate(
+pub(super) fn property_candidate(
     value_type: Option<&str>,
     text: &str,
 ) -> Result<PropertyMutationCandidate, &'static str> {
