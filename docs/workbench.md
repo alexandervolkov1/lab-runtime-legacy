@@ -107,11 +107,13 @@ floating-point seconds; formatting cannot recover precision already lost there.
 The tooltip prefers the unit in the cached Runtime observation. If only the
 presentation's display-unit metadata is available, it explicitly says **display
 label; no conversion**. An unknown unit stays **unit unknown**. Values are never
-converted to another unit by the renderer. **Fresh view** describes the source
-cache/attachment, not a claim that a historical sample was measured just now or
-is valid for physical control. Stale, Unknown, Rebuilding and Unresolved remain
-explicit. Hovering neither contacts Runtime nor edits the document, revision,
-recovery information or recording, and adds no retained sample history.
+converted to another unit by the renderer. When the source view is Fresh, the
+tooltip contains only the curve name, time and value with its unit. Other states
+add a short **Stale**, **Unknown**, **Rebuilding** or **Unresolved** marker; detailed
+observation state remains in the status panels. These states describe the source
+cache/attachment, not the physical freshness of a historical sample. Hovering
+neither contacts Runtime nor edits the document, revision, recovery information
+or recording, and adds no retained sample history.
 
 This GUI has no arbitrary plot/trace editor or **Save Layout** button. You cannot
 use GUI menus to compose dashboards or edit trace colors and stored axis settings;

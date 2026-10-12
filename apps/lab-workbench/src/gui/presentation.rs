@@ -271,17 +271,17 @@ fn line_tooltip(
         return None;
     }
     let timestamp = elapsed_time_label(position.x)?;
-    let state = match source_state(observations, curve.source) {
-        SourceState::Fresh => "Fresh view",
-        SourceState::Stale => "Stale — cached observation",
-        SourceState::Unknown => "Unknown — freshness not established",
-        SourceState::Rebuilding => "Rebuilding — freshness not established",
-        SourceState::Unresolved => "Unresolved — no Runtime observation",
+    let state_suffix = match source_state(observations, curve.source) {
+        SourceState::Fresh => "",
+        SourceState::Stale => "\nStale",
+        SourceState::Unknown => "\nUnknown",
+        SourceState::Rebuilding => "\nRebuilding",
+        SourceState::Unresolved => "\nUnresolved",
     };
     // Format the library's line position, without claiming an extra measurement
     // if a future egui_plot version returns a point inside a segment.
     Some(format!(
-        "{}\n{timestamp}, {}\n{state}",
+        "{}\n{timestamp}, {}{state_suffix}",
         plot_name,
         line_value_label(position.y, curve, observations)
     ))
@@ -624,20 +624,11 @@ mod tests {
         // X=42 lies on a segment, away from either retained endpoint. In 0.37
         // Line returns the closer endpoint, not cursor X or an interpolated Y.
         for (value, expected) in [
-            (
-                292.0,
-                Some("Temperature 1\nT+00:00:40.125, 292 °C\nFresh view"),
-            ),
-            (
-                302.0,
-                Some("Temperature 2\nT+00:00:40.375, 302 K\nFresh view"),
-            ),
+            (292.0, Some("Temperature 1\nT+00:00:40.125, 292 °C")),
+            (302.0, Some("Temperature 2\nT+00:00:40.375, 302 K")),
             (297.0, None), // between the separated curves
             (315.0, None), // far from both, but still inside the plot
-            (
-                292.0,
-                Some("Temperature 1\nT+00:00:40.125, 292 °C\nFresh view"),
-            ),
+            (292.0, Some("Temperature 1\nT+00:00:40.125, 292 °C")),
         ] {
             let text = hover(
                 &context,
@@ -647,6 +638,10 @@ mod tests {
                 PlotPoint::new(42.0, value),
             );
             assert_eq!(tooltip(&text), expected);
+            if let Some(label) = tooltip(&text) {
+                assert!(!label.contains("Fresh view"));
+                assert_eq!(label.lines().count(), 2);
+            }
             assert_eq!(
                 text.iter()
                     .filter(|(text, _)| text.contains("\nT+"))
@@ -714,11 +709,11 @@ mod tests {
         for (point, expected) in [
             (
                 PlotPoint::new(40.0, 292.0),
-                "Temperature 1\nT+00:00:40.000, 292 K\nFresh view",
+                "Temperature 1\nT+00:00:40.000, 292 K",
             ),
             (
                 PlotPoint::new(40.0, 302.0),
-                "Temperature 1 (2)\nT+00:00:40.000, 302 °C\nStale — cached observation",
+                "Temperature 1 (2)\nT+00:00:40.000, 302 °C\nStale",
             ),
         ] {
             let text = hover(&context, &mut renderer, &model, 1, point);
@@ -760,12 +755,9 @@ mod tests {
         let mut model = hover_model();
         model.presentation.plots[0].traces.truncate(1);
         for (state, expected) in [
-            (Freshness::Stale, "Stale — cached observation"),
-            (
-                Freshness::Rebuilding,
-                "Rebuilding — freshness not established",
-            ),
-            (Freshness::Unknown, "Unknown — freshness not established"),
+            (Freshness::Stale, "Stale"),
+            (Freshness::Rebuilding, "Rebuilding"),
+            (Freshness::Unknown, "Unknown"),
         ] {
             model.observations.freshness = state;
             let text = hover(
@@ -776,8 +768,11 @@ mod tests {
                 PlotPoint::new(40.0, 292.0),
             );
             let label = tooltip(&text).unwrap();
-            assert_eq!(label.matches(expected).count(), 1);
-            assert!(!label.contains("Fresh view"));
+            assert_eq!(
+                label,
+                format!("Temperature 1\nT+00:00:40.000, 292 K\n{expected}")
+            );
+            assert!(!label.contains("Fresh"));
         }
     }
 
@@ -836,11 +831,7 @@ mod tests {
             .position_from_point(&PlotPoint::new(0.0, 270.0));
         run(vec![egui::Event::PointerMoved(position)]);
         let text = run(vec![]);
-        assert!(
-            tooltip(&text)
-                .unwrap()
-                .contains("Signal 1/1\nT+00:00:00.000, 270 K\nFresh view")
-        );
+        assert_eq!(tooltip(&text), Some("Signal 1/1\nT+00:00:00.000, 270 K"));
         assert_eq!(model, before);
     }
 
