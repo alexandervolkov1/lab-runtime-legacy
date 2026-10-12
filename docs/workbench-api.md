@@ -298,10 +298,15 @@ Windows are `{"id":...,"title":...,"tabs":[...]}`; tabs are
 `target`, `kind` (`set_reference`, `controller_lifecycle`, `recording_lifecycle`,
 `apply_configuration`, or `reconnect_resource`), and boolean `confirm`. IDs are
 unique document-wide and panel references must resolve inside the document.
-The native GUI currently enables only `recording_lifecycle` targeting
-`{"kind":"recorder"}`. It offers Start/Stop from the Runtime projection through
-the existing operator workflow, with a separate mandatory Confirm even when
-`confirm` is false. Other kinds and incompatible targets remain inactive.
+The native GUI enables `recording_lifecycle` targeting `{"kind":"recorder"}`
+and `set_reference` targeting `{"kind":"reference","reference":"..."}`.
+They offer Recorder Start/Stop and fixed Reference configuration through the
+existing operator workflow, with a separate mandatory Confirm even when `confirm`
+is false. Reference Ramp/Retune and other declarative kinds remain inactive.
+Reference input is bounded local GUI state keyed by Control ID/target, cleared
+on presentation revision change; it is not part of this document or recovery.
+The existing Runtime revision/freshness/recovery guards apply, and values use the
+Runtime Reference unit without conversion. Incompatible targets stay inactive.
 These definitions are presentation metadata, not executable API requests.
 
 ## UI mutation contract
@@ -412,7 +417,7 @@ its ordinary default-plot behavior.
 
 The configuration currently changes **only in memory and is not saved to disk**.
 Workbench displays configured windows/tabs and Status/Plot panels through its
-[declarative view](workbench.md#view-and-adjust-plots). Recorder Controls can
+[declarative view](workbench.md#view-and-adjust-plots). Recorder and fixed Reference Controls can
 express a local operator intent, followed by the existing confirmation workflow;
 replacement itself does not execute controls or add presentation persistence.
 
