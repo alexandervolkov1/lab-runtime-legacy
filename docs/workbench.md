@@ -51,12 +51,43 @@ Select a **Signal** in Discovery to display its live graph. The standard view al
 creates a default live plot when signals become available. No add-plot action is
 needed for this workflow.
 
+When the current `PresentationDocument` defines windows, Workbench displays them
+as titled groups inside the existing window, with a tab strip for each group.
+Only the selected tab's panels are visible. Tab selection, plot panning and legend
+interaction are local view state: they do not edit the document or contact Runtime.
+These are logical windows, not additional native OS windows.
+
+Status panels display the referenced Runtime entity's cached value and freshness.
+Plot panels display their referenced plot with all configured visible traces,
+using the existing bounded live buffers, labels, colors, widths and display time
+windows. A plot referenced by a panel is not also rendered by the standard plot
+list or the selected-signal graph. If `windows` is empty, the standard plot list
+and selected-signal workflow remain available.
+
+Panel and trace states distinguish **Fresh**, **Stale**, **Unknown**,
+**Rebuilding**, and **Unresolved**. Stale observations may remain visible as cached
+values and curves; Unknown/Rebuilding never claim completed freshness. Unresolved
+means there is no cached observation for that Runtime reference. A known entity
+can still be waiting for usable finite live samples. Layout references do not
+initiate queries or manufacture missing data.
+
+The [Workbench API](workbench-api.md#ui_replace_document) can atomically replace
+the current in-memory layout. The renderer uses the committed replacement on its
+next owner turn, reconciles removed windows/tabs, and discards old plot zoom/legend
+state when the presentation revision changes. Explicit replacements and
+declarative layouts do not implicitly acquire a default plot. The API does not
+save the layout to disk.
+
+Declarative Controls panels currently display an inactive placeholder. Existing
+operator controls, confirmation, recovery and reconnect workflows remain separate
+from the read-only layout.
+
 Drag inside a plot to pan. Double-click the plot to restore automatic bounds.
 These changes affect only your view, not measurement or recording.
 
 This GUI has no arbitrary plot/trace editor or **Save Layout** button. You cannot
-use it to add named multi-signal dashboards or edit trace colors and stored axis
-settings. Do not look for menus that are not present in this preview.
+use GUI menus to compose dashboards or edit trace colors and stored axis settings;
+declarative dashboards are supplied through the document/API instead.
 
 **Waiting for good finite signal events.** means no usable live samples have
 arrived for that signal. A flat line can simply mean a steady value. Old display

@@ -1,5 +1,6 @@
 //! eframe main-thread owner and thin observational rendering.
 
+use super::presentation::PresentationRenderer;
 use super::rebuild::RebuildCoordinator;
 use crate::{
     client::ClientHandle,
@@ -12,7 +13,7 @@ use crate::{
         Freshness, OperatorIntent, OperatorWarning, OperatorWorkflow, OperatorWorkflowState,
         PROPERTY_TEXT_BYTES, PidCandidate, PreparedExactRetry, PropertyMutationCandidate,
         RECORDING_LABEL_BYTES, RecoveryAttachment, RecoveryRecordPresentation, RecoveryStatusState,
-        RecoveryStatusTracker, StatusEligibility, UiCommand, WorkbenchModel,
+        RecoveryStatusTracker, RuntimeObservations, StatusEligibility, UiCommand, WorkbenchModel,
     },
     ownership::WorkspaceOwnership,
     presentation::{
@@ -36,6 +37,7 @@ pub(crate) struct WorkbenchApp {
     observation_only: bool,
     runtime_label: String,
     model: WorkbenchDispatcher<ClientHandle>,
+    presentation_renderer: PresentationRenderer,
     rebuild: RebuildCoordinator,
     operator: OperatorWorkflow,
     recovery_status: RecoveryStatusTracker,
@@ -98,6 +100,7 @@ impl WorkbenchApp {
             observation_only,
             runtime_label,
             model: WorkbenchDispatcher::new(WorkbenchModel::new(presentation), client),
+            presentation_renderer: PresentationRenderer::default(),
             rebuild: RebuildCoordinator::default(),
             operator: OperatorWorkflow::default(),
             recovery_status: RecoveryStatusTracker::default(),
@@ -494,7 +497,12 @@ impl WorkbenchApp {
     }
 
     fn render_main(&mut self, ui: &mut egui::Ui) {
-        self.render_presentation_plots(ui);
+        let declarative = self.presentation_renderer.show(
+            ui,
+            &self.model.presentation,
+            &self.model.observations,
+            self.model.presentation_revision(),
+        );
         let Some(selected) = self.selected.clone() else {
             ui.heading("Live signal");
             ui.label("No discovered signal is available.");
@@ -522,26 +530,7 @@ impl WorkbenchApp {
         if let Some(observation) = &observation {
             ui.monospace(bounded_value_text(&observation.value));
         }
-        if let Some(buffer) = self.model.observations.live.get(&selected) {
-            let points = buffer
-                .points()
-                .iter()
-                .map(|point| [point.time_seconds, point.value])
-                .collect::<Vec<_>>();
-            EguiPlot::new("selected-live-signal")
-                .height(360.0)
-                .show(ui, |plot_ui| {
-                    plot_ui.line(Line::new("observed", PlotPoints::from(points)));
-                });
-            if buffer.dropped() > 0 {
-                ui.colored_label(
-                    Color32::YELLOW,
-                    format!("Display window truncated {} old point(s)", buffer.dropped()),
-                );
-            }
-        } else if matches!(selected, RuntimeRef::Signal { .. }) {
-            ui.label("Waiting for good finite signal events.");
-        }
+        render_selected_live_plot(ui, &selected, &self.model.observations, declarative);
         ui.separator();
         self.render_operator_workflow(ui);
         if matches!(self.operator.state, OperatorWorkflowState::Idle) {
@@ -551,64 +540,6 @@ impl WorkbenchApp {
                 observation.as_ref().map(|value| &value.value),
             );
             self.render_recorder_controls(ui);
-        }
-    }
-
-    fn render_presentation_plots(&self, ui: &mut egui::Ui) {
-        // Presentation commands already commit through the one dispatcher. Read
-        // its document and Runtime-owned observations here; never synthesize data.
-        for plot in &self.model.presentation.plots {
-            ui.strong(&plot.title);
-            let mut view = EguiPlot::new(("presentation-plot", &plot.id))
-                .height(160.0)
-                .legend(Default::default());
-            if let Some(minimum) = plot.axes.y_min {
-                view = view.include_y(minimum);
-            }
-            if let Some(maximum) = plot.axes.y_max {
-                view = view.include_y(maximum);
-            }
-            let mut cached = false;
-            view.show(ui, |plot_ui| {
-                for trace in plot.traces.iter().filter(|trace| trace.visible) {
-                    cached |= self
-                        .model
-                        .observations
-                        .entities
-                        .get(&trace.source)
-                        .is_none_or(|observation| observation.freshness != Freshness::Fresh);
-                    let Some(buffer) = self.model.observations.live.get(&trace.source) else {
-                        continue;
-                    };
-                    let newest = buffer
-                        .points()
-                        .back()
-                        .map_or(0.0, |point| point.time_seconds);
-                    let points = buffer
-                        .points()
-                        .iter()
-                        .filter(|point| point.time_seconds >= newest - plot.time_window_seconds)
-                        .map(|point| [point.time_seconds, point.value])
-                        .collect::<Vec<_>>();
-                    let color = match trace.style.color.as_str() {
-                        "cyan" => Color32::from_rgb(0, 200, 220),
-                        "red" => Color32::LIGHT_RED,
-                        "green" => Color32::LIGHT_GREEN,
-                        _ => Color32::from_hex(&trace.style.color).unwrap_or(Color32::LIGHT_BLUE),
-                    };
-                    plot_ui.line(
-                        Line::new(&trace.display_label, PlotPoints::from(points))
-                            .width(trace.style.width as f32)
-                            .color(color),
-                    );
-                }
-            });
-            if cached || self.model.observations.freshness != Freshness::Fresh {
-                ui.colored_label(
-                    Color32::YELLOW,
-                    "Cached plot observations: freshness is not established.",
-                );
-            }
         }
     }
 
@@ -1362,13 +1293,44 @@ impl Drop for WorkbenchApp {
     }
 }
 
+fn render_selected_live_plot(
+    ui: &mut egui::Ui,
+    selected: &RuntimeRef,
+    observations: &RuntimeObservations,
+    declarative: bool,
+) {
+    if declarative {
+        return;
+    }
+    if let Some(buffer) = observations.live.get(selected) {
+        let points = buffer
+            .points()
+            .iter()
+            .map(|point| [point.time_seconds, point.value])
+            .collect::<Vec<_>>();
+        EguiPlot::new("selected-live-signal")
+            .id(ui.make_persistent_id("selected-live-signal"))
+            .height(360.0)
+            .show(ui, |plot_ui| {
+                plot_ui.line(Line::new("observed", PlotPoints::from(points)));
+            });
+        if buffer.dropped() > 0 {
+            ui.colored_label(
+                Color32::YELLOW,
+                format!("Display window truncated {} old point(s)", buffer.dropped()),
+            );
+        }
+    } else if matches!(selected, RuntimeRef::Signal { .. }) {
+        ui.label("Waiting for good finite signal events.");
+    }
+}
+
 fn default_plot_command<C>(
     model: &WorkbenchDispatcher<C>,
     signal: RuntimeRef,
 ) -> Option<UiCommand> {
-    model
-        .should_create_default_plot()
-        .then(|| UiCommand::AddPlot {
+    (model.should_create_default_plot() && model.presentation.windows.is_empty()).then(|| {
+        UiCommand::AddPlot {
             plot: PresentationPlot {
                 id: "default-live-plot".into(),
                 title: "Live signal".into(),
@@ -1386,7 +1348,8 @@ fn default_plot_command<C>(
                     display_unit: None,
                 }],
             },
-        })
+        }
+    })
 }
 
 fn drain_bounded<T>(
@@ -1572,7 +1535,7 @@ fn render_operator_warning(ui: &mut egui::Ui, warning: &OperatorWarning) {
     ui.colored_label(Color32::YELLOW, text);
 }
 
-fn runtime_ref_label(reference: &RuntimeRef) -> String {
+pub(super) fn runtime_ref_label(reference: &RuntimeRef) -> String {
     match reference {
         RuntimeRef::Instrument { instrument } => format!("Instrument {instrument}"),
         RuntimeRef::Signal {
@@ -1592,7 +1555,7 @@ fn runtime_ref_label(reference: &RuntimeRef) -> String {
     }
 }
 
-fn bounded_value_text(value: &serde_json::Value) -> String {
+pub(super) fn bounded_value_text(value: &serde_json::Value) -> String {
     let mut text = value.to_string();
     if text.len() > 1024 {
         truncate_utf8(&mut text, 1024);
@@ -1953,6 +1916,58 @@ mod tests {
             assert!(default_plot_command(&model, signal.clone()).is_none());
             assert_eq!(model.presentation, document);
             assert_eq!(model.presentation_revision(), revision);
+        }
+    }
+
+    #[test]
+    fn declarative_layout_suppresses_legacy_selected_graph_and_implicit_default() {
+        let document: PresentationDocument = serde_json::from_value(json!({
+            "format_version":1,"document_id":"status-only","plots":[],"controls":[],
+            "windows":[{"id":"window","title":"Window","tabs":[{
+                "id":"tab","title":"Tab","panels":[{"id":"panel","title":"Status",
+                    "kind":{"kind":"status","source":{"kind":"signal","instrument":"1","parameter":"2"}}}]
+            }]}]
+        })).unwrap();
+        let signal = RuntimeRef::Signal {
+            instrument: "1".into(),
+            parameter: "2".into(),
+        };
+        for declared in [true, false] {
+            let mut model = WorkbenchModel::new(document.clone());
+            if !declared {
+                model.presentation.windows.clear();
+            }
+            model
+                .push_live_point(
+                    signal.clone(),
+                    crate::model::LivePoint {
+                        time_seconds: 1.0,
+                        value: 293.0,
+                    },
+                )
+                .unwrap();
+            let model = WorkbenchDispatcher::new(model, ());
+            assert_eq!(
+                default_plot_command(&model, signal.clone()).is_none(),
+                declared
+            );
+            let before = (*model).clone();
+            let context = egui::Context::default();
+            let mut renderer = PresentationRenderer::default();
+            let mut selected_plot_id = egui::Id::NULL;
+            let output = context.run_ui(Default::default(), |ui| {
+                selected_plot_id = ui.make_persistent_id("selected-live-signal");
+                let active = renderer.show(ui, &model.presentation, &model.observations, 1);
+                assert_eq!(active, declared);
+                render_selected_live_plot(ui, &signal, &model.observations, active);
+            });
+            output.drop_without_applying_deltas();
+            assert_eq!(
+                egui_plot::PlotMemory::load(&context, selected_plot_id).is_none(),
+                declared
+            );
+            assert_eq!(*model, before);
+            assert_eq!(model.presentation_revision(), 1);
         }
     }
 

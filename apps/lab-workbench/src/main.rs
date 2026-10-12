@@ -291,6 +291,24 @@ mod operator_boundary_tests {
         let source = include_str!("gui/app.rs");
         let dispatcher = include_str!("dispatcher.rs");
         let external = include_str!("external.rs");
+        let renderer = production_source(include_str!("gui/presentation.rs"));
+        for prohibited in [
+            "ClientHandle",
+            "WorkbenchDispatcher",
+            "UiCommand",
+            "dispatch(",
+            ".query(",
+            ".mutation(",
+            ".operation_status(",
+            ".retry_mutation(",
+            "apply_gui_ui",
+            "RecoveryJournal",
+        ] {
+            assert!(
+                !renderer.contains(prohibited),
+                "declarative renderer contains authority seam {prohibited}"
+            );
+        }
         assert!(!source.contains(".mutation("));
         assert!(!source.contains(".retry_mutation("));
         assert!(!source.contains(".apply_ui_command("));

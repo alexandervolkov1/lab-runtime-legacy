@@ -406,8 +406,9 @@ plot, including for a document with no plots; the initial empty Workbench retain
 its ordinary default-plot behavior.
 
 The configuration currently changes **only in memory and is not saved to disk**.
-This operation does not add a window/panel renderer, executable Controls, or
-presentation persistence.
+Workbench displays configured windows/tabs and Status/Plot panels through its
+[read-only declarative view](workbench.md#view-and-adjust-plots). Controls panels
+remain inactive; replacement does not execute them or add presentation persistence.
 
 ## Events
 
