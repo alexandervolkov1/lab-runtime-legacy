@@ -221,37 +221,21 @@ struct ObservedCurve<'a> {
     width: f32,
 }
 
-fn nearest_sample(points: &[PlotPoint], time: f64) -> Option<&PlotPoint> {
-    if !time.is_finite() {
-        return None;
-    }
-    points.iter().min_by(|left, right| {
-        (left.x - time)
-            .abs()
-            .total_cmp(&(right.x - time).abs())
-            // Equal distances choose the earlier actual timestamp, not a midpoint.
-            .then_with(|| left.x.total_cmp(&right.x))
-    })
-}
-
-fn elapsed_time_label(seconds: f64, fraction_digits: u32) -> Option<String> {
+fn elapsed_time_label(seconds: f64) -> Option<String> {
     // observed_at_ns is Runtime's monotonic duration since its process clock
     // origin. Workbench has no trustworthy calendar anchor for live points.
     let duration = Duration::try_from_secs_f64(seconds).ok()?;
-    let divisor = 10_u128.pow(9 - fraction_digits);
-    let ticks = (duration.as_nanos() + divisor / 2) / divisor;
-    let ticks_per_second = 10_u128.pow(fraction_digits);
-    let hours = ticks / (3_600 * ticks_per_second);
-    let minutes = (ticks / (60 * ticks_per_second)) % 60;
-    let seconds = (ticks / ticks_per_second) % 60;
+    let milliseconds = (duration.as_nanos() + 500_000) / 1_000_000;
+    let hours = milliseconds / 3_600_000;
+    let minutes = (milliseconds / 60_000) % 60;
+    let seconds = (milliseconds / 1_000) % 60;
     Some(format!(
-        "T+{hours:02}:{minutes:02}:{seconds:02}.{:0width$}",
-        ticks % ticks_per_second,
-        width = fraction_digits as usize,
+        "T+{hours:02}:{minutes:02}:{seconds:02}.{:03}",
+        milliseconds % 1_000,
     ))
 }
 
-fn sample_value_label(
+fn line_value_label(
     value: f64,
     curve: &ObservedCurve<'_>,
     observations: &RuntimeObservations,
@@ -277,80 +261,71 @@ fn sample_value_label(
     }
 }
 
-fn sample_tooltip(
-    curves: &[ObservedCurve<'_>],
+fn line_tooltip(
+    plot_name: &str,
+    curve: &ObservedCurve<'_>,
     observations: &RuntimeObservations,
-    time: f64,
-    is_hidden: impl Fn(egui::Id) -> bool,
+    position: PlotPoint,
 ) -> Option<String> {
-    let samples = curves
-        .iter()
-        .filter(|curve| !is_hidden(curve.id))
-        .filter_map(|curve| nearest_sample(&curve.points, time).map(|point| (curve, point)))
-        .collect::<Vec<_>>();
-    // Milliseconds are normally enough. Keep asynchronous sub-millisecond
-    // samples distinguishable rather than presenting rounded times as equal.
-    let mut fraction_digits = 3;
-    for (_, left) in &samples {
-        for (_, right) in &samples {
-            let difference = (left.x - right.x).abs();
-            if difference > 0.0 && difference < 0.000_001 {
-                fraction_digits = 9;
-            } else if difference > 0.0 && difference < 0.001 {
-                fraction_digits = fraction_digits.max(6);
-            }
-        }
+    if !position.y.is_finite() {
+        return None;
     }
-    let mut rows = Vec::new();
-    for (curve, point) in samples {
-        let Some(timestamp) = elapsed_time_label(point.x, fraction_digits) else {
-            continue;
-        };
-        let state = match source_state(observations, curve.source) {
-            SourceState::Fresh => "Fresh view",
-            SourceState::Stale => "Stale — cached observation",
-            SourceState::Unknown => "Unknown — freshness not established",
-            SourceState::Rebuilding => "Rebuilding — freshness not established",
-            SourceState::Unresolved => "Unresolved — no Runtime observation",
-        };
-        // Each curve keeps its own sample time, even when others have nearby Xs.
-        rows.push(format!(
-            "{}: {} · {timestamp} · {state}",
-            curve.label,
-            sample_value_label(point.y, curve, observations)
-        ));
-    }
-    (!rows.is_empty()).then(|| format!("Nearest observed samples\n{}", rows.join("\n")))
+    let timestamp = elapsed_time_label(position.x)?;
+    let state = match source_state(observations, curve.source) {
+        SourceState::Fresh => "Fresh view",
+        SourceState::Stale => "Stale — cached observation",
+        SourceState::Unknown => "Unknown — freshness not established",
+        SourceState::Rebuilding => "Rebuilding — freshness not established",
+        SourceState::Unresolved => "Unresolved — no Runtime observation",
+    };
+    // Format the library's line position, without claiming an extra measurement
+    // if a future egui_plot version returns a point inside a segment.
+    Some(format!(
+        "{}\n{timestamp}, {}\n{state}",
+        plot_name,
+        line_value_label(position.y, curve, observations)
+    ))
 }
 
 fn show_observed_plot<'a>(
     ui: &mut egui::Ui,
     view: EguiPlot<'a>,
-    id: egui::Id,
     curves: &'a [ObservedCurve<'a>],
     observations: &'a RuntimeObservations,
 ) {
-    let memory = egui_plot::PlotMemory::load(ui.ctx(), id);
-    view.label_formatter(move |position| {
-        let time = match position {
-            HoverPosition::Elsewhere { position }
-            | HoverPosition::NearDataPoint { position, .. } => position.x,
+    // HoverPosition carries a name, not an item ID. Keep legend names unique
+    // even when presentation labels repeat, so units/freshness use the selected
+    // curve's source. IDs, buffer contents and the document remain unchanged.
+    let mut named_curves: Vec<(String, &ObservedCurve<'_>)> = Vec::with_capacity(curves.len());
+    for curve in curves {
+        let mut name = curve.label.to_owned();
+        let mut suffix = 2;
+        while named_curves.iter().any(|(used, _)| used == &name) {
+            name = format!("{} ({suffix})", curve.label);
+            suffix += 1;
+        }
+        named_curves.push((name, curve));
+    }
+    view.label_formatter(|hover| {
+        let HoverPosition::NearDataPoint {
+            plot_name,
+            position,
+            ..
+        } = hover
+        else {
+            return None;
         };
-        sample_tooltip(curves, observations, time, |curve_id| {
-            memory
-                .as_ref()
-                .is_some_and(|memory| memory.hidden_items.contains(&curve_id))
-        })
+        let (_, curve) = named_curves.iter().find(|(name, _)| name == plot_name)?;
+        line_tooltip(plot_name, curve, observations, *position)
     })
     .show(ui, |plot_ui| {
-        for curve in curves.iter().filter(|curve| !curve.points.is_empty()) {
-            let mut line = Line::new(curve.label, PlotPoints::Borrowed(&curve.points))
+        for (name, curve) in named_curves
+            .iter()
+            .filter(|(_, curve)| !curve.points.is_empty())
+        {
+            let mut line = Line::new(name, PlotPoints::Borrowed(&curve.points))
                 .id(curve.id)
-                .width(curve.width)
-                // Use the cursor X for every curve, rather than snapping all
-                // readouts to one line's nearest endpoint. The plot still owns
-                // crosshairs, tooltip placement, pan/zoom and legend interaction.
-                .allow_hover(false);
+                .width(curve.width);
             if let Some(color) = curve.color {
                 line = line.color(color);
             }
@@ -359,7 +334,7 @@ fn show_observed_plot<'a>(
     });
 }
 
-/// The ordinary selected-signal graph uses the same read-only sample tooltip.
+/// The ordinary selected-signal graph uses the same read-only line tooltip.
 pub(super) fn render_signal_plot(
     ui: &mut egui::Ui,
     source: &RuntimeRef,
@@ -388,7 +363,6 @@ pub(super) fn render_signal_plot(
     show_observed_plot(
         ui,
         EguiPlot::new("selected-live-signal").id(id).height(360.0),
-        id,
         &curves,
         observations,
     );
@@ -430,7 +404,7 @@ fn render_plot(ui: &mut egui::Ui, plot: &Plot, observations: &RuntimeObservation
             }
         })
         .collect::<Vec<_>>();
-    show_observed_plot(ui, view, id, &curves, observations);
+    show_observed_plot(ui, view, &curves, observations);
     for trace in plot.traces.iter().filter(|trace| trace.visible) {
         ui.horizontal_wrapped(|ui| {
             ui.label(&trace.display_label);
@@ -566,12 +540,20 @@ mod tests {
         text.iter().map(|(label, _)| label.as_str()).collect()
     }
 
+    fn hover_model() -> WorkbenchModel {
+        let mut model = model();
+        // Keep both curves and empty space well inside stable Y bounds.
+        model.presentation.plots[0].axes.y_min = Some(280.0);
+        model.presentation.plots[0].axes.y_max = Some(320.0);
+        model
+    }
+
     fn hover(
         context: &egui::Context,
         renderer: &mut PresentationRenderer,
         model: &WorkbenchModel,
         revision: u64,
-        time: f64,
+        point: PlotPoint,
     ) -> Vec<(String, egui::Rect)> {
         frame(context, renderer, model, revision, vec![]);
         frame(context, renderer, model, revision, vec![]);
@@ -579,10 +561,9 @@ mod tests {
             egui_plot::PlotMemory::load(context, *renderer.plot_ids.iter().next().unwrap())
                 .unwrap();
         let transform = memory.transform();
-        let position = egui::pos2(
-            transform.position_from_point_x(time),
-            transform.frame().center().y,
-        );
+        // Exercise egui_plot's screen-space hit testing in both dimensions.
+        let position = transform.position_from_point(&point) + egui::vec2(0.0, 2.0);
+        assert!(transform.frame().contains(position));
         frame(
             context,
             renderer,
@@ -595,7 +576,7 @@ mod tests {
 
     fn tooltip(text: &[(String, egui::Rect)]) -> Option<&str> {
         text.iter()
-            .find(|(text, _)| text.starts_with("Nearest observed samples\n"))
+            .find(|(text, _)| text.contains("\nT+"))
             .map(|(text, _)| text.as_str())
     }
 
@@ -608,42 +589,18 @@ mod tests {
             (3599.9996, "T+01:00:00.000"),
             (86400.001, "T+24:00:00.001"),
         ] {
-            assert_eq!(elapsed_time_label(seconds, 3).as_deref(), Some(expected));
+            assert_eq!(elapsed_time_label(seconds).as_deref(), Some(expected));
         }
-        assert_eq!(
-            elapsed_time_label(1.0001, 6).as_deref(),
-            Some("T+00:00:01.000100")
-        );
         for invalid in [-1.0, f64::NAN, f64::INFINITY, f64::MAX] {
-            assert!(elapsed_time_label(invalid, 3).is_none());
+            assert!(elapsed_time_label(invalid).is_none());
         }
     }
 
     #[test]
-    fn nearest_sample_uses_actual_points_and_earlier_ties_without_interpolation() {
-        let points = [
-            PlotPoint::new(4.0, 100.0),
-            PlotPoint::new(1.0, 10.0),
-            PlotPoint::new(2.0, 30.0),
-        ];
-        for (time, expected) in [
-            (-100.0, points[1]),
-            (1.5, points[1]),
-            (1.9, points[2]),
-            (3.0, points[2]),
-            (100.0, points[0]),
-        ] {
-            assert_eq!(nearest_sample(&points, time), Some(&expected));
-        }
-        assert!(nearest_sample(&[], 1.0).is_none());
-        assert!(nearest_sample(&points, f64::NAN).is_none());
-    }
-
-    #[test]
-    fn hover_shows_one_tooltip_with_real_values_and_each_curves_own_time() {
+    fn hover_switches_between_curves_by_screen_distance_and_is_absent_in_empty_space() {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
-        let mut model = model();
+        let mut model = hover_model();
         for (index, time) in [(0, 40.125), (1, 40.375)] {
             let source = model.presentation.plots[0].traces[index].source.clone();
             model.observations.live.remove(&source);
@@ -663,26 +620,49 @@ mod tests {
         model.observations.entities.get_mut(&source).unwrap().value["unit"] =
             json!({"id":"degC","symbol":"°C"});
         let before = model.clone();
-        let text = hover(&context, &mut renderer, &model, 1, 40.25);
-        let label = tooltip(&text).unwrap();
-        assert_eq!(
-            text.iter()
-                .filter(|(text, _)| text.starts_with("Nearest observed samples"))
-                .count(),
-            1
-        );
-        assert!(label.contains("Temperature 1: 292 °C · T+00:00:40.125 · Fresh view"));
-        assert!(label.contains("Temperature 2: 302 K · T+00:00:40.375 · Fresh view"));
-        assert!(!label.contains("292 K"));
+        // Same cursor X throughout: only the actual screen Y changes selection.
+        // X=42 lies on a segment, away from either retained endpoint. In 0.37
+        // Line returns the closer endpoint, not cursor X or an interpolated Y.
+        for (value, expected) in [
+            (
+                292.0,
+                Some("Temperature 1\nT+00:00:40.125, 292 °C\nFresh view"),
+            ),
+            (
+                302.0,
+                Some("Temperature 2\nT+00:00:40.375, 302 K\nFresh view"),
+            ),
+            (297.0, None), // between the separated curves
+            (315.0, None), // far from both, but still inside the plot
+            (
+                292.0,
+                Some("Temperature 1\nT+00:00:40.125, 292 °C\nFresh view"),
+            ),
+        ] {
+            let text = hover(
+                &context,
+                &mut renderer,
+                &model,
+                1,
+                PlotPoint::new(42.0, value),
+            );
+            assert_eq!(tooltip(&text), expected);
+            assert_eq!(
+                text.iter()
+                    .filter(|(text, _)| text.contains("\nT+"))
+                    .count(),
+                usize::from(expected.is_some())
+            );
+        }
         assert_eq!(model, before);
     }
 
     #[test]
-    fn tooltip_units_fallback_is_explicit_and_close_sample_times_stay_distinct() {
+    fn tooltip_formats_the_returned_position_with_honest_unit_fallbacks() {
         let mut model = model();
         model.observations.entities.clear();
         let traces = &model.presentation.plots[0].traces;
-        let mut curves = traces
+        let curves = traces
             .iter()
             .enumerate()
             .map(|(index, trace)| ObservedCurve {
@@ -699,45 +679,86 @@ mod tests {
                 width: 1.5,
             })
             .collect::<Vec<_>>();
-        let label = sample_tooltip(&curves, &model.observations, 1.0, |_| false).unwrap();
-        assert!(label.contains("0.00000025 K (display label; no conversion) · T+00:00:01.000100"));
-        assert!(label.contains("0.00000025 (unit unknown) · T+00:00:01.000200"));
+        // This position is intentionally not a retained point. The formatter
+        // uses the library's coordinates and does not call it a measured sample.
+        let position = PlotPoint::new(1.2345, 0.00000025);
+        let label =
+            line_tooltip(curves[0].label, &curves[0], &model.observations, position).unwrap();
+        assert!(label.contains("T+00:00:01.235, 0.00000025 K (display label; no conversion)"));
+        assert!(!label.contains("sample"));
         assert!(!label.contains("Fresh view"));
-        curves[0].points = vec![PlotPoint::new(1.0000001, 1.0)];
-        curves[1].points = vec![PlotPoint::new(1.0000002, 2.0)];
-        let label = sample_tooltip(&curves, &model.observations, 1.0, |_| false).unwrap();
-        assert!(label.contains("T+00:00:01.000000100"));
-        assert!(label.contains("T+00:00:01.000000200"));
+        let label =
+            line_tooltip(curves[1].label, &curves[1], &model.observations, position).unwrap();
+        assert!(label.contains("T+00:00:01.235, 0.00000025 (unit unknown)"));
+        assert!(
+            line_tooltip(
+                curves[0].label,
+                &curves[0],
+                &model.observations,
+                PlotPoint::new(1.0, f64::NAN)
+            )
+            .is_none()
+        );
+    }
+
+    #[test]
+    fn repeated_curve_names_keep_the_selected_sources_unit_and_freshness() {
+        let context = egui::Context::default();
+        let mut renderer = PresentationRenderer::default();
+        let mut model = hover_model();
+        model.presentation.plots[0].traces[1].display_label = "Temperature 1".into();
+        let source = model.presentation.plots[0].traces[1].source.clone();
+        let observation = model.observations.entities.get_mut(&source).unwrap();
+        observation.value["unit"] = json!({"id":"degC","symbol":"°C"});
+        observation.freshness = Freshness::Stale;
+        for (point, expected) in [
+            (
+                PlotPoint::new(40.0, 292.0),
+                "Temperature 1\nT+00:00:40.000, 292 K\nFresh view",
+            ),
+            (
+                PlotPoint::new(40.0, 302.0),
+                "Temperature 1 (2)\nT+00:00:40.000, 302 °C\nStale — cached observation",
+            ),
+        ] {
+            let text = hover(&context, &mut renderer, &model, 1, point);
+            assert_eq!(tooltip(&text), Some(expected));
+        }
     }
 
     #[test]
     fn hover_omits_presentation_hidden_legend_hidden_and_absent_samples() {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
-        let mut model = model();
-        model.presentation.plots[0].traces[1].visible = false;
-        let text = hover(&context, &mut renderer, &model, 1, 41.0);
+        let mut model = hover_model();
+        let point = PlotPoint::new(40.0, 292.0);
+        let text = hover(&context, &mut renderer, &model, 1, point);
         let label = tooltip(&text).unwrap();
-        assert!(label.contains("Temperature 1: 292 K"));
+        assert!(label.contains("292 K"));
         assert!(!label.contains("Temperature 2"));
         assert!(!label.contains("270")); // outside the configured trailing window
+        model.presentation.plots[0].traces[0].visible = false;
+        assert!(tooltip(&hover(&context, &mut renderer, &model, 1, point)).is_none());
+        model.presentation.plots[0].traces[0].visible = true;
         let id = *renderer.plot_ids.iter().next().unwrap();
         let mut memory = egui_plot::PlotMemory::load(&context, id).unwrap();
         memory.hidden_items.insert(egui::Id::new("trace-1"));
         memory.store(&context, id);
-        assert!(tooltip(&hover(&context, &mut renderer, &model, 1, 41.0)).is_none());
+        assert!(tooltip(&hover(&context, &mut renderer, &model, 1, point)).is_none());
         let mut memory = egui_plot::PlotMemory::load(&context, id).unwrap();
         memory.hidden_items.clear();
         memory.store(&context, id);
-        model.observations.live.clear();
-        assert!(tooltip(&hover(&context, &mut renderer, &model, 1, 41.0)).is_none());
+        let source = model.presentation.plots[0].traces[0].source.clone();
+        model.observations.live.remove(&source);
+        assert!(tooltip(&hover(&context, &mut renderer, &model, 1, point)).is_none());
     }
 
     #[test]
     fn hover_freshness_respects_stale_unknown_and_the_rebuild_barrier() {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
-        let mut model = model();
+        let mut model = hover_model();
+        model.presentation.plots[0].traces.truncate(1);
         for (state, expected) in [
             (Freshness::Stale, "Stale — cached observation"),
             (
@@ -747,9 +768,15 @@ mod tests {
             (Freshness::Unknown, "Unknown — freshness not established"),
         ] {
             model.observations.freshness = state;
-            let text = hover(&context, &mut renderer, &model, 1, 41.0);
+            let text = hover(
+                &context,
+                &mut renderer,
+                &model,
+                1,
+                PlotPoint::new(40.0, 292.0),
+            );
             let label = tooltip(&text).unwrap();
-            assert_eq!(label.matches(expected).count(), 2);
+            assert_eq!(label.matches(expected).count(), 1);
             assert!(!label.contains("Fresh view"));
         }
     }
@@ -759,13 +786,19 @@ mod tests {
         for declared in [true, false] {
             let context = egui::Context::default();
             let mut renderer = PresentationRenderer::default();
-            let mut model = model();
+            let mut model = hover_model();
             if !declared {
                 model.presentation.windows.clear();
             }
             let dispatcher = WorkbenchDispatcher::new(model, FakeClient::default());
             let before = (*dispatcher).clone();
-            assert!(tooltip(&hover(&context, &mut renderer, &dispatcher, 1, 41.0)).is_some());
+            for point in [
+                PlotPoint::new(40.0, 292.0),
+                PlotPoint::new(40.0, 302.0),
+                PlotPoint::new(40.0, 297.0),
+            ] {
+                hover(&context, &mut renderer, &dispatcher, 1, point);
+            }
             assert_eq!(*dispatcher, before);
             assert_eq!(dispatcher.presentation_revision(), 1);
             assert_eq!(dispatcher.client().unwrap().0.get(), 0);
@@ -798,16 +831,15 @@ mod tests {
         run(vec![]);
         run(vec![]);
         let memory = egui_plot::PlotMemory::load(&context, id.get()).unwrap();
-        let position = egui::pos2(
-            memory.transform().position_from_point_x(0.0),
-            memory.transform().frame().center().y,
-        );
+        let position = memory
+            .transform()
+            .position_from_point(&PlotPoint::new(0.0, 270.0));
         run(vec![egui::Event::PointerMoved(position)]);
         let text = run(vec![]);
         assert!(
             tooltip(&text)
                 .unwrap()
-                .contains("Signal 1/1: 270 K · T+00:00:00.000 · Fresh view")
+                .contains("Signal 1/1\nT+00:00:00.000, 270 K\nFresh view")
         );
         assert_eq!(model, before);
     }
@@ -816,12 +848,65 @@ mod tests {
     fn tooltip_keeps_legend_hiding_zoom_and_pan_owned_by_egui_plot() {
         let context = egui::Context::default();
         let mut renderer = PresentationRenderer::default();
-        let model = model();
-        hover(&context, &mut renderer, &model, 1, 50.0);
+        let model = hover_model();
+        let text = hover(
+            &context,
+            &mut renderer,
+            &model,
+            1,
+            PlotPoint::new(50.0, 292.5),
+        );
         let id = *renderer.plot_ids.iter().next().unwrap();
-        let mut memory = egui_plot::PlotMemory::load(&context, id).unwrap();
-        memory.hidden_items.insert(egui::Id::new("trace-2"));
-        memory.store(&context, id);
+        // Click the real legend entry, rather than injecting its hidden state.
+        let legend_position = text
+            .iter()
+            .find(|(label, _)| label == "Temperature 2")
+            .unwrap()
+            .1
+            .center();
+        for pressed in [true, false] {
+            frame(
+                &context,
+                &mut renderer,
+                &model,
+                1,
+                vec![
+                    egui::Event::PointerMoved(legend_position),
+                    egui::Event::PointerButton {
+                        pos: legend_position,
+                        button: egui::PointerButton::Primary,
+                        pressed,
+                        modifiers: Default::default(),
+                    },
+                ],
+            );
+        }
+        assert!(
+            egui_plot::PlotMemory::load(&context, id)
+                .unwrap()
+                .hidden_items
+                .contains(&egui::Id::new("trace-2"))
+        );
+        assert!(
+            tooltip(&hover(
+                &context,
+                &mut renderer,
+                &model,
+                1,
+                PlotPoint::new(50.0, 302.5)
+            ))
+            .is_none()
+        );
+        assert!(
+            tooltip(&hover(
+                &context,
+                &mut renderer,
+                &model,
+                1,
+                PlotPoint::new(50.0, 292.5)
+            ))
+            .is_some()
+        );
         let before = *egui_plot::PlotMemory::load(&context, id).unwrap().bounds();
         frame(
             &context,
@@ -869,7 +954,13 @@ mod tests {
         assert_ne!(panned.bounds().min()[0], zoomed.bounds().min()[0]);
         assert!(!panned.auto_bounds.x);
         assert!(panned.hidden_items.contains(&egui::Id::new("trace-2")));
-        let text = hover(&context, &mut renderer, &model, 1, 50.0);
+        let text = hover(
+            &context,
+            &mut renderer,
+            &model,
+            1,
+            PlotPoint::new(50.0, 292.5),
+        );
         assert!(!tooltip(&text).unwrap().contains("Temperature 2"));
         assert_eq!(
             *egui_plot::PlotMemory::load(&context, id).unwrap().bounds(),

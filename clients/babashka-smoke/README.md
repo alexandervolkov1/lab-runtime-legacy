@@ -180,7 +180,39 @@ testing endpoint or changing the renderer. The runner itself does not assert tha
 any visual inspection occurred; `visual_assertions` remains false in its evidence.
 If no interactive desktop is available, report the visual check as unperformed.
 
-### Observed Windows result
+For a plot-hover inspection with two separated curves, use the same runner with
+an isolated, generated virtual deployment instead of the default virtual-demo:
+
+```powershell
+pwsh -NoProfile -File clients/babashka-smoke/run-smoke.ps1 `
+  -Presentation -TwoCurveHover -Repeat 1 -GuiHoldSeconds 120
+```
+
+This fixture has two independent virtual thermal plants, `1/1` at 20 °C and `2/1`
+at 40 °C, with no controller or Recorder. Both sources come from authoritative
+discovery and real Runtime observations; no display offset or conversion separates
+the lines. The runner requires two discovered sources and retains its existing
+deadlines, connection-count checks, exact readback and owned-process cleanup.
+Move near each line in turn: only the selected curve should have a tooltip, with
+`T+HH:mm:ss.SSS`, its Y value/unit and freshness. Moving between the lines or far
+from both, inside the plot, must remove the tooltip. Hide a line through its legend
+entry and verify it no longer responds to hover. The library chooses the line in
+screen coordinates, including after zoom or pan; it does not summarize all curves
+at the cursor's X. The readout is the position returned by egui_plot, not a new
+measurement. These remain manual visual assertions, separate from protocol PASS.
+
+On 2026-10-12, a native Windows/MSVC corrective DGUI-4A run with this two-plant
+fixture passed. Client-area captures after mouse movement showed only
+`temperature` at 20 °C near the green line and only `temperature (2)` at 40 °C near
+the blue line, with their own relative times. Between the lines and after hiding
+the blue curve through its legend entry, no tooltip appeared. Post-interaction
+readback preserved the exact document and revision 3, with zero new presentation
+events and unchanged attachment/recovery journal. All 569 TCP samples in that run
+observed one Runtime connection; owned-process cleanup completed. These visual
+observations are separate from the runner's protocol PASS; native Stale/Rebuilding
+was not exercised (deterministic egui tests cover those states).
+
+### Observed Windows result (DGUI-3 virtual-demo)
 
 On 2026-10-12, using the native `x86_64-pc-windows-msvc` toolchain and Babashka
 1.13.220, three consecutive replacements and post-inspection readback passed against

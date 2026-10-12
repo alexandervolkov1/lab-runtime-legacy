@@ -2,6 +2,7 @@
 param(
     [ValidateRange(1, 10)][int]$Repeat = 3,
     [switch]$Presentation,
+    [switch]$TwoCurveHover,
     [ValidateRange(0, 120)][int]$GuiHoldSeconds = 0,
     [string]$RuntimeExe,
     [string]$WorkbenchExe
@@ -104,6 +105,9 @@ function Invoke-Smoke([string]$Script, [int]$Port, [int]$Run, [string[]]$ModeArg
         [IO.File]::WriteAllText((Join-Path $temporary "$Script-$Run.json"), $output)
         $summary = $output | ConvertFrom-Json
         if ($summary.status -ne 'PASS') { throw "Babashka omitted PASS: $Script" }
+        if ($TwoCurveHover -and $ModeArguments.Count -eq 0 -and @($summary.signals).Count -ne 2) {
+            throw 'Two-curve hover fixture did not expose two measurement sources'
+        }
         $summary | ConvertTo-Json -Compress -Depth 20
     }
     finally { Stop-Fixture $fixture }
@@ -111,11 +115,47 @@ function Invoke-Smoke([string]$Script, [int]$Port, [int]$Run, [string[]]$ModeArg
 
 try {
     if ($GuiHoldSeconds -gt 0 -and -not $Presentation) { throw 'GUI inspection hold requires -Presentation' }
+    if ($TwoCurveHover -and -not $Presentation) { throw 'Two-curve hover fixture requires -Presentation' }
     $runtimePath = Resolve-SmokeExecutable $RuntimeExe 'lab-runtime.exe' 'target/debug/lab-runtime.exe'
     $workbenchPath = Resolve-SmokeExecutable $WorkbenchExe 'lab-workbench.exe' 'target/debug/lab-workbench.exe'
-    $runtime = Start-Fixture $runtimePath @(
-        '--serve', '--profile', 'virtual-demo', '--port', '0'
-    ) 'runtime'
+    $runtimeArguments = @('--serve', '--profile', 'virtual-demo', '--port', '0')
+    if ($TwoCurveHover) {
+        # Two independent virtual plants with separated steady observations.
+        # No controller, output command, physical device or Recorder is involved.
+        $configuration = @'
+schema_version = 1
+[runtime]
+key = "plot-hover-smoke"
+display_name = "Virtual plot hover fixture"
+[server]
+host = "127.0.0.1"
+port = 0
+[recording]
+enabled = false
+policy = "best_effort"
+'@
+        foreach ($instrument in 1..2) {
+            $temperature = 20 * $instrument
+            $configuration += @"
+
+[[instruments]]
+id = $instrument
+key = "plant-$instrument"
+kind = "thermal_plant"
+display_name = "Virtual plant $instrument"
+history_capacity = 64
+ambient_temperature = $temperature.0
+initial_temperature = $temperature.0
+gain_per_percent = 0.8
+time_constant_ms = 8000
+poll_period_ms = 100
+"@
+        }
+        $configurationPath = Join-Path $temporary 'two-curve-hover.toml'
+        [IO.File]::WriteAllText($configurationPath, $configuration)
+        $runtimeArguments = @('--serve', '--config', $configurationPath)
+    }
+    $runtime = Start-Fixture $runtimePath $runtimeArguments 'runtime'
     $ready = Read-Ready $runtime
     if ($ready.port -lt 1) { throw 'Runtime omitted bound port' }
     $workbench = Start-Fixture $workbenchPath @(
