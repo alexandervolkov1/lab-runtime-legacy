@@ -472,6 +472,7 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         include_str!("page.rs"),
         include_str!("navigation.rs"),
         include_str!("plot_projection.rs"),
+        include_str!("plot_widget.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -502,7 +503,8 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         assert!(!consumer.contains("readonly_v2"));
     }
     let source = include_str!("mod.rs");
-    assert!(!source.contains("Vec<"));
+    // The only returned Vec is the caller-owned CPU mesh output, never a cache.
+    assert_eq!(source.matches("Vec<").count(), 1);
     assert!(!source.contains("HashMap"));
     assert!(!std::hint::black_box(ACTIVATION_QUALIFIED));
     let admitted = admit(&syntax());
@@ -546,6 +548,14 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
             PresentationEpoch { revision, ..EPOCH },
             vec![egui::Event::Text("input cannot mutate".into())],
         );
+        let mut preview = Preview::new(&plot_document, PresentationEpoch { revision, ..EPOCH });
+        preview.open_plot(0);
+        let (mut output, _) = preview
+            .run(&dispatcher.observations, egui::RawInput::default())
+            .unwrap();
+        drop(preview.tessellate(&mut output));
+        output.drop_without_applying_deltas();
+        preview.close_plot();
         assert_eq!(&*dispatcher, &before);
         assert_eq!(workflow, before_workflow);
         assert_eq!(dispatcher.recovery_generation(), recovery_generation);
@@ -715,7 +725,7 @@ fn every_unimplemented_component_is_a_noninteractive_placeholder() {
     doc["components"][0]["layout"] = json!("column");
     let admitted = admit(&doc);
     let (report, painted) = frame(&admitted, &observations(), EPOCH, vec![]);
-    assert_eq!(report.placeholders, 7);
+    assert_eq!(report.placeholders, 6);
     let text: Vec<_> = painted.iter().map(|(s, _)| s.clone()).collect();
     for kind in [
         "Button",
@@ -724,13 +734,13 @@ fn every_unimplemented_component_is_a_noninteractive_placeholder() {
         "IntegerInput",
         "NumberInput",
         "TextInput",
-        "Plot",
     ] {
         has(
             &text,
             &format!("{kind}: unsupported in read-only preview (inert)"),
         );
     }
+    has(&text, "Read-only Plot: open one chart at a time");
     let at = painted
         .iter()
         .find(|(s, _)| s == "Do not execute")

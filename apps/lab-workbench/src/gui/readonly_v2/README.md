@@ -7,9 +7,11 @@ protocol capability, Runtime callback, persistence or laboratory action path.
 The v1 Workbench and its 16 external operations retain their existing owner.
 `ACTIVATION_QUALIFIED` remains **false**.
 
-DGUI-4C7B1 adds an independent, frame-local [Plot/Trace projection](PLOT_PROJECTION.md).
-It prepares bounded curve data from the existing observation buffers, without
-creating an egui_plot widget or changing the Preview's inert Plot placeholder.
+DGUI-4C7B1 supplies the frame-local [Plot/Trace projection](PLOT_PROJECTION.md).
+DGUI-4C7B2 adds [one interactive read-only Plot mode](PLOT_WIDGET.md), with
+Preview-owned viewport/legend state and actual CPU tessellation measurements.
+Full-schema Plot memory qualification remains blocked; the linked report gives
+the reproducible counterexample and preflight refusal policy.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See
@@ -58,10 +60,10 @@ or Runtime queries. Runtime scalar text over 512 UTF-8 bytes is explicitly
 unavailable before a typed-read clone; entity text remains an explicitly marked
 1024-byte prefix. This is read-only display, never a candidate value.
 
-Button, Toggle, Select, IntegerInput, NumberInput, TextInput and Plot remain
+Button, Toggle, Select, IntegerInput, NumberInput and TextInput remain
 explicit inert placeholders. All availability is resolved through admitted
 occurrence paths, including inherited v1 origin ceilings. There are no drafts,
-Confirm implementation, sample buffers, metadata refresh or action execution.
+Confirm implementation, persistent sample copies, metadata refresh or action execution.
 The fixed previous paint page is compared with freshly resolved text each frame;
 it is not an independently usable observation cache.
 
@@ -77,6 +79,6 @@ additionally reports peak block count for conservative per-block accounting.
 
 The previous 66,153,808-byte retained Context was caused by submitting all
 20,480 occurrences. The bounded preview removes that submission path. Full
-activation still requires a reviewed host lifecycle/GPU integration, Plot v2,
+activation still requires a reviewed host lifecycle/GPU integration, full-schema Plot memory,
 bounded editors/drafts, actions, operator Confirm and the external v2 protocol/
-profile. DGUI-4C7B is not implemented here.
+profile. No external v2 activation is implemented here.

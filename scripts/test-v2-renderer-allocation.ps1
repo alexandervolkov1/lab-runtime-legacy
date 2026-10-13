@@ -2,7 +2,8 @@
 param(
     [ValidateSet('dev', 'release')][string]$BuildProfile = 'dev',
     [switch]$DiagnosticProvenance,
-    [switch]$ProjectionOnly
+    [switch]$ProjectionOnly,
+    [switch]$PlotOnly
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -14,6 +15,7 @@ try {
     }
     if ($DiagnosticProvenance -and $BuildProfile -ne 'dev') { throw 'Diagnostic baseline is dev-only' }
     if ($DiagnosticProvenance -and $ProjectionOnly) { throw 'Projection qualification requires the fixed profiles' }
+    if ($DiagnosticProvenance -and $PlotOnly) { throw 'Plot qualification requires the fixed profiles' }
     $cargoArgs = @('build', '-p', 'lab-workbench', '--locked', '--profile', $BuildProfile, '--message-format=json')
     if ($DiagnosticProvenance) {
         # Reproduce the reviewed pre-fix dependency cfg, without editing Cargo.toml.
@@ -113,8 +115,9 @@ fn main() { probe::run(); }
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection') }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot') }
     if ($ProjectionOnly) { $scenarios = @('projection') }
+    if ($PlotOnly) { $scenarios = @('plot') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE

@@ -198,7 +198,12 @@ guards. `cargo fmt --all -- --check`,
 `cargo clippy -p lab-workbench --all-targets --locked -- -D warnings`, standalone
 probe formatting and `git diff --check` passed. No full-workspace gate was run.
 
-## B2 view-state contract (design only)
+## B2 view-state contract
+
+The original design below is now implemented by [PLOT_WIDGET.md](PLOT_WIDGET.md).
+B1's projection, quota algorithm and independent allocation qualification are
+unchanged. The combined widget qualification has a documented full-schema text
+counterexample and remains an activation blocker.
 
 The Preview retires Context whenever page text changes, so Context cannot be the
 sole owner of plot interaction state. B2 should give the isolated preview owner
@@ -217,8 +222,9 @@ retirement may preserve only the validated slot. Returning to another occurrence
 does not resurrect its prior GUI state. Full trace identity, not a label or source
 name, selects the legend/hover target.
 
-B2 must qualify actual egui_plot allocations, layout/paint work, combined frame
-and state budgets, Context retirement, hover honesty and host/GPU resource lifetime.
-No slot, widget, pan/zoom, legend interaction, v2 Plot capability, GPU integration,
-external v2 protocol/profile, drafts, action execution or Confirm is implemented
-here. Independent review is required before beginning that work.
+B2 measures actual egui_plot allocations, layout/paint work, combined frame
+and state budgets, Context retirement and hover honesty. Host/GPU resource
+lifetime qualification is deferred because there is no active host integration.
+The projection itself owns no slot, widget, pan/zoom or legend interaction. B2
+adds those in the isolated Preview, without GPU integration, external v2
+protocol/profile, drafts, action execution or Confirm.
