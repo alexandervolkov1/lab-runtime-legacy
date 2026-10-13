@@ -558,6 +558,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         include_str!("admission.rs"),
         include_str!("visual_budget.rs"),
         include_str!("conversion.rs"),
+        include_str!("export.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -588,6 +589,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         assert!(!consumer.contains("CanonicalWireCandidate"));
         assert!(!consumer.contains("AdmittedV2Document"));
         assert!(!consumer.contains("convert_v1"));
+        assert!(!consumer.contains("export_v1"));
     }
     // Outer dependencies are exact read-only constant/source-schema surfaces.
     let limits = include_str!("limits.rs").replace("\r\n", "\n");
@@ -598,7 +600,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
     let source = include_str!("source_v1.rs").replace("\r\n", "\n");
     assert_eq!(
         source.split_once("\n\n").unwrap().1,
-        "pub(super) use crate::presentation::{\n    ConfigurationOwner, Control, ControlKind, DocumentError, PanelKind, PresentationDocument,\n    RuntimeRef,\n};\n"
+        "pub(super) use crate::presentation::{\n    AxisOptions, ConfigurationOwner, Control, ControlKind, DocumentError, MAX_CONTROLS, Panel,\n    PanelKind, Plot, PresentationDocument, PresentationTab, PresentationWindow, RuntimeRef, Trace,\n    TraceStyle,\n};\n"
     );
 }
 

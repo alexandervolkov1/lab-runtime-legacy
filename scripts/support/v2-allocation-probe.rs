@@ -1,7 +1,7 @@
 //! Standalone, single-thread test process. Never compiled into Workbench.
 //! The launcher links the exact already-built serde artifacts and source module.
 
-use crate::{conversion_fixtures, fixtures, presentation, v2};
+use crate::{conversion_fixtures, export_fixtures, fixtures, presentation, v2};
 
 // This is the sole unsafe code in the probe. Workspace forbid(unsafe_code)
 // remains unchanged. No custom allocation algorithm: all calls delegate to System.
@@ -294,4 +294,77 @@ pub(crate) fn run() {
             serde_json::to_vec_pretty(&source).unwrap().len()
         );
     }
+    for (name, source) in [
+        ("empty", presentation::PresentationDocument::empty("empty")),
+        ("mixed", conversion_fixtures::mixed()),
+        ("expansion", conversion_fixtures::expansion()),
+        ("long-normal-form", export_fixtures::long_normal_source()),
+    ] {
+        let admitted = v2::convert_v1(v2::ValidatedV1Document::check(&source).unwrap()).unwrap();
+        measure_export(name, &admitted, true);
+    }
+    for (name, count, long) in [
+        ("v1-size-limit", 480, true),
+        ("normal-form-amplification", 600, false),
+    ] {
+        let fixture = export_fixtures::shared_traces(count, long);
+        let admitted = v2::admit(&serde_json::to_vec(&fixture).unwrap()).unwrap();
+        measure_export(name, &admitted, false);
+    }
+    let mut edited = serde_json::to_value(
+        v2::convert_v1(v2::ValidatedV1Document::check(&conversion_fixtures::mixed()).unwrap())
+            .unwrap()
+            .dto(),
+    )
+    .unwrap();
+    edited["settings"]["density"] = serde_json::json!("compact");
+    let admitted = v2::admit(&serde_json::to_vec(&edited).unwrap()).unwrap();
+    measure_export("nondefault-settings", &admitted, false);
+
+    let mut source = conversion_fixtures::mixed();
+    source.document_id = "x".repeat(257);
+    let admitted = v2::convert_v1(v2::ValidatedV1Document::check(&source).unwrap()).unwrap();
+    let before = admitted.canonical_bytes().to_vec();
+    // First reconstructed String, then repeat-C canonical/wire buffer reservations.
+    // Other inherited converter/validator allocations are not fallible OOM probes.
+    for size in [257, 1024 * 1024, 2 * 1024 * 1024] {
+        meter::start();
+        meter::fail(size);
+        let error = v2::export_v1(&admitted).unwrap_err();
+        assert_eq!(error, v2::ExportError::ConversionLimit);
+        let reading = meter::phase();
+        meter::stop();
+        assert_eq!(reading.live, 0);
+        assert_eq!(reading.blocks, 0);
+        assert_eq!(before, admitted.canonical_bytes());
+    }
+    println!(
+        "export reproducibility, atomic failures and three fallible reservation failures passed"
+    );
+}
+
+fn measure_export(name: &str, source: &v2::AdmittedV2Document, success: bool) {
+    let before = source.canonical_bytes().to_vec();
+    let measure = || {
+        meter::start();
+        let result = v2::export_v1(source);
+        let exported = meter::phase();
+        assert_eq!(result.is_ok(), success);
+        if !success {
+            assert_eq!(exported.live, 0);
+        }
+        drop(result);
+        let released = meter::phase();
+        meter::stop();
+        assert_eq!(released.live, 0);
+        assert_eq!(released.blocks, 0);
+        exported
+    };
+    let first = measure();
+    assert_eq!(first, measure());
+    assert_eq!(before, source.canonical_bytes());
+    println!(
+        "export {name}, borrowed v2 requested {}, additional {first:?}",
+        source.allocation().capacity_bytes
+    );
 }

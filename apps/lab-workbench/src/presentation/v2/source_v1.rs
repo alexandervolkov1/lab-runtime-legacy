@@ -1,6 +1,7 @@
-//! Read-only source schema for offline conversion; no persistence or owner access.
+//! Shared v1 syntax for offline import/export; no persistence or owner access.
 
 pub(super) use crate::presentation::{
-    ConfigurationOwner, Control, ControlKind, DocumentError, PanelKind, PresentationDocument,
-    RuntimeRef,
+    AxisOptions, ConfigurationOwner, Control, ControlKind, DocumentError, MAX_CONTROLS, Panel,
+    PanelKind, Plot, PresentationDocument, PresentationTab, PresentationWindow, RuntimeRef, Trace,
+    TraceStyle,
 };
