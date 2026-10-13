@@ -107,4 +107,54 @@ pub(super) fn run() {
         MAX_POINTS * std::mem::size_of::<PlotPoint>(),
         MAX_TRACES * std::mem::size_of::<TraceView<'_>>()
     );
+    measure_quota_fixtures();
+}
+
+fn measure_quota_fixtures() {
+    let doc = fixtures::admit(&fixtures::syntax(32, false));
+    let bytes = doc.canonical_bytes().to_vec();
+    let mut skewed = [1; 32];
+    skewed[0] = 4096;
+    let mut exact = [1; 32];
+    exact[..3].fill(4096);
+    exact[3] = 4068;
+    let mut over = exact;
+    over[3] += 1;
+    let mut mixed = [1; 32];
+    mixed[..5].fill(4096);
+    for (label, lengths, expected) in [
+        ("skewed-4127", skewed, 4127),
+        ("exact-budget", exact, MAX_POINTS),
+        ("budget-plus-one", over, MAX_POINTS - 1),
+        ("redistributed", mixed, MAX_POINTS - 3),
+    ] {
+        let obs = fixtures::observations_with_lengths(&lengths);
+        let before = obs.clone();
+        meter::start();
+        let view = project(
+            &doc,
+            &obs,
+            PresentationEpoch {
+                owner: [3; 16],
+                revision: 0,
+            },
+            Location::default(),
+            0,
+            PROJECTION_RESERVATION,
+        )
+        .unwrap();
+        assert_eq!(view.prepared_points(), expected);
+        let retained = meter::phase();
+        drop(view);
+        let dropped = meter::phase();
+        assert_eq!((dropped.live, dropped.blocks), (0, 0));
+        let charged = retained.overlap_peak + retained.peak_blocks * 127 + 64 * 1024;
+        assert!(charged <= PROJECTION_RESERVATION);
+        meter::stop();
+        assert_eq!(obs, before);
+        assert_eq!(doc.canonical_bytes(), bytes);
+        println!(
+            "quota {label}: points={expected}; {retained:?}; drop: {dropped:?}; charged={charged}"
+        );
+    }
 }

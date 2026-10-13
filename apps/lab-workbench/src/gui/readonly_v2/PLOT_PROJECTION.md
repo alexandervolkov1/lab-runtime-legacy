@@ -98,10 +98,22 @@ there is no unbounded formatter output or silently truncated identity.
 
 ## Deterministic decimation
 
-First count eligible points without copying them. Divide the 16,384-point quota
-equally among visible, compatible, nonempty curves. Each curve gets at least 512
-slots; unused quota is deliberately not redistributed. A curve fitting its quota
-is copied exactly, including signed zero and subnormals.
+First count eligible window points for each visible, compatible, nonempty curve
+without copying them. If their aggregate demand is at most 16,384, every eligible
+point is copied exactly, including signed zero and subnormals. Empty, hidden,
+missing or disabled/incompatible curves have zero demand and consume no quota.
+
+Above that total, use integer water filling with two fixed 32-slot arrays. Find
+the highest level L such that `sum(min(window_points, L)) <= 16,384` by at most
+13 binary-search passes over the slots (each demand is at most 4096). Short traces
+receive their full demand, leaving the remaining capacity available to longer
+traces. Allocate the residual slots one apiece to still-unsatisfied traces in
+original Trace order. Maximality of L guarantees fewer than 32 residual slots;
+the final quota sum is exactly 16,384. Unsatisfied traces differ by at most one
+slot. The water level is at least 512, so no nonempty trace is starved and every
+decimated curve has room for both endpoints. Neither point buffers nor trace
+order are modified. The bounded slot arrays fit within the existing 64 KiB
+scratch allowance; no persistent cache or extra heap allocation is introduced.
 
 For an over-quota curve, preserve its first and last eligible point and divide
 the interior into `floor((quota - 2) / 2)` contiguous, equal-count buckets. Emit
@@ -122,6 +134,7 @@ link the actual Workbench dependency artifacts and fixed Cargo profiles. The new
 or worker threads. Fixtures/admission/shared observations exist before measurement;
 all projection allocations and formatting are charged. It measures 32 independent
 4096-point sources over 21 epochs, dropping every view, and injects arena failures.
+It also measures unequal source lengths below, at and above the aggregate budget.
 The finite lifetime proof is architectural (no global state or persistent owner),
 not an inference from a finite number of successful epochs.
 
@@ -145,7 +158,26 @@ Requested bytes are allocator measurements, not an RSS claim. All repeated epoch
 readings are exactly equal. Budget refusal allocates nothing; injected trace-arena
 failure allocates nothing; point-arena failure releases its earlier trace arena.
 
-Both full native renderer suites also passed: all 5120 pages covering 20,480
+The non-wasteful quota correction was remeasured with `-ProjectionOnly` in both
+profiles, with identical results (retained = phase peak = overlap peak):
+
+| Window demands in Trace order | Prepared points | Requested bytes | Charged bytes |
+| --- | ---: | ---: | ---: |
+| 4096 + 31 × 1 | 4,127 (all) | 90,864 | 157,289 |
+| 3 × 4096 + 4068 + 28 × 1 | 16,384 (all) | 286,976 | 353,401 |
+| 3 × 4096 + 4069 + 28 × 1 | 16,383 | 286,976 | 353,401 |
+| 5 × 4096 + 27 × 1 | 16,381 | 286,976 | 353,401 |
+
+The budget-plus-one case assigns quotas 4096, 4096, 4095, 4069, then 28 singletons.
+Only the third trace is decimated; the unchanged bucket algorithm emits 4094
+points for its odd quota. In the mixed case the five long quotas are 3272, 3272,
+3271, 3271, 3271; every short trace keeps its point. Odd quotas and coincident
+min/max can still leave emission slots unused, without artificial duplicates.
+All quota capacity is assigned before decimation. Each view drop releases every
+allocation. The reservation remains 512 KiB, and the worst-case measurements and
+allocation-failure behavior above are unchanged.
+
+The original full native renderer suites also passed: all 5120 pages covering 20,480
 occurrences, repeated frames, text stress, 21 epochs, Context recreation and
 max-to-empty transitions, and zero SOURCE_MAP accumulation in the fixed profiles.
 Their retained/peak evidence remains unchanged from A2. The existing admission,
@@ -154,9 +186,9 @@ scenario against freshly built executable dependency artifacts without repeating
 the unrelated full-page traversal. Raw outputs are under
 `target/v2-renderer-allocation-probe/{dev,release}/projection.txt`.
 
-Validation: 247 selected dev regressions passed, followed by the final 12 Plot
-projection regressions plus the strengthened live-owner/runtime-silence boundary
-test (249 distinct tests total). Coverage includes v1 Plot/hover/Confirm, v2
+Validation after the quota correction: 253 selected dev regressions passed,
+including 16 Plot projection tests and the live-owner/runtime-silence boundary
+test. Coverage includes v1 Plot/hover/Confirm, v2
 renderer/navigation, DTO/graph/admission/conversion/export, external API v1,
 Dispatcher, typed reads and architecture guards. Native probes exercise actual
 allocation and failure paths; deterministic unit tests cover irregular windows,

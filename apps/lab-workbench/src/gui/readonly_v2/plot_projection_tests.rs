@@ -481,7 +481,7 @@ fn four_group_levels_and_64_plot_occurrences_project_only_the_selected_one() {
 
 #[test]
 fn decimation_is_deterministic_for_flat_buckets_odd_quotas_and_irregular_times() {
-    let doc = admit(&syntax(11, false)); // Odd quota: floor(16384 / 11) = 1489.
+    let doc = admit(&syntax(11, false)); // Quotas 1490 for the first 5, then 1489.
     let mut obs = observations(11, 0);
     for source in 0..11 {
         for i in 0..4096 {
@@ -523,4 +523,170 @@ fn decimation_is_deterministic_for_flat_buckets_odd_quotas_and_irregular_times()
         }));
     }
     assert!(first.prepared_points() <= MAX_POINTS);
+}
+
+fn assert_exact_source(
+    result: &PlotView<'_>,
+    obs: &RuntimeObservations,
+    trace: usize,
+    source: usize,
+) {
+    let points = obs.live[&target(source)].points();
+    assert_eq!(result.points(trace).len(), points.len());
+    for (actual, expected) in result.points(trace).iter().zip(points) {
+        assert_eq!(actual.x.to_bits(), expected.time_seconds.to_bits());
+        assert_eq!(actual.y.to_bits(), expected.value.to_bits());
+    }
+    assert_eq!(result.traces[trace].decimated_points, 0);
+}
+
+#[test]
+fn skewed_and_exact_budget_windows_copy_every_point_without_decimation() {
+    let doc = admit(&syntax(32, false));
+    let bytes = doc.canonical_bytes().to_vec();
+    let mut skewed = [1; 32];
+    skewed[0] = 4096;
+    let mut exact = [1; 32];
+    exact[..3].fill(4096);
+    exact[3] = 4068; // 3*4096 + 4068 + 28 = 16384.
+    for lengths in [skewed, exact] {
+        let obs = observations_with_lengths(&lengths);
+        let before = obs.clone();
+        let result = view(&doc, &obs);
+        assert_eq!(result.prepared_points(), lengths.iter().sum::<usize>());
+        for index in 0..32 {
+            assert_exact_source(&result, &obs, index, index);
+        }
+        assert_eq!(obs, before);
+        assert_eq!(doc.canonical_bytes(), bytes);
+    }
+}
+
+#[test]
+fn over_budget_by_one_and_skewed_overload_redistribute_in_trace_order() {
+    let doc = admit(&syntax(32, false));
+    let bytes = doc.canonical_bytes().to_vec();
+    let mut one_over = [1; 32];
+    one_over[..3].fill(4096);
+    one_over[3] = 4069;
+    let mut mixed = [1; 32];
+    mixed[..5].fill(4096);
+    for (lengths, expected_prefix, expected_total) in [
+        // Only trace 2 is decimated: its odd quota 4095 emits 4094 points.
+        (one_over, vec![4096, 4096, 4094, 4069], MAX_POINTS - 1),
+        // Capped water level 3271, with two residual slots in trace order.
+        (mixed, vec![3272, 3272, 3270, 3270, 3270], MAX_POINTS - 3),
+    ] {
+        let obs = observations_with_lengths(&lengths);
+        let before = obs.clone();
+        let result = view(&doc, &obs);
+        let repeated = view(&doc, &obs);
+        assert_eq!(result.prepared_points(), expected_total);
+        for (index, &length) in lengths.iter().enumerate() {
+            let points = result.points(index);
+            assert_eq!(
+                points.len(),
+                expected_prefix.get(index).copied().unwrap_or(1)
+            );
+            assert_eq!(points, repeated.points(index));
+            assert_eq!(points.first().unwrap().x, 0.0);
+            assert_eq!(points.last().unwrap().x, (length - 1) as f64);
+            assert!(points.windows(2).all(|pair| pair[0].x < pair[1].x));
+            assert_eq!(result.traces[index].decimated_points, length - points.len());
+            assert_eq!(result.traces[index].buffer_dropped, 0);
+            if length > 234 {
+                assert!(points.contains(&PlotPoint::new(123.0, 1000.0)));
+                assert!(points.contains(&PlotPoint::new(234.0, -1000.0)));
+            }
+        }
+        assert_eq!(obs, before);
+        assert_eq!(doc.canonical_bytes(), bytes);
+    }
+}
+
+#[test]
+fn inactive_windows_consume_no_quota_and_one_or_two_point_traces_survive() {
+    let mut syntax = syntax(32, false);
+    for index in [4].into_iter().chain(9..32) {
+        syntax["plots"][0]["traces"][index]["visible"] = json!(false);
+    }
+    syntax["data_bindings"][5]["target"] = json!({"kind":"reference","reference":"r"});
+    syntax["data_bindings"][8]["expect_kind"] = json!("integer");
+    let doc = admit(&syntax);
+    let mut obs = observations(32, 4096);
+    obs.live.insert(target(3), Default::default());
+    obs.entities.remove(&target(6));
+    obs.live.remove(&target(7));
+    let before = obs.clone();
+    let result = view(&doc, &obs);
+    assert_eq!(result.prepared_points(), 3 * 4096);
+    for index in 0..3 {
+        assert_exact_source(&result, &obs, index, index);
+    }
+    assert_eq!(result.traces[3].state, CurveState::EmptyWindow);
+    assert_eq!(
+        result.traces[5].state,
+        CurveState::Disabled(v2::StaticBlocker::IncompatibleTarget)
+    );
+    assert_eq!(
+        result.traces[6].state,
+        CurveState::Absent(ReadAbsence::MissingObservation)
+    );
+    assert_eq!(result.traces[7].state, CurveState::MissingBuffer);
+    assert_eq!(result.traces[8].state, CurveState::ExpectKindMismatch);
+    for index in 3..32 {
+        assert!(result.points(index).is_empty());
+        assert_eq!(result.traces[index].window_points, 0);
+    }
+    assert_eq!(obs, before);
+
+    let doc = admit(&super::plot_fixtures::syntax(32, false));
+    let mut lengths = [0; 32];
+    lengths[31] = 4096;
+    let obs = observations_with_lengths(&lengths);
+    assert_exact_source(&view(&doc, &obs), &obs, 31, 31);
+    let mut lengths = [4096; 32];
+    lengths[0] = 1;
+    lengths[31] = 2;
+    let obs = observations_with_lengths(&lengths);
+    let result = view(&doc, &obs);
+    assert_exact_source(&result, &obs, 0, 0);
+    assert_exact_source(&result, &obs, 31, 31);
+    assert!(result.prepared_points() <= MAX_POINTS);
+    assert!(
+        result
+            .traces
+            .iter()
+            .enumerate()
+            .all(|(i, _)| !result.points(i).is_empty())
+    );
+}
+
+#[test]
+fn shared_sources_each_get_independent_quota_and_exact_irregular_signed_zero_points() {
+    let mut syntax = syntax(32, false);
+    syntax["data_bindings"][1]["target"] = syntax["data_bindings"][0]["target"].clone();
+    let doc = admit(&syntax);
+    let mut lengths = [1; 32];
+    lengths[0] = 4096;
+    let mut obs = observations_with_lengths(&lengths);
+    // One source is reused by two traces. Irregular x and signed zero must be
+    // copied bit-for-bit when the aggregate demand fits (8192 + 30 points).
+    let buffer = obs.live.get_mut(&target(0)).unwrap();
+    *buffer = Default::default();
+    for index in 0..4096 {
+        buffer
+            .push(LivePoint {
+                time_seconds: (index as f64).powi(2) / 4096.0,
+                value: if index % 2 == 0 { -0.0 } else { 0.0 },
+            })
+            .unwrap();
+    }
+    let before = obs.clone();
+    let result = view(&doc, &obs);
+    assert_eq!(result.prepared_points(), 8222);
+    assert_exact_source(&result, &obs, 0, 0);
+    assert_exact_source(&result, &obs, 1, 0);
+    assert_ne!(result.traces[0].identity, result.traces[1].identity);
+    assert_eq!(obs, before);
 }

@@ -345,15 +345,16 @@ pub(crate) fn project<'a>(
         }
         result.traces.push(trace);
     }
-    let active = buffers.iter().flatten().count();
-    let quota = MAX_POINTS / active.max(1);
-    let count = result
-        .traces
-        .iter()
-        .map(|trace| trace.window_points.min(quota))
-        .sum();
+    let needs = std::array::from_fn(|index| {
+        result
+            .traces
+            .get(index)
+            .map_or(0, |trace| trace.window_points)
+    });
+    let quotas = point_quotas(needs);
+    let count = quotas.iter().sum();
     result.points = reserve(count)?;
-    for (trace, buffer) in result.traces.iter_mut().zip(buffers) {
+    for ((trace, buffer), quota) in result.traces.iter_mut().zip(buffers).zip(quotas) {
         trace.points.start = result.points.len();
         if let Some(buffer) = buffer {
             let cutoff = trace.window.expect("counted source window").0;
@@ -369,6 +370,38 @@ pub(crate) fn project<'a>(
     }
     debug_assert!(result.points.len() <= MAX_POINTS && result.point_visits <= MAX_POINT_VISITS);
     Ok(result)
+}
+
+/// Integer water filling over 32 fixed slots, with no point scans or allocation.
+/// Needs come only from eligible windows (each <= LIVE_TRACE_POINTS), so all
+/// sums are <= 32 * 4096. At most 13 binary-search passes find the highest common
+/// level whose capped sum fits; fewer than 32 residual slots go in trace order.
+fn point_quotas(needs: [usize; MAX_TRACES]) -> [usize; MAX_TRACES] {
+    if needs.iter().sum::<usize>() <= MAX_POINTS {
+        return needs;
+    }
+    let (mut low, mut high) = (0, LIVE_TRACE_POINTS);
+    while low < high {
+        let level = low + (high - low).div_ceil(2);
+        let used: usize = needs.iter().map(|&need| need.min(level)).sum();
+        if used <= MAX_POINTS {
+            low = level;
+        } else {
+            high = level - 1;
+        }
+    }
+    let mut quotas = needs.map(|need| need.min(low));
+    let mut remaining = MAX_POINTS - quotas.iter().sum::<usize>();
+    for (quota, need) in quotas.iter_mut().zip(needs) {
+        if remaining != 0 && *quota < need {
+            *quota += 1;
+            remaining -= 1;
+        }
+    }
+    // The level is at least MAX_POINTS / MAX_TRACES = 512: every nonempty
+    // trace survives, and every decimated trace has room for both endpoints.
+    debug_assert_eq!(remaining, 0);
+    quotas
 }
 
 fn eligible(point: &LivePoint, cutoff: f64) -> bool {

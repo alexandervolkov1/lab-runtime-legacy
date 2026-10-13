@@ -36,8 +36,12 @@ pub(crate) fn observe(obs: &mut RuntimeObservations, index: usize, kind: &str, v
 }
 pub(crate) fn observations(sources: usize, points: usize) -> RuntimeObservations {
     assert!(sources <= 32 && points <= 4096);
+    observations_with_lengths(&[points; 32][..sources])
+}
+pub(crate) fn observations_with_lengths(lengths: &[usize]) -> RuntimeObservations {
+    assert!(lengths.len() <= 32 && lengths.iter().all(|&points| points <= 4096));
     let mut obs = RuntimeObservations::default();
-    for source in 0..sources {
+    for (source, &points) in lengths.iter().enumerate() {
         observe(&mut obs, source, "float", json!(1.0));
         for i in 0..points {
             obs.live
