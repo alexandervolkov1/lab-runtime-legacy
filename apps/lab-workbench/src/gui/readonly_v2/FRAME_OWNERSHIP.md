@@ -1,5 +1,10 @@
 # DGUI-4C7B2C4A: enforced frame ownership and host boundary
 
+C4B2A implements [fallible retirement and persistent HostSession ownership](FALLIBLE_RETIREMENT.md).
+That report supersedes the host constructor, infallible complete/drain and
+retirement descriptions below. This file preserves the historical C4A contract
+and evidence; the exclusive frame and generation bounds remain.
+
 C4B1 follow-up: [native Glow preflight](NATIVE_GLOW_PREFLIGHT.md) corrects drain
 arming for platform errors without uploads and identifies the infallible drain
 contract as a GPU integration blocker. The C4A evidence below is historical.

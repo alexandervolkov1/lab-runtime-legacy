@@ -3,7 +3,9 @@ use super::{epoch, meter, readonly_v2};
 use crate::{plot_fixtures as fixtures, plot_geometry_fixtures::GeometryStats};
 use eframe::egui;
 use readonly_v2::{
+    completion::{Completion, WaitFailure, WaitPolicy, WaitPurpose, WaitRequest},
     frame::{ContextGeneration, FrameError, FrameOutcome},
+    host_session::{HostSession, ShutdownOutcome},
     texture_owner::{FrameBackend, MAX_TEXTURES, TextureKey},
 };
 
@@ -73,18 +75,19 @@ impl FrameBackend for &mut Host {
             Ok(())
         }
     }
-    fn complete(&mut self) -> Result<(), FrameError> {
-        if self.fault == Some(FrameError::Completion) && self.draws >= self.fault_after_draws {
-            Err(FrameError::Completion)
+    fn wait(&mut self, request: WaitRequest) -> Completion {
+        if request.purpose == WaitPurpose::Retirement {
+            self.busy = false;
+            self.drains += 1;
+            Completion::Quiesced
+        } else if self.fault == Some(FrameError::Completion) && self.draws >= self.fault_after_draws
+        {
+            Completion::Failed(WaitFailure::WaitError)
         } else {
             self.busy = false;
             self.completed += 1;
-            Ok(())
+            Completion::Quiesced
         }
-    }
-    fn drain(&mut self) {
-        self.busy = false;
-        self.drains += 1;
     }
     fn free(&mut self, key: TextureKey) {
         assert!(!self.busy);
@@ -128,7 +131,8 @@ pub(super) fn run_no_upload_faults() {
         };
         let mut stats = GeometryStats::default();
         meter::start();
-        let mut preview = readonly_v2::Preview::with_backend(&doc, epoch(0), &mut host);
+        let mut session = HostSession::new(&mut host);
+        let mut preview = readonly_v2::Preview::with_session(&doc, epoch(0), &mut session);
         preview.open_plot(0);
         let mut warm = preview.run(&obs, Default::default()).unwrap();
         let generation = warm.generation();
@@ -149,6 +153,11 @@ pub(super) fn run_no_upload_faults() {
         }
         let retained = meter::phase();
         drop(preview);
+        assert_eq!(
+            session.shutdown(WaitPolicy::default()),
+            ShutdownOutcome::Released
+        );
+        drop(session);
         let dropped = meter::phase();
         meter::stop();
         assert_eq!(host.late_sets, 0, "failure must occur without new uploads");
@@ -213,7 +222,8 @@ pub(super) fn run() {
         let expected_fault = host.fault;
         let mut stats = GeometryStats::default();
         meter::start();
-        let mut preview = readonly_v2::Preview::with_backend(&doc, epoch(0), &mut host);
+        let mut session = HostSession::new(&mut host);
+        let mut preview = readonly_v2::Preview::with_session(&doc, epoch(0), &mut session);
         if case != 0 {
             preview.open_plot(0);
         }
@@ -258,6 +268,11 @@ pub(super) fn run() {
         }
         let reading = meter::phase();
         drop(preview);
+        assert_eq!(
+            session.shutdown(WaitPolicy::default()),
+            ShutdownOutcome::Released
+        );
+        drop(session);
         let dropped = meter::phase();
         meter::stop();
         assert_eq!((dropped.live, dropped.blocks), (0, 0));

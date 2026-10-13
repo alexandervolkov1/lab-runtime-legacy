@@ -53,6 +53,8 @@ pub(crate) enum FrameError {
     PlatformOutput,
     Submission,
     Completion,
+    RetirementPending,
+    HostClosed,
 }
 
 /// Preparation diagnostics are distinct from a completed host acknowledgement.
@@ -91,8 +93,8 @@ impl FrameData {
 }
 impl Drop for FrameData {
     fn drop(&mut self) {
-        // Only CPU image bytes are discarded here. Preview's TextureOwner owns
-        // all host obligations and drains/retires them separately on failure.
+        // Only CPU image bytes are discarded here. The session owns host
+        // obligations and retains this payload until retirement is proven.
         self.output.textures_delta.clear();
     }
 }
@@ -188,6 +190,7 @@ impl<B: FrameBackend> PreviewFrame<'_, '_, B> {
             Err(FrameError::NotTessellated)
         } else {
             self.preview
+                .session
                 .textures
                 .process(data.generation, &mut data.output, &data.meshes)
         };
@@ -205,7 +208,16 @@ impl<B: FrameBackend> PreviewFrame<'_, '_, B> {
             Err(error) => FrameOutcome::Failed(error),
         };
         if result.is_err() {
-            self.preview.retire();
+            self.preview.retire_with(
+                super::host_session::RetirementReason::FrameFailed,
+                Some(outcome),
+            );
+            // An unsuccessful completion already spent its bounded observation
+            // budget. Preserve it; only the caller may request another wait.
+            if result != Err(FrameError::Completion) {
+                self.preview
+                    .poll_retirement(super::completion::WaitPolicy::default());
+            }
         } else {
             self.preview.pending = None;
         }

@@ -1,5 +1,9 @@
 # DGUI-4C7B2C4B1: native Glow preflight and platform failure correction
 
+C4B2A follow-up: [fallible retirement and persistent HostSession](FALLIBLE_RETIREMENT.md)
+implements the approved ownership direction. This preflight remains historical;
+the real GPU adapter, runner and device-loss teardown are still unqualified.
+
 **Status: BLOCKED at the required integration-seam gate.** No native GPU smoke
 or GPU lifecycle qualification is claimed. `ACTIVATION_QUALIFIED = false`.
 

@@ -1,0 +1,114 @@
+DGUI-4C7B2C4B2A gate record - 2026-10-14
+Implementation: fallible completion/retirement and external persistent HostSession.
+GPU lifecycle: BLOCKED; real GL/native GPU smoke intentionally not implemented or run.
+CPU MEMORY QUALIFIED retained only for the pinned isolated Windows/MSVC scope.
+ACTIVATION_QUALIFIED=false. No active v2 integration, release or C4B2B work.
+
+C4B1 approved HEAD: 9c76a020deb599fab6172b25260c695e090a136b.
+PR #32 verified unchanged, made Ready, merged normally.
+Merge: 2e516f718fa1cfd3e3d38fae56fe8a6e2afa3641; approved HEAD is second parent.
+Main synchronized and clean before branch feature/dgui-4c7b2c4b2a-fallible-retirement.
+Windows 10 Pro 10.0.19045, x86_64-pc-windows-msvc.
+rustc 1.95.0 (59807616e 2026-04-14), LLVM 22.1.2.
+Pinned eframe/egui/epaint/egui_glow 0.36.2, egui_plot 0.37.0.
+Dependency/features/profiles unchanged; Cargo.lock blob affb1f7bada9ea57186a94f57d77229d2db7dc4d.
+Existing dev profile only disables egui debug assertions; other dev checks remain.
+1280x960, pixels-per-point 1, bounded events/Unicode, one Plot and Context namespace.
+Runtime/Workbench API, schemas, B1, FiniteTraceItem and active v1 source unchanged.
+
+Targeted tests: 308 PASS dev, 308 PASS release (301 previous + 7 retirement tests).
+Selection: gui::readonly_v2:: presentation:: gui::controls:: gui::app:: external::tests:: dispatcher::tests:: operator_boundary_tests:: model::read_binding::
+Includes A1/A2/B1/B2/B2A, widget/Unicode/Page, v1 GUI/Plot/hover/Confirm,
+admission/conversion/export, finite geometry and architecture guards.
+Final owner subset: 25 tests PASS release; final complete dev rerun 308 PASS.
+Initial completion evidence is preserved independently of later cleanup waits.
+One extra inline check hit Windows LNK1104 while the same test executable ran;
+the serialized final inline check passed. No test/assertion was weakened.
+
+New deterministic tests cover:
+- Timeout, WaitError, missing/invalid fence, DeviceLost after work started.
+- Pending Context/FrameData/key retention independently of Preview lifetime.
+- Ambiguous partial upload; unattempted next key never registered or replayed.
+- Failed platform and submit with no new uploads; busy before returning error.
+- Repeated pending retirement, 25 rejected data/owner/revision/frame/navigation requests.
+- Repeated waits preserving original error, initial wait and generation.
+- New Preview cannot replace pending state; shutdown closes admission permanently.
+- Explicit later proof permits release/new generation only in an open session.
+- Same numeric TextureId with a new generation; no retry/double free/render acknowledgement.
+- Separate wait-attempt cap, per-call request, monotonic deadline and actual elapsed time.
+- Twenty immediate timeouts, twenty 5 ms mock waits, one 250 ms mock overrun,
+  zero call/deadline budget and immediate return on non-timeout statuses.
+Mock proofs after injected DeviceLost test state transitions, not real device recovery.
+
+Five native borrowing gates PASS dev/release:
+next-frame E0499; retire-context E0499; drop-preview E0505;
+second-host-preview E0499; drop-host-session E0505.
+Public Glow signatures/borrowed App lifetime compile witness PASS; never invoked.
+
+Full native CPU launchers exit 0 in dev/release:
+119 geometry cases/profile: max accounted 4610337.
+125 C3 memory cases/profile: max accounted 4458653.
+113 Plot widget phases/profile: max accounted 4483157.
+5120 A2 pages plus stress/lifetimes/profile: max accounted 3013664.
+12 C4A frame cases/profile: max accounted 4355499, four injected frame faults.
+4 C4B1 no-upload cases/profile: max accounted 4367945, three injected frame faults.
+9 C4B2A pending cases/profile: max accounted 4367945, eight injected frame faults.
+Final dev FramesOnly rerun recompiles the final fixed-size diagnostic record.
+Geometry/memory CSVs and widget/Page text match preserved C4A evidence exactly.
+Current frame/no-upload/pending CSV pairs are byte-identical dev/release;
+FALLIBLE_RETIREMENT_EVIDENCE_SHA256.txt records normalized CSV and exact text hashes.
+Historical CSVs remain unchanged. Completion-error retained values now include
+the pending payload instead of falsely treating failure as completed cleanup.
+
+Combined accounted maximum: 4610337 / 8388608 bytes; headroom 3778271.
+Formula unchanged: realloc_overlap_peak + 127 * peak_blocks + 65536, including B1.
+New pending cases: phase peak 3590538; realloc overlap 4170202; max peak blocks 1041.
+Max pending retained after Preview Drop: 2992214 bytes / 834 blocks;
+no-upload pending retained: 2747498 bytes / 835 blocks.
+Every unresolved case: one pending key, zero frees before proof; 25 further polls
+retain exactly the same live bytes/blocks and never replay upload/platform/draw.
+After an explicit separate Quiesced proof: 0 bytes, 0 blocks, 0 owned keys.
+Normal case: 1 set, 1 submit, 1 frame completion, 1 wait, 1 free.
+Failed-frame completion is never converted to HostCompleted by successful cleanup.
+New cases: shapes 202, vertices 69760, indices 106926 including GUI;
+geometry faults 0, allocation faults 0. Existing geometry/B1 allocation faults preserved.
+Independent structural limits: 32 traces; 16384 B1 points; 65536 curve vertices;
+98304 curve indices; 8 keys; 16 updates; one generation/frame/pending slot.
+
+Fixed x64 sizes: Preview 16112; HostSession<Mock> 1232; TextureOwner<CpuOnly> 320;
+FrameData 640; Page 13800. Combined inline subtotal including external session
+and existing scratch: 44672 < 65536, both profiles PASS.
+Native host_fixed_bytes=1496: session 1232 plus fixed mock control 264.
+Session fixed storage is conservatively included in Preview's fixed charge;
+the mock control is host-only. Session introduces no heap buffer of its own.
+Real host staging/upload copies/buffers, driver allocations and VRAM: NOT MEASURED.
+
+Admission/conversion/export native allocation launcher: PASS, including three
+fallible reservation failures. Previous B1/curve allocation diagnostics preserved.
+cargo fmt --all -- --check: PASS.
+Standalone rustfmt --check --edition 2024 for support modules: PASS.
+cargo clippy -p lab-workbench --all-targets --locked -- -D warnings: PASS.
+git diff --check: PASS.
+
+Reproduction (Windows/MSVC):
+cargo test -p lab-workbench --locked -- gui::readonly_v2:: presentation:: gui::controls:: gui::app:: external::tests:: dispatcher::tests:: operator_boundary_tests:: model::read_binding:: --test-threads=1
+Repeat with --release before --locked.
+./scripts/test-v2-renderer-allocation.ps1 -BuildProfile dev
+./scripts/test-v2-renderer-allocation.ps1 -BuildProfile release
+Use -FramesOnly for 12 C4A + 4 C4B1 + 9 pending cases and five compile gates.
+./scripts/test-v2-allocation.ps1
+cargo test -p lab-workbench --locked fixed_owner_and_page_storage_fit_the_existing_inline_charge -- --nocapture
+cargo fmt --all -- --check
+rustfmt --check --edition 2024 scripts/support/frame-owner-probe.rs scripts/support/retirement-probe.rs scripts/support/v2-renderer-allocation-probe.rs scripts/support/glow-seam-check.rs
+cargo clippy -p lab-workbench --all-targets --locked -- -D warnings
+git diff --check
+
+Remaining blockers: real Glow error reporting, valid fence/flush/current context,
+truthful post-quiescence resource release, outer native-root shutdown ownership,
+terminal release after device loss, GPU smoke/counters and host/driver/VRAM accounting.
+Dropping unresolved HostSession destroys its CPU fields; this is unsupported,
+not a successful shutdown or recovery policy. The trusted native root must stay
+alive with its OS/GL context until separately proven final release. Rust borrowing
+enforces Preview's shorter lifetime, not linear destruction of that final root.
+No leak, forgotten owner, infinite wait or fake zero-obligation failure is used.
+See FALLIBLE_RETIREMENT.md for the ownership/state diagram and precise contract.
