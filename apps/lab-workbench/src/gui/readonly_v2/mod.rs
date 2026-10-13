@@ -7,6 +7,11 @@ mod navigation;
 #[cfg(test)]
 mod navigation_tests;
 mod page;
+#[cfg(test)]
+mod plot_fixtures;
+pub(crate) mod plot_projection;
+#[cfg(test)]
+mod plot_projection_tests;
 mod read;
 #[cfg(test)]
 mod tests;

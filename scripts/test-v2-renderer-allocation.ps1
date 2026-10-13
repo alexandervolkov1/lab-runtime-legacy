@@ -1,7 +1,8 @@
 # Native lifecycle probe linked against the real Workbench executable's artifacts.
 param(
     [ValidateSet('dev', 'release')][string]$BuildProfile = 'dev',
-    [switch]$DiagnosticProvenance
+    [switch]$DiagnosticProvenance,
+    [switch]$ProjectionOnly
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -12,6 +13,7 @@ try {
         throw 'Renderer qualification requires native x86_64 Windows/MSVC'
     }
     if ($DiagnosticProvenance -and $BuildProfile -ne 'dev') { throw 'Diagnostic baseline is dev-only' }
+    if ($DiagnosticProvenance -and $ProjectionOnly) { throw 'Projection qualification requires the fixed profiles' }
     $cargoArgs = @('build', '-p', 'lab-workbench', '--locked', '--profile', $BuildProfile, '--message-format=json')
     if ($DiagnosticProvenance) {
         # Reproduce the reviewed pre-fix dependency cfg, without editing Cargo.toml.
@@ -93,6 +95,7 @@ pub(crate) use v1_probe::V1Scene;
 }
 use gui::readonly_v2;
 #[path = "$sourceRoot/gui/readonly_v2/fixtures.rs"] mod fixtures;
+#[path = "$sourceRoot/gui/readonly_v2/plot_fixtures.rs"] mod plot_fixtures;
 #[path = "$support/v2-renderer-allocation-probe.rs"] mod probe;
 fn main() { probe::run(); }
 "@
@@ -110,7 +113,8 @@ fn main() { probe::run(); }
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += 'bounded' }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection') }
+    if ($ProjectionOnly) { $scenarios = @('projection') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE

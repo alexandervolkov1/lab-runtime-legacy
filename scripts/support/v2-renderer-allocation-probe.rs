@@ -238,11 +238,18 @@ fn print_report(label: &str, report: &Report, epochs: usize, recreations: usize)
 
 #[path = "bounded-renderer-probe.rs"]
 mod bounded;
+#[path = "plot-projection-probe.rs"]
+mod projection;
 
 pub(crate) fn run() {
     let args: Vec<_> = std::env::args().collect();
     let scenario = args.get(1).expect("scenario").as_str();
     let provenance = args.get(2).expect("provenance on/off") == "on";
+    if scenario == "projection" {
+        assert!(!provenance, "projection qualification uses the executable profiles");
+        projection::run();
+        return;
+    }
     if scenario == "bounded" {
         assert!(
             !provenance,
