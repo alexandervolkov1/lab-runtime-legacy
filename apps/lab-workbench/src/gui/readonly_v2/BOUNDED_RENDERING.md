@@ -9,7 +9,8 @@ The four-cell page limits below still apply to ordinary pages; Plot uses its own
 bounded work within the SAME 8 MiB, including projection and CPU tessellation.
 [B2A](PLOT_LABEL_MEMORY.md) adds ASCII curve aliases and lossless text-fragment
 navigation with Context retirement, superseding B2's full-label refusal.
-Full-schema Plot memory qualification remains open for independent review. Zoom
+The later [C3 CPU qualification](PLOT_CPU_MEMORY.md) records the current Plot
+memory scope, allocation audit and frame-ownership contract. Zoom
 events are accepted only in Plot mode and never change the preview's font scale.
 
 ## Work limits and reachability

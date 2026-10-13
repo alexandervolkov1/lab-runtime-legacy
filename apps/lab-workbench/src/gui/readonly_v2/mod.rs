@@ -87,6 +87,8 @@ pub(crate) struct RenderReport {
     pub(crate) geometry_segments: usize,
     pub(crate) geometry_unavailable: usize,
     pub(crate) geometry_failures: usize,
+    /// Failed fallible curve reservations; never count as rendered geometry.
+    pub(crate) allocation_faults: usize,
 }
 
 /// Owns one isolated Context, one fixed page of text and a four-slot navigation
@@ -265,10 +267,16 @@ impl<'a> Preview<'a> {
             report.path_nodes += next.depth;
         }
         self.previous = Some(page);
+        // Navigation changes the next view, but this output still needs the
+        // generating Context's font atlas for CPU tessellation. No second
+        // Context is created here. The next run retires it via the changed page
+        // or PlotState::prepare, after the caller has consumed this output.
+        let frame_context = self.context.take();
         self.navigate(next);
         if let Some(index) = plot {
             self.open_plot(index);
         }
+        self.context = frame_context;
         Ok((output, report))
     }
 
@@ -300,7 +308,10 @@ impl<'a> Preview<'a> {
             result = state.paint(ui, &view, text_page.as_ref());
         });
         if result.0 {
-            self.close_plot();
+            // Keep the generating Context until this frame is consumed. The
+            // next page has no previous-page key, so run retires it first.
+            self.plot = None;
+            self.previous = None;
         }
         Ok((output, result.1))
     }
@@ -321,11 +332,13 @@ fn bounded_input(mut input: egui::RawInput, plot: bool) -> egui::RawInput {
         egui::vec2(1280.0, 960.0),
     ));
     input.viewport_id = egui::ViewportId::ROOT;
-    input.events = input
-        .events
-        .into_iter()
-        .take(64)
-        .filter_map(|event| match event {
+    // collect() can reuse the caller's arbitrarily large spare capacity even
+    // after take(64). Build a separate bounded buffer so Context cannot retain
+    // that allocation. A future host must bound/charge the incoming RawInput
+    // storage before transferring ownership to Preview.
+    let mut events = Vec::new();
+    for event in input.events.into_iter().take(64) {
+        let accepted = match event {
             egui::Event::Zoom(factor)
                 if plot && factor.is_finite() && (0.1..=10.0).contains(&factor) =>
             {
@@ -353,11 +366,14 @@ fn bounded_input(mut input: egui::RawInput, plot: bool) -> egui::RawInput {
                 modifiers: egui::Modifiers::NONE,
             }),
             _ => None,
-        })
-        .collect();
+        };
+        if let Some(event) = accepted {
+            events.push(event);
+        }
+    }
     egui::RawInput {
         screen_rect: input.screen_rect,
-        events: input.events,
+        events,
         time: input.time,
         ..Default::default()
     }

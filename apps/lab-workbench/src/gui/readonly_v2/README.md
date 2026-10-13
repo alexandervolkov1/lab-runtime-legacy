@@ -23,6 +23,10 @@ DGUI-4C7B2C2 implements the reviewed [finite current-frame PlotItem and pre-axis
 boundary](PLOT_FINITE_ITEM.md). Numeric refusals are explicit; safe segments and
 hover use the same current transform. The report separates structural bounds,
 native fixture qualification and remaining universal allocator/GPU limits.
+DGUI-4C7B2C3 supplies the [CPU memory audit, native sequence evidence and
+frame-ownership handoff](PLOT_CPU_MEMORY.md), including fallible allocation tests
+and transition-frame Context lifetime. The qualification is scoped to the pinned
+Windows/MSVC CPU configuration; host/GPU activation is still separate.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See
@@ -90,6 +94,6 @@ additionally reports peak block count for conservative per-block accounting.
 
 The previous 66,153,808-byte retained Context was caused by submitting all
 20,480 occurrences. The bounded preview removes that submission path. Full
-activation still requires a reviewed host lifecycle/GPU integration, full-schema Plot memory,
+activation still requires a reviewed host lifecycle/GPU integration,
 bounded editors/drafts, actions, operator Confirm and the external v2 protocol/
 profile. No external v2 activation is implemented here.

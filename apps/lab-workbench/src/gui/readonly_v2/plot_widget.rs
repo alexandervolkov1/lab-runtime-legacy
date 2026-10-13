@@ -232,6 +232,17 @@ impl<'a> PlotState<'a> {
                 "GeometryUnavailable: {reason:?}; unsafe viewport request was not applied"
             ));
         }
+        let allocation_faults = status
+            .iter()
+            .filter(|s| s.get().fault == Some(GeometryUnavailable::Allocation))
+            .count();
+        if allocation_faults != 0 {
+            // Visible even when the affected trace's detail selector is on a
+            // different page. No failed trace is reported as a complete curve.
+            ui.label(format!(
+                "GeometryUnavailable: Allocation ({allocation_faults} traces)"
+            ));
+        }
         // Only four ASCII detail selectors/diagnostics at once. This pages text,
         // NOT curve data: all 32 B1 traces remain submitted to the plot above.
         ui.horizontal(|ui| {
@@ -271,6 +282,7 @@ impl<'a> PlotState<'a> {
                 occurrences: 1,
                 plot_points: view.prepared_points(),
                 plot_traces: view.traces.len(),
+                allocation_faults,
                 geometry_segments: status.iter().map(|s| s.get().segments).sum(),
                 geometry_unavailable: status.iter().filter(|s| s.get().fault.is_some()).count()
                     + usize::from(viewport_fault.is_some()),

@@ -1,0 +1,18 @@
+C3 exact pinned source audit (SHA-256; paths relative to Cargo registry source root).
+Windows 10 Pro 10.0.19045 x86_64-pc-windows-msvc; rustc 1.95.0 (59807616e 2026-04-14).
+Dependency features/profiles are verified by scripts/test-v2-renderer-allocation.ps1.
+No third-party source or version was modified.
+c1152788996a49f6ebfb45d817d4e9541d731334c12817ee075d448c0e55eea3  egui-0.36.2/src/context.rs
+87a7ab7e0381cd38def0604c3a63582536e1c37f7038318124f7d73ca102f16d  egui-0.36.2/src/data/output.rs
+157222559ea4ff564a888eba09f91aa0e66c5eebd7661d3ff5a46ba23889ff2e  egui-0.36.2/src/layers.rs
+86e244febe8b99ba2f462439aef2a3f7334a119e1e48c5bb1a8c2f4f82ef76d0  egui-0.36.2/src/input_state/mod.rs
+8fe3868e6cd057ccef7cda7f74f97d0c4d03aa4fe51a985407b79e0ae5b5a724  egui_plot-0.37.0/src/plot.rs
+f20f11a4ca100b79230660edc6454a80b152d2809c759df80a74431fc3e5edcb  egui_plot-0.37.0/src/memory.rs
+278b6f8dba8cdd3531a0551c6af8d07144f10259198e909547e73b7243fc565a  egui_plot-0.37.0/src/axis.rs
+9e7bc8d6c31be89a10f0be999783c05b6277dcec1248a478b9cd302c88f41436  egui_plot-0.37.0/src/overlays/legend.rs
+c2d6f86a759bd2157b5b787ab03e8eae981b243988ecf4e19c45312c8d9ee3ef  epaint-0.36.2/src/mesh.rs
+4f3b5809df42f2de7574ea41d6e1f0df3296908597cf1197c871dc0c08f10488  epaint-0.36.2/src/tessellator.rs
+8789e9093b52ac6fd8bd4171adec01802b32ec148ed302057396bd4659ff03d5  epaint-0.36.2/src/text/fonts.rs
+3854d03eef3f10406c0f092658972686993d350af2600980af8ddf3eee3bd92f  epaint-0.36.2/src/text/font.rs
+ef2ccc4ceb221c49e65f702a11efb0980a55d2073ddb4d89d1e3f9bb637f9e62  epaint-0.36.2/src/textures.rs
+25d90783fc1b217b9e43a8077443956c4101facdca7009c6a0dd45d0228e603e  epaint-0.36.2/src/texture_atlas.rs

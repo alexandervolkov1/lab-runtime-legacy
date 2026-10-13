@@ -135,5 +135,18 @@ pub(super) fn stop() {
     );
 }
 pub(super) fn fail(size: usize) {
+    assert_ne!(size, 0);
+    assert_eq!(
+        FAIL_SIZE.load(SeqCst),
+        0,
+        "previous injected fault was not consumed"
+    );
     FAIL_SIZE.store(size, SeqCst);
+}
+pub(super) fn assert_fault_consumed() {
+    assert_eq!(
+        FAIL_SIZE.load(SeqCst),
+        0,
+        "injection missed its reservation"
+    );
 }

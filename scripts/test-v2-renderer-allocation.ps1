@@ -4,7 +4,8 @@ param(
     [switch]$DiagnosticProvenance,
     [switch]$ProjectionOnly,
     [switch]$PlotOnly,
-    [switch]$GeometryOnly
+    [switch]$GeometryOnly,
+    [switch]$MemoryOnly
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -18,6 +19,7 @@ try {
     if ($DiagnosticProvenance -and $ProjectionOnly) { throw 'Projection qualification requires the fixed profiles' }
     if ($DiagnosticProvenance -and $PlotOnly) { throw 'Plot qualification requires the fixed profiles' }
     if ($DiagnosticProvenance -and $GeometryOnly) { throw 'Geometry qualification requires the fixed profiles' }
+    if ($DiagnosticProvenance -and $MemoryOnly) { throw 'Memory qualification requires the fixed profiles' }
     $cargoArgs = @('build', '-p', 'lab-workbench', '--locked', '--profile', $BuildProfile, '--message-format=json')
     if ($DiagnosticProvenance) {
         # Reproduce the reviewed pre-fix dependency cfg, without editing Cargo.toml.
@@ -118,10 +120,11 @@ fn main() { probe::run(); }
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry') }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory') }
     if ($ProjectionOnly) { $scenarios = @('projection') }
     if ($PlotOnly) { $scenarios = @('plot') }
     if ($GeometryOnly) { $scenarios = @('geometry') }
+    if ($MemoryOnly) { $scenarios = @('memory') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE
