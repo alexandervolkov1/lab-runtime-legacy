@@ -5,6 +5,8 @@ Context retirement key, preflight and memory evidence are superseded by
 [DGUI-4C7B2A full-label containment](PLOT_LABEL_MEMORY.md). In particular, the
 1024-byte refusal and diagnostic guard-bypass probe described below are removed.
 The B1 projection and B2 Plot identity/interaction contracts remain in effect.
+Current geometry and checked interaction policy are documented in
+[DGUI-4C7B2C2](PLOT_FINITE_ITEM.md); the stock-Line implementation below is historical.
 
 `ACTIVATION_QUALIFIED` remains false. The active v1 Workbench, its 16 API
 operations, Dispatcher, Runtime, recovery and v1 plotting are unchanged.

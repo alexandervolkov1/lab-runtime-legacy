@@ -1,12 +1,14 @@
 //! Isolated bounded read-only preview. No active presentation consumer or drafts.
 #![allow(dead_code, reason = "isolated pending activation qualification")]
 
+mod finite_trace;
 #[cfg(test)]
 mod fixtures;
 mod navigation;
 #[cfg(test)]
 mod navigation_tests;
 mod page;
+mod plot_bounds;
 #[cfg(test)]
 mod plot_fixtures;
 #[cfg(test)]
@@ -82,6 +84,9 @@ pub(crate) struct RenderReport {
     pub(crate) guarded: bool,
     pub(crate) plot_points: usize,
     pub(crate) plot_traces: usize,
+    pub(crate) geometry_segments: usize,
+    pub(crate) geometry_unavailable: usize,
+    pub(crate) geometry_failures: usize,
 }
 
 /// Owns one isolated Context, one fixed page of text and a four-slot navigation
@@ -288,12 +293,11 @@ impl<'a> Preview<'a> {
         if changed {
             self.retire();
         }
-        let restored = self.context.is_none();
         let context = self.context.get_or_insert_with(new_context);
         let state = self.plot.as_mut().unwrap();
         let mut result = (false, RenderReport::default());
         let output = context.run_ui(bounded_input(input, text_page.is_none()), |ui| {
-            result = state.paint(ui, &view, text_page.as_ref(), restored);
+            result = state.paint(ui, &view, text_page.as_ref());
         });
         if result.0 {
             self.close_plot();
@@ -327,14 +331,14 @@ fn bounded_input(mut input: egui::RawInput, plot: bool) -> egui::RawInput {
             {
                 Some(egui::Event::Zoom(factor))
             }
-            egui::Event::PointerMoved(pos) if pos.is_finite() => Some(event),
+            egui::Event::PointerMoved(pos) if bounded_position(pos) => Some(event),
             egui::Event::PointerGone => Some(event),
             egui::Event::PointerButton {
                 pos,
                 button,
                 pressed,
                 ..
-            } if pos.is_finite() => Some(egui::Event::PointerButton {
+            } if bounded_position(pos) => Some(egui::Event::PointerButton {
                 pos,
                 button,
                 pressed,
@@ -342,7 +346,7 @@ fn bounded_input(mut input: egui::RawInput, plot: bool) -> egui::RawInput {
             }),
             egui::Event::MouseWheel {
                 unit, delta, phase, ..
-            } if delta.is_finite() => Some(egui::Event::MouseWheel {
+            } if bounded_position(delta.to_pos2()) => Some(egui::Event::MouseWheel {
                 unit,
                 delta,
                 phase,
@@ -357,4 +361,11 @@ fn bounded_input(mut input: egui::RawInput, plot: bool) -> egui::RawInput {
         time: input.time,
         ..Default::default()
     }
+}
+
+// Finite alone is insufficient: egui computes f32 pointer deltas before the
+// Plot callback. Events far outside this fixed CPU surface have no authority to
+// overflow that arithmetic. This bounds input, never sample values.
+fn bounded_position(pos: egui::Pos2) -> bool {
+    pos.is_finite() && pos.x.abs() <= 16_384.0 && pos.y.abs() <= 16_384.0
 }

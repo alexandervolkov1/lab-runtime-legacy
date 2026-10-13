@@ -39,6 +39,25 @@ pub(crate) struct Case {
     pub(crate) axes: Option<(f64, f64)>,
 }
 impl Case {
+    /// Configuration semantics, independent of the renderer's reported reason:
+    /// ordinary curves must actually render, not pass by diagnosing everything.
+    pub(crate) fn accepts_output(&self, stats: GeometryStats) -> bool {
+        let axis_refusal = self
+            .axes
+            .is_some_and(|(lo, hi)| lo.abs().max(hi.abs()) > f64::MAX / 4096.0);
+        let numeric_refusal = stats.points > 0
+            && (self.width as f32 == 0.0
+                || matches!(
+                    self.geometry,
+                    Geometry::HugeX | Geometry::HugeY | Geometry::Subnormal
+                ));
+        if axis_refusal || numeric_refusal {
+            stats.segments == 0 && stats.unavailable > 0
+        } else {
+            stats.unavailable == 0 && (stats.points == 0 || stats.segments > 0)
+        }
+    }
+
     pub(crate) fn combined() -> Self {
         Self {
             name: "combined".into(),
@@ -247,6 +266,9 @@ pub(crate) fn scene(case: &Case, phase: usize) -> (v2::AdmittedV2Document, Runti
 pub(crate) struct GeometryStats {
     pub(crate) points: usize,
     pub(crate) traces: usize,
+    pub(crate) segments: usize,
+    pub(crate) unavailable: usize,
+    pub(crate) policy_failures: usize,
     pub(crate) shapes: usize,
     pub(crate) vertices: usize,
     pub(crate) indices: usize,
@@ -260,6 +282,9 @@ impl GeometryStats {
     pub(crate) fn max_assign(&mut self, other: Self) {
         self.points = self.points.max(other.points);
         self.traces = self.traces.max(other.traces);
+        self.segments = self.segments.max(other.segments);
+        self.unavailable = self.unavailable.max(other.unavailable);
+        self.policy_failures += other.policy_failures;
         self.shapes = self.shapes.max(other.shapes);
         self.vertices = self.vertices.max(other.vertices);
         self.indices = self.indices.max(other.indices);
@@ -275,6 +300,12 @@ impl GeometryStats {
             && self.invalid_meshes == 0
             && self.unsupported_shapes == 0
             && self.panics == 0
+            && self.policy_failures == 0
+            && self.points <= 16_384
+            && self.traces <= 32
+            && self.segments <= 16_384
+            && self.vertices <= 4 * self.points + 32_768
+            && self.indices <= 6 * self.points + 131_072
     }
     fn shape(&mut self, shape: &egui::Shape) {
         self.shapes += 1;
@@ -343,6 +374,9 @@ impl GeometryStats {
         let mut stats = Self {
             points: report.plot_points,
             traces: report.plot_traces,
+            segments: report.geometry_segments,
+            unavailable: report.geometry_unavailable,
+            policy_failures: report.geometry_failures,
             ..Self::default()
         };
         for shape in &output.shapes {

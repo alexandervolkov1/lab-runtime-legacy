@@ -313,7 +313,7 @@ fn generation_metadata_expectation_hidden_and_rebuild_changes_render_no_old_curv
 }
 
 #[test]
-fn projected_spikes_are_real_colored_paths_and_invalid_hover_has_no_tooltip() {
+fn projected_spikes_are_real_colored_meshes_and_invalid_hover_has_no_tooltip() {
     let mut syntax = plot_fixtures::syntax(32, true);
     for trace in syntax["plots"][0]["traces"].as_array_mut().unwrap() {
         trace["style"] = json!({"color":"#ff0000","width":2.5});
@@ -328,20 +328,25 @@ fn projected_spikes_are_real_colored_paths_and_invalid_hover_has_no_tooltip() {
     let transform = memory(&preview).transform();
     let peak = transform.position_from_point(&PlotPoint::new(123.0, 1000.0));
     let trough = transform.position_from_point(&PlotPoint::new(234.0, -1000.0));
-    let paths: Vec<_> = output
+    let curves: Vec<_> = output
         .shapes
         .iter()
         .filter_map(|s| {
-            if let egui::Shape::Path(p) = &s.shape {
-                (p.stroke.width == 2.5 && p.points.len() == 512).then_some(p)
+            if let egui::Shape::Mesh(m) = &s.shape {
+                (m.vertices.len() == 511 * 4
+                    && m.vertices.iter().all(|v| v.color == egui::Color32::RED))
+                .then_some(m)
             } else {
                 None
             }
         })
         .collect();
-    assert_eq!(paths.len(), 32);
-    for path in paths {
-        assert!(path.points.contains(&peak) && path.points.contains(&trough));
+    assert_eq!(curves.len(), 32);
+    for mesh in curves {
+        // Square caps stay within sqrt(2) * half-width of each original spike.
+        for spike in [peak, trough] {
+            assert!(mesh.vertices.iter().any(|v| v.pos.distance(spike) < 1.8));
+        }
     }
     drop(preview.tessellate(&mut output));
     output.drop_without_applying_deltas();
