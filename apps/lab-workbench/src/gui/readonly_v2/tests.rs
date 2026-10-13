@@ -346,6 +346,84 @@ fn repeated_definitions_multiple_arrangements_and_epoch_identity() {
 }
 
 #[test]
+fn compiled_egui_does_not_format_or_retain_diagnostic_id_sources() {
+    // This generic is instantiated in the real application test target, whose
+    // dev assertions stay enabled. The cfg must come from egui's own artifact.
+    #[derive(Hash)]
+    struct Source(u64);
+    impl std::fmt::Debug for Source {
+        fn fmt(&self, _: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            panic!("egui attempted to retain ID provenance");
+        }
+    }
+    let root = egui::Id::new(Source(123));
+    let child = root.with(Source(456));
+    let salt = egui::IdSalt::new(Source(789));
+    assert_ne!(root, child);
+    assert!(format!("{root:?}").starts_with("id_"));
+    assert!(format!("{salt:?}").starts_with("salt_"));
+}
+
+#[test]
+fn document_owner_revision_and_repeated_occurrences_never_restore_foreign_state() {
+    let mut syntax = syntax();
+    syntax["components"][0]["children"] = json!(["a", "a"]);
+    let first = admit(&syntax);
+    syntax["document_id"] = json!("replacement");
+    let second = admit(&syntax);
+    let address = |doc: &v2::AdmittedV2Document, epoch, child| {
+        OccurrenceIdentity {
+            epoch,
+            occurrence: doc
+                .source()
+                .occurrence(0, 0, 0, 0, &[child])
+                .unwrap()
+                .identity,
+        }
+        .widget_id()
+    };
+    let old = address(&first, EPOCH, 0);
+    let mut ids = std::collections::BTreeSet::new();
+    for document in [&first, &second] {
+        for owner in [[1; 16], [2; 16]] {
+            for revision in 1..=16 {
+                for child in 0..2 {
+                    assert!(ids.insert(
+                        address(document, PresentationEpoch { owner, revision }, child).value()
+                    ));
+                }
+            }
+        }
+    }
+    assert_eq!(ids.len(), 128);
+    assert_eq!(old, address(&first, EPOCH, 0));
+    let observations = RuntimeObservations::default();
+    let before = observations.clone();
+    for _ in 0..3 {
+        let context = egui::Context::default();
+        assert!(egui::text_edit::TextEditState::load(&context, old).is_none());
+        // Deliberate foreign state tests the namespace; the renderer creates no
+        // editor. Its future children must also remain scoped to this identity.
+        egui::text_edit::TextEditState::default().store(&context, old);
+        context.data_mut(|data| data.insert_temp(old, "foreign view/draft".to_owned()));
+        context.memory_mut(|memory| memory.request_focus(old));
+        for revision in 2..=4 {
+            let epoch = PresentationEpoch { revision, ..EPOCH };
+            let current = address(&second, epoch, 0);
+            frame(&context, &second, &observations, epoch, vec![]);
+            assert_ne!(context.memory(|memory| memory.focused()), Some(current));
+            assert!(context.data(|data| data.get_temp::<String>(current).is_none()));
+            assert!(egui::text_edit::TextEditState::load(&context, current).is_none());
+        }
+        assert_eq!(observations, before);
+        assert_eq!(
+            context.data(|data| data.count::<egui::text_edit::TextEditState>()),
+            1
+        );
+    }
+}
+
+#[test]
 fn entity_status_all_targets_and_static_disabled_binding() {
     let mut doc = syntax();
     for target in [
