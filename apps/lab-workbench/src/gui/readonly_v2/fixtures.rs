@@ -4,10 +4,18 @@ use crate::presentation::v2;
 use serde_json::json;
 
 pub(super) fn maximum_graph() -> v2::AdmittedV2Document {
+    graph(64, 64)
+}
+
+pub(super) fn repeated_small_graph() -> v2::AdmittedV2Document {
+    graph(1, 2)
+}
+
+fn graph(panels: usize, roots: usize) -> v2::AdmittedV2Document {
     let doc = json!({
         "format_version":2,"binding_version":1,"document_id":"large",
         "windows":[{"id":"w","title":"Window","tabs":[{"id":"t","title":"Tab","panels":
-            (0..64).map(|p| json!({"id":format!("p{p}"),"title":"Panel","components":vec!["group";64]})).collect::<Vec<_>>()
+            (0..panels).map(|p| json!({"id":format!("p{p}"),"title":"Panel","components":vec!["group";roots]})).collect::<Vec<_>>()
         }]}],
         "components":[
             {"id":"group","kind":"group","label":"Group","layout":"row","children":["a","b","a","b"]},

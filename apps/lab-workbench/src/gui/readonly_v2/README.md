@@ -5,6 +5,9 @@ internal, isolated renderer. It has no active application/Dispatcher consumer,
 protocol capability, presentation ownership, persistence or Runtime call path.
 The existing v1 GUI and all 16 external operations continue to use their current
 owner. This module is not activation-qualified (`ACTIVATION_QUALIFIED = false`).
+The subsequent [DGUI-4C7A1 ID memory report](ID_MEMORY.md) documents the egui-only
+dev/test build override and native debug/release evidence. ID provenance growth
+is contained; the independent Context/paint-work memory blocker remains.
 
 ## Rendering and identity
 
@@ -54,6 +57,11 @@ ceilings are read from each occurrence, including reused nested descendants.
 
 ## Memory evidence and activation blocker
 
+The measurements in this section are the original DGUI-4C7A evidence, before
+the DGUI-4C7A1 build override. The expanded probe now also reproduces that cfg
+with `-DiagnosticProvenance`; current fixed dev/release results are in
+[ID_MEMORY.md](ID_MEMORY.md).
+
 The renderer retains **zero owned heap state between frames** and makes one
 bounded typed read at a time. This is not a proof that egui retains zero state.
 The offline `VisualReservation` also cannot prove egui's actual allocations.
@@ -94,16 +102,14 @@ it as released Context memory.
 
 Activation stays blocked. A future owner needs a measured runtime limit on
 submitted visible widgets/paint work and a lifecycle for retiring Context
-capacities, all charged to the combined visual budget. It also needs an exact
-build configuration with bounded or disabled debug ID provenance, and allocation
-qualification for that configuration. Merely reducing the traversal stack,
-clearing IdTypeMap, changing epoch or dropping Context cannot satisfy both
-problems. No dependency/profile change or partial live-render fallback is part
-of this foundation; the isolated preview still visits the whole admitted graph.
+capacities, all charged to the combined visual budget. DGUI-4C7A1 qualifies the
+default dev/test and release cfg against provenance accumulation, but does not
+qualify those Context capacities. The isolated preview still visits the whole
+admitted graph; no partial live-render fallback or navigation is introduced.
 
 ## Regression evidence
 
-Twelve deterministic headless egui tests exercise actual painted text/layout,
+The original twelve deterministic headless egui tests exercise actual painted text/layout,
 all five scalar types and selectors, i64 endpoints, Number extremes/signed zero,
 all three property owners, absence/quality/metadata/generation/expect_kind,
 freshness/rebuild, static blockers, repeated references, multiple arrangements,
@@ -111,6 +117,8 @@ four Group levels, epoch isolation and every inert placeholder. The maximum
 fixture renders twice without renderer state or a materialized expansion.
 Boundary tests verify immutable document/observations/owner/recovery/workflow,
 zero client query/mutation/status calls and no active application consumer.
+Two DGUI-4C7A1 regressions add compiled-profile and cross-Context identity/state
+checks; all fourteen also pass in the native release test target.
 
 Targeted gates also cover the 77 v2 DTO/graph/canonical/admission/conversion/export
 tests, 47 v1 presentation/GUI/Plot/hover/Confirm tests, seven GUI control tests,

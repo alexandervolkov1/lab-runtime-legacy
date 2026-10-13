@@ -14,3 +14,12 @@ missing_docs = "warn"
 
 [workspace.lints.clippy]
 all = "warn"
+
+# egui 0.36.2 stores every debug Id/IdSalt source in process-global maps without
+# eviction. Disable that crate's diagnostic cfg in dev (also inherited by test).
+# Application/Runtime assertions stay enabled; preserve egui overflow checks.
+# Other disabled egui diagnostics are documented in
+# apps/lab-workbench/src/gui/readonly_v2/ID_MEMORY.md.
+[profile.dev.package."egui:0.36.2"]
+debug-assertions = false
+overflow-checks = true
