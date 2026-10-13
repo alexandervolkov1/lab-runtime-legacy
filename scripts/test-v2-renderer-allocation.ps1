@@ -109,7 +109,9 @@ fn main() { probe::run(); }
     $compiled | Where-Object { $_.target.name -in @('egui', 'eframe', 'lab-workbench') } |
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
-    foreach ($scenario in @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')) {
+    $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
+    if (-not $DiagnosticProvenance) { $scenarios += 'bounded' }
+    foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE
         $output | Set-Content -LiteralPath (Join-Path $probeDir "$scenario.txt")

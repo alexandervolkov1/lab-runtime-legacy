@@ -6,6 +6,7 @@ use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering::SeqCst};
 static ENABLED: AtomicBool = AtomicBool::new(false);
 static LIVE: AtomicUsize = AtomicUsize::new(0);
 static BLOCKS: AtomicUsize = AtomicUsize::new(0);
+static PEAK_BLOCKS: AtomicUsize = AtomicUsize::new(0);
 static PEAK: AtomicUsize = AtomicUsize::new(0);
 static REALLOC_OVERLAP: AtomicUsize = AtomicUsize::new(0);
 static FAIL_SIZE: AtomicUsize = AtomicUsize::new(0);
@@ -39,7 +40,8 @@ fn increase(counter: &AtomicUsize, bytes: usize) -> usize {
 }
 fn allocated(bytes: usize) {
     let live = increase(&LIVE, bytes);
-    increase(&BLOCKS, 1);
+    let blocks = increase(&BLOCKS, 1);
+    PEAK_BLOCKS.fetch_max(blocks, SeqCst);
     PEAK.fetch_max(live, SeqCst);
     REALLOC_OVERLAP.fetch_max(live, SeqCst);
 }
@@ -88,6 +90,7 @@ unsafe impl GlobalAlloc for Meter {
             // Also report an upper estimate assuming old/new blocks overlap;
             // System may resize in place, which this hook cannot observe.
             REALLOC_OVERLAP.fetch_max(sum(LIVE.load(SeqCst), size), SeqCst);
+            PEAK_BLOCKS.fetch_max(sum(BLOCKS.load(SeqCst), 1), SeqCst);
             subtract(&LIVE, layout.size());
             let live = increase(&LIVE, size);
             PEAK.fetch_max(live, SeqCst);
@@ -99,6 +102,8 @@ unsafe impl GlobalAlloc for Meter {
 pub(super) struct Reading {
     pub(super) live: usize,
     pub(super) blocks: usize,
+    /// Includes a possible old/new realloc overlap block.
+    pub(super) peak_blocks: usize,
     pub(super) peak: usize,
     pub(super) overlap_peak: usize,
 }
@@ -106,6 +111,7 @@ pub(super) fn start() {
     assert!(!ENABLED.load(SeqCst));
     LIVE.store(0, SeqCst);
     BLOCKS.store(0, SeqCst);
+    PEAK_BLOCKS.store(0, SeqCst);
     PEAK.store(0, SeqCst);
     REALLOC_OVERLAP.store(0, SeqCst);
     INVALID.store(false, SeqCst);
@@ -116,6 +122,7 @@ pub(super) fn phase() -> Reading {
     Reading {
         live,
         blocks: BLOCKS.load(SeqCst),
+        peak_blocks: PEAK_BLOCKS.swap(BLOCKS.load(SeqCst), SeqCst),
         peak: PEAK.swap(live, SeqCst),
         overlap_peak: REALLOC_OVERLAP.swap(live, SeqCst),
     }

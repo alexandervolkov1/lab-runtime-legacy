@@ -1,132 +1,78 @@
-# Isolated read-only v2 preview (DGUI-4C7A)
+# Isolated bounded read-only v2 preview
 
-`show(Ui, &AdmittedV2Document, &RuntimeObservations, PresentationEpoch)` is an
-internal, isolated renderer. It has no active application/Dispatcher consumer,
-protocol capability, presentation ownership, persistence or Runtime call path.
-The existing v1 GUI and all 16 external operations continue to use their current
-owner. This module is not activation-qualified (`ACTIVATION_QUALIFIED = false`).
-The subsequent [DGUI-4C7A1 ID memory report](ID_MEMORY.md) documents the egui-only
-dev/test build override and native debug/release evidence. ID provenance growth
-is contained; the independent Context/paint-work memory blocker remains.
+`Preview` borrows an `AdmittedV2Document`, accepts immutable
+`RuntimeObservations` and an explicit presentation owner/revision, and owns one
+private egui Context. It has no active application/Dispatcher consumer,
+protocol capability, Runtime callback, persistence or laboratory action path.
+The v1 Workbench and its 16 external operations retain their existing owner.
+`ACTIVATION_QUALIFIED` remains **false**.
 
-## Rendering and identity
+DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
+hierarchical paging and an explicit Context lifetime. See
+[bounded rendering and allocation qualification](BOUNDED_RENDERING.md) for the
+limits, accounting policy, evidence and remaining host restrictions.
+[ID_MEMORY.md](ID_MEMORY.md) retains the DGUI-4C7A1 provenance investigation and
+package-specific Cargo profile fix. Neither Cargo profiles nor Cargo.lock change
+in DGUI-4C7A2.
 
-The preview visits logical windows, tabs, panels and roots in document order.
-All tabs are shown; navigation/viewport policy belongs to a future caller.
-Group supports row/column layout, ordered repeated references and four nested
-Group levels. Each visit resolves the admitted registry reference and its
-occurrence-local availability through `source().occurrence()`. The traversal
-keeps four child-position slots and bounded recursion, not a materialized tree,
-document copy or per-view model. Checked admission proves at most 20,480 visits.
+## Navigation and identity
 
-Semantic identity combines the borrowed document/window/tab/panel IDs, root and
-child positions with an explicit owner identity and presentation revision.
-An owner must advance revision on every replacement, including a replacement
-with the same document ID. Repeated views have different identities while their
-DataBinding definition remains shared. The egui hash is a widget address, not a
-replacement for the semantic identity. Numeric salts avoid recursively embedding
-egui's debug ID representation in descendant salts.
+Only one window/tab/panel and one page of four immediate components is submitted.
+Previous/next selectors follow document order. Each Group has an explicit Open
+button; Parent returns to the page containing that particular occurrence.
+Four group-position slots suffice, including diamond/shared subtrees. A scroll
+area exposes the whole current page, including long text. No expanded graph,
+subtree-count index, per-occurrence GUI model or navigation history is retained.
 
-Indicator and Status(data) use the existing DGUI-4C3 typed read layer, with a
-closed selector mapping and full RuntimeRef, including ConfigurationProperty
-owner kind, identity and property. `expect_kind` is an additional restriction:
-it cannot invent metadata, parse an Enum as Number, convert Integer to Number,
-or turn missing data into a scalar. Static Disabled remains Disabled; static
-NeedsRuntimeResolution still requires a compatible cached observation.
+Row/column applies to the immediate children of the selected Group on the
+current page. Nested Groups are previews with explicit entry, not simultaneously
+expanded compositions. This is a hierarchical preview policy, **not full v2
+layout compatibility**. Every admitted occurrence remains reachable.
 
-Boolean, exact i64, Number, Text and Enum are distinct. False, zero and empty
-Text are displayed explicitly; missing values retain their absence reason.
-Numbers use the round-trippable Rust display spelling, including signed zero,
-and precision adds only a secondary rounded Number caption. Runtime units are
-shown separately without conversion. Quality, metadata/generation failures and
-freshness remain explicit. Global Rebuilding overrides a cached freshness label;
-a missing entity is Unresolved even when the connection is Fresh.
+Occurrence identity still combines document/window/tab/panel IDs, root/child
+positions, owner and revision. Returning to a page retains its semantic IDs but
+creates a new Context, so it cannot revive stale focus, scroll or draft state.
+Replacement, including a different admission with identical document IDs, resets
+navigation. Changed rendered text retires Context caches but preserves the two
+local scroll coordinates on the same page. Navigation activates on primary press
+inside the current clipped button rectangle, so observation updates cannot
+starve navigation between press and release. It creates no laboratory intent.
 
-Status(entity) uses those same typed meanings where available. Instrument,
-Resource and Component retain v1's bounded cached JSON status meaning, with no
-new field selectors. JSON is streamed into a 1,024-byte UTF-8 prefix, marked with
-an ellipsis on truncation; there is no full serialized observation copy. Scalar
-strings above 512 UTF-8 bytes are explicitly unavailable before typed decoding
-can clone them. This display refusal never mutates the cached value.
+## Read-only meaning
 
-Button, Toggle, Select, all Input components and Plot show explicit inert,
-unsupported placeholders. Labels are nonselectable and no input/click response
-is consumed. No drafts, undo, sample buffers, Confirm interaction, intent,
-observation refresh or action submission exists. Inherited v1 inert/family/target
-ceilings are read from each occurrence, including reused nested descendants.
+Indicator and Status(data) use the existing DGUI-4C3 typed read layer and full
+RuntimeRef, including ConfigurationProperty owner kind, identity and property.
+`expect_kind` only restricts actual metadata. Exact i64 and Number values,
+negative zero, false, empty Text, Enum without choices, units without conversion,
+quality, absence and generation fencing retain their existing meaning.
+Precision supplies a secondary rounded Number caption; it never replaces the
+exact value. Rebuilding overrides stale observation presentation.
 
-## Memory evidence and activation blocker
+Status(entity) uses the existing typed meaning where available. Instrument,
+Resource and Component show a bounded cached projection, without new selectors
+or Runtime queries. Runtime scalar text over 512 UTF-8 bytes is explicitly
+unavailable before a typed-read clone; entity text remains an explicitly marked
+1024-byte prefix. This is read-only display, never a candidate value.
 
-The measurements in this section are the original DGUI-4C7A evidence, before
-the DGUI-4C7A1 build override. The expanded probe now also reproduces that cfg
-with `-DiagnosticProvenance`; current fixed dev/release results are in
-[ID_MEMORY.md](ID_MEMORY.md).
+Button, Toggle, Select, IntegerInput, NumberInput, TextInput and Plot remain
+explicit inert placeholders. All availability is resolved through admitted
+occurrence paths, including inherited v1 origin ceilings. There are no drafts,
+Confirm implementation, sample buffers, metadata refresh or action execution.
+The fixed previous paint page is compared with freshly resolved text each frame;
+it is not an independently usable observation cache.
 
-The renderer retains **zero owned heap state between frames** and makes one
-bounded typed read at a time. This is not a proof that egui retains zero state.
-The offline `VisualReservation` also cannot prove egui's actual allocations.
+## Verification
 
-`scripts/test-v2-renderer-allocation.ps1` links the production renderer and exact
-locked Cargo artifacts into a separate native System-allocator probe. The
-fixture has three component definitions and 20,480 occurrences; its reservation
-is **5,284,672 accounted bytes**. Source/observation owners and fixture creation
-are outside the measurement window. No expanded test-side text/shape list is
-constructed. Outputs are dropped after every frame; IdTypeMap stays empty.
+Headless tests inspect actual egui output and geometry, including all 20,480
+occurrences, real navigation buttons, repeated/diamond paths, depth four,
+64 windows and the 64th tab, long scrolled text, owner/revision/admission replacement,
+scalar/freshness/generation semantics and inert controls. Native probes link the
+real executable's locked dependencies in both corrected dev and release profiles.
+The admission/conversion/export allocation probe is preserved; its shared meter
+additionally reports peak block count for conservative per-block accounting.
 
-Native Windows x86_64 MSVC / Rust 1.95.0 / locked egui 0.36.2, requested heap bytes:
-
-| Context phase (debug ID tables already warmed) | Live | Phase peak |
-|---|---:|---:|
-| Empty preview baseline | 325,653 | 593,821 |
-| First maximum-graph frame | 33,386,868 | 45,054,960 |
-| Three more frames, same epoch | 66,154,224 | 77,822,316 |
-| New epoch | 66,154,224 | 66,310,100 |
-| Three empty frames after retirement | 65,889,685 | 66,156,032 |
-| Context drop | 0 | 65,889,685 |
-
-These Context-only readings repeat identically in the probe. They include egui
-frame buffers, retained capacities and font state; they are neither RSS nor an
-allocator-overhead estimate or a universal maximum. Their scale already prevents
-claiming compliance with the **8 MiB presentation-owned visual state** ceiling.
-Retiring a document does not release these Context capacities.
-
-A separate fresh-process mode includes previously cold debug ID tables. After
-the first epoch settles it retains 149,015,916 requested bytes; a second epoch
-raises this to 231,872,525. After Context drop, **165,719,485 bytes remain** in
-egui's process-global debug provenance tables. In the pinned egui sources,
-`id.rs::id_source` and `id_salt.rs::id_salt_source` insert into static SOURCE_MAPs
-without an eviction path. Distinct future epochs therefore have no finite
-lifetime bound in this build. Empty IdTypeMap and zero renderer drafts do not
-qualify those tables. The probe exposes this retention instead of misreporting
-it as released Context memory.
-
-Activation stays blocked. A future owner needs a measured runtime limit on
-submitted visible widgets/paint work and a lifecycle for retiring Context
-capacities, all charged to the combined visual budget. DGUI-4C7A1 qualifies the
-default dev/test and release cfg against provenance accumulation, but does not
-qualify those Context capacities. The isolated preview still visits the whole
-admitted graph; no partial live-render fallback or navigation is introduced.
-
-## Regression evidence
-
-The original twelve deterministic headless egui tests exercise actual painted text/layout,
-all five scalar types and selectors, i64 endpoints, Number extremes/signed zero,
-all three property owners, absence/quality/metadata/generation/expect_kind,
-freshness/rebuild, static blockers, repeated references, multiple arrangements,
-four Group levels, epoch isolation and every inert placeholder. The maximum
-fixture renders twice without renderer state or a materialized expansion.
-Boundary tests verify immutable document/observations/owner/recovery/workflow,
-zero client query/mutation/status calls and no active application consumer.
-Two DGUI-4C7A1 regressions add compiled-profile and cross-Context identity/state
-checks; all fourteen also pass in the native release test target.
-
-Targeted gates also cover the 77 v2 DTO/graph/canonical/admission/conversion/export
-tests, 47 v1 presentation/GUI/Plot/hover/Confirm tests, seven GUI control tests,
-12 GUI application tests, 39 external tests, 19 Dispatcher tests, five operator
-architecture guards and ten typed-read tests.
-The existing native admission/conversion/export probe uses the same extracted
-test-only allocation meter. Formatting, warning-denied scoped Clippy and diff
-checks remain required. No full workspace gate or release is needed here.
-
-Plot v2, actions, editors, Toggle/Select interaction, protocol/profile and
-activation require separately reviewed work. DGUI-4C7B is not started here.
+The previous 66,153,808-byte retained Context was caused by submitting all
+20,480 occurrences. The bounded preview removes that submission path. Full
+activation still requires a reviewed host lifecycle/GPU integration, Plot v2,
+bounded editors/drafts, actions, operator Confirm and the external v2 protocol/
+profile. DGUI-4C7B is not implemented here.

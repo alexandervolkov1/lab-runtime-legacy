@@ -1,6 +1,6 @@
 //! One frame-local typed read at a time; no metadata refresh or observation copy.
 
-use super::label;
+use super::{TextBuffer, label};
 use crate::{
     model::{
         Freshness, ReadBinding, ReadPayload, ReadQuality, RuntimeObservations, ScalarKind,
@@ -8,7 +8,6 @@ use crate::{
     },
     presentation::{ConfigurationOwner, RuntimeRef, v2},
 };
-use eframe::egui;
 use std::io;
 
 // Runtime text is not bounded by the presentation document's string validator.
@@ -85,7 +84,7 @@ fn kind(kind: v2::ScalarKind) -> ScalarKind {
 }
 
 pub(super) fn data(
-    ui: &mut egui::Ui,
+    ui: &mut TextBuffer,
     document: &v2::AdmittedV2Document,
     observations: &RuntimeObservations,
     id: &v2::Id,
@@ -116,7 +115,7 @@ pub(super) fn data(
 }
 
 pub(super) fn entity(
-    ui: &mut egui::Ui,
+    ui: &mut TextBuffer,
     observations: &RuntimeObservations,
     source: &v2::RuntimeRef,
 ) {
@@ -139,7 +138,7 @@ pub(super) fn entity(
 }
 
 fn typed(
-    ui: &mut egui::Ui,
+    ui: &mut TextBuffer,
     observations: &RuntimeObservations,
     target: &RuntimeRef,
     binding: ReadBinding,
@@ -193,7 +192,7 @@ fn typed(
     freshness(ui, observations, target, Some(reading.freshness));
 }
 
-fn show_payload(ui: &mut egui::Ui, reading: &TypedRead, precision: Option<u8>) {
+fn show_payload(ui: &mut TextBuffer, reading: &TypedRead, precision: Option<u8>) {
     match &reading.payload {
         ReadPayload::Absent(reason) => label(ui, format!("Value (cached): {}", reason.label())),
         ReadPayload::Value(value) => {
@@ -222,7 +221,7 @@ fn show_payload(ui: &mut egui::Ui, reading: &TypedRead, precision: Option<u8>) {
 }
 
 fn freshness(
-    ui: &mut egui::Ui,
+    ui: &mut TextBuffer,
     observations: &RuntimeObservations,
     target: &RuntimeRef,
     resolved: Option<Freshness>,
