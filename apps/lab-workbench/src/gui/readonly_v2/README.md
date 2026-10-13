@@ -15,12 +15,14 @@ DGUI-4C7B2A replaces the old text refusal with [ASCII curve aliases and lossless
 Plot viewport across Context retirement. The report separates text containment,
 native memory evidence and remaining full-schema/GPU qualification limits.
 DGUI-4C7B2B records [full-schema CPU geometry counterexamples and allocation
-evidence](PLOT_GEOMETRY.md): legal coincident/extreme data and zoom-out can yield
-nonfinite geometry or a dev tessellation panic. CPU Plot qualification is
-**BLOCKED**, despite the tested memory totals remaining below 8 MiB.
+evidence](PLOT_GEOMETRY.md): the historical stock-Line renderer could produce
+nonfinite geometry or a dev tessellation panic despite memory below 8 MiB.
 DGUI-4C7B2C1 supplies [current-frame API evidence and a finite-geometry interface
-proposal](PLOT_FINITE_BOUNDARY.md). Reliable drawing and hover require a reviewed
-custom PlotItem; the existing NaN/panic cases are not repaired or qualified.
+proposal](PLOT_FINITE_BOUNDARY.md).
+DGUI-4C7B2C2 implements the reviewed [finite current-frame PlotItem and pre-axis
+boundary](PLOT_FINITE_ITEM.md). Numeric refusals are explicit; safe segments and
+hover use the same current transform. The report separates structural bounds,
+native fixture qualification and remaining universal allocator/GPU limits.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See

@@ -45,17 +45,17 @@ fn painted(
                 (egui::Shape::Text(t), Some(caption)) if t.galley.text() == caption => {
                     Some(t.visual_bounding_rect().center())
                 }
-                (egui::Shape::Path(p), None) if p.points.len() > 2 => p
-                    .points
-                    .iter()
+                (egui::Shape::Mesh(m), None) if m.vertices.len() >= 4 => m
+                    .vertices
+                    .chunks_exact(4)
+                    .map(|quad| (quad[0].pos + quad[2].pos.to_vec2()) / 2.0)
                     .find(|pos| {
                         pos.x > 300.0
                             && pos.x < 900.0
                             && pos.y > 150.0
                             && pos.y < 500.0
-                            && shape.clip_rect.contains(**pos)
-                    })
-                    .copied(),
+                            && shape.clip_rect.contains(*pos)
+                    }),
                 _ => None,
             });
         let stats = GeometryStats::inspect(preview, &mut output, report);
@@ -111,7 +111,7 @@ fn record(
 ) -> bool {
     let pass = charge(r) <= readonly_v2::PREVIEW_RESERVATION && s.finite() && dropped.live == 0;
     println!(
-        "{name},{},{},{width:e},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
+        "{name},{},{},{width:e},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
         s.points,
         s.traces,
         s.shapes,
@@ -128,6 +128,9 @@ fn record(
         s.unsupported_shapes,
         s.panics,
         dropped.live,
+        s.segments,
+        s.unavailable,
+        s.policy_failures,
         if pass { "PASS" } else { "BLOCKED" }
     );
     !pass
@@ -419,7 +422,7 @@ pub(super) fn run() {
         .run_ui(egui::RawInput::default(), |_| {})
         .drop_without_applying_deltas();
     println!(
-        "scenario,points,traces,width,shapes,vertices,indices,retained,peak,realloc_overlap,peak_blocks,accounted,bad_shape,bad_mesh,invalid_meshes,unsupported_shapes,panics,drop_bytes,status"
+        "scenario,points,traces,width,shapes,vertices,indices,retained,peak,realloc_overlap,peak_blocks,accounted,bad_shape,bad_mesh,invalid_meshes,unsupported_shapes,panics,drop_bytes,segments,geometry_unavailable,policy_failures,status"
     );
     let mut blocked = 0;
     for case in fixtures::matrix() {
@@ -432,6 +435,9 @@ pub(super) fn run() {
         let mut stats = GeometryStats::default();
         for _ in 0..4 {
             stats.max_assign(frame(&mut preview, &obs, vec![]));
+        }
+        if !case.accepts_output(stats) {
+            stats.policy_failures += 1;
         }
         let r = meter::phase();
         drop(preview);

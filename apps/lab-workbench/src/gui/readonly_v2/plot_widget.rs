@@ -1,10 +1,15 @@
 //! One read-only plot and one bounded, owner-held viewport/legend slot.
 use super::{
-    OccurrenceIdentity, RenderReport, egui, page, plot_projection as projection,
+    OccurrenceIdentity, RenderReport, egui,
+    finite_trace::{FiniteTraceItem, TraceGeometry},
+    page,
+    plot_bounds::{self, GeometryUnavailable, Preflight},
+    plot_projection as projection,
     plot_text::{self, Cursor, Field, PageKey, TRACES_PER_PAGE, TextPage},
 };
 use crate::presentation::v2;
-use egui_plot::{HoverPosition, Legend, LegendGrouping, Line, Plot, PlotBounds, PlotMemory};
+use egui_plot::{HoverPosition, Legend, LegendGrouping, Plot, PlotBounds, PlotMemory};
+use std::cell::Cell;
 
 /// Persistent state contains no samples, owned strings, history or PlotMemory.
 pub(crate) struct PlotState<'a> {
@@ -67,7 +72,6 @@ impl<'a> PlotState<'a> {
         ui: &mut egui::Ui,
         view: &projection::PlotView<'_>,
         text_page: Option<&TextPage>,
-        restored: bool,
     ) -> (bool, RenderReport) {
         let mut back = false;
         let mut reset = false;
@@ -100,8 +104,35 @@ impl<'a> PlotState<'a> {
             });
         }
         let id = self.id();
-        let mut plot = Plot::new(id.value())
+        let preflight = Preflight::new(view, self.hidden);
+        let mut viewport_fault = preflight.as_ref().err().copied();
+        let auto_bounds = preflight
+            .as_ref()
+            .map_or(PlotBounds::new_symmetrical(1.0), |p| p.bounds);
+        if self.bounds.is_some_and(|b| !plot_bounds::valid(b)) {
+            self.bounds = None;
+            self.auto = true.into();
+            viewport_fault = Some(GeometryUnavailable::Bounds);
+        }
+        let status: [Cell<TraceGeometry>; 32] = std::array::from_fn(|i| {
+            Cell::new(TraceGeometry {
+                fault: preflight.as_ref().ok().and_then(|p| p.faults[i]),
+                segments: 0,
+            })
+        });
+        let plot = Plot::new(id.value())
             .id(id)
+            // All viewport mutation is checked below, BEFORE axes and items.
+            // The library's unchecked post-closure transforms are disabled.
+            .allow_drag(false)
+            .allow_zoom(false)
+            .allow_scroll(false)
+            .allow_axis_zoom_drag(false)
+            .allow_boxed_zoom(false)
+            .allow_double_click_reset(false)
+            .sense(egui::Sense::click_and_drag())
+            .default_x_bounds(auto_bounds.min()[0], auto_bounds.max()[0])
+            .default_y_bounds(auto_bounds.min()[1], auto_bounds.max()[1])
             .width(1200.0)
             .height(540.0)
             .x_grid_spacer(grid)
@@ -135,58 +166,71 @@ impl<'a> PlotState<'a> {
                     .map(|text| text.as_str().to_owned()),
                 HoverPosition::Elsewhere { .. } => None,
             });
-        if let Some(min) = view.definition.axes.y_min {
-            plot = plot.include_y(min.0);
-        }
-        if let Some(max) = view.definition.axes.y_max {
-            plot = plot.include_y(max.0);
-        }
-        plot.show(ui, |plot_ui| {
-            // Restore only on Context creation. Applying this every frame would
-            // override egui_plot's double-click reset before its interaction pass.
-            if restored {
-                if let Some(bounds) = self.bounds {
-                    plot_ui.set_plot_bounds(bounds);
+        if preflight.is_ok() {
+            plot.show(ui, |plot_ui| {
+                if reset || plot_ui.response().double_clicked() {
+                    self.auto = true.into();
                 }
-                plot_ui.set_auto_bounds(self.auto);
-            }
-            if reset {
-                plot_ui.set_auto_bounds(true);
-            }
-            for (index, trace) in view.traces.iter().enumerate() {
-                if !trace.definition.visible {
-                    continue;
-                }
-                // Legend::hidden_items restores checkboxes, but this version
-                // filters curves using PREVIOUS PlotMemory. Empty borrowed data
-                // prevents a one-frame flash when restoring a hidden curve.
-                let points = if self.hidden & (1 << index) == 0 {
-                    view.points(index)
+                let mut bounds = if self.auto.all() {
+                    auto_bounds
                 } else {
-                    &[]
+                    self.bounds.unwrap_or(auto_bounds)
                 };
-                // add(), unlike line(), preserves empty legend entries. There
-                // is no fabricated point, even for unavailable/hidden curves.
-                plot_ui.add(
-                    Line::new(plot_text::alias(index), points)
-                        .id(Self::trace_id(trace))
-                        .color(color(trace.definition.style.color.as_str()))
-                        .width(trace.definition.style.width.0 as f32),
-                );
-            }
-        });
-        if let Some(memory) = PlotMemory::load(ui.ctx(), id) {
-            let bounds = *memory.bounds();
-            if bounds.is_valid() && bounds.width().is_finite() && bounds.height().is_finite() {
-                self.bounds = Some(bounds);
-                self.auto = memory.auto_bounds;
-            } else {
-                self.bounds = None;
-                self.auto = true.into();
-            }
-            self.hidden = view.traces.iter().enumerate().fold(0, |mask, (i, trace)| {
-                mask | (u32::from(memory.hidden_items.contains(&Self::trace_id(trace))) << i)
+                match plot_bounds::interact(bounds, plot_ui.response(), plot_ui.ctx()) {
+                    Ok(Some(candidate)) => {
+                        bounds = candidate;
+                        self.auto = false.into();
+                    }
+                    Ok(None) => {}
+                    Err(reason) => {
+                        viewport_fault = Some(reason);
+                    }
+                }
+                plot_ui.set_plot_bounds(bounds);
+                plot_ui.set_auto_bounds(self.auto);
+                for (index, trace) in view.traces.iter().enumerate() {
+                    if !trace.definition.visible {
+                        continue;
+                    }
+                    // Legend::hidden_items restores checkboxes, but this version
+                    // filters curves using PREVIOUS PlotMemory. Empty borrowed data
+                    // prevents a one-frame flash when restoring a hidden curve.
+                    let points = if self.hidden & (1 << index) == 0 {
+                        view.points(index)
+                    } else {
+                        &[]
+                    };
+                    // add(), unlike line(), preserves empty legend entries. There
+                    // is no fabricated point, even for unavailable/hidden curves.
+                    plot_ui.add(FiniteTraceItem::new(
+                        trace,
+                        points,
+                        egui::Stroke::new(
+                            trace.definition.style.width.0 as f32,
+                            color(trace.definition.style.color.as_str()),
+                        ),
+                        &status[index],
+                    ));
+                }
             });
+            if let Some(memory) = PlotMemory::load(ui.ctx(), id) {
+                let bounds = *memory.bounds();
+                if plot_bounds::valid(bounds) {
+                    self.bounds = Some(bounds);
+                    self.auto = memory.auto_bounds;
+                } else {
+                    self.bounds = None;
+                    self.auto = true.into();
+                }
+                self.hidden = view.traces.iter().enumerate().fold(0, |mask, (i, trace)| {
+                    mask | (u32::from(memory.hidden_items.contains(&Self::trace_id(trace))) << i)
+                });
+            }
+        }
+        if let Some(reason) = viewport_fault {
+            ui.label(format!(
+                "GeometryUnavailable: {reason:?}; unsafe viewport request was not applied"
+            ));
         }
         // Only four ASCII detail selectors/diagnostics at once. This pages text,
         // NOT curve data: all 32 B1 traces remain submitted to the plot above.
@@ -216,6 +260,9 @@ impl<'a> PlotState<'a> {
                     view.points(index).len(), trace.decimated_points, trace.buffer_dropped,
                     if trace.definition.visible { "" } else { "; definition hidden" },
                 )).selectable(false));
+                if let Some(reason) = status[index].get().fault {
+                    ui.label(format!("GeometryUnavailable {}: {reason:?}", plot_text::alias(index)));
+                }
             }
         });
         (
@@ -224,6 +271,18 @@ impl<'a> PlotState<'a> {
                 occurrences: 1,
                 plot_points: view.prepared_points(),
                 plot_traces: view.traces.len(),
+                geometry_segments: status.iter().map(|s| s.get().segments).sum(),
+                geometry_unavailable: status.iter().filter(|s| s.get().fault.is_some()).count()
+                    + usize::from(viewport_fault.is_some()),
+                geometry_failures: status
+                    .iter()
+                    .filter(|s| {
+                        matches!(
+                            s.get().fault,
+                            Some(GeometryUnavailable::Allocation | GeometryUnavailable::Transform)
+                        )
+                    })
+                    .count(),
                 labels: 112,
                 widgets: 224,
                 text_bytes: 8 * 1024,

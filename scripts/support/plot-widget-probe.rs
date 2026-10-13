@@ -105,11 +105,11 @@ fn hover_curve(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations
         .shapes
         .iter()
         .find_map(|shape| match &shape.shape {
-            egui::Shape::Path(path) if path.points.len() >= 256 => path
-                .points
-                .iter()
-                .find(|p| interior.contains(**p) && shape.clip_rect.contains(**p))
-                .copied(),
+            egui::Shape::Mesh(mesh) if mesh.vertices.len() >= 256 => mesh
+                .vertices
+                .chunks_exact(4)
+                .map(|quad| (quad[0].pos + quad[2].pos.to_vec2()) / 2.0)
+                .find(|p| interior.contains(*p) && shape.clip_rect.contains(*p)),
             _ => None,
         })
         .expect("actual visible curve geometry");
