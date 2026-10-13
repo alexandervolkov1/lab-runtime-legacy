@@ -18,6 +18,9 @@ DGUI-4C7B2B records [full-schema CPU geometry counterexamples and allocation
 evidence](PLOT_GEOMETRY.md): legal coincident/extreme data and zoom-out can yield
 nonfinite geometry or a dev tessellation panic. CPU Plot qualification is
 **BLOCKED**, despite the tested memory totals remaining below 8 MiB.
+DGUI-4C7B2C1 supplies [current-frame API evidence and a finite-geometry interface
+proposal](PLOT_FINITE_BOUNDARY.md). Reliable drawing and hover require a reviewed
+custom PlotItem; the existing NaN/panic cases are not repaired or qualified.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See

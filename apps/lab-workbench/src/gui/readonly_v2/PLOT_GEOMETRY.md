@@ -1,5 +1,9 @@
 # DGUI-4C7B2B: CPU Plot geometry qualification — BLOCKED
 
+Historical **pre-fix B2B** report and CSV evidence. The subsequent
+[C1 integration-seam investigation](PLOT_FINITE_BOUNDARY.md) keeps these original
+tables unchanged and records the review blocker for a current-frame boundary.
+
 **Full-schema CPU Plot qualification is blocked.** The finite native matrix stays
 below 8,388,608 accounted bytes, but legal observations and ordinary zoom events
 can produce NaN mesh vertices. Extreme finite observations also panic during

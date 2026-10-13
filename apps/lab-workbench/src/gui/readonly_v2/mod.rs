@@ -16,6 +16,8 @@ mod plot_geometry_tests;
 pub(crate) mod plot_projection;
 #[cfg(test)]
 mod plot_projection_tests;
+#[cfg(test)]
+mod plot_seam_tests;
 mod plot_text;
 #[cfg(test)]
 mod plot_text_tests;

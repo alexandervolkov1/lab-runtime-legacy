@@ -111,7 +111,7 @@ fn record(
 ) -> bool {
     let pass = charge(r) <= readonly_v2::PREVIEW_RESERVATION && s.finite() && dropped.live == 0;
     println!(
-        "{name},{},{},{width:e},{},{},{},{},{},{},{},{},{},{},{},{},{}",
+        "{name},{},{},{width:e},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
         s.points,
         s.traces,
         s.shapes,
@@ -124,6 +124,8 @@ fn record(
         charge(r),
         s.bad_shape_positions,
         s.bad_mesh_positions,
+        s.invalid_meshes,
+        s.unsupported_shapes,
         s.panics,
         dropped.live,
         if pass { "PASS" } else { "BLOCKED" }
@@ -417,7 +419,7 @@ pub(super) fn run() {
         .run_ui(egui::RawInput::default(), |_| {})
         .drop_without_applying_deltas();
     println!(
-        "scenario,points,traces,width,shapes,vertices,indices,retained,peak,realloc_overlap,peak_blocks,accounted,bad_shape,bad_mesh,panics,drop_bytes,status"
+        "scenario,points,traces,width,shapes,vertices,indices,retained,peak,realloc_overlap,peak_blocks,accounted,bad_shape,bad_mesh,invalid_meshes,unsupported_shapes,panics,drop_bytes,status"
     );
     let mut blocked = 0;
     for case in fixtures::matrix() {
