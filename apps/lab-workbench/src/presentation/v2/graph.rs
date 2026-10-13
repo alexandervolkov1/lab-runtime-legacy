@@ -110,7 +110,7 @@ pub(super) fn check(doc: &DocumentDto, index: &Index<'_>) -> Result<(usize, usiz
 /// An injective address within one immutable document, using reference positions.
 /// A future renderer must additionally scope it to the owner's presentation epoch.
 /// Definition IDs alone cannot distinguish repeated roots, siblings or diamonds.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub(crate) struct ViewOccurrenceId<'a> {
     document: &'a Id,
     window: &'a Id,

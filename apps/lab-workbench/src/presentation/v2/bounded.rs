@@ -28,9 +28,16 @@ struct Budget {
 }
 
 /// UTF-8 text with a byte ceiling; IDs and labels additionally forbid empty text.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(try_from = "String")]
 pub(crate) struct Text<const NONEMPTY: bool>(pub(super) String);
+
+impl<const N: bool> Text<N> {
+    /// Borrows bounded text without exposing mutable DTO storage.
+    pub(crate) fn as_str(&self) -> &str {
+        &self.0
+    }
+}
 
 impl<const N: bool> TryFrom<String> for Text<N> {
     type Error = &'static str;

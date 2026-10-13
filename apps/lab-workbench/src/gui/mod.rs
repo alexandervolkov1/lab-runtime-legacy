@@ -3,6 +3,7 @@
 mod app;
 mod controls;
 mod presentation;
+mod readonly_v2;
 pub(crate) use crate::rebuild;
 
 use crate::{
