@@ -775,3 +775,22 @@ fn every_unimplemented_component_is_a_noninteractive_placeholder() {
     // page, including the pointer/text event frames above. Epoch/focus retirement
     // is independently exercised in navigation_tests.
 }
+#[test]
+fn bounded_input_does_not_inherit_caller_event_spare_capacity() {
+    for count in [0, 1, 64, 65] {
+        let mut events = Vec::with_capacity(4096);
+        events.extend((0..count).map(|_| egui::Event::PointerMoved(egui::pos2(10.0, 10.0))));
+        let input = super::bounded_input(
+            egui::RawInput {
+                events,
+                ..Default::default()
+            },
+            true,
+        );
+        assert_eq!(input.events.len(), count.min(64));
+        assert!(
+            input.events.capacity() <= 64,
+            "caller spare capacity must not persist in Context"
+        );
+    }
+}

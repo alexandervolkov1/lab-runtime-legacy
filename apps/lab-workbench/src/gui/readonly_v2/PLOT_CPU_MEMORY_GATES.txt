@@ -1,0 +1,30 @@
+DGUI-4C7B2C3 final gate record - 2026-10-13
+Platform: Windows 10 Pro 10.0.19045, x86_64-pc-windows-msvc
+rustc: 1.95.0 (59807616e 2026-04-14), LLVM 22.1.2
+C2 merge: f3fbce6d8cf85612d6d7f1f457cbbca56c15534f
+Cargo.lock unchanged, git blob: affb1f7bada9ea57186a94f57d77229d2db7dc4d
+Profiles/dependencies unchanged; no release.
+Targeted cargo tests: 283 passed dev; 283 passed release; 0 failed.
+Selection: gui::readonly_v2:: presentation:: gui::controls:: gui::app:: external::tests:: dispatcher::tests:: operator_boundary_tests:: model::read_binding::
+Full native renderer launcher: dev PASS; release PASS (exit 0).
+A1 hash/ID baselines, A2 5120 pages/lifetimes, B1 projection/quota/faults, B2/B2A widget/Unicode: PASS.
+Geometry: 119 PASS per profile; no allocation/policy failures, nonfinite geometry, panics or post-drop bytes.
+C3: 125 PASS per profile; 6 exactly expected allocation failures; 4 later explicit mesh frames recover.
+Geometry, C3 and widget dev/release evidence files are byte-identical.
+Native admission/conversion/export allocation launcher: PASS (exit 0), including three reservation-failure cases.
+cargo clippy -p lab-workbench --all-targets --locked -- -D warnings: PASS.
+cargo fmt --all -- --check: PASS.
+rustfmt --check --edition 2024 on changed support modules: PASS.
+git diff --check: PASS.
+Input-capacity regression: demonstrated pre-fix failure with 1 event / Vec capacity 4096; final cases 0/1/64/65 events PASS.
+FullOutput navigation regression: transition output retains generating Context for CPU tessellation; next frame retires it.
+No new toolchain/dependency; no Runtime/instrument connection; no GPU/host implementation.
+
+Actual Cargo artifact profiles (dev):
+egui features=bytemuck,default_fonts profile={"opt_level":"0","debuginfo":2,"debug_assertions":false,"overflow_checks":true,"test":false}
+eframe features=accesskit,default_fonts,glow profile={"opt_level":"0","debuginfo":2,"debug_assertions":true,"overflow_checks":true,"test":false}
+lab-workbench features= profile={"opt_level":"0","debuginfo":2,"debug_assertions":true,"overflow_checks":true,"test":false}
+Actual Cargo artifact profiles (release):
+egui features=bytemuck,default_fonts profile={"opt_level":"3","debuginfo":0,"debug_assertions":false,"overflow_checks":false,"test":false}
+eframe features=accesskit,default_fonts,glow profile={"opt_level":"3","debuginfo":0,"debug_assertions":false,"overflow_checks":false,"test":false}
+lab-workbench features= profile={"opt_level":"3","debuginfo":0,"debug_assertions":false,"overflow_checks":false,"test":false}

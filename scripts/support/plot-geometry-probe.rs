@@ -13,14 +13,14 @@ fn charge(r: meter::Reading) -> usize {
         .checked_add(65536)
         .unwrap()
 }
-fn frame(
+pub(super) fn frame(
     preview: &mut readonly_v2::Preview<'_>,
     obs: &RuntimeObservations,
     events: Vec<egui::Event>,
 ) -> GeometryStats {
     painted(preview, obs, events, None).0
 }
-fn painted(
+pub(super) fn painted(
     preview: &mut readonly_v2::Preview<'_>,
     obs: &RuntimeObservations,
     events: Vec<egui::Event>,
@@ -77,7 +77,7 @@ fn painted(
         }
     }
 }
-fn click(
+pub(super) fn click(
     preview: &mut readonly_v2::Preview<'_>,
     obs: &RuntimeObservations,
     caption: &str,
@@ -111,7 +111,7 @@ fn record(
 ) -> bool {
     let pass = charge(r) <= readonly_v2::PREVIEW_RESERVATION && s.finite() && dropped.live == 0;
     println!(
-        "{name},{},{},{width:e},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
+        "{name},{},{},{width:e},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
         s.points,
         s.traces,
         s.shapes,
@@ -131,12 +131,17 @@ fn record(
         s.segments,
         s.unavailable,
         s.policy_failures,
+        s.allocation_faults,
+        s.curve_vertices,
+        s.curve_indices,
+        s.curve_vertex_capacity,
+        s.curve_index_capacity,
         if pass { "PASS" } else { "BLOCKED" }
     );
     !pass
 }
 
-fn read_pages(
+pub(super) fn read_pages(
     preview: &mut readonly_v2::Preview<'_>,
     obs: &RuntimeObservations,
     text: &str,
@@ -422,7 +427,7 @@ pub(super) fn run() {
         .run_ui(egui::RawInput::default(), |_| {})
         .drop_without_applying_deltas();
     println!(
-        "scenario,points,traces,width,shapes,vertices,indices,retained,peak,realloc_overlap,peak_blocks,accounted,bad_shape,bad_mesh,invalid_meshes,unsupported_shapes,panics,drop_bytes,segments,geometry_unavailable,policy_failures,status"
+        "scenario,points,traces,width,shapes,vertices,indices,retained,peak,realloc_overlap,peak_blocks,accounted,bad_shape,bad_mesh,invalid_meshes,unsupported_shapes,panics,drop_bytes,segments,geometry_unavailable,policy_failures,allocation_faults,curve_vertices,curve_indices,curve_vertex_capacity,curve_index_capacity,status"
     );
     let mut blocked = 0;
     for case in fixtures::matrix() {

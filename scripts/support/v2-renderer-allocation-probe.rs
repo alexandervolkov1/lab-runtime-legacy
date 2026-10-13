@@ -240,6 +240,8 @@ fn print_report(label: &str, report: &Report, epochs: usize, recreations: usize)
 mod bounded;
 #[path = "plot-geometry-probe.rs"]
 mod plot_geometry;
+#[path = "plot-memory-probe.rs"]
+mod plot_memory;
 #[path = "plot-widget-probe.rs"]
 mod plot_widget;
 #[path = "plot-projection-probe.rs"]
@@ -249,6 +251,11 @@ pub(crate) fn run() {
     let args: Vec<_> = std::env::args().collect();
     let scenario = args.get(1).expect("scenario").as_str();
     let provenance = args.get(2).expect("provenance on/off") == "on";
+    if scenario == "memory" {
+        assert!(!provenance, "CPU memory uses the executable profiles");
+        plot_memory::run();
+        return;
+    }
     if scenario == "geometry" {
         assert!(!provenance, "geometry uses the executable profiles");
         plot_geometry::run();

@@ -277,6 +277,11 @@ pub(crate) struct GeometryStats {
     pub(crate) invalid_meshes: usize,
     pub(crate) unsupported_shapes: usize,
     pub(crate) panics: usize,
+    pub(crate) allocation_faults: usize,
+    pub(crate) curve_vertices: usize,
+    pub(crate) curve_indices: usize,
+    pub(crate) curve_vertex_capacity: usize,
+    pub(crate) curve_index_capacity: usize,
 }
 impl GeometryStats {
     pub(crate) fn max_assign(&mut self, other: Self) {
@@ -293,6 +298,11 @@ impl GeometryStats {
         self.invalid_meshes = self.invalid_meshes.max(other.invalid_meshes);
         self.unsupported_shapes = self.unsupported_shapes.max(other.unsupported_shapes);
         self.panics += other.panics;
+        self.allocation_faults += other.allocation_faults;
+        self.curve_vertices = self.curve_vertices.max(other.curve_vertices);
+        self.curve_indices = self.curve_indices.max(other.curve_indices);
+        self.curve_vertex_capacity = self.curve_vertex_capacity.max(other.curve_vertex_capacity);
+        self.curve_index_capacity = self.curve_index_capacity.max(other.curve_index_capacity);
     }
     pub(crate) fn finite(self) -> bool {
         self.bad_shape_positions == 0
@@ -304,6 +314,12 @@ impl GeometryStats {
             && self.points <= 16_384
             && self.traces <= 32
             && self.segments <= 16_384
+            && self.curve_vertices <= 65_536
+            && self.curve_indices <= 98_304
+            // Measured capacities for the pinned native allocator/toolchain;
+            // try_reserve_exact is not a portable exact-capacity guarantee.
+            && self.curve_vertex_capacity <= 65_536
+            && self.curve_index_capacity <= 98_304
             && self.vertices <= 4 * self.points + 32_768
             && self.indices <= 6 * self.points + 131_072
     }
@@ -345,6 +361,10 @@ impl GeometryStats {
                 self.bad_shape_positions += usize::from(!t.pos.is_finite() || !t.angle.is_finite());
             }
             egui::Shape::Mesh(m) => {
+                self.curve_vertices += m.vertices.len();
+                self.curve_indices += m.indices.len();
+                self.curve_vertex_capacity += m.vertices.capacity();
+                self.curve_index_capacity += m.indices.capacity();
                 self.bad_shape_positions += m
                     .vertices
                     .iter()
@@ -377,6 +397,7 @@ impl GeometryStats {
             segments: report.geometry_segments,
             unavailable: report.geometry_unavailable,
             policy_failures: report.geometry_failures,
+            allocation_faults: report.allocation_faults,
             ..Self::default()
         };
         for shape in &output.shapes {
@@ -396,6 +417,7 @@ impl GeometryStats {
                 return stats;
             }
         };
+        stats.policy_failures += usize::from(stats.shapes > 0 && meshes.is_empty());
         for primitive in &meshes {
             if let egui::epaint::Primitive::Mesh(mesh) = &primitive.primitive {
                 stats.vertices += mesh.vertices.len();

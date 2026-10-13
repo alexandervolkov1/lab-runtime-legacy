@@ -21,9 +21,7 @@ pub(super) fn frame(
     let text = navigation_tests::painted_text(&output);
     assert_eq!(output.platform_output.num_completed_passes, 1);
     let meshes = preview.tessellate(&mut output);
-    if preview.context.is_some() {
-        assert!(!meshes.is_empty());
-    }
+    assert!(!meshes.is_empty());
     drop(meshes);
     output.drop_without_applying_deltas();
     (report, text)
@@ -61,6 +59,47 @@ pub(super) fn click(preview: &mut Preview<'_>, obs: &RuntimeObservations, captio
 }
 fn has(text: &[(String, egui::Rect)], needle: &str) -> bool {
     text.iter().any(|(text, _)| text.contains(needle))
+}
+
+#[test]
+fn navigation_output_keeps_its_generating_context_until_consumed() {
+    let doc = plot_fixtures::admit(&plot_fixtures::syntax(2, false));
+    let obs = plot_fixtures::observations(2, 512);
+    let mut preview = Preview::new(&doc, EPOCH);
+    // Both UI-driven Page -> Plot and Plot -> Page used to retire the Context
+    // before returning the transition frame, silently losing its CPU meshes.
+    for caption in ["Open Plot", "Back", "Open Plot", "Back"] {
+        let (_, text) = frame(&mut preview, &obs, vec![]);
+        let pos = text.iter().find(|(s, _)| s == caption).unwrap().1.center();
+        let (mut output, _) = preview
+            .run(
+                &obs,
+                egui::RawInput {
+                    events: vec![egui::Event::PointerMoved(pos), button(pos, true)],
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+        assert_eq!(preview.plot.is_some(), caption == "Open Plot");
+        assert!(preview.context.is_some());
+        let meshes = preview.tessellate(&mut output);
+        assert!(!meshes.is_empty(), "transition output must be consumable");
+        assert!(output.shapes.is_empty());
+        drop(meshes);
+        output.drop_without_applying_deltas();
+        let (mut next, _) = preview
+            .run(
+                &obs,
+                egui::RawInput {
+                    events: vec![button(pos, false)],
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+        assert_eq!(preview.context.as_ref().unwrap().cumulative_frame_nr(), 1);
+        assert!(!preview.tessellate(&mut next).is_empty());
+        next.drop_without_applying_deltas();
+    }
 }
 
 #[test]
