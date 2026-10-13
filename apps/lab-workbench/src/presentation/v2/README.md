@@ -2,8 +2,8 @@
 
 This module implements the DTO vocabulary in the
 [v2 contract](../../../../../docs/generic-controls-v2-contract.md), sections 2–4
-and the applicable definition limits in section 8, plus the pure section-7.1
-v1-to-v2 converter. It has no active consumer.
+and the applicable definition limits in section 8, plus the pure section-7
+v1 conversion and lossless export. It has no active consumer.
 The running Workbench, its 16 operations and its v1 document remain unchanged.
 
 `parse(&[u8]) -> ParsedDocument` first checks the 2 MiB input-body ceiling,
@@ -353,7 +353,7 @@ has no deserializer, mutable accessor or unchecked constructor.
 `AdmittedV2Document` or an error. `InvalidV1` identifies invalid structure/version,
 strings/numbers/references or source canonical size. A valid source whose expanded
 form cannot satisfy **any** v2 bound fails with `conversion_limit`. Nothing is
-truncated, renamed, dropped, published or saved. There is no reverse/export stub.
+truncated, renamed, dropped, published or saved.
 
 ### Normal form and identities
 
@@ -440,7 +440,7 @@ Tests also admit v1 at exactly 1 MiB while rejecting its amplified v2 result;
 v1 at 1 MiB + 1 fails source validation instead. Large valid v1 does not imply
 that v2 can fit its wire/canonical limits.
 
-### Safety evidence and pending reverse proof
+### Conversion safety evidence
 
 Tests cover all five kinds crossed with all target categories, including all
 three property-owner kinds, independent owners and repeated equal targets.
@@ -458,9 +458,145 @@ modeled structural/guard floor only: it is **not** an end-to-end proof of actual
 Runtime readiness, constraints, recovery or the future v2 operator adapter.
 The existing separate Confirm floor and production GUI regressions remain intact.
 
-The future exporter must still prove `E(C(v1)) == v1` and
-`C(E(v2)) == normalize(v2)`: exact template recognition, helper identity/allocation
-order, shared Recorder topology, absent/default fields, all display values and
-rejection of edited/nonrepresentable forms. No hidden v1 payload is kept to fake
-those identities. No public protocol/profile, live migration, new widgets,
-metadata refresh, physical control or persistence is introduced here.
+The offline exporter below completes the two inverse checks. No hidden v1 payload
+is kept to fake those identities. No public protocol/profile, live migration, new
+widgets, metadata refresh, physical control or persistence is introduced here.
+
+## Lossless v1 export (DGUI-4C6B)
+
+`export_v1(&AdmittedV2Document)` is the sole export entry. It borrows immutable
+admitted syntax and returns either a complete `PresentationDocument`,
+`unrepresentable_v1` with a bounded first offending schema/registry path, or
+`conversion_limit`. No partial document escapes any failure. It neither reads
+observations nor has access to the running presentation owner, persistence,
+Dispatcher, ClientHandle or operator workflow. The v1 schema/API and the approved
+converter are unchanged.
+
+The exportable subset is exactly the image of the approved converter C, modulo
+the existing v2 canonical normalization of object field order and specified
+optional defaults, intersected with the validation/allocation limits. It is not
+all valid admitted v2. Merely having `v1_control`/`v1_kind` is insufficient.
+
+The candidate inverse reconstructs all groups in component-registry order as v1
+Controls, using their ID/label and complete origin kind/target/confirm. Windows,
+tabs, panel identities/titles, ordered repeated Controls roots and single
+Plot/Status leaves restore the arrangement. Every plot and trace is restored in
+registry order, with the complete trace binding target inlined as its v1 source.
+All display numbers are direct binary64 copies; no numeric JSON parsing occurs.
+Unused Controls/Plots, empty arrays, all RuntimeRef/property-owner variants,
+display_unit null, visibility and confirm false retain their original meaning.
+
+The candidate passes the unchanged v1 format/structural validator and the same
+canonical pretty-serialization size check via `ValidatedV1Document::check`'s
+counting writer. Count/size/allocation failures become `conversion_limit`; any
+other invalid inverse becomes `unrepresentable_v1`. A private final-fence test
+deliberately supplies invalid reconstructed v1; there is no unchecked export API.
+
+### Two round-trip proofs
+
+1. **E(C(v1)) = v1.** C copies every v1 field into the above definitions and
+   annotations without reordering its original arrays. Reconstruction reads
+   precisely those copies, including full targets and provenance. Generated
+   helpers are the only fields excluded from reconstruction, and the second
+   proof verifies every one of them. Tests compare the entire serialized v1
+   byte sequence as well as DTO equality and explicit float `to_bits()` values;
+   floating-point `PartialEq` alone would miss signed-zero loss.
+2. **C(E(v2)) = normalize(v2).** Before returning any candidate, export invokes
+   the unchanged C and requires equality of its complete admitted canonical bytes
+   with the source's complete admitted canonical bytes. No hash, approximate DTO
+   equality, projection or subset comparison grants success. Admission has
+   already applied the permitted field-order/default normalization. Neither
+   side drops unknown fields, definitions or arrays during this comparison.
+
+This recognizes the exact child composition/order/labels, data/editor/action
+families and targets, defaults, generated-ID allocation and collision handling,
+shared Recorder data/editor, independent per-control bindings and independent
+trace bindings using one authoritative template implementation. An extra unused
+v2 definition cannot vanish: C must reproduce it byte-for-byte. Canonical
+comparison also retains the inert origin ceiling and separate Confirm policy;
+no new Boolean/Number/Enum property mutation or Reconnect action is introduced.
+
+Edits with a complete v1 inverse are permitted: for example a Control label,
+confirm annotation, trace visibility or the full target of its own trace data
+definition. Retargeting the trace's **binding ID**, merging bindings or leaving
+obsolete definitions is not that edit and fails exact reconstruction.
+
+### Rejection and limit evidence
+
+Deterministic tests require full admission before testing export refusal for
+Toggle/Select, multi-source groups, literal action parameters, custom constraints,
+nondefault settings, missing origin/panel annotations, help/precision/label/layout/
+applicability edits, child and registry reordering, noncanonical helper IDs, extra
+unused component/data/editor/action definitions, shared independent control
+bindings, coupled/swapped trace bindings, separate Recorder input/data topology,
+an incomplete PropertyScalar group, changed action family and inert-button action
+injection. Duplicate recording_label editors or malformed matching_type pairs
+are already refused by admission; they cannot be export inputs.
+
+Positive fixtures cover all five kinds crossed with all ten RuntimeRef/owner
+variants and both confirm values, every PanelKind, multiple windows/tabs, unused
+definitions, repeated references, shared Recorder, two traces on one source,
+collisions in every source namespace, exact UTF-8/escaping and array order.
+Numeric cases include signed zero, positive/negative minimum subnormal, minimum
+normal, both finite extrema, the 2^53 boundary and time-window/width endpoints.
+
+Limit tests include 65 annotated Controls, a compact admitted document with 480
+shared long-source traces whose v1 serialization exceeds 1 MiB, and 600 shared
+traces whose independent normal-form expansion fails repeat-C wire admission.
+Every failed export leaves source bytes, summary and allocation accounting intact.
+The 4 MiB reconstruction quota is checked at its exact boundary, the next block
+and checked-multiplication overflow. Prior DTO/graph/canonical/admission/conversion
+regressions, v1 presentation/GUI, external 16-operation API, Dispatcher and
+architectural guards remain part of the targeted gates.
+
+### Memory ownership and native qualification
+
+Reconstruction owns one candidate with at most **4 MiB accounted allocations**.
+Every String/Vec uses fallible exact reservation, charges before allocation and
+then charges actual capacity with the existing rounding/allocator allowance.
+Arrays reserve their known final length once; no incremental growth or expanded
+view tree is needed. Count bounds come from admission, with the additional v1
+64-Control fence. All capacity multiplication/addition is checked. Reference
+lookups are bounded linear scans over at most 512 components / 1,152 data bindings.
+
+The borrowed admitted source (at most 4 MiB), candidate (at most 4 MiB), and one
+repeat-C admitted output (at most 4 MiB including its 1 MiB canonical buffer) can
+coexist. This **12 MiB retained accounting sum is not a process peak limit**:
+repeat C also uses its existing finite construction/index/validation scratch and
+one transient 2 MiB wire buffer. Its pre-admission builder retains the documented
+construction ceilings above. The exporter builds no JSON Value tree, v1 byte
+buffer, cloned source document or second hidden original. Repeat-C and its
+scratch are dropped before return; only the reconstructed v1 remains.
+
+The native probe measures additional requested heap bytes above the already
+borrowed admitted v2, including reconstruction, v1 validation and complete repeat
+conversion. It repeats each fixture twice, requires identical readings and zero
+remaining allocations after output drop or failure. Three injected failures
+(first reconstructed String, 1 MiB canonical reserve, 2 MiB wire reserve) return
+`conversion_limit` and leave the source unchanged. Inherited String/BTree
+allocations inside v1 validation/C retain their existing process-OOM behavior;
+this is bounded allocation evidence, not universal graceful process-OOM handling.
+
+Native x86_64 Windows/MSVC, Rust 1.95.0, locked dependencies; requested bytes:
+
+| Export fixture | Borrowed v2 retained | Additional v1 retained | Additional peak |
+|---|---:|---:|---:|
+| Empty | 1,048,581 | 5 | 3,147,165 |
+| Mixed controls/panels | 1,060,769 | 2,482 | 3,162,674 |
+| 20,480 expanded occurrences | 1,209,572 | 143,879 | 3,452,874 |
+| 320 traces, long labels/colors/full sources | 1,805,720 | 712,806 | 4,617,730 |
+| v1 serialized-size refusal | 1,615,334 | 0 | 1,096,258 |
+| Repeat-C amplification refusal | 1,144,916 | 0 | 3,458,434 |
+| Edited settings refusal | 1,060,658 | 0 | 3,162,674 |
+
+These are fixture observations, not universal maxima or RSS/allocator-overhead
+measurements. Export remains an offline library operation; no endpoint, profile,
+renderer, autosave, metadata refresh or Runtime execution is enabled. DGUI-4C6B
+requires independent review before merge or any subsequent stage.
+
+Native targeted gates for this implementation passed: `presentation::v2::`
+(77 tests, including 13 export tests), `presentation::tests::` (47 v1/GUI tests),
+`external::tests::` (39), `dispatcher::tests::` (19), `operator_boundary_tests::`
+(5), the native allocation probe, `cargo fmt --all -- --check`, standalone probe
+rustfmt, `cargo clippy -p lab-workbench --all-targets --locked -- -D warnings`, and
+`git diff --check`. No full workspace gate was needed for this offline-only change.

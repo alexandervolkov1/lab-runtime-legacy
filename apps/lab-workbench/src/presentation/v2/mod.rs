@@ -10,6 +10,7 @@ mod canonical;
 mod conversion;
 mod dto;
 mod encoding;
+mod export;
 mod graph;
 mod limits;
 mod source_v1;
@@ -23,6 +24,7 @@ pub(crate) use bounded::{I64Decimal, U64Decimal};
 pub(crate) use canonical::CanonicalWireCandidate;
 pub(crate) use conversion::{ConversionError, ValidatedV1Document, convert_v1};
 pub(crate) use dto::*;
+pub(crate) use export::{ExportError, export_v1};
 pub(crate) use graph::{ViewOccurrence, ViewOccurrenceId};
 pub(crate) use structure::{StaticAvailability, StaticBlocker, StructuralSummary};
 pub(crate) use wire::WireUsage;
@@ -123,6 +125,10 @@ mod conversion_fixtures;
 mod conversion_model_tests;
 #[cfg(test)]
 mod conversion_tests;
+#[cfg(test)]
+mod export_fixtures;
+#[cfg(test)]
+mod export_tests;
 #[cfg(test)]
 mod structure_tests;
 #[cfg(test)]

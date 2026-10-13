@@ -30,6 +30,7 @@ try {
     $reference = (Join-Path $repo 'apps/lab-workbench/src/presentation/reference.rs').Replace('\', '/')
     $fixture = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/admission_fixtures.rs').Replace('\', '/')
     $conversionFixture = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/conversion_fixtures.rs').Replace('\', '/')
+    $exportFixture = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/export_fixtures.rs').Replace('\', '/')
     $probe = (Join-Path $repo 'scripts/support/v2-allocation-probe.rs').Replace('\', '/')
     $wrapper = @"
 #![deny(unsafe_code)]
@@ -46,6 +47,7 @@ pub(crate) use reference::*;
 #[path = "$module"] mod v2;
 #[path = "$fixture"] mod fixtures;
 #[path = "$conversionFixture"] mod conversion_fixtures;
+#[path = "$exportFixture"] mod export_fixtures;
 #[path = "$probe"] mod probe;
 fn main() { probe::run(); }
 "@
