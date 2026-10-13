@@ -7,10 +7,12 @@ mod admission;
 mod allocation;
 mod bounded;
 mod canonical;
+mod conversion;
 mod dto;
 mod encoding;
 mod graph;
 mod limits;
+mod source_v1;
 mod structure;
 mod validation;
 mod visual_budget;
@@ -19,6 +21,7 @@ mod wire;
 pub(crate) use admission::{AdmittedV2Document, admit};
 pub(crate) use bounded::{I64Decimal, U64Decimal};
 pub(crate) use canonical::CanonicalWireCandidate;
+pub(crate) use conversion::{ConversionError, ValidatedV1Document, convert_v1};
 pub(crate) use dto::*;
 pub(crate) use graph::{ViewOccurrence, ViewOccurrenceId};
 pub(crate) use structure::{StaticAvailability, StaticBlocker, StructuralSummary};
@@ -114,6 +117,12 @@ mod admission_fixtures;
 mod admission_tests;
 #[cfg(test)]
 mod canonical_tests;
+#[cfg(test)]
+mod conversion_fixtures;
+#[cfg(test)]
+mod conversion_model_tests;
+#[cfg(test)]
+mod conversion_tests;
 #[cfg(test)]
 mod structure_tests;
 #[cfg(test)]

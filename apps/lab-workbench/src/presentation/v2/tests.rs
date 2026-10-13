@@ -557,6 +557,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         include_str!("allocation.rs"),
         include_str!("admission.rs"),
         include_str!("visual_budget.rs"),
+        include_str!("conversion.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -586,12 +587,18 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
         assert!(!consumer.contains("StructurallyCheckedDocument"));
         assert!(!consumer.contains("CanonicalWireCandidate"));
         assert!(!consumer.contains("AdmittedV2Document"));
+        assert!(!consumer.contains("convert_v1"));
     }
-    // The only outer-module dependency is this exact read-only constant surface.
+    // Outer dependencies are exact read-only constant/source-schema surfaces.
     let limits = include_str!("limits.rs").replace("\r\n", "\n");
     assert_eq!(
         limits.split_once("\n\n").unwrap().1,
         "pub(super) use crate::external::{\n    FRAME_BYTES, JSON_BODY_BYTES, JSON_DEPTH, JSON_STRING_BYTES, JSON_VALUES, NAME_BYTES,\n};\npub(super) use crate::presentation::PRESENTATION_FILE_BYTES;\n"
+    );
+    let source = include_str!("source_v1.rs").replace("\r\n", "\n");
+    assert_eq!(
+        source.split_once("\n\n").unwrap().1,
+        "pub(super) use crate::presentation::{\n    ConfigurationOwner, Control, ControlKind, DocumentError, PanelKind, PresentationDocument,\n    RuntimeRef,\n};\n"
     );
 }
 

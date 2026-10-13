@@ -1,7 +1,7 @@
 //! Standalone, single-thread test process. Never compiled into Workbench.
 //! The launcher links the exact already-built serde artifacts and source module.
 
-use crate::{fixtures, v2};
+use crate::{conversion_fixtures, fixtures, presentation, v2};
 
 // This is the sole unsafe code in the probe. Workspace forbid(unsafe_code)
 // remains unchanged. No custom allocation algorithm: all calls delegate to System.
@@ -251,4 +251,47 @@ pub(crate) fn run() {
     println!(
         "reproducibility, retained-capacity equality, coexistence and allocation-failure checks passed"
     );
+    for (name, source, success) in [
+        (
+            "empty",
+            presentation::PresentationDocument::empty("empty"),
+            true,
+        ),
+        ("mixed", conversion_fixtures::mixed(), true),
+        ("expansion", conversion_fixtures::expansion(), true),
+        ("near-limit", conversion_fixtures::near_limit(), false),
+    ] {
+        let original = serde_json::to_vec(&source).unwrap();
+        let measure = || {
+            meter::start();
+            let checked = v2::ValidatedV1Document::check(&source).unwrap();
+            let validated = meter::phase();
+            assert_eq!(validated.live, 0); // The validated source is only borrowed.
+            let result = v2::convert_v1(checked);
+            let converted = meter::phase();
+            let accounted = if let Ok(doc) = &result {
+                assert!(success);
+                assert_eq!(converted.live, doc.allocation().capacity_bytes);
+                assert_eq!(converted.blocks, doc.allocation().blocks);
+                doc.allocation().accounted_bytes
+            } else {
+                assert!(!success);
+                assert_eq!(converted.live, 0);
+                0
+            };
+            drop(result);
+            let released = meter::phase();
+            meter::stop();
+            assert_eq!(released.live, 0);
+            assert_eq!(released.blocks, 0);
+            (validated, converted, accounted)
+        };
+        let first = measure();
+        assert_eq!(first, measure());
+        assert_eq!(original, serde_json::to_vec(&source).unwrap());
+        println!(
+            "conversion {name}, v1 canonical {}: {first:?}",
+            serde_json::to_vec_pretty(&source).unwrap().len()
+        );
+    }
 }
