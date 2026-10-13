@@ -51,6 +51,8 @@ impl FrameBackend for Mock {
     ) -> Result<(), FrameError> {
         let mut log = self.0.borrow_mut();
         log.events.push(Event::Platform);
+        // Platform processing can start dependent work without a texture set.
+        log.busy = true;
         if log.fault == Some(FrameError::PlatformOutput) {
             Err(FrameError::PlatformOutput)
         } else {
@@ -355,6 +357,51 @@ fn host_faults_drain_partial_work_then_free_without_success_or_retry() {
             1
         );
         assert!(matches!(events[events.len() - 2], Event::Drain));
+    }
+}
+
+#[test]
+fn warmed_frame_faults_without_uploads_never_acknowledge_or_retry() {
+    let doc = fixtures::admit(&fixtures::syntax(1, false));
+    for error in [
+        FrameError::PlatformOutput,
+        FrameError::Submission,
+        FrameError::Completion,
+    ] {
+        let log = Rc::new(RefCell::new(Log::default()));
+        let mut preview = Preview::with_backend(&doc, EPOCH, Mock(log.clone()));
+        let mut warm = preview
+            .run(&Default::default(), Default::default())
+            .unwrap();
+        let generation = warm.generation();
+        warm.tessellate().unwrap();
+        warm.finish().unwrap();
+        log.borrow_mut().events.clear();
+        log.borrow_mut().fault = Some(error);
+
+        let mut frame = preview
+            .run(&Default::default(), Default::default())
+            .unwrap();
+        assert_eq!(frame.generation(), generation);
+        frame.tessellate().unwrap();
+        assert_eq!(frame.finish(), Err(error));
+        assert_eq!(preview.last_outcome(), Some(FrameOutcome::Failed(error)));
+        assert!(preview.context.is_none() && preview.pending.is_none());
+        let events = log.borrow().events.clone();
+        assert!(!events.iter().any(|event| matches!(event, Event::Set(_, _))));
+        assert_eq!(
+            &events[events.len() - 2..],
+            &[
+                Event::Drain,
+                Event::Free(TextureKey {
+                    generation,
+                    id: egui::TextureId::Managed(0)
+                })
+            ]
+        );
+        drop(preview);
+        assert_eq!(log.borrow().events, events);
+        assert!(!log.borrow().busy);
     }
 }
 

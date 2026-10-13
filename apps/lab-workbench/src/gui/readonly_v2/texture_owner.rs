@@ -13,8 +13,9 @@ pub(crate) struct TextureKey {
 }
 
 /// Trusted host contract, deliberately synchronous and without a submission queue.
-/// `submit`/`complete` errors may leave work in flight. `drain` MUST establish
-/// that no submitted draw/upload can still use any resource before returning,
+/// `set`/`platform`/`submit`/`complete` errors may leave work in flight, even when
+/// the frame has no texture updates. `drain` MUST establish
+/// that no dependent platform operation/draw/upload can use resources on return,
 /// including after partial failure. `free` then releases the entire key, including
 /// partially created resources. Neither cleanup operation may panic. A real GPU
 /// implementation needs independently reviewed fences, device-loss handling and
@@ -171,6 +172,9 @@ impl<B: FrameBackend> TextureOwner<B> {
                 self.backend.set(key, update)?;
             }
         }
+        // Platform output can start dependent work even with an empty set delta.
+        // Arm cleanup before calling it, including its ambiguous error path.
+        self.in_flight = true;
         self.backend
             .platform(&output.platform_output, &output.viewport_output)?;
         // No user textures or callbacks enter this isolated seam. Validate every
@@ -266,6 +270,58 @@ mod tests {
         assert!(owner.textures.iter().all(Option::is_none));
         owner.retire();
         assert_eq!(log.borrow().events.len(), 6);
+    }
+    #[test]
+    fn errors_without_new_uploads_drain_before_retirement() {
+        for existing in [false, true] {
+            for error in [
+                FrameError::PlatformOutput,
+                FrameError::Submission,
+                FrameError::Completion,
+            ] {
+                let log = Rc::new(RefCell::new(Log::default()));
+                let mut owner = TextureOwner::new(Mock(log.clone()));
+                let generation = ContextGeneration::allocate().unwrap();
+                owner.begin(generation);
+                let key = TextureKey {
+                    generation,
+                    id: TextureId::Managed(0),
+                };
+                if existing {
+                    owner
+                        .process(generation, &mut output(key.id, false, false), &[])
+                        .unwrap();
+                }
+                log.borrow_mut().events.clear();
+                log.borrow_mut().fault = Some(error);
+                // This frame contains NO upload, including no font atlas update.
+                let mut out = egui::FullOutput::default();
+                assert_eq!(owner.process(generation, &mut out, &[]), Err(error));
+                assert!(log.borrow().busy);
+                owner.retire();
+                let events = log.borrow().events.clone();
+                let expected_calls = match error {
+                    FrameError::PlatformOutput => vec![Event::Platform],
+                    FrameError::Submission => vec![Event::Platform, Event::Submit(generation)],
+                    FrameError::Completion => {
+                        vec![Event::Platform, Event::Submit(generation), Event::Complete]
+                    }
+                    _ => unreachable!(),
+                };
+                let mut expected = expected_calls;
+                expected.push(Event::Drain);
+                if existing {
+                    expected.push(Event::Free(key));
+                }
+                assert_eq!(events, expected);
+                assert!(!log.borrow().busy);
+                assert!(owner.generation.is_none());
+                assert!(owner.textures.iter().all(Option::is_none));
+                owner.retire();
+                drop(owner);
+                assert_eq!(log.borrow().events, events); // No retry or double free.
+            }
+        }
     }
     #[test]
     fn unknown_or_out_of_bounds_partial_never_reaches_backend() {

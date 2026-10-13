@@ -1,0 +1,68 @@
+DGUI-4C7B2C4B1 gate record - 2026-10-13
+Status: BLOCKED at native GPU integration-seam preflight; CPU gates PASS.
+Platform: Windows 10 Pro 10.0.19045, x86_64-pc-windows-msvc.
+rustc: 1.95.0 (59807616e 2026-04-14), LLVM 22.1.2.
+C4A approved HEAD: 60ae02e859e762d4d1292a8a023d713174de2c83.
+C4A ordinary merge: 58035120aedaf0a2105ee0f0763aeca811d0eac3; approved HEAD is second parent.
+PR #31 verified unchanged, Ready, MERGED; main synchronized and clean before branch creation.
+Branch: feature/dgui-4c7b2c4b1-native-glow-smoke.
+Cargo.lock blob unchanged: affb1f7bada9ea57186a94f57d77229d2db7dc4d.
+Dependency versions/features/profiles, B1, finite geometry and active v1 source unchanged.
+No release, v2 activation, real GPU backend or native window launch.
+
+Targeted tests: 301 passed dev, 301 passed release, 0 failed (previous 299 + 2).
+Selection: gui::readonly_v2:: presentation:: gui::controls:: gui::app:: external::tests:: dispatcher::tests:: operator_boundary_tests:: model::read_binding::
+Includes old A1/A2/B1/B2/B2A, finite geometry, frame/generation/texture lifecycle,
+Unicode/navigation, v1 GUI/Plot/hover/Confirm, admission/conversion/export and architecture guards.
+New deterministic regression fails with old production arming (missing Drain); both new tests PASS after correction.
+New owner test: platform/submit/completion errors with empty set and 0 or 1 existing keys.
+New Preview test: warm successful frame, then 3 error paths without sets; failed outcome, drain/free, no retry.
+Public Glow signatures and borrowed AppCreator/run_native lifetime witness: compile PASS dev/release.
+Compile-fail ownership gates: next-frame E0499, retire-context E0499, drop-preview E0505, both profiles PASS.
+
+Full native CPU renderer launchers: dev exit 0; release exit 0.
+Geometry: 119 PASS/profile; maximum accounted 4610337.
+C3 combined memory: 125 PASS/profile; maximum accounted 4458653.
+Full Plot widget: 113 phases/profile; maximum accounted 4483157.
+C4A frame owner: 12 PASS/profile; maximum accounted 4355499; 4 expected mock faults.
+New no-upload host cases: 4 PASS/profile; maximum accounted 4367945; 3 expected mock faults.
+A2 Page/tessellation: all 5120 pages plus stress/lifetimes; maximum accounted 3013664.
+All five preserved evidence sets equal historical C4A results in both profiles.
+New no-upload dev/release CSVs byte-identical; post-drop 0 bytes/0 blocks/0 mock keys in every case.
+Historical CSVs preserved; NATIVE_GLOW_EVIDENCE_SHA256.txt records rerun comparisons.
+Combined maximum unchanged: 4610337 of 8388608 accounted bytes.
+Formula unchanged: realloc_overlap_peak + 127 * peak_blocks + 65536; B1 included.
+New cases peak 3590538; realloc overlap 4170202; blocks 1041; max retained 644282.
+New cases shapes 202; vertices 69760; indices 106926 (includes GUI); geometry/allocation faults 0.
+New cases: one generation/key each; sets 1, partials 0; frees 1; outstanding 0.
+Control has 2 successful mock completions, no drain. Each error has 1 prior completion, 1 drain.
+Preserved curve/B1 allocation fault tests: 4/2 deterministic failures; no successful partial trace or false acknowledgement.
+Admission/conversion/export native allocation launcher: PASS, including 3 fallible reservation failures.
+cargo fmt --all -- --check: PASS.
+Standalone rustfmt --check --edition 2024 (3 changed support modules): PASS.
+cargo clippy -p lab-workbench --all-targets --locked -- -D warnings: PASS.
+git diff --check: PASS.
+
+Reproduction commands (native Windows/MSVC):
+cargo test -p lab-workbench --locked -- gui::readonly_v2:: presentation:: gui::controls:: gui::app:: external::tests:: dispatcher::tests:: operator_boundary_tests:: model::read_binding:: --test-threads=1
+Repeat targeted command with --release before --locked.
+./scripts/test-v2-renderer-allocation.ps1 -BuildProfile dev
+./scripts/test-v2-renderer-allocation.ps1 -BuildProfile release
+Use -FramesOnly for the preserved 12 + new 4 native CPU/mock cases and compile gates.
+./scripts/test-v2-allocation.ps1
+cargo fmt --all -- --check
+rustfmt --check --edition 2024 scripts/support/glow-seam-check.rs scripts/support/frame-owner-probe.rs scripts/support/v2-renderer-allocation-probe.rs
+cargo clippy -p lab-workbench --all-targets --locked -- -D warnings
+git diff --check
+
+Native GPU result: NOT RUN, not GPU SMOKE PASS or GPU LIFECYCLE QUALIFIED.
+GPU texture set/partial/free, submitted/completed frames, objects created/destroyed,
+outstanding GPU ownership and host CPU/VRAM measurements: NOT MEASURED.
+Exact blocker: infallible drain clears ownership unconditionally on return; finite
+fence timeout/wait failure cannot be represented without a C4A protocol change.
+Additional adapter review: Painter's void/error-consuming calls and narrow raw-GL
+safety boundary, current-context/native-runner shutdown, device-loss terminal release.
+GLOW_DRAIN_PROPOSAL.md is a separate review proposal, not an implemented new contract.
+Task section 3 requires that review before substantial C4A interface changes.
+CPU MEMORY QUALIFIED retained only for the pinned isolated configuration.
+ACTIVATION_QUALIFIED=false; C4B2 not started; C4B1 remains a Draft PR for independent review.

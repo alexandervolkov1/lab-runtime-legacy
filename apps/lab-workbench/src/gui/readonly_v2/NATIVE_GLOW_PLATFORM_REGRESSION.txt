@@ -1,0 +1,40 @@
+C4B1 deterministic platform-without-uploads counterexample.
+Before: new regression plus mock platform busy marker, old production TextureOwner.
+Expected failure; no native GPU was used.
+
+   Compiling lab-workbench v0.1.0 (D:\rust\lab-runtime\apps\lab-workbench)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 39s
+     Running unittests src\main.rs (target\debug\deps\lab_workbench-7b495ec4c394c9e4.exe)
+
+running 1 test
+test gui::readonly_v2::texture_owner::tests::errors_without_new_uploads_drain_before_retirement ... FAILED
+
+failures:
+
+---- gui::readonly_v2::texture_owner::tests::errors_without_new_uploads_drain_before_retirement stdout ----
+
+thread 'gui::readonly_v2::texture_owner::tests::errors_without_new_uploads_drain_before_retirement' (16736) panicked at apps\lab-workbench\src\gui\readonly_v2\texture_owner.rs:312:17:
+assertion `left == right` failed
+  left: [Platform]
+ right: [Platform, Drain]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    gui::readonly_v2::texture_owner::tests::errors_without_new_uploads_drain_before_retirement
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 477 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p lab-workbench --bin lab-workbench`
+
+After: in_flight armed before platform; same regression plus Preview failure test.
+
+   Compiling lab-workbench v0.1.0 (D:\rust\lab-runtime\apps\lab-workbench)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.32s
+     Running unittests src\main.rs (target\debug\deps\lab_workbench-7b495ec4c394c9e4.exe)
+
+running 2 tests
+test gui::readonly_v2::frame_tests::warmed_frame_faults_without_uploads_never_acknowledge_or_retry ... ok
+test gui::readonly_v2::texture_owner::tests::errors_without_new_uploads_drain_before_retirement ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 477 filtered out; finished in 0.09s

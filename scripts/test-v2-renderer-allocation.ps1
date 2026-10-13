@@ -106,6 +106,7 @@ use gui::readonly_v2;
 #[path = "$sourceRoot/gui/readonly_v2/plot_fixtures.rs"] mod plot_fixtures;
 #[path = "$sourceRoot/gui/readonly_v2/plot_geometry_fixtures.rs"] mod plot_geometry_fixtures;
 #[path = "$support/v2-renderer-allocation-probe.rs"] mod probe;
+#[path = "$support/glow-seam-check.rs"] mod glow_seam_check;
 fn main() { probe::run(); }
 "@
     $source = Join-Path $probeDir 'main.rs'
@@ -117,6 +118,7 @@ fn main() { probe::run(); }
     }
     & rustc --edition=2024 -D warnings $source @externs @rustFlags -L "dependency=$(Join-Path $repo "target/$directory/deps")" -o $binary
     if ($LASTEXITCODE -ne 0) { throw 'Renderer probe compilation failed' }
+    Write-Output 'Public Glow API and borrowed native App lifetime: compile PASS (no GPU execution)'
     # Compile the same real modules with deliberately invalid ownership examples.
     # This verifies borrowing enforcement without adding a test-only dependency.
     $borrowCases = @(
@@ -139,12 +141,12 @@ fn main() { probe::run(); }
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory', 'frames') }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory', 'frames', 'host-no-upload') }
     if ($ProjectionOnly) { $scenarios = @('projection') }
     if ($PlotOnly) { $scenarios = @('plot') }
     if ($GeometryOnly) { $scenarios = @('geometry') }
     if ($MemoryOnly) { $scenarios = @('memory') }
-    if ($FramesOnly) { $scenarios = @('frames') }
+    if ($FramesOnly) { $scenarios = @('frames', 'host-no-upload') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE
