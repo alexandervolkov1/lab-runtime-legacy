@@ -3,12 +3,12 @@ use crate::model::{Freshness, LivePoint};
 use egui_plot::{PlotMemory, PlotPoint};
 use serde_json::json;
 
-const EPOCH: PresentationEpoch = PresentationEpoch {
+pub(super) const EPOCH: PresentationEpoch = PresentationEpoch {
     owner: [7; 16],
     revision: 1,
 };
 
-fn frame(
+pub(super) fn frame(
     preview: &mut Preview<'_>,
     obs: &RuntimeObservations,
     events: Vec<egui::Event>,
@@ -28,7 +28,7 @@ fn frame(
     output.drop_without_applying_deltas();
     (report, text)
 }
-fn memory(preview: &Preview<'_>) -> PlotMemory {
+pub(super) fn memory(preview: &Preview<'_>) -> PlotMemory {
     PlotMemory::load(
         preview.context.as_ref().unwrap(),
         preview.plot.as_ref().unwrap().id(),
@@ -43,7 +43,7 @@ fn button(pos: egui::Pos2, pressed: bool) -> egui::Event {
         modifiers: egui::Modifiers::NONE,
     }
 }
-fn click(preview: &mut Preview<'_>, obs: &RuntimeObservations, caption: &str) {
+pub(super) fn click(preview: &mut Preview<'_>, obs: &RuntimeObservations, caption: &str) {
     let (_, text) = frame(preview, obs, vec![]);
     let pos = text
         .iter()
@@ -79,13 +79,13 @@ fn actual_plot_output_and_tessellation() {
         let (mut output, report) = preview.run(&obs, egui::RawInput::default()).unwrap();
         assert_eq!(report.plot_points, 16384);
         let text = navigation_tests::painted_text(&output);
-        assert!(text.iter().any(|(text, _)| text == "Plot title"));
-        assert!(text.iter().any(|(text, _)| text == "32: Same label"));
+        assert!(text.iter().any(|(text, _)| text == "Title details"));
+        assert!(text.iter().any(|(text, _)| text == "T32"));
         let meshes = preview.tessellate(&mut output);
         assert!(!meshes.is_empty());
         output.drop_without_applying_deltas();
     }
-    click(&mut preview, &obs, "32: Same label");
+    click(&mut preview, &obs, "T32");
     assert_eq!(preview.plot.as_ref().unwrap().hidden, 1 << 31);
 }
 
@@ -100,7 +100,7 @@ fn real_card_open_back_and_forget_reentered_view() {
     click(&mut preview, &obs, "Open Plot");
     assert!(preview.plot.is_some());
     let (_, text) = frame(&mut preview, &obs, vec![]);
-    assert!(has(&text, "1: Same label"));
+    assert!(has(&text, "T01"));
     click(&mut preview, &obs, "Back");
     assert!(preview.plot.is_none());
     assert_eq!(preview.location(), Location::default());
@@ -118,7 +118,7 @@ fn legend_pan_wheel_zoom_reset_and_context_recreation_preserve_only_current_slot
     for _ in 0..3 {
         frame(&mut preview, &obs, vec![]);
     }
-    click(&mut preview, &obs, "2: Same label");
+    click(&mut preview, &obs, "T02");
     assert_eq!(preview.plot.as_ref().unwrap().hidden, 2);
     let initial = *memory(&preview).bounds();
     let pos = memory(&preview).transform().frame().center();
@@ -245,10 +245,7 @@ fn hover_routes_duplicate_labels_to_exact_trace_with_units_staleness_and_curve_p
             .position_from_point(&PlotPoint::new(5.0, value));
         frame(&mut preview, &obs, vec![egui::Event::PointerMoved(pos)]);
         let (_, text) = frame(&mut preview, &obs, vec![]);
-        assert!(
-            has(&text, &format!("{i}: Same label\nCurve position:")),
-            "{text:?}"
-        );
+        assert!(has(&text, &format!("T{i:02}\nCurve position:")), "{text:?}");
         assert!(has(&text, "T+00:00:05.000"));
         assert!(has(
             &text,
@@ -360,7 +357,7 @@ fn projected_spikes_are_real_colored_paths_and_invalid_hover_has_no_tooltip() {
 }
 
 #[test]
-fn text_preflight_is_explicit_and_back_works_without_constructing_curves() {
+fn long_text_opens_real_curves_and_budget_refusal_still_precedes_widgets() {
     let mut syntax = plot_fixtures::syntax(32, false);
     for trace in syntax["plots"][0]["traces"].as_array_mut().unwrap() {
         trace["display_label"] = json!("Ж".repeat(256));
@@ -370,9 +367,9 @@ fn text_preflight_is_explicit_and_back_works_without_constructing_curves() {
     let mut preview = Preview::new(&doc, EPOCH);
     preview.open_plot(0);
     let (report, text) = frame(&mut preview, &obs, vec![]);
-    assert!(report.guarded && report.plot_points == 0);
-    assert!(has(&text, "Plot paused"));
-    assert!(!has(&text, "1: "));
+    assert!(!report.guarded && report.plot_points == 16384);
+    assert!(has(&text, "T32"));
+    assert!(!has(&text, "Ж"));
     click(&mut preview, &obs, "Back");
     assert!(preview.plot.is_none());
     preview.open_plot(0);
@@ -495,5 +492,5 @@ fn skewed_shared_sources_and_all_occurrences_keep_independent_identities_and_sou
     preview.open_plot(0);
     let (report, text) = frame(&mut preview, &obs, vec![]);
     assert_eq!(report.plot_points, 8192);
-    assert!(has(&text, "1: Same label") && has(&text, "2: Same label"));
+    assert!(has(&text, "T01") && has(&text, "T02"));
 }

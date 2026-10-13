@@ -12,6 +12,9 @@ mod plot_fixtures;
 pub(crate) mod plot_projection;
 #[cfg(test)]
 mod plot_projection_tests;
+mod plot_text;
+#[cfg(test)]
+mod plot_text_tests;
 pub(crate) mod plot_widget;
 #[cfg(test)]
 mod plot_widget_tests;
@@ -273,36 +276,18 @@ impl<'a> Preview<'a> {
             self.allowance.min(plot_projection::PROJECTION_RESERVATION),
         )
         .map_err(|_| "Read-only Plot unavailable: bounded projection failed")?;
-        if !plot_widget::preflight(&view) {
-            // Retire any previously warm chart before creating a small notice.
-            // No legend, plot widget or tessellated curve is constructed here.
-            self.retire();
-            let context = self.context.get_or_insert_with(new_context);
-            let mut back = false;
-            let output = context.run_ui(bounded_input(input, false), |ui| {
-                back = page::navigate_button(ui, true, "Back");
-                ui.label("Plot paused: this chart's text exceeds the current preview limits. Return to the page with Back.");
-            });
-            if back {
-                self.close_plot();
-            }
-            return Ok((
-                output,
-                RenderReport {
-                    guarded: true,
-                    ..Default::default()
-                },
-            ));
-        }
-        if self.plot.as_mut().unwrap().refresh_units(&view) {
+        // Fixed-size text planning precedes font, widget and galley allocation.
+        // A changed fragment retires the complete Context before new glyphs.
+        let (changed, text_page) = self.plot.as_mut().unwrap().prepare(&view);
+        if changed {
             self.retire();
         }
         let restored = self.context.is_none();
         let context = self.context.get_or_insert_with(new_context);
         let state = self.plot.as_mut().unwrap();
         let mut result = (false, RenderReport::default());
-        let output = context.run_ui(bounded_input(input, true), |ui| {
-            result = state.paint(ui, &view, restored);
+        let output = context.run_ui(bounded_input(input, text_page.is_none()), |ui| {
+            result = state.paint(ui, &view, text_page.as_ref(), restored);
         });
         if result.0 {
             self.close_plot();
