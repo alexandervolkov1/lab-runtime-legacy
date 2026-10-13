@@ -62,6 +62,7 @@ struct Cell {
     lines: Range<usize>,
     index: usize,
     group: bool,
+    plot: bool,
 }
 
 #[derive(PartialEq, Eq)]
@@ -217,6 +218,7 @@ impl Page {
                     lines: begin..page.text.count,
                     index,
                     group: matches!(view.component, v2::Component::Group { .. }),
+                    plot: matches!(view.component, v2::Component::Plot { .. }),
                 });
             }
         } else {
@@ -317,6 +319,10 @@ impl Page {
                     }
                 }
             }
+            v2::Component::Plot { label: caption, .. } => {
+                label(&mut self.text, caption.as_str());
+                label(&mut self.text, "Read-only Plot: open one chart at a time");
+            }
             unsupported => {
                 self.report.placeholders += 1;
                 let (caption, kind) = match unsupported {
@@ -326,7 +332,6 @@ impl Page {
                     v2::Component::IntegerInput { label, .. } => (label, "IntegerInput"),
                     v2::Component::NumberInput { label, .. } => (label, "NumberInput"),
                     v2::Component::TextInput { label, .. } => (label, "TextInput"),
-                    v2::Component::Plot { label, .. } => (label, "Plot"),
                     _ => unreachable!("handled read components"),
                 };
                 label(&mut self.text, caption.as_str());
@@ -341,7 +346,13 @@ impl Page {
         }
     }
 
-    pub(super) fn paint(&self, ui: &mut egui::Ui, next: &mut Location, scroll: &mut egui::Vec2) {
+    pub(super) fn paint(
+        &self,
+        ui: &mut egui::Ui,
+        next: &mut Location,
+        scroll: &mut egui::Vec2,
+        plot: &mut Option<usize>,
+    ) {
         ui.push_id(
             (
                 "v2-navigation",
@@ -416,6 +427,9 @@ impl Page {
                                         if cell.group && navigate_button(ui, true, "Open group") {
                                             *next = self.location.enter(cell.index);
                                         }
+                                        if cell.plot && navigate_button(ui, true, "Open Plot") {
+                                            *plot = Some(cell.index);
+                                        }
                                     });
                                 });
                             }
@@ -435,7 +449,7 @@ impl Page {
 /// Navigation activates on a primary press inside its current clipped rectangle.
 /// It needs no prior-frame click/focus state, so changing observations cannot
 /// starve navigation by retiring the Context between press and release.
-fn navigate_button(ui: &mut egui::Ui, enabled: bool, caption: &str) -> bool {
+pub(super) fn navigate_button(ui: &mut egui::Ui, enabled: bool, caption: &str) -> bool {
     let response = ui.add_enabled(enabled, egui::Button::new(caption));
     enabled
         && ui.input(|input| {

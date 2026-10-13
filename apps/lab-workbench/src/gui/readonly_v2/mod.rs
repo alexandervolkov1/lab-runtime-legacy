@@ -12,6 +12,9 @@ mod plot_fixtures;
 pub(crate) mod plot_projection;
 #[cfg(test)]
 mod plot_projection_tests;
+pub(crate) mod plot_widget;
+#[cfg(test)]
+mod plot_widget_tests;
 mod read;
 #[cfg(test)]
 mod tests;
@@ -68,6 +71,8 @@ pub(crate) struct RenderReport {
     pub(crate) text_bytes: usize,
     pub(crate) widgets: usize,
     pub(crate) guarded: bool,
+    pub(crate) plot_points: usize,
+    pub(crate) plot_traces: usize,
 }
 
 /// Owns one isolated Context, one fixed page of text and a four-slot navigation
@@ -81,6 +86,7 @@ pub(crate) struct Preview<'a> {
     previous: Option<Page>,
     scroll: egui::Vec2,
     allowance: usize,
+    plot: Option<plot_widget::PlotState<'a>>,
 }
 
 impl<'a> Preview<'a> {
@@ -93,6 +99,7 @@ impl<'a> Preview<'a> {
             previous: None,
             scroll: egui::Vec2::ZERO,
             allowance: PREVIEW_RESERVATION,
+            plot: None,
         }
     }
 
@@ -105,6 +112,7 @@ impl<'a> Preview<'a> {
         // confusing two immutable admissions, even if the caller forgot revision.
         if !std::ptr::eq(self.document, document) || self.epoch != epoch {
             self.retire();
+            self.plot = None;
             self.location = Location::default();
             self.scroll = egui::Vec2::ZERO;
             self.document = document;
@@ -122,6 +130,7 @@ impl<'a> Preview<'a> {
         }
         if location != self.location {
             self.retire();
+            self.plot = None;
             self.location = location;
             self.scroll = egui::Vec2::ZERO;
         }
@@ -145,6 +154,65 @@ impl<'a> Preview<'a> {
         self.previous = None;
     }
 
+    /// Release only the library caches, preserving the single current Plot slot.
+    pub(crate) fn retire_context(&mut self) {
+        self.retire();
+    }
+
+    pub(crate) fn close_plot(&mut self) {
+        self.retire();
+        self.plot = None;
+    }
+
+    /// Open only an admitted Plot on the current four-cell page. No projection
+    /// or allocation is needed merely to choose this local viewing mode.
+    pub(crate) fn open_plot(&mut self, index: usize) -> bool {
+        if index / PAGE_SIZE != self.location.page || !self.location.valid(self.document) {
+            return false;
+        }
+        let (root, path) = self.location.occurrence(index);
+        let Some(view) = self.document.source().occurrence(
+            self.location.window,
+            self.location.tab,
+            self.location.panel,
+            root,
+            &path[..self.location.depth],
+        ) else {
+            return false;
+        };
+        let v2::Component::Plot { plot_id, .. } = view.component else {
+            return false;
+        };
+        let Some(definition) = self
+            .document
+            .dto()
+            .plots
+            .0
+            .iter()
+            .find(|p| p.id == *plot_id)
+        else {
+            return false;
+        };
+        self.retire();
+        self.plot = Some(plot_widget::PlotState::from_definition(
+            OccurrenceIdentity {
+                epoch: self.epoch,
+                occurrence: view.identity,
+            },
+            definition,
+            index,
+        ));
+        true
+    }
+
+    /// Consume shapes while the bounded Context is alive. Callers must drop the
+    /// returned CPU meshes and FullOutput before the next frame. No GPU host.
+    pub(crate) fn tessellate(&self, output: &mut egui::FullOutput) -> Vec<egui::ClippedPrimitive> {
+        self.context.as_ref().map_or_else(Vec::new, |context| {
+            context.tessellate(std::mem::take(&mut output.shapes), output.pixels_per_point)
+        })
+    }
+
     /// CPU preview at a fixed, bounded logical viewport and default fonts/style.
     /// Consume/drop output before the next frame. A GPU host must retire texture
     /// resources too; this module does not qualify such a host. Changed text
@@ -158,6 +226,9 @@ impl<'a> Preview<'a> {
         if self.allowance < NOTICE_RESERVATION {
             return Err("Read-only preview paused: visual reservation unavailable");
         }
+        if self.plot.is_some() && self.allowance >= PREVIEW_RESERVATION {
+            return self.run_plot(observations, input);
+        }
         let page = if self.allowance < PREVIEW_RESERVATION {
             Page::notice(self.epoch)
         } else {
@@ -166,58 +237,14 @@ impl<'a> Preview<'a> {
         if self.previous.as_ref() != Some(&page) {
             self.retire();
         }
-        let context = self.context.get_or_insert_with(|| {
-            let context = egui::Context::default();
-            context.options_mut(|options| {
-                options.max_passes = std::num::NonZeroUsize::new(1).unwrap();
-                options.zoom_with_keyboard = false;
-            });
-            context
-        });
+        let context = self.context.get_or_insert_with(new_context);
         // Arbitrary DPI, zoom, fonts, secondary viewports and screen sizes are
         // not accepted as another allocation authority in this isolated preview.
-        input.screen_rect = Some(egui::Rect::from_min_size(
-            egui::Pos2::ZERO,
-            egui::vec2(1280.0, 960.0),
-        ));
-        input.viewport_id = egui::ViewportId::ROOT;
-        input.events = input
-            .events
-            .into_iter()
-            .take(64)
-            .filter_map(|event| match event {
-                egui::Event::PointerMoved(_) | egui::Event::PointerGone => Some(event),
-                egui::Event::PointerButton {
-                    pos,
-                    button,
-                    pressed,
-                    ..
-                } => Some(egui::Event::PointerButton {
-                    pos,
-                    button,
-                    pressed,
-                    modifiers: egui::Modifiers::NONE,
-                }),
-                egui::Event::MouseWheel {
-                    unit, delta, phase, ..
-                } => Some(egui::Event::MouseWheel {
-                    unit,
-                    delta,
-                    phase,
-                    modifiers: egui::Modifiers::NONE,
-                }),
-                _ => None,
-            })
-            .collect();
-        input = egui::RawInput {
-            screen_rect: input.screen_rect,
-            events: input.events,
-            time: input.time,
-            ..Default::default()
-        };
+        input = bounded_input(input, false);
         let mut next = self.location;
+        let mut plot = None;
         let output = context.run_ui(input, |ui| {
-            page.paint(ui, &mut next, &mut self.scroll);
+            page.paint(ui, &mut next, &mut self.scroll, &mut plot);
         });
         let mut report = page.report;
         if next != self.location {
@@ -225,6 +252,118 @@ impl<'a> Preview<'a> {
         }
         self.previous = Some(page);
         self.navigate(next);
+        if let Some(index) = plot {
+            self.open_plot(index);
+        }
         Ok((output, report))
+    }
+
+    fn run_plot(
+        &mut self,
+        observations: &RuntimeObservations,
+        input: egui::RawInput,
+    ) -> Result<(egui::FullOutput, RenderReport), &'static str> {
+        // One combined reservation, checked before the first projection buffer.
+        let view = plot_projection::project(
+            self.document,
+            observations,
+            self.epoch,
+            self.location,
+            self.plot.as_ref().unwrap().index,
+            self.allowance.min(plot_projection::PROJECTION_RESERVATION),
+        )
+        .map_err(|_| "Read-only Plot unavailable: bounded projection failed")?;
+        if !plot_widget::preflight(&view) {
+            // Retire any previously warm chart before creating a small notice.
+            // No legend, plot widget or tessellated curve is constructed here.
+            self.retire();
+            let context = self.context.get_or_insert_with(new_context);
+            let mut back = false;
+            let output = context.run_ui(bounded_input(input, false), |ui| {
+                back = page::navigate_button(ui, true, "Back");
+                ui.label("Plot paused: this chart's text exceeds the current preview limits. Return to the page with Back.");
+            });
+            if back {
+                self.close_plot();
+            }
+            return Ok((
+                output,
+                RenderReport {
+                    guarded: true,
+                    ..Default::default()
+                },
+            ));
+        }
+        if self.plot.as_mut().unwrap().refresh_units(&view) {
+            self.retire();
+        }
+        let restored = self.context.is_none();
+        let context = self.context.get_or_insert_with(new_context);
+        let state = self.plot.as_mut().unwrap();
+        let mut result = (false, RenderReport::default());
+        let output = context.run_ui(bounded_input(input, true), |ui| {
+            result = state.paint(ui, &view, restored);
+        });
+        if result.0 {
+            self.close_plot();
+        }
+        Ok((output, result.1))
+    }
+}
+
+fn new_context() -> egui::Context {
+    let context = egui::Context::default();
+    context.options_mut(|options| {
+        options.max_passes = std::num::NonZeroUsize::new(1).unwrap();
+        options.zoom_with_keyboard = false;
+    });
+    context
+}
+
+fn bounded_input(mut input: egui::RawInput, plot: bool) -> egui::RawInput {
+    input.screen_rect = Some(egui::Rect::from_min_size(
+        egui::Pos2::ZERO,
+        egui::vec2(1280.0, 960.0),
+    ));
+    input.viewport_id = egui::ViewportId::ROOT;
+    input.events = input
+        .events
+        .into_iter()
+        .take(64)
+        .filter_map(|event| match event {
+            egui::Event::Zoom(factor)
+                if plot && factor.is_finite() && (0.1..=10.0).contains(&factor) =>
+            {
+                Some(egui::Event::Zoom(factor))
+            }
+            egui::Event::PointerMoved(pos) if pos.is_finite() => Some(event),
+            egui::Event::PointerGone => Some(event),
+            egui::Event::PointerButton {
+                pos,
+                button,
+                pressed,
+                ..
+            } if pos.is_finite() => Some(egui::Event::PointerButton {
+                pos,
+                button,
+                pressed,
+                modifiers: egui::Modifiers::NONE,
+            }),
+            egui::Event::MouseWheel {
+                unit, delta, phase, ..
+            } if delta.is_finite() => Some(egui::Event::MouseWheel {
+                unit,
+                delta,
+                phase,
+                modifiers: egui::Modifiers::NONE,
+            }),
+            _ => None,
+        })
+        .collect();
+    egui::RawInput {
+        screen_rect: input.screen_rect,
+        events: input.events,
+        time: input.time,
+        ..Default::default()
     }
 }
