@@ -3,7 +3,9 @@
 This module implements the DTO vocabulary in the
 [v2 contract](../../../../../docs/generic-controls-v2-contract.md), sections 2–4
 and the applicable definition limits in section 8, plus the pure section-7
-v1 conversion and lossless export. It has no active consumer.
+v1 conversion and lossless export. It has no active consumer. The separate
+[DGUI-4C7A read-only preview](../../gui/readonly_v2/README.md) borrows admitted
+documents in isolation; its egui memory activation blockers remain explicit.
 The running Workbench, its 16 operations and its v1 document remain unchanged.
 
 `parse(&[u8]) -> ParsedDocument` first checks the 2 MiB input-body ceiling,
@@ -61,8 +63,8 @@ button occurrences, including shared and nested groups. Supported origins also
 restrict descendant actions to their original family and exact target. These
 ceilings are occurrence-local and supplement the binding summary; inspecting an
 action definition alone cannot establish applicability. `confirm:false` remains
-provenance. The one-way normal-form converter is described below; exporter and
-round-trip proofs remain future work.
+provenance. The normal-form converter, exporter and round-trip proofs are
+described below.
 
 The checked stage has a private payload, no deserializer/public constructor and
 no mutable DTO accessor. Static success grants no publication or execution rights.
