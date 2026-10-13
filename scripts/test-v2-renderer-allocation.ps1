@@ -5,7 +5,8 @@ param(
     [switch]$ProjectionOnly,
     [switch]$PlotOnly,
     [switch]$GeometryOnly,
-    [switch]$MemoryOnly
+    [switch]$MemoryOnly,
+    [switch]$FramesOnly
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -20,6 +21,7 @@ try {
     if ($DiagnosticProvenance -and $PlotOnly) { throw 'Plot qualification requires the fixed profiles' }
     if ($DiagnosticProvenance -and $GeometryOnly) { throw 'Geometry qualification requires the fixed profiles' }
     if ($DiagnosticProvenance -and $MemoryOnly) { throw 'Memory qualification requires the fixed profiles' }
+    if ($DiagnosticProvenance -and $FramesOnly) { throw 'Frame qualification requires the fixed profiles' }
     $cargoArgs = @('build', '-p', 'lab-workbench', '--locked', '--profile', $BuildProfile, '--message-format=json')
     if ($DiagnosticProvenance) {
         # Reproduce the reviewed pre-fix dependency cfg, without editing Cargo.toml.
@@ -115,16 +117,34 @@ fn main() { probe::run(); }
     }
     & rustc --edition=2024 -D warnings $source @externs @rustFlags -L "dependency=$(Join-Path $repo "target/$directory/deps")" -o $binary
     if ($LASTEXITCODE -ne 0) { throw 'Renderer probe compilation failed' }
+    # Compile the same real modules with deliberately invalid ownership examples.
+    # This verifies borrowing enforcement without adding a test-only dependency.
+    $borrowCases = @(
+        @('next-frame', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); let _ = p.run(&Default::default(), Default::default()); f.discard(); }'),
+        @('retire-context', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); p.retire_context(); f.discard(); }'),
+        @('drop-preview', 'E0505', 'fn denied(mut p: readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); drop(p); f.discard(); }')
+    )
+    foreach ($case in $borrowCases) {
+        $deniedSource = Join-Path $probeDir "denied-$($case[0]).rs"
+        [IO.File]::WriteAllText($deniedSource, $wrapper + "`n" + $case[2], [Text.UTF8Encoding]::new($false))
+        $diagnostic = & rustc --edition=2024 --emit=metadata $deniedSource @externs @rustFlags -L "dependency=$(Join-Path $repo "target/$directory/deps")" -o (Join-Path $probeDir 'denied.rmeta') 2>&1
+        if ($LASTEXITCODE -eq 0 -or ($diagnostic -join "`n") -notmatch "error\[$($case[1])\]") {
+            throw "Ownership compile-fail gate did not reject $($case[0]) as expected: $diagnostic"
+        }
+        $diagnostic | Set-Content -LiteralPath (Join-Path $probeDir "denied-$($case[0]).txt")
+        Write-Output "Ownership compile-fail PASS: $($case[0]) ($($case[1]))"
+    }
     $evidence = Join-Path $probeDir 'artifacts.json'
     $compiled | Where-Object { $_.target.name -in @('egui', 'eframe', 'lab-workbench') } |
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory') }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory', 'frames') }
     if ($ProjectionOnly) { $scenarios = @('projection') }
     if ($PlotOnly) { $scenarios = @('plot') }
     if ($GeometryOnly) { $scenarios = @('geometry') }
     if ($MemoryOnly) { $scenarios = @('memory') }
+    if ($FramesOnly) { $scenarios = @('frames') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE

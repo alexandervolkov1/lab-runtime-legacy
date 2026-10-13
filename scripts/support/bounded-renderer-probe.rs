@@ -3,18 +3,19 @@ use super::{RuntimeObservations, ZERO, epoch, fixtures, meter, readonly_v2};
 use eframe::egui;
 
 fn frame(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations) -> (usize, usize) {
-    let (output, report) = preview.run(obs, egui::RawInput::default()).unwrap();
+    let output = preview.run(obs, egui::RawInput::default()).unwrap();
+    let report = output.report();
     assert!(!report.guarded);
     assert!(report.occurrences <= readonly_v2::PAGE_SIZE);
     assert!(report.path_nodes <= readonly_v2::MAX_PATH_NODES);
     assert!(report.labels <= readonly_v2::MAX_LABELS);
     assert!(report.widgets <= readonly_v2::MAX_WIDGETS);
     assert!(report.text_bytes <= readonly_v2::MAX_TEXT_BYTES);
-    let shapes = output.shapes.len();
+    let shapes = output.shapes().len();
     assert!(shapes <= readonly_v2::MAX_SHAPES);
-    assert_eq!(output.platform_output.num_completed_passes, 1);
+    assert_eq!(output.completed_passes(), 1);
     let result = (report.occurrences, shapes);
-    output.drop_without_applying_deltas();
+    output.finish_cpu().unwrap();
     result
 }
 
@@ -58,9 +59,10 @@ pub(super) fn run() {
         "only caller RawInput construction is allowed"
     );
     preview.set_allowance(readonly_v2::NOTICE_RESERVATION);
-    let (output, report) = preview.run(&obs, egui::RawInput::default()).unwrap();
+    let output = preview.run(&obs, egui::RawInput::default()).unwrap();
+    let report = output.report();
     assert!(report.guarded && report.occurrences == 0);
-    output.drop_without_applying_deltas();
+    output.finish_cpu().unwrap();
     let notice = meter::phase();
     assert!(
         notice.overlap_peak + 127 * notice.peak_blocks + 65536 <= readonly_v2::NOTICE_RESERVATION

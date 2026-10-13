@@ -1,0 +1,26 @@
+denied Reading { live: 0, blocks: 0, peak_blocks: 1, peak: 564, overlap_peak: 564 }; notice Reading { live: 407677, blocks: 294, peak_blocks: 374, peak: 723169, overlap_peak: 737393 }; one Indicator Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+maximum initial Reading { live: 435094, blocks: 345, peak_blocks: 414, peak: 760058, overlap_peak: 764666 }; all 5120 pages / 20480 occurrences, shapes <= 43: Reading { live: 446003, blocks: 376, peak_blocks: 441, peak: 837663, overlap_peak: 859167 }
+settled Reading { live: 457003, blocks: 381, peak_blocks: 441, peak: 586051, overlap_peak: 607555 }; 32 repeats Reading { live: 457003, blocks: 381, peak_blocks: 441, peak: 586051, overlap_peak: 607555 }; depth four Reading { live: 445208, blocks: 376, peak_blocks: 447, peak: 836868, overlap_peak: 858372 }; text stress Reading { live: 1709235, blocks: 999, peak_blocks: 1071, peak: 2697527, overlap_peak: 2812111 }; line stress Reading { live: 1252322, blocks: 761, peak_blocks: 999, peak: 1978550, overlap_peak: 2093134 }
+epoch 0: Reading { live: 446639, blocks: 362, peak_blocks: 761, peak: 1252322, overlap_peak: 1252322 }
+epoch 1: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 2: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 3: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 4: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 5: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 6: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 7: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 8: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 9: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 10: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 11: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 12: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 13: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 14: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 15: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 16: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 17: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 18: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 19: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+epoch 20: Reading { live: 446639, blocks: 362, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }
+maximum -> empty Reading { live: 406054, blocks: 299, peak_blocks: 414, peak: 760058, overlap_peak: 764666 }; drop Reading { live: 0, blocks: 0, peak_blocks: 299, peak: 406054, overlap_peak: 406054 }; recreations [Reading { live: 0, blocks: 0, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }, Reading { live: 0, blocks: 0, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }, Reading { live: 0, blocks: 0, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }, Reading { live: 0, blocks: 0, peak_blocks: 443, peak: 768659, overlap_peak: 774035 }]
+Heap realloc overlap + 127 per peak block + 65536 inline bytes <= 8388608; no GPU host qualification

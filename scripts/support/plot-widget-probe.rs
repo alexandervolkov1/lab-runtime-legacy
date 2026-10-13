@@ -26,7 +26,7 @@ fn frame_at(
     events: Vec<egui::Event>,
     caption: &str,
 ) -> (readonly_v2::RenderReport, usize, usize, Option<egui::Pos2>) {
-    let (mut output, report) = preview
+    let mut output = preview
         .run(
             obs,
             egui::RawInput {
@@ -35,15 +35,16 @@ fn frame_at(
             },
         )
         .unwrap();
-    let legend = output.shapes.iter().find_map(|shape| {
+    let report = output.report();
+    let legend = output.shapes().iter().find_map(|shape| {
         if let egui::Shape::Text(text) = &shape.shape {
             (text.galley.text() == caption).then(|| text.visual_bounding_rect().center())
         } else {
             None
         }
     });
-    let shapes = output.shapes.len();
-    let meshes = preview.tessellate(&mut output);
+    let shapes = output.shapes().len();
+    let meshes = output.tessellate().unwrap();
     let vertices = meshes
         .iter()
         .map(|p| match &p.primitive {
@@ -51,8 +52,7 @@ fn frame_at(
             _ => 0,
         })
         .sum::<usize>();
-    drop(meshes);
-    output.drop_without_applying_deltas();
+    output.finish_cpu().unwrap();
     (report, shapes, vertices, legend)
 }
 
@@ -75,10 +75,11 @@ fn read_pages(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations,
         if page > 0 {
             click(preview, obs, "Next fragment");
         }
-        let (mut output, report) = preview.run(obs, egui::RawInput::default()).unwrap();
+        let mut output = preview.run(obs, egui::RawInput::default()).unwrap();
+        let report = output.report();
         assert!(!report.guarded && report.plot_points == 0);
         let text = output
-            .shapes
+            .shapes()
             .iter()
             .find_map(|shape| match &shape.shape {
                 egui::Shape::Text(t) => t.galley.text().strip_prefix("UTF-8: "),
@@ -92,17 +93,17 @@ fn read_pages(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations,
             );
             offset += 1;
         }
-        drop(preview.tessellate(&mut output));
-        output.drop_without_applying_deltas();
+        let _ = output.tessellate().unwrap();
+        output.finish_cpu().unwrap();
     }
     assert_eq!(offset, bytes.len());
 }
 
 fn hover_curve(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations) {
-    let (mut output, _) = preview.run(obs, egui::RawInput::default()).unwrap();
+    let mut output = preview.run(obs, egui::RawInput::default()).unwrap();
     let interior = egui::Rect::from_min_max(egui::pos2(300.0, 150.0), egui::pos2(1000.0, 500.0));
     let pos = output
-        .shapes
+        .shapes()
         .iter()
         .find_map(|shape| match &shape.shape {
             egui::Shape::Mesh(mesh) if mesh.vertices.len() >= 256 => mesh
@@ -113,12 +114,12 @@ fn hover_curve(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations
             _ => None,
         })
         .expect("actual visible curve geometry");
-    drop(preview.tessellate(&mut output));
-    output.drop_without_applying_deltas();
+    let _ = output.tessellate().unwrap();
+    output.finish_cpu().unwrap();
     frame(preview, obs, vec![egui::Event::PointerMoved(pos)]);
-    let (mut output, _) = preview.run(obs, egui::RawInput::default()).unwrap();
+    let mut output = preview.run(obs, egui::RawInput::default()).unwrap();
     assert!(
-        output.shapes.iter().any(|shape| match &shape.shape {
+        output.shapes().iter().any(|shape| match &shape.shape {
             egui::Shape::Text(t) => {
                 let text = t.galley.text();
                 text.is_ascii()
@@ -129,8 +130,8 @@ fn hover_curve(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations
         }),
         "real bounded Unicode-unit hover output"
     );
-    drop(preview.tessellate(&mut output));
-    output.drop_without_applying_deltas();
+    let _ = output.tessellate().unwrap();
+    output.finish_cpu().unwrap();
 }
 
 fn unicode_case(repertoire: usize) {

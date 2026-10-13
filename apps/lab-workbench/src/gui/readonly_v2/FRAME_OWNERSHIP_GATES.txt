@@ -1,0 +1,52 @@
+DGUI-4C7B2C4A final gate record - 2026-10-13
+Platform: Windows 10 Pro 10.0.19045, x86_64-pc-windows-msvc
+rustc: 1.95.0 (59807616e 2026-04-14), LLVM 22.1.2
+C3 approved HEAD: e42b970461791f9e792d5e434cf380d82ce9a26b
+C3 ordinary merge: 7f11a34ce9997c8260c30e805d2c028c49d0ba93 (approved HEAD is second parent).
+Cargo.lock unchanged, git blob: affb1f7bada9ea57186a94f57d77229d2db7dc4d
+Pinned dependencies/profiles/features unchanged. No release or activation.
+
+Targeted tests: 299 passed dev; 299 passed release; 0 failed.
+Selection: gui::readonly_v2:: presentation:: gui::controls:: gui::app:: external::tests:: dispatcher::tests:: operator_boundary_tests:: model::read_binding::
+Existing 283 regressions preserved; 16 ownership/generation/ledger tests added.
+Final mock-only same-frame second-set failure enhancement: all 16 owner tests repeated dev/release, PASS.
+Final shutdown-peak accounting: all 12 native frame cases repeated dev/release, PASS; totals unchanged.
+Complete native renderer launchers: dev PASS; release PASS (exit 0).
+A1/A2/B1/B2/B2A, full widget, Unicode/lifecycle, finite geometry and allocation faults: PASS.
+Geometry: 119 PASS per profile; maximum accounted 4610337.
+C3 combined memory: 125 PASS per profile; maximum accounted 4458653.
+Plot widget: 113 phases per profile; maximum accounted 4483157.
+Frame owner: 12 PASS per profile; maximum accounted 4355499; four expected host faults.
+A2 Page/tessellation: all 5120 pages plus text/lifecycle cases; maximum accounted 3013664.
+Geometry/memory/widget evidence unchanged numerically from C3; historical evidence files untouched.
+All five new evidence pairs (geometry, memory, frames, widget, pages) byte-identical dev/release.
+Complete lifetime post-drop retained: 0 bytes, 0 blocks above prewarmed singleton baseline.
+Curve failures: 4 injected reservations -> degraded CPU outcome, 31 remaining complete traces, no retry.
+B1 failures: 2 injected shared reservations -> no frame/report/acknowledgement, failed preparation outcome.
+Mock faults: upload, platform output, submission, completion -> drain, namespace free, failed outcome.
+Partial update order/bounds, partial same-frame application, ID collision, no-final-free retirement: PASS.
+Forgotten guard cannot allocate another frame; explicit retirement/shutdown releases CPU ownership: PASS.
+Context generations: transitions, Unicode/units, document/owner/revision, repeated lifetimes and exhaustion PASS.
+Compile-fail gates in both profiles: next-frame E0499, retire-context E0499, drop-preview E0505.
+Fixed storage regression: Preview 15168; TextureOwner<CpuOnly> 280; FrameData 640; Page 13800; inline subtotal 42496 < 65536.
+Admission/conversion/export native allocation probe: PASS, including three reservation failures.
+cargo fmt --all -- --check: PASS.
+rustfmt --check --edition 2024 on six changed support modules: PASS.
+cargo clippy -p lab-workbench --all-targets --locked -- -D warnings: PASS.
+git diff --check: PASS.
+
+Primary raw logs (ignored target/):
+c4a-tests-dev-final.txt; c4a-tests-release-final.txt; c4a-owner-dev-final.txt; c4a-owner-release-final.txt
+c4a-probes-dev.txt; c4a-probes-release.txt; c4a-frames-dev-final.txt; c4a-frames-release-final.txt
+c4a-admission.txt; c4a-clippy-final.txt; c4a-inline.txt
+target/v2-renderer-allocation-probe/{dev,release}/artifacts.json and denied-*.txt
+
+Actual artifact profiles remain as recorded in PLOT_CPU_MEMORY_GATES.txt:
+dev: egui debug_assertions=false/overflow_checks=true; eframe and Workbench true/true, opt=0.
+release: opt=3, debug_assertions=false, overflow_checks=false.
+eframe features=accesskit,default_fonts,glow; egui=bytemuck,default_fonts.
+
+Verdict: CPU MEMORY QUALIFIED in the fixed C3 CPU-only scope; enforced serial frame/texture seam tested.
+No real GPU or native-window smoke test. Backend fences, device-loss/bounded drain/shutdown,
+host CPU/GPU budgets, viewport/redraw integration and activation approval remain unqualified.
+ACTIVATION_QUALIFIED=false. C4A Draft PR only; no C4A merge/C4B work/release.

@@ -386,11 +386,10 @@ impl GeometryStats {
             egui::Shape::Noop => {}
         }
     }
-    pub(crate) fn inspect(
-        preview: &crate::gui::readonly_v2::Preview<'_>,
-        output: &mut egui::FullOutput,
-        report: crate::gui::readonly_v2::RenderReport,
+    pub(crate) fn inspect<B: crate::gui::readonly_v2::texture_owner::FrameBackend>(
+        output: &mut crate::gui::readonly_v2::frame::PreviewFrame<'_, '_, B>,
     ) -> Self {
+        let report = output.report();
         let mut stats = Self {
             points: report.plot_points,
             traces: report.plot_traces,
@@ -400,7 +399,7 @@ impl GeometryStats {
             allocation_faults: report.allocation_faults,
             ..Self::default()
         };
-        for shape in &output.shapes {
+        for shape in output.shapes() {
             stats.shape(&shape.shape);
         }
         // Keep FullOutput alive across unwinding so its TexturesDelta can still
@@ -408,28 +407,34 @@ impl GeometryStats {
         // a second panic and aborts the research process. A caught library panic
         // is a BLOCKED result, never successful geometry or a production guard.
         let meshes = match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            preview.tessellate(output)
+            output.tessellate().map(|meshes| {
+                for primitive in meshes {
+                    if let egui::epaint::Primitive::Mesh(mesh) = &primitive.primitive {
+                        stats.vertices += mesh.vertices.len();
+                        stats.indices += mesh.indices.len();
+                        stats.bad_mesh_positions += mesh
+                            .vertices
+                            .iter()
+                            .filter(|v| !v.pos.is_finite() || !v.uv.is_finite())
+                            .count();
+                        stats.invalid_meshes += usize::from(!mesh.is_valid());
+                    }
+                }
+                meshes.is_empty()
+            })
         })) {
-            Ok(meshes) => meshes,
+            Ok(Ok(empty)) => empty,
+            Ok(Err(_)) => {
+                stats.policy_failures += 1;
+                return stats;
+            }
             Err(payload) => {
                 drop(payload);
                 stats.panics += 1;
                 return stats;
             }
         };
-        stats.policy_failures += usize::from(stats.shapes > 0 && meshes.is_empty());
-        for primitive in &meshes {
-            if let egui::epaint::Primitive::Mesh(mesh) = &primitive.primitive {
-                stats.vertices += mesh.vertices.len();
-                stats.indices += mesh.indices.len();
-                stats.bad_mesh_positions += mesh
-                    .vertices
-                    .iter()
-                    .filter(|v| !v.pos.is_finite() || !v.uv.is_finite())
-                    .count();
-                stats.invalid_meshes += usize::from(!mesh.is_valid());
-            }
-        }
+        stats.policy_failures += usize::from(stats.shapes > 0 && meshes);
         stats
     }
 }

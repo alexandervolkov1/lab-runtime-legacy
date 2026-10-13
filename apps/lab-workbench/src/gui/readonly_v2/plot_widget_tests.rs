@@ -17,13 +17,13 @@ pub(super) fn frame(
         events,
         ..Default::default()
     };
-    let (mut output, report) = preview.run(obs, input).unwrap();
-    let text = navigation_tests::painted_text(&output);
-    assert_eq!(output.platform_output.num_completed_passes, 1);
-    let meshes = preview.tessellate(&mut output);
+    let mut output = preview.run(obs, input).unwrap();
+    let report = output.report();
+    let text = navigation_tests::painted_text(output.shapes());
+    assert_eq!(output.completed_passes(), 1);
+    let meshes = output.tessellate().unwrap();
     assert!(!meshes.is_empty());
-    drop(meshes);
-    output.drop_without_applying_deltas();
+    output.finish_cpu().unwrap();
     (report, text)
 }
 pub(super) fn memory(preview: &Preview<'_>) -> PlotMemory {
@@ -71,7 +71,7 @@ fn navigation_output_keeps_its_generating_context_until_consumed() {
     for caption in ["Open Plot", "Back", "Open Plot", "Back"] {
         let (_, text) = frame(&mut preview, &obs, vec![]);
         let pos = text.iter().find(|(s, _)| s == caption).unwrap().1.center();
-        let (mut output, _) = preview
+        let mut output = preview
             .run(
                 &obs,
                 egui::RawInput {
@@ -80,14 +80,13 @@ fn navigation_output_keeps_its_generating_context_until_consumed() {
                 },
             )
             .unwrap();
+        let meshes = output.tessellate().unwrap();
+        assert!(!meshes.is_empty(), "transition output must be consumable");
+        assert!(output.shapes().is_empty());
+        output.finish_cpu().unwrap();
         assert_eq!(preview.plot.is_some(), caption == "Open Plot");
         assert!(preview.context.is_some());
-        let meshes = preview.tessellate(&mut output);
-        assert!(!meshes.is_empty(), "transition output must be consumable");
-        assert!(output.shapes.is_empty());
-        drop(meshes);
-        output.drop_without_applying_deltas();
-        let (mut next, _) = preview
+        let mut next = preview
             .run(
                 &obs,
                 egui::RawInput {
@@ -96,9 +95,9 @@ fn navigation_output_keeps_its_generating_context_until_consumed() {
                 },
             )
             .unwrap();
+        assert!(!next.tessellate().unwrap().is_empty());
+        next.finish_cpu().unwrap();
         assert_eq!(preview.context.as_ref().unwrap().cumulative_frame_nr(), 1);
-        assert!(!preview.tessellate(&mut next).is_empty());
-        next.drop_without_applying_deltas();
     }
 }
 
@@ -115,14 +114,15 @@ fn actual_plot_output_and_tessellation() {
     );
     assert!(preview.open_plot(0));
     for _ in 0..3 {
-        let (mut output, report) = preview.run(&obs, egui::RawInput::default()).unwrap();
+        let mut output = preview.run(&obs, egui::RawInput::default()).unwrap();
+        let report = output.report();
         assert_eq!(report.plot_points, 16384);
-        let text = navigation_tests::painted_text(&output);
+        let text = navigation_tests::painted_text(output.shapes());
         assert!(text.iter().any(|(text, _)| text == "Title details"));
         assert!(text.iter().any(|(text, _)| text == "T32"));
-        let meshes = preview.tessellate(&mut output);
+        let meshes = output.tessellate().unwrap();
         assert!(!meshes.is_empty());
-        output.drop_without_applying_deltas();
+        output.finish_cpu().unwrap();
     }
     click(&mut preview, &obs, "T32");
     assert_eq!(preview.plot.as_ref().unwrap().hidden, 1 << 31);
@@ -150,6 +150,7 @@ fn real_card_open_back_and_forget_reentered_view() {
 
 #[test]
 fn legend_pan_wheel_zoom_reset_and_context_recreation_preserve_only_current_slot() {
+    let replacement = plot_fixtures::admit(&plot_fixtures::syntax(2, false));
     let doc = plot_fixtures::admit(&plot_fixtures::syntax(2, false));
     let mut obs = plot_fixtures::observations(2, 200);
     let mut preview = Preview::new(&doc, EPOCH);
@@ -240,9 +241,9 @@ fn legend_pan_wheel_zoom_reset_and_context_recreation_preserve_only_current_slot
         assert_ne!(preview.plot.as_ref().unwrap().id(), old_id);
         frame(&mut preview, &obs, vec![]);
     }
-    let replacement = plot_fixtures::admit(&plot_fixtures::syntax(2, false));
     preview.replace(&replacement, preview.epoch);
     assert!(preview.plot.is_none());
+    drop(preview);
 }
 
 #[test]
@@ -362,13 +363,16 @@ fn projected_spikes_are_real_colored_meshes_and_invalid_hover_has_no_tooltip() {
     let mut preview = Preview::new(&doc, EPOCH);
     preview.open_plot(0);
     frame(&mut preview, &obs, vec![]);
-    let (mut output, report) = preview.run(&obs, egui::RawInput::default()).unwrap();
+    let mut output = preview.run(&obs, egui::RawInput::default()).unwrap();
+    // Test-only inspection through the exclusive guard: use this frame's actual
+    // post-axis transform, never the previous frame's layout.
+    let transform = memory(output.preview).transform();
+    let report = output.report();
     assert_eq!(report.plot_points, 16384);
-    let transform = memory(&preview).transform();
     let peak = transform.position_from_point(&PlotPoint::new(123.0, 1000.0));
     let trough = transform.position_from_point(&PlotPoint::new(234.0, -1000.0));
     let curves: Vec<_> = output
-        .shapes
+        .shapes()
         .iter()
         .filter_map(|s| {
             if let egui::Shape::Mesh(m) = &s.shape {
@@ -387,8 +391,8 @@ fn projected_spikes_are_real_colored_meshes_and_invalid_hover_has_no_tooltip() {
             assert!(mesh.vertices.iter().any(|v| v.pos.distance(spike) < 1.8));
         }
     }
-    drop(preview.tessellate(&mut output));
-    output.drop_without_applying_deltas();
+    let _ = output.tessellate().unwrap();
+    output.finish_cpu().unwrap();
     let (_, text) = frame(
         &mut preview,
         &obs,

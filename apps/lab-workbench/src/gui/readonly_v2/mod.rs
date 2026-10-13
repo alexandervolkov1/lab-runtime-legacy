@@ -4,6 +4,9 @@
 mod finite_trace;
 #[cfg(test)]
 mod fixtures;
+pub(crate) mod frame;
+#[cfg(test)]
+mod frame_tests;
 mod navigation;
 #[cfg(test)]
 mod navigation_tests;
@@ -29,11 +32,14 @@ mod plot_widget_tests;
 mod read;
 #[cfg(test)]
 mod tests;
+pub(crate) mod texture_owner;
 
 use crate::{model::RuntimeObservations, presentation::v2};
 use eframe::egui;
+use frame::{ContextGeneration, FrameData, FrameError, FrameOutcome, PreviewFrame};
 pub(crate) use navigation::Location;
 use page::{Page, TextBuffer, label};
+use texture_owner::{CpuOnly, FrameBackend, TextureOwner};
 
 /// Identity supplied by the owner; replacement must advance revision.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -94,11 +100,15 @@ pub(crate) struct RenderReport {
 /// Owns one isolated Context, one fixed page of text and a four-slot navigation
 /// path. The document/observations are borrowed, never copied into a GUI model.
 /// No Context handle escapes: another consumer cannot expand its caches.
-pub(crate) struct Preview<'a> {
+pub(crate) struct Preview<'a, B: FrameBackend = CpuOnly> {
     document: &'a v2::AdmittedV2Document,
     epoch: PresentationEpoch,
     location: Location,
     context: Option<egui::Context>,
+    generation: Option<ContextGeneration>,
+    textures: TextureOwner<B>,
+    pending: Option<FrameData>,
+    last_outcome: Option<FrameOutcome>,
     previous: Option<Page>,
     scroll: egui::Vec2,
     allowance: usize,
@@ -107,11 +117,25 @@ pub(crate) struct Preview<'a> {
 
 impl<'a> Preview<'a> {
     pub(crate) fn new(document: &'a v2::AdmittedV2Document, epoch: PresentationEpoch) -> Self {
+        Self::with_backend(document, epoch, CpuOnly)
+    }
+}
+
+impl<'a, B: FrameBackend> Preview<'a, B> {
+    pub(crate) fn with_backend(
+        document: &'a v2::AdmittedV2Document,
+        epoch: PresentationEpoch,
+        backend: B,
+    ) -> Self {
         Self {
             document,
             epoch,
             location: Location::default(),
             context: None,
+            generation: None,
+            textures: TextureOwner::new(backend),
+            pending: None,
+            last_outcome: None,
             previous: None,
             scroll: egui::Vec2::ZERO,
             allowance: PREVIEW_RESERVATION,
@@ -166,8 +190,32 @@ impl<'a> Preview<'a> {
     }
 
     fn retire(&mut self) {
+        self.textures.retire();
+        if self.pending.take().is_some() {
+            self.last_outcome = Some(FrameOutcome::Abandoned);
+        }
         self.context = None;
+        self.generation = None;
         self.previous = None;
+    }
+
+    fn abort_frame(&mut self, outcome: FrameOutcome) {
+        self.retire();
+        self.last_outcome = Some(outcome);
+    }
+
+    pub(crate) fn last_outcome(&self) -> Option<FrameOutcome> {
+        self.last_outcome
+    }
+
+    fn ensure_context(&mut self) -> Result<(), FrameError> {
+        if self.context.is_none() {
+            let generation = ContextGeneration::allocate()?;
+            self.context = Some(new_context());
+            self.generation = Some(generation);
+            self.textures.begin(generation);
+        }
+        Ok(())
     }
 
     /// Release only the library caches, preserving the single current Plot slot.
@@ -183,6 +231,15 @@ impl<'a> Preview<'a> {
     /// Open only an admitted Plot on the current four-cell page. No projection
     /// or allocation is needed merely to choose this local viewing mode.
     pub(crate) fn open_plot(&mut self, index: usize) -> bool {
+        if self.select_plot(index) {
+            self.retire();
+            true
+        } else {
+            false
+        }
+    }
+
+    fn select_plot(&mut self, index: usize) -> bool {
         if index / PAGE_SIZE != self.location.page || !self.location.valid(self.document) {
             return false;
         }
@@ -209,7 +266,6 @@ impl<'a> Preview<'a> {
         else {
             return false;
         };
-        self.retire();
         self.plot = Some(plot_widget::PlotState::from_definition(
             OccurrenceIdentity {
                 epoch: self.epoch,
@@ -221,26 +277,41 @@ impl<'a> Preview<'a> {
         true
     }
 
-    /// Consume shapes while the bounded Context is alive. Callers must drop the
-    /// returned CPU meshes and FullOutput before the next frame. No GPU host.
-    pub(crate) fn tessellate(&self, output: &mut egui::FullOutput) -> Vec<egui::ClippedPrimitive> {
-        self.context.as_ref().map_or_else(Vec::new, |context| {
-            context.tessellate(std::mem::take(&mut output.shapes), output.pixels_per_point)
-        })
-    }
-
-    /// CPU preview at a fixed, bounded logical viewport and default fonts/style.
-    /// Consume/drop output before the next frame. A GPU host must retire texture
-    /// resources too; this module does not qualify such a host. Changed text
-    /// retires font caches before new glyphs/layout are submitted. Exact page
-    /// equality (not a content hash) decides reuse; no history persists.
+    /// Prepare one exclusively borrowed frame at the fixed CPU viewport. The
+    /// private payload stays in Preview, including if its guard is forgotten.
     pub(crate) fn run(
         &mut self,
         observations: &RuntimeObservations,
+        input: egui::RawInput,
+    ) -> Result<PreviewFrame<'_, 'a, B>, FrameError> {
+        if self.pending.is_some() {
+            return Err(FrameError::OutstandingFrame);
+        }
+        self.last_outcome = None;
+        let (output, report) = match self.prepare(observations, input) {
+            Ok(frame) => frame,
+            Err(error) => {
+                self.retire();
+                self.last_outcome = Some(FrameOutcome::Failed(error));
+                return Err(error);
+            }
+        };
+        self.pending = Some(FrameData::new(output, report, self.generation.unwrap()));
+        Ok(PreviewFrame {
+            preview: self,
+            ended: false,
+        })
+    }
+
+    fn prepare(
+        &mut self,
+        observations: &RuntimeObservations,
         mut input: egui::RawInput,
-    ) -> Result<(egui::FullOutput, RenderReport), &'static str> {
+    ) -> Result<(egui::FullOutput, RenderReport), FrameError> {
         if self.allowance < NOTICE_RESERVATION {
-            return Err("Read-only preview paused: visual reservation unavailable");
+            return Err(FrameError::Preparation(
+                "Read-only preview paused: visual reservation unavailable",
+            ));
         }
         if self.plot.is_some() && self.allowance >= PREVIEW_RESERVATION {
             return self.run_plot(observations, input);
@@ -253,7 +324,8 @@ impl<'a> Preview<'a> {
         if self.previous.as_ref() != Some(&page) {
             self.retire();
         }
-        let context = self.context.get_or_insert_with(new_context);
+        self.ensure_context()?;
+        let context = self.context.as_ref().unwrap();
         // Arbitrary DPI, zoom, fonts, secondary viewports and screen sizes are
         // not accepted as another allocation authority in this isolated preview.
         input = bounded_input(input, false);
@@ -271,12 +343,18 @@ impl<'a> Preview<'a> {
         // generating Context's font atlas for CPU tessellation. No second
         // Context is created here. The next run retires it via the changed page
         // or PlotState::prepare, after the caller has consumed this output.
-        let frame_context = self.context.take();
-        self.navigate(next);
-        if let Some(index) = plot {
-            self.open_plot(index);
+        // Change only the next logical selection. Defer the actual retirement
+        // until the next prepare, retaining this frame's exact generation and
+        // host namespace too (not just its Context handle).
+        if next != self.location {
+            self.location = next;
+            self.scroll = egui::Vec2::ZERO;
+            self.plot = None;
         }
-        self.context = frame_context;
+        if let Some(index) = plot {
+            // Selection does not touch the generating resource owner.
+            self.select_plot(index);
+        }
         Ok((output, report))
     }
 
@@ -284,7 +362,7 @@ impl<'a> Preview<'a> {
         &mut self,
         observations: &RuntimeObservations,
         input: egui::RawInput,
-    ) -> Result<(egui::FullOutput, RenderReport), &'static str> {
+    ) -> Result<(egui::FullOutput, RenderReport), FrameError> {
         // One combined reservation, checked before the first projection buffer.
         let view = plot_projection::project(
             self.document,
@@ -294,14 +372,17 @@ impl<'a> Preview<'a> {
             self.plot.as_ref().unwrap().index,
             self.allowance.min(plot_projection::PROJECTION_RESERVATION),
         )
-        .map_err(|_| "Read-only Plot unavailable: bounded projection failed")?;
+        .map_err(|_| {
+            FrameError::Preparation("Read-only Plot unavailable: bounded projection failed")
+        })?;
         // Fixed-size text planning precedes font, widget and galley allocation.
         // A changed fragment retires the complete Context before new glyphs.
         let (changed, text_page) = self.plot.as_mut().unwrap().prepare(&view);
         if changed {
             self.retire();
         }
-        let context = self.context.get_or_insert_with(new_context);
+        self.ensure_context()?;
+        let context = self.context.as_ref().unwrap();
         let state = self.plot.as_mut().unwrap();
         let mut result = (false, RenderReport::default());
         let output = context.run_ui(bounded_input(input, text_page.is_none()), |ui| {
@@ -314,6 +395,12 @@ impl<'a> Preview<'a> {
             self.previous = None;
         }
         Ok((output, result.1))
+    }
+}
+
+impl<B: FrameBackend> Drop for Preview<'_, B> {
+    fn drop(&mut self) {
+        self.retire();
     }
 }
 

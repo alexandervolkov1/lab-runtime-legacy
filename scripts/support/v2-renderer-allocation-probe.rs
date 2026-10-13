@@ -74,12 +74,13 @@ impl<'a> FrameState<'a> {
             Scene::V2(doc) => {
                 let preview = self.preview.as_mut().unwrap();
                 preview.replace(doc, epoch(revision));
-                let (output, report) = preview
+                let output = preview
                     .run(&RuntimeObservations::default(), egui::RawInput::default())
                     .unwrap();
+                let report = output.report();
                 assert!(report.occurrences <= readonly_v2::PAGE_SIZE);
-                assert!(output.shapes.len() <= readonly_v2::MAX_SHAPES);
-                output.drop_without_applying_deltas();
+                assert!(output.shapes().len() <= readonly_v2::MAX_SHAPES);
+                output.finish_cpu().unwrap();
             }
         }
     }
@@ -238,6 +239,8 @@ fn print_report(label: &str, report: &Report, epochs: usize, recreations: usize)
 
 #[path = "bounded-renderer-probe.rs"]
 mod bounded;
+#[path = "frame-owner-probe.rs"]
+mod frame_owner;
 #[path = "plot-geometry-probe.rs"]
 mod plot_geometry;
 #[path = "plot-memory-probe.rs"]
@@ -251,6 +254,10 @@ pub(crate) fn run() {
     let args: Vec<_> = std::env::args().collect();
     let scenario = args.get(1).expect("scenario").as_str();
     let provenance = args.get(2).expect("provenance on/off") == "on";
+    if scenario == "frames" {
+        frame_owner::run();
+        return;
+    }
     if scenario == "memory" {
         assert!(!provenance, "CPU memory uses the executable profiles");
         plot_memory::run();

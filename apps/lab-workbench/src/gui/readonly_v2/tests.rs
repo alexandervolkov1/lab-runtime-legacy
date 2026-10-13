@@ -63,7 +63,7 @@ fn frame(
     let mut painted = Vec::new();
     super::navigation_tests::visit_pages(document, |location| {
         assert!(preview.navigate(location));
-        let (output, report) = preview
+        let output = preview
             .run(
                 observations,
                 egui::RawInput {
@@ -72,12 +72,13 @@ fn frame(
                 },
             )
             .unwrap();
+        let report = output.report();
         total.occurrences += report.occurrences;
         total.placeholders += report.placeholders;
         total.statically_disabled += report.statically_disabled;
         total.maximum_path = total.maximum_path.max(report.maximum_path);
-        painted.extend(super::navigation_tests::painted_text(&output));
-        output.drop_without_applying_deltas();
+        painted.extend(super::navigation_tests::painted_text(output.shapes()));
+        output.finish_cpu().unwrap();
         if let Some(context) = &preview.context {
             assert_eq!(
                 context.data(|data| data.count::<egui::text_edit::TextEditState>()),
@@ -474,6 +475,8 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         include_str!("plot_projection.rs"),
         include_str!("plot_widget.rs"),
         include_str!("plot_text.rs"),
+        include_str!("frame.rs"),
+        include_str!("texture_owner.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -504,8 +507,9 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         assert!(!consumer.contains("readonly_v2"));
     }
     let source = include_str!("mod.rs");
-    // The only returned Vec is the caller-owned CPU mesh output, never a cache.
-    assert_eq!(source.matches("Vec<").count(), 1);
+    // Mesh/output ownership now resides in the single private FrameData slot;
+    // Preview no longer returns a Vec that can survive into another frame.
+    assert_eq!(source.matches("Vec<").count(), 0);
     assert!(!source.contains("HashMap"));
     assert!(!std::hint::black_box(ACTIVATION_QUALIFIED));
     let admitted = admit(&syntax());
@@ -551,11 +555,10 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         );
         let mut preview = Preview::new(&plot_document, PresentationEpoch { revision, ..EPOCH });
         preview.open_plot(0);
-        let (mut output, _) = preview
+        let output = preview
             .run(&dispatcher.observations, egui::RawInput::default())
             .unwrap();
-        drop(preview.tessellate(&mut output));
-        output.drop_without_applying_deltas();
+        output.finish_cpu().unwrap();
         preview.close_plot();
         assert_eq!(&*dispatcher, &before);
         assert_eq!(workflow, before_workflow);
