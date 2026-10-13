@@ -22,6 +22,7 @@ const RECREATIONS: usize = 4;
 const ZERO: meter::Reading = meter::Reading {
     live: 0,
     blocks: 0,
+    peak_blocks: 0,
     peak: 0,
     overlap_peak: 0,
 };
@@ -43,72 +44,86 @@ enum Scene<'a> {
     V2(&'a v2::AdmittedV2Document),
     V1(&'a WorkbenchModel),
 }
-impl Scene<'_> {
-    fn frame(&self, context: &egui::Context, v1: &mut V1Scene, revision: u64) {
-        match self {
-            Self::V1(model) => v1.frame(context, model, revision),
-            Self::Empty | Self::V2(_) => {
-                context
-                    .run_ui(egui::RawInput::default(), |ui| {
-                        if let Self::V2(document) = self {
-                            let report = readonly_v2::show(
-                                ui,
-                                document,
-                                &RuntimeObservations::default(),
-                                readonly_v2::PresentationEpoch {
-                                    owner: [1; 16],
-                                    revision,
-                                },
-                            );
-                            assert_eq!(report.occurrences, document.summary().expanded_components);
-                        }
-                    })
-                    .drop_without_applying_deltas();
-                assert_eq!(context.data(|data| data.len()), 0);
+struct FrameState<'a> {
+    context: Option<egui::Context>,
+    v1: V1Scene,
+    preview: Option<readonly_v2::Preview<'a>>,
+}
+impl<'a> FrameState<'a> {
+    fn new(scene: &Scene<'a>) -> Self {
+        Self {
+            context: (!matches!(scene, Scene::V2(_))).then(egui::Context::default),
+            v1: V1Scene::default(),
+            preview: match scene {
+                Scene::V2(doc) => Some(readonly_v2::Preview::new(doc, epoch(0))),
+                _ => None,
+            },
+        }
+    }
+    fn frame(&mut self, scene: &Scene<'a>, revision: u64) {
+        match scene {
+            Scene::V1(model) => self
+                .v1
+                .frame(self.context.as_ref().unwrap(), model, revision),
+            Scene::Empty => self
+                .context
+                .as_ref()
+                .unwrap()
+                .run_ui(egui::RawInput::default(), |_| {})
+                .drop_without_applying_deltas(),
+            Scene::V2(doc) => {
+                let preview = self.preview.as_mut().unwrap();
+                preview.replace(doc, epoch(revision));
+                let (output, report) = preview
+                    .run(&RuntimeObservations::default(), egui::RawInput::default())
+                    .unwrap();
+                assert!(report.occurrences <= readonly_v2::PAGE_SIZE);
+                assert!(output.shapes.len() <= readonly_v2::MAX_SHAPES);
+                output.drop_without_applying_deltas();
             }
         }
     }
 }
-
+fn epoch(revision: u64) -> readonly_v2::PresentationEpoch {
+    readonly_v2::PresentationEpoch {
+        owner: [1; 16],
+        revision,
+    }
+}
 fn measure(scene: &Scene<'_>, epochs: usize, recreations: usize) -> Report {
     meter::start();
-    let context = egui::Context::default();
-    let mut v1 = V1Scene::default();
+    let mut state = FrameState::new(scene);
     let created = meter::phase();
-    scene.frame(&context, &mut v1, 0);
+    state.frame(scene, 0);
     let first = meter::phase();
     for _ in 0..3 {
-        scene.frame(&context, &mut v1, 0);
+        state.frame(scene, 0);
     }
     let repeated = meter::phase();
     for _ in 0..3 {
-        scene.frame(&context, &mut v1, 0);
+        state.frame(scene, 0);
     }
     let same_epoch = meter::phase();
     assert_eq!(
         (repeated.live, repeated.blocks),
-        (same_epoch.live, same_epoch.blocks),
-        "settled same-epoch frames must not retain more allocations"
+        (same_epoch.live, same_epoch.blocks)
     );
     let mut later = [ZERO; EPOCHS];
     for (i, reading) in later.iter_mut().enumerate().take(epochs) {
-        scene.frame(&context, &mut v1, i as u64 + 1);
+        state.frame(scene, i as u64 + 1);
         *reading = meter::phase();
     }
-    drop(v1);
-    drop(context);
+    drop(state);
     let dropped = meter::phase();
     let mut recreated = [ZERO; RECREATIONS];
     let mut redropped = [ZERO; RECREATIONS];
     for i in 0..recreations {
-        let context = egui::Context::default();
-        let mut v1 = V1Scene::default();
+        let mut state = FrameState::new(scene);
         for _ in 0..4 {
-            scene.frame(&context, &mut v1, (epochs + i + 1) as u64);
+            state.frame(scene, (epochs + i + 1) as u64);
         }
         recreated[i] = meter::phase();
-        drop(v1);
-        drop(context);
+        drop(state);
         redropped[i] = meter::phase();
     }
     meter::stop();
@@ -221,10 +236,21 @@ fn print_report(label: &str, report: &Report, epochs: usize, recreations: usize)
     }
 }
 
+#[path = "bounded-renderer-probe.rs"]
+mod bounded;
+
 pub(crate) fn run() {
     let args: Vec<_> = std::env::args().collect();
     let scenario = args.get(1).expect("scenario").as_str();
     let provenance = args.get(2).expect("provenance on/off") == "on";
+    if scenario == "bounded" {
+        assert!(
+            !provenance,
+            "bounded qualification requires the executable profile fix"
+        );
+        bounded::run();
+        return;
+    }
     if scenario == "hash-baseline" {
         meter::start();
         std::hint::black_box(ahash::RandomState::new());
@@ -267,9 +293,7 @@ pub(crate) fn run() {
     // No renderer ID/epoch or widgets in the scene have been submitted yet.
     // The empty scenario deliberately also measures the first-ever Context.
     if scenario != "empty" {
-        let warm = egui::Context::default();
-        Scene::Empty.frame(&warm, &mut V1Scene::default(), 0);
-        drop(warm);
+        FrameState::new(&Scene::Empty).frame(&Scene::Empty, 0);
     }
     let (epochs, recreations) = if scenario == "maximum" {
         (1, 1)

@@ -1,27 +1,29 @@
-//! Isolated read-only rendering. No active presentation consumer or input drafts.
-#![allow(
-    dead_code,
-    reason = "DGUI-4C7A is isolated pending activation qualification"
-)]
+//! Isolated bounded read-only preview. No active presentation consumer or drafts.
+#![allow(dead_code, reason = "isolated pending activation qualification")]
 
 #[cfg(test)]
 mod fixtures;
+mod navigation;
+#[cfg(test)]
+mod navigation_tests;
+mod page;
 mod read;
 #[cfg(test)]
 mod tests;
 
 use crate::{model::RuntimeObservations, presentation::v2};
 use eframe::egui;
+pub(crate) use navigation::Location;
+use page::{Page, TextBuffer, label};
 
-/// Identity supplied by the presentation owner; never inferred from observations.
-/// The owner must advance revision on replacement, even for the same document ID.
+/// Identity supplied by the owner; replacement must advance revision.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub(crate) struct PresentationEpoch {
     pub(crate) owner: [u8; 16],
     pub(crate) revision: u64,
 }
 
-/// Borrowed semantic identity; hashing it for egui does not replace this address.
+/// Exact borrowed semantic identity, including each repeated occurrence's path.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub(crate) struct OccurrenceIdentity<'a> {
     pub(crate) epoch: PresentationEpoch,
@@ -33,7 +35,20 @@ impl OccurrenceIdentity<'_> {
     }
 }
 
-/// Finite frame counters only. No expanded tree, values, identities or drafts persist.
+pub(crate) const PAGE_SIZE: usize = 4;
+pub(crate) const MAX_LABELS: usize = 64;
+pub(crate) const MAX_TEXT_BYTES: usize = 12 * 1024;
+/// Explicit widgets plus conservatively charged layout/scroll containers.
+pub(crate) const MAX_WIDGETS: usize = 128;
+/// Four visible cells plus their bounded ancestor walks and the group header.
+pub(crate) const MAX_PATH_NODES: usize = 28;
+pub(crate) const MAX_SHAPES: usize = 192;
+/// Uniform read-only reservation; includes Context, scratch, output and overlap.
+/// This replaces unmaterialized view credits; it is not added to 20,480 views.
+pub(crate) const PREVIEW_RESERVATION: usize = 8 * 1024 * 1024;
+pub(crate) const NOTICE_RESERVATION: usize = 1024 * 1024;
+pub(crate) const ACTIVATION_QUALIFIED: bool = false;
+
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub(crate) struct RenderReport {
     pub(crate) windows: usize,
@@ -43,197 +58,168 @@ pub(crate) struct RenderReport {
     pub(crate) placeholders: usize,
     pub(crate) statically_disabled: usize,
     pub(crate) maximum_path: usize,
+    pub(crate) path_nodes: usize,
+    pub(crate) labels: usize,
+    pub(crate) text_bytes: usize,
+    pub(crate) widgets: usize,
+    pub(crate) guarded: bool,
 }
 
-/// Activation is blocked until egui-owned retained capacities are qualified or
-/// guarded at runtime. An offline VisualReservation alone cannot establish that.
-pub(crate) const ACTIVATION_QUALIFIED: bool = false;
-
-/// Renders all logical windows/tabs in document order as a read-only preview.
-/// The caller supplies the Ui (and its viewport/scroll policy). This foundation
-/// keeps no tab selection, plot state, editor state or second observation cache.
-/// Traversal visits at most the admitted 20,480 occurrences with four path slots.
-pub(crate) fn show(
-    ui: &mut egui::Ui,
-    document: &v2::AdmittedV2Document,
-    observations: &RuntimeObservations,
-    epoch: PresentationEpoch,
-) -> RenderReport {
-    let mut frame = Frame {
-        document,
-        observations,
-        epoch,
-        report: RenderReport::default(),
-    };
-    ui.push_id(
-        (
-            "readonly-v2-arrangement",
-            epoch,
-            document.dto().document_id.as_str(),
-        ),
-        |ui| {
-            for (w, window) in document.dto().windows.0.iter().enumerate() {
-                frame.report.windows += 1;
-                label(ui, window.title.as_str());
-                for (t, tab) in window.tabs.0.iter().enumerate() {
-                    frame.report.tabs += 1;
-                    label(ui, tab.title.as_str());
-                    for (p, panel) in tab.panels.0.iter().enumerate() {
-                        frame.report.panels += 1;
-                        label(ui, panel.title.as_str());
-                        for root in 0..panel.components.0.len() {
-                            frame.component(ui, [w, t, p, root], &mut [0; 4], 0);
-                        }
-                    }
-                }
-            }
-        },
-    );
-    debug_assert_eq!(
-        frame.report.occurrences,
-        document.summary().expanded_components
-    );
-    frame.report
-}
-
-fn label(ui: &mut egui::Ui, text: impl Into<egui::WidgetText>) {
-    // Labels must not create egui text-selection state, even if caller style
-    // enables selectable labels. No focus, click or keyboard response is consumed.
-    ui.add(
-        egui::Label::new(text)
-            .selectable(false)
-            .sense(egui::Sense::hover()),
-    );
-}
-
-struct Frame<'a> {
+/// Owns one isolated Context, one fixed page of text and a four-slot navigation
+/// path. The document/observations are borrowed, never copied into a GUI model.
+/// No Context handle escapes: another consumer cannot expand its caches.
+pub(crate) struct Preview<'a> {
     document: &'a v2::AdmittedV2Document,
-    observations: &'a RuntimeObservations,
     epoch: PresentationEpoch,
-    report: RenderReport,
+    location: Location,
+    context: Option<egui::Context>,
+    previous: Option<Page>,
+    scroll: egui::Vec2,
+    allowance: usize,
 }
-impl Frame<'_> {
-    fn component(
-        &mut self,
-        ui: &mut egui::Ui,
-        address: [usize; 4],
-        path: &mut [usize; 4],
-        depth: usize,
-    ) {
-        let [w, t, p, root] = address;
-        let view = self
-            .document
-            .source()
-            .occurrence(w, t, p, root, &path[..depth])
-            .expect("admitted occurrence and bounded traversal");
-        self.report.occurrences += 1;
-        self.report.maximum_path = self.report.maximum_path.max(depth);
-        let identity = OccurrenceIdentity {
-            epoch: self.epoch,
-            occurrence: view.identity,
-        };
-        if matches!(view.availability, v2::StaticAvailability::Disabled(_)) {
-            self.report.statically_disabled += 1;
+
+impl<'a> Preview<'a> {
+    pub(crate) fn new(document: &'a v2::AdmittedV2Document, epoch: PresentationEpoch) -> Self {
+        Self {
+            document,
+            epoch,
+            location: Location::default(),
+            context: None,
+            previous: None,
+            scroll: egui::Vec2::ZERO,
+            allowance: PREVIEW_RESERVATION,
         }
-        // Use the admitted occurrence's availability, including ancestor v1
-        // ceilings. Never substitute definition-only action/editor availability.
-        // Pass the hash as a numeric salt: egui debug IDs otherwise recursively
-        // format their complete provenance into every descendant's debug string.
-        // This reduces that overhead, but does not qualify its global ID tables.
-        ui.push_id(identity.widget_id().value(), |ui| {
-            ui.vertical(|ui| match view.component {
-                v2::Component::Group {
-                    label: caption,
-                    help,
-                    layout,
-                    children,
-                    ..
-                } => {
-                    label(ui, caption.as_str());
-                    if let Some(help) = help {
-                        label(ui, help.as_str());
-                    }
-                    let mut children_ui = |ui: &mut egui::Ui| {
-                        for position in 0..children.0.len() {
-                            path[depth] = position;
-                            self.component(ui, address, path, depth + 1);
-                        }
-                    };
-                    match layout {
-                        v2::Layout::Row => {
-                            ui.horizontal_top(children_ui);
-                        }
-                        v2::Layout::Column => {
-                            ui.vertical(&mut children_ui);
-                        }
-                    }
-                }
-                v2::Component::Indicator {
-                    label: caption,
-                    help,
-                    data_id,
-                    precision,
-                    ..
-                } => {
-                    label(ui, caption.as_str());
-                    if let Some(help) = help {
-                        label(ui, help.as_str());
-                    }
-                    read::data(
-                        ui,
-                        self.document,
-                        self.observations,
-                        data_id,
-                        view.availability,
-                        *precision,
-                    );
-                }
-                v2::Component::Status {
-                    label: caption,
-                    help,
-                    source,
-                    ..
-                } => {
-                    label(ui, caption.as_str());
-                    if let Some(help) = help {
-                        label(ui, help.as_str());
-                    }
-                    match source {
-                        v2::StatusSource::Data { data_id } => read::data(
-                            ui,
-                            self.document,
-                            self.observations,
-                            data_id,
-                            view.availability,
-                            None,
-                        ),
-                        v2::StatusSource::Entity { target } => {
-                            read::entity(ui, self.observations, target)
-                        }
-                    }
-                }
-                unsupported => {
-                    self.report.placeholders += 1;
-                    let (caption, kind) = match unsupported {
-                        v2::Component::Button { label, .. } => (label, "Button"),
-                        v2::Component::Toggle { label, .. } => (label, "Toggle"),
-                        v2::Component::Select { label, .. } => (label, "Select"),
-                        v2::Component::IntegerInput { label, .. } => (label, "IntegerInput"),
-                        v2::Component::NumberInput { label, .. } => (label, "NumberInput"),
-                        v2::Component::TextInput { label, .. } => (label, "TextInput"),
-                        v2::Component::Plot { label, .. } => (label, "Plot"),
-                        _ => unreachable!("read-only components handled above"),
-                    };
-                    label(ui, caption.as_str());
-                    label(
-                        ui,
-                        format!("{kind}: unsupported in read-only preview (inert)"),
-                    );
-                    if let v2::StaticAvailability::Disabled(reason) = view.availability {
-                        label(ui, format!("Disabled: {reason:?}"));
-                    }
-                }
+    }
+
+    pub(crate) fn replace(
+        &mut self,
+        document: &'a v2::AdmittedV2Document,
+        epoch: PresentationEpoch,
+    ) {
+        // Retaining the actual borrow prevents allocator-address reuse from
+        // confusing two immutable admissions, even if the caller forgot revision.
+        if !std::ptr::eq(self.document, document) || self.epoch != epoch {
+            self.retire();
+            self.location = Location::default();
+            self.scroll = egui::Vec2::ZERO;
+            self.document = document;
+            self.epoch = epoch;
+        }
+    }
+
+    /// Local navigation only. Invalid addresses fail without changing the view.
+    pub(crate) fn navigate(&mut self, location: Location) -> bool {
+        if location == self.location {
+            return true;
+        }
+        if !location.valid(self.document) {
+            return false;
+        }
+        if location != self.location {
+            self.retire();
+            self.location = location;
+            self.scroll = egui::Vec2::ZERO;
+        }
+        true
+    }
+
+    pub(crate) fn location(&self) -> Location {
+        self.location
+    }
+
+    /// Below the notice allowance, denial returns only a static reason.
+    pub(crate) fn set_allowance(&mut self, bytes: usize) {
+        self.allowance = bytes.min(PREVIEW_RESERVATION);
+        if self.allowance < PREVIEW_RESERVATION {
+            self.retire();
+        }
+    }
+
+    fn retire(&mut self) {
+        self.context = None;
+        self.previous = None;
+    }
+
+    /// CPU preview at a fixed, bounded logical viewport and default fonts/style.
+    /// Consume/drop output before the next frame. A GPU host must retire texture
+    /// resources too; this module does not qualify such a host. Changed text
+    /// retires font caches before new glyphs/layout are submitted. Exact page
+    /// equality (not a content hash) decides reuse; no history persists.
+    pub(crate) fn run(
+        &mut self,
+        observations: &RuntimeObservations,
+        mut input: egui::RawInput,
+    ) -> Result<(egui::FullOutput, RenderReport), &'static str> {
+        if self.allowance < NOTICE_RESERVATION {
+            return Err("Read-only preview paused: visual reservation unavailable");
+        }
+        let page = if self.allowance < PREVIEW_RESERVATION {
+            Page::notice(self.epoch)
+        } else {
+            Page::prepare(self.document, observations, self.epoch, self.location)
+        };
+        if self.previous.as_ref() != Some(&page) {
+            self.retire();
+        }
+        let context = self.context.get_or_insert_with(|| {
+            let context = egui::Context::default();
+            context.options_mut(|options| {
+                options.max_passes = std::num::NonZeroUsize::new(1).unwrap();
+                options.zoom_with_keyboard = false;
             });
+            context
         });
+        // Arbitrary DPI, zoom, fonts, secondary viewports and screen sizes are
+        // not accepted as another allocation authority in this isolated preview.
+        input.screen_rect = Some(egui::Rect::from_min_size(
+            egui::Pos2::ZERO,
+            egui::vec2(1280.0, 960.0),
+        ));
+        input.viewport_id = egui::ViewportId::ROOT;
+        input.events = input
+            .events
+            .into_iter()
+            .take(64)
+            .filter_map(|event| match event {
+                egui::Event::PointerMoved(_) | egui::Event::PointerGone => Some(event),
+                egui::Event::PointerButton {
+                    pos,
+                    button,
+                    pressed,
+                    ..
+                } => Some(egui::Event::PointerButton {
+                    pos,
+                    button,
+                    pressed,
+                    modifiers: egui::Modifiers::NONE,
+                }),
+                egui::Event::MouseWheel {
+                    unit, delta, phase, ..
+                } => Some(egui::Event::MouseWheel {
+                    unit,
+                    delta,
+                    phase,
+                    modifiers: egui::Modifiers::NONE,
+                }),
+                _ => None,
+            })
+            .collect();
+        input = egui::RawInput {
+            screen_rect: input.screen_rect,
+            events: input.events,
+            time: input.time,
+            ..Default::default()
+        };
+        let mut next = self.location;
+        let output = context.run_ui(input, |ui| {
+            page.paint(ui, &mut next, &mut self.scroll);
+        });
+        let mut report = page.report;
+        if next != self.location {
+            report.path_nodes += next.depth;
+        }
+        self.previous = Some(page);
+        self.navigate(next);
+        Ok((output, report))
     }
 }

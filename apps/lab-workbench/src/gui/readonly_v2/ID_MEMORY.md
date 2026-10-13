@@ -1,5 +1,9 @@
 # egui ID provenance containment (DGUI-4C7A1)
 
+This is the historical DGUI-4C7A1 report. The subsequent
+[DGUI-4C7A2 bounded preview](BOUNDED_RENDERING.md) addresses Context-local
+retention without changing the profile fix below. Activation remains disabled.
+
 The default native dev/test build now compiles **only egui 0.36.2** with
 `debug-assertions = false`, retaining `overflow-checks = true`. Release already
 omits this cfg. The process-global ID provenance accumulation is eliminated in
