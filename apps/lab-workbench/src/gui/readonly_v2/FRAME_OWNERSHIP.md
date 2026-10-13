@@ -1,5 +1,9 @@
 # DGUI-4C7B2C4A: enforced frame ownership and host boundary
 
+C4B1 follow-up: [native Glow preflight](NATIVE_GLOW_PREFLIGHT.md) corrects drain
+arming for platform errors without uploads and identifies the infallible drain
+contract as a GPU integration blocker. The C4A evidence below is historical.
+
 C3 PR #30 was verified at `e42b970461791f9e792d5e434cf380d82ce9a26b`,
 made Ready and merged normally as `7f11a34ce9997c8260c30e805d2c028c49d0ba93`.
 The approved commit is the merge's second parent. Main was synchronized with a

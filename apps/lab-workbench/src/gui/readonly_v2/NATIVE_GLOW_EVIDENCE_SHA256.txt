@@ -1,0 +1,15 @@
+C4B1 native CPU rerun evidence (SHA-256 of normalized UTF-8 CSV, or exact text).
+All historical C3/C4A evidence is preserved.
+Renderer launcher exit 0 in both profiles; GPU execution not attempted.
+8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751  dev/geometry normalized CSV; 119 rows; identical to FRAME_OWNERSHIP_GEOMETRY_DEV.csv
+48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212  dev/memory normalized CSV; 125 rows; identical to FRAME_OWNERSHIP_MEMORY_DEV.csv
+211b7ea6266bc445757c5f1462762185ea5927bcbe48b1b56fa865f1790ff3b7  dev/frames normalized CSV; 12 rows; identical to FRAME_OWNERSHIP_FRAMES_DEV.csv
+7169183c4957336bb174928c82bafe51901bdadb81606a37cfeda109a74d3dcf  dev/plot text; byte-identical to FRAME_OWNERSHIP_WIDGET_DEV.txt
+b11bd50f94ee2e9b387b50c73939b5d5d30675cdcf58426bdff7c06e2c031b3e  dev/bounded text; byte-identical to FRAME_OWNERSHIP_PAGES_DEV.txt
+2d66cc0b8fe466cb4a93374ee97d84178e90a7c36f392ac11cf77cbb9c60fe3b  NATIVE_GLOW_NO_UPLOAD_DEV.csv
+8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751  release/geometry normalized CSV; 119 rows; identical to FRAME_OWNERSHIP_GEOMETRY_RELEASE.csv
+48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212  release/memory normalized CSV; 125 rows; identical to FRAME_OWNERSHIP_MEMORY_RELEASE.csv
+211b7ea6266bc445757c5f1462762185ea5927bcbe48b1b56fa865f1790ff3b7  release/frames normalized CSV; 12 rows; identical to FRAME_OWNERSHIP_FRAMES_RELEASE.csv
+7169183c4957336bb174928c82bafe51901bdadb81606a37cfeda109a74d3dcf  release/plot text; byte-identical to FRAME_OWNERSHIP_WIDGET_RELEASE.txt
+b11bd50f94ee2e9b387b50c73939b5d5d30675cdcf58426bdff7c06e2c031b3e  release/bounded text; byte-identical to FRAME_OWNERSHIP_PAGES_RELEASE.txt
+2d66cc0b8fe466cb4a93374ee97d84178e90a7c36f392ac11cf77cbb9c60fe3b  NATIVE_GLOW_NO_UPLOAD_RELEASE.csv

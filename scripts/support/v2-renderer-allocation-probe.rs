@@ -258,6 +258,10 @@ pub(crate) fn run() {
         frame_owner::run();
         return;
     }
+    if scenario == "host-no-upload" {
+        frame_owner::run_no_upload_faults();
+        return;
+    }
     if scenario == "memory" {
         assert!(!provenance, "CPU memory uses the executable profiles");
         plot_memory::run();

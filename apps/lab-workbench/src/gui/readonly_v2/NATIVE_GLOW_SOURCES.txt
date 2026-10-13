@@ -1,0 +1,26 @@
+C4B1 exact pinned dependency source audit (SHA-256).
+All C4A dependency source hashes verified unchanged.
+Public API checks compile against existing dev/release Workbench Cargo artifacts.
+No dependency, feature or compilation-profile change. No GPU execution.
+c1152788996a49f6ebfb45d817d4e9541d731334c12817ee075d448c0e55eea3  egui-0.36.2/src/context.rs
+87a7ab7e0381cd38def0604c3a63582536e1c37f7038318124f7d73ca102f16d  egui-0.36.2/src/data/output.rs
+157222559ea4ff564a888eba09f91aa0e66c5eebd7661d3ff5a46ba23889ff2e  egui-0.36.2/src/layers.rs
+86e244febe8b99ba2f462439aef2a3f7334a119e1e48c5bb1a8c2f4f82ef76d0  egui-0.36.2/src/input_state/mod.rs
+8fe3868e6cd057ccef7cda7f74f97d0c4d03aa4fe51a985407b79e0ae5b5a724  egui_plot-0.37.0/src/plot.rs
+f20f11a4ca100b79230660edc6454a80b152d2809c759df80a74431fc3e5edcb  egui_plot-0.37.0/src/memory.rs
+278b6f8dba8cdd3531a0551c6af8d07144f10259198e909547e73b7243fc565a  egui_plot-0.37.0/src/axis.rs
+9e7bc8d6c31be89a10f0be999783c05b6277dcec1248a478b9cd302c88f41436  egui_plot-0.37.0/src/overlays/legend.rs
+c2d6f86a759bd2157b5b787ab03e8eae981b243988ecf4e19c45312c8d9ee3ef  epaint-0.36.2/src/mesh.rs
+4f3b5809df42f2de7574ea41d6e1f0df3296908597cf1197c871dc0c08f10488  epaint-0.36.2/src/tessellator.rs
+8789e9093b52ac6fd8bd4171adec01802b32ec148ed302057396bd4659ff03d5  epaint-0.36.2/src/text/fonts.rs
+3854d03eef3f10406c0f092658972686993d350af2600980af8ddf3eee3bd92f  epaint-0.36.2/src/text/font.rs
+ef2ccc4ceb221c49e65f702a11efb0980a55d2073ddb4d89d1e3f9bb637f9e62  epaint-0.36.2/src/textures.rs
+25d90783fc1b217b9e43a8077443956c4101facdca7009c6a0dd45d0228e603e  epaint-0.36.2/src/texture_atlas.rs
+65a3542c285c387ab83e7983add4cb9969aba1416278e511cdcf99e2ec5fc76a  eframe-0.36.2/src/native/glow_integration.rs
+cfc3f543acd155530c6a18b291666615083c345abcf09edfc038351f08337246  epaint-0.36.2/src/image.rs
+104f16618665b690070e692a1954e2c7439b2363c59c972ee07bb1ddf691be30  eframe-0.36.2/src/lib.rs
+9dad50a69b22c031c125df16b76d9bed59e8695c97639f927b8f7f8ccb3fe820  eframe-0.36.2/src/epi.rs
+74ebbb81b9e0edf8b1e1f76b1f8b8cfe1cfc1d5fb8b3a4cd4393dc7b6483f839  egui_glow-0.36.2/src/lib.rs
+fbebbfb983c2100993a2351a8513c675fe3ec6a099067993a192bedc5030140d  egui_glow-0.36.2/src/painter.rs
+5ccfa4e62fc01bb10a2896ff8a7403d8c1250fb48beb84c02e5c9888728c0844  glow-0.17.0/src/lib.rs
+48b3d02cc462b8043ab361338befeaf53a7dff42309aee5701bf943855cf2d0f  glow-0.17.0/src/native.rs

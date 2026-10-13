@@ -30,6 +30,9 @@ Windows/MSVC CPU configuration; host/GPU activation is still separate.
 DGUI-4C7B2C4A enforces [single-frame ownership, Context generations and bounded
 texture retirement](FRAME_OWNERSHIP.md) through a borrowed frame and serial host
 seam. Its mock backend is lifecycle evidence, not GPU qualification.
+DGUI-4C7B2C4B1 records the [native Glow preflight blocker and platform-error
+cleanup correction](NATIVE_GLOW_PREFLIGHT.md), with a separate fallible-retirement
+proposal for review. Real GPU smoke remains blocked at the interface gate.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See

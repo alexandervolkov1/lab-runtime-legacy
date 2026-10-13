@@ -12,19 +12,26 @@ struct Host {
     keys: [Option<TextureKey>; MAX_TEXTURES],
     busy: bool,
     fault: Option<FrameError>,
+    fault_after_draws: usize,
     sets: usize,
+    late_sets: usize,
+    partial_sets: usize,
+    platforms: usize,
     draws: usize,
+    completed: usize,
     drains: usize,
     frees: usize,
 }
 impl FrameBackend for &mut Host {
     const CPU_ONLY: bool = false;
-    fn set(&mut self, key: TextureKey, _: &egui::epaint::ImageDelta) -> Result<(), FrameError> {
+    fn set(&mut self, key: TextureKey, delta: &egui::epaint::ImageDelta) -> Result<(), FrameError> {
         self.busy = true;
         if !self.keys.contains(&Some(key)) {
             *self.keys.iter_mut().find(|k| k.is_none()).unwrap() = Some(key);
         }
         self.sets += 1;
+        self.late_sets += usize::from(self.draws != 0);
+        self.partial_sets += usize::from(delta.pos.is_some());
         if self.fault == Some(FrameError::TextureUpdate) {
             Err(FrameError::TextureUpdate)
         } else {
@@ -37,7 +44,9 @@ impl FrameBackend for &mut Host {
         viewports: &egui::OrderedViewportIdMap<egui::ViewportOutput>,
     ) -> Result<(), FrameError> {
         assert_eq!(viewports.len(), 1);
-        if self.fault == Some(FrameError::PlatformOutput) {
+        self.platforms += 1;
+        self.busy = true;
+        if self.fault == Some(FrameError::PlatformOutput) && self.draws >= self.fault_after_draws {
             Err(FrameError::PlatformOutput)
         } else {
             Ok(())
@@ -58,17 +67,18 @@ impl FrameBackend for &mut Host {
         );
         self.busy = true;
         self.draws += 1;
-        if self.fault == Some(FrameError::Submission) {
+        if self.fault == Some(FrameError::Submission) && self.draws >= self.fault_after_draws {
             Err(FrameError::Submission)
         } else {
             Ok(())
         }
     }
     fn complete(&mut self) -> Result<(), FrameError> {
-        if self.fault == Some(FrameError::Completion) {
+        if self.fault == Some(FrameError::Completion) && self.draws >= self.fault_after_draws {
             Err(FrameError::Completion)
         } else {
             self.busy = false;
+            self.completed += 1;
             Ok(())
         }
     }
@@ -80,6 +90,101 @@ impl FrameBackend for &mut Host {
         assert!(!self.busy);
         *self.keys.iter_mut().find(|k| **k == Some(key)).unwrap() = None;
         self.frees += 1;
+    }
+}
+
+/// Additional native CPU cases. Counters belong to a mock, not to OpenGL.
+pub(super) fn run_no_upload_faults() {
+    let _ = ahash::RandomState::new();
+    egui::Context::default()
+        .run_ui(Default::default(), |_| {})
+        .drop_without_applying_deltas();
+    println!(
+        "scenario,retained,phase_peak,realloc_overlap_peak,peak_blocks,accounted,shapes,vertices,indices,geometry_faults,allocation_faults,host_faults,post_drop,post_drop_blocks,sets,partial_sets,platforms,submitted,completed,drains,frees,outstanding,result"
+    );
+    for fault in [
+        None,
+        Some(FrameError::PlatformOutput),
+        Some(FrameError::Submission),
+        Some(FrameError::Completion),
+    ] {
+        let name = match fault {
+            None => "no-upload-success",
+            Some(FrameError::PlatformOutput) => "no-upload-platform-error",
+            Some(FrameError::Submission) => "no-upload-submit-error",
+            Some(FrameError::Completion) => "no-upload-completion-error",
+            _ => unreachable!(),
+        };
+        let doc = fixtures::admit(&fixtures::syntax(32, false));
+        let obs = fixtures::observations(32, 512);
+        let mut host = Host {
+            fault,
+            fault_after_draws: if fault == Some(FrameError::PlatformOutput) {
+                1
+            } else {
+                2
+            },
+            ..Default::default()
+        };
+        let mut stats = GeometryStats::default();
+        meter::start();
+        let mut preview = readonly_v2::Preview::with_backend(&doc, epoch(0), &mut host);
+        preview.open_plot(0);
+        let mut warm = preview.run(&obs, Default::default()).unwrap();
+        let generation = warm.generation();
+        stats.max_assign(GeometryStats::inspect(&mut warm));
+        assert_eq!(
+            warm.finish(),
+            Ok(FrameOutcome::HostCompleted { degraded: false })
+        );
+        let mut next = preview.run(&obs, Default::default()).unwrap();
+        assert_eq!(next.generation(), generation);
+        stats.max_assign(GeometryStats::inspect(&mut next));
+        let result = next.finish();
+        if let Some(error) = fault {
+            assert_eq!(result, Err(error));
+            assert_eq!(preview.last_outcome(), Some(FrameOutcome::Failed(error)));
+        } else {
+            assert_eq!(result, Ok(FrameOutcome::HostCompleted { degraded: false }));
+        }
+        let retained = meter::phase();
+        drop(preview);
+        let dropped = meter::phase();
+        meter::stop();
+        assert_eq!(host.late_sets, 0, "failure must occur without new uploads");
+        assert_eq!(host.platforms, 2);
+        assert_eq!(host.completed, if fault.is_none() { 2 } else { 1 });
+        assert_eq!(host.drains, usize::from(fault.is_some()));
+        assert_eq!(host.sets, 1);
+        assert_eq!(host.frees, 1);
+        let outstanding = host.keys.iter().flatten().count();
+        assert_eq!((outstanding, host.busy), (0, false));
+        assert_eq!((dropped.live, dropped.blocks), (0, 0));
+        assert!(stats.finite());
+        let peak = retained.peak.max(dropped.peak);
+        let overlap = retained.overlap_peak.max(dropped.overlap_peak);
+        let blocks = retained.peak_blocks.max(dropped.peak_blocks);
+        let accounted = overlap + 127 * blocks + 65_536;
+        assert!(accounted <= readonly_v2::PREVIEW_RESERVATION);
+        println!(
+            "{name},{},{peak},{overlap},{blocks},{accounted},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{outstanding},PASS",
+            retained.live,
+            stats.shapes,
+            stats.vertices,
+            stats.indices,
+            stats.policy_failures,
+            stats.allocation_faults,
+            usize::from(fault.is_some()),
+            dropped.live,
+            dropped.blocks,
+            host.sets,
+            host.partial_sets,
+            host.platforms,
+            host.draws,
+            host.completed,
+            host.drains,
+            host.frees,
+        );
     }
 }
 
