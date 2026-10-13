@@ -471,6 +471,7 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         include_str!("read.rs"),
         include_str!("page.rs"),
         include_str!("navigation.rs"),
+        include_str!("plot_projection.rs"),
     ] {
         for forbidden in [
             "ClientHandle",
@@ -506,8 +507,11 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
     assert!(!std::hint::black_box(ACTIVATION_QUALIFIED));
     let admitted = admit(&syntax());
     let bytes = admitted.canonical_bytes().to_vec();
+    let plot_document = super::plot_fixtures::admit(&super::plot_fixtures::syntax(32, true));
     let mut model = WorkbenchModel::new(PresentationDocument::empty("active-v1"));
     model.observations = observations();
+    super::plot_fixtures::observe(&mut model.observations, 0, "float", json!(1.0));
+    model.observations.live = super::plot_fixtures::observations(1, 4096).live;
     model.recovery.scope = Some("retained-scope".into());
     model.recovery.next_seq = Some(42);
     let before = model.clone();
@@ -517,6 +521,25 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
     let recovery_generation = dispatcher.recovery_generation();
     let presentation_revision = dispatcher.presentation_revision();
     for revision in 1..=3 {
+        let projection = super::plot_projection::project(
+            &plot_document,
+            &dispatcher.observations,
+            PresentationEpoch { revision, ..EPOCH },
+            Location::default(),
+            0,
+            super::plot_projection::PROJECTION_RESERVATION,
+        )
+        .unwrap();
+        assert!(
+            projection
+                .traces
+                .iter()
+                .all(|trace| trace.state == super::plot_projection::CurveState::Ready)
+        );
+        assert_eq!(
+            projection.prepared_points(),
+            super::plot_projection::MAX_POINTS
+        );
         frame(
             &admitted,
             &dispatcher.observations,

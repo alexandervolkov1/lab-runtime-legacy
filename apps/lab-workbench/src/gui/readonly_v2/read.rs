@@ -73,7 +73,7 @@ fn binding(selector: v2::Selector) -> ReadBinding {
         v2::Selector::RecorderState => ReadBinding::RecorderState,
     }
 }
-fn kind(kind: v2::ScalarKind) -> ScalarKind {
+pub(super) fn kind(kind: v2::ScalarKind) -> ScalarKind {
     match kind {
         v2::ScalarKind::Boolean => ScalarKind::Boolean,
         v2::ScalarKind::Integer => ScalarKind::Integer,

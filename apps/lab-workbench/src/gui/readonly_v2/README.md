@@ -7,6 +7,10 @@ protocol capability, Runtime callback, persistence or laboratory action path.
 The v1 Workbench and its 16 external operations retain their existing owner.
 `ACTIVATION_QUALIFIED` remains **false**.
 
+DGUI-4C7B1 adds an independent, frame-local [Plot/Trace projection](PLOT_PROJECTION.md).
+It prepares bounded curve data from the existing observation buffers, without
+creating an egui_plot widget or changing the Preview's inert Plot placeholder.
+
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See
 [bounded rendering and allocation qualification](BOUNDED_RENDERING.md) for the
