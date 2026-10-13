@@ -6,8 +6,10 @@ recovery, OperatorWorkflow or persistence changes. Activation remains false.
 
 DGUI-4C7B2 adds a separate one-Plot mode documented in [PLOT_WIDGET.md](PLOT_WIDGET.md).
 The four-cell page limits below still apply to ordinary pages; Plot uses its own
-bounded work and text preflight within the SAME 8 MiB, including projection and
-CPU tessellation. Full-schema Plot memory qualification remains blocked. Zoom
+bounded work within the SAME 8 MiB, including projection and CPU tessellation.
+[B2A](PLOT_LABEL_MEMORY.md) adds ASCII curve aliases and lossless text-fragment
+navigation with Context retirement, superseding B2's full-label refusal.
+Full-schema Plot memory qualification remains open for independent review. Zoom
 events are accepted only in Plot mode and never change the preview's font scale.
 
 ## Work limits and reachability

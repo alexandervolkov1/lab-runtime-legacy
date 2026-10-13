@@ -1,5 +1,8 @@
 //! One read-only plot and one bounded, owner-held viewport/legend slot.
-use super::{OccurrenceIdentity, RenderReport, egui, page, plot_projection as projection};
+use super::{
+    OccurrenceIdentity, RenderReport, egui, page, plot_projection as projection,
+    plot_text::{self, Cursor, Field, PageKey, TRACES_PER_PAGE, TextPage},
+};
 use crate::presentation::v2;
 use egui_plot::{HoverPosition, Legend, LegendGrouping, Line, Plot, PlotBounds, PlotMemory};
 
@@ -11,9 +14,9 @@ pub(crate) struct PlotState<'a> {
     pub(super) bounds: Option<PlotBounds>,
     pub(super) auto: egui::Vec2b,
     pub(super) hidden: u32,
-    // Only changing non-ASCII observation text can grow the font repertoire.
-    // Exact bounded equality retires that Context; numeric/diagnostic text is ASCII.
-    units: [(projection::Text<32>, projection::Text<16>); projection::MAX_TRACES],
+    pub(super) details: Option<Cursor>,
+    trace_page: usize,
+    painted: Option<Option<PageKey>>,
 }
 
 // The contract reserves 4096 bytes per Plot viewport; this preview owns one.
@@ -32,7 +35,9 @@ impl<'a> PlotState<'a> {
             bounds: None,
             auto: true.into(),
             hidden: 0,
-            units: std::array::from_fn(|_| Default::default()),
+            details: None,
+            trace_page: 0,
+            painted: None,
         }
     }
 
@@ -45,26 +50,23 @@ impl<'a> PlotState<'a> {
         egui::Id::new(("v2-plot-trace", &trace.identity))
     }
 
-    pub(super) fn refresh_units(&mut self, view: &projection::PlotView<'_>) -> bool {
-        let mut changed = false;
-        for (slot, trace) in self.units.iter_mut().zip(&view.traces) {
-            if slot.0 != trace.runtime_unit_id || slot.1 != trace.runtime_unit_symbol {
-                *slot = (
-                    trace.runtime_unit_id.clone(),
-                    trace.runtime_unit_symbol.clone(),
-                );
-                changed = true;
-            }
+    pub(super) fn prepare(&mut self, view: &projection::PlotView<'_>) -> (bool, Option<TextPage>) {
+        let page = self.details.map(|cursor| TextPage::new(view, cursor));
+        if let Some(page) = &page {
+            self.details = Some(page.cursor);
         }
-        changed
+        let key = page.as_ref().map(|page| page.key);
+        let changed = self.painted != Some(key);
+        self.painted = Some(key);
+        (changed, page)
     }
 
-    /// Low-level widget. Preview must pass preflight before calling this. Kept
-    /// separate so the native probe can reproduce the rejected counterexample.
-    pub(crate) fn paint(
+    /// Paint exactly the preflighted graph or text page, never both together.
+    pub(super) fn paint(
         &mut self,
         ui: &mut egui::Ui,
         view: &projection::PlotView<'_>,
+        text_page: Option<&TextPage>,
         restored: bool,
     ) -> (bool, RenderReport) {
         let mut back = false;
@@ -72,9 +74,31 @@ impl<'a> PlotState<'a> {
         ui.horizontal(|ui| {
             back = page::navigate_button(ui, true, "Back");
             reset = page::navigate_button(ui, true, "Reset / auto bounds");
-            ui.label("Read-only Plot · monotonic elapsed time · no Runtime commands");
+            ui.label("Read-only Plot - monotonic elapsed time - no Runtime commands");
         });
-        ui.add(egui::Label::new(view.definition.title.as_str()).selectable(false));
+        if reset {
+            self.auto = true.into();
+        }
+        if let Some(text_page) = text_page {
+            self.paint_details(ui, text_page);
+            return (
+                back,
+                RenderReport {
+                    occurrences: 1,
+                    labels: 24,
+                    widgets: 48,
+                    text_bytes: 1024,
+                    ..Default::default()
+                },
+            );
+        }
+        if page::navigate_button(ui, true, "Title details") {
+            self.details = Some(Cursor {
+                trace: 0,
+                field: Field::Title,
+                page: 0,
+            });
+        }
         let id = self.id();
         let mut plot = Plot::new(id.value())
             .id(id)
@@ -107,11 +131,7 @@ impl<'a> PlotState<'a> {
                     plot_name,
                     position,
                     ..
-                } => view
-                    .traces
-                    .iter()
-                    .find(|trace| trace.legend.as_str() == *plot_name)
-                    .and_then(|trace| projection::hover(trace, *position))
+                } => plot_text::hover(view, plot_name, *position)
                     .map(|text| text.as_str().to_owned()),
                 HoverPosition::Elsewhere { .. } => None,
             });
@@ -148,7 +168,7 @@ impl<'a> PlotState<'a> {
                 // add(), unlike line(), preserves empty legend entries. There
                 // is no fabricated point, even for unavailable/hidden curves.
                 plot_ui.add(
-                    Line::new(trace.legend.as_str(), points)
+                    Line::new(plot_text::alias(index), points)
                         .id(Self::trace_id(trace))
                         .color(color(trace.definition.style.color.as_str()))
                         .width(trace.definition.style.width.0 as f32),
@@ -168,12 +188,28 @@ impl<'a> PlotState<'a> {
                 mask | (u32::from(memory.hidden_items.contains(&Self::trace_id(trace))) << i)
             });
         }
-        // At most 32 fixed-format diagnostic rows; scrolling adds no occurrences.
-        egui::ScrollArea::vertical().max_height(280.0).show(ui, |ui| {
+        // Only four ASCII detail selectors/diagnostics at once. This pages text,
+        // NOT curve data: all 32 B1 traces remain submitted to the plot above.
+        ui.horizontal(|ui| {
+            if page::navigate_button(ui, self.trace_page > 0, "Previous traces") {
+                self.trace_page -= 1;
+            }
+            if page::navigate_button(
+                ui,
+                (self.trace_page + 1) * TRACES_PER_PAGE < view.traces.len(),
+                "Next traces",
+            ) {
+                self.trace_page += 1;
+            }
+        });
+        ui.vertical(|ui| {
             if view.traces.is_empty() {
                 ui.label("Empty Plot: no traces");
             }
-            for (index, trace) in view.traces.iter().enumerate() {
+            for (index, trace) in view.traces.iter().enumerate().skip(self.trace_page * TRACES_PER_PAGE).take(TRACES_PER_PAGE) {
+                if page::navigate_button(ui, true, &format!("Details {}", plot_text::alias(index))) {
+                    self.details = Some(Cursor { trace: index, field: Field::Label, page: 0 });
+                }
                 ui.add(egui::Label::new(format!(
                     "Trace {}: {:?}; {:?}; quality {:?}; {} points; decimated {}; buffer evictions {}{}",
                     index + 1, trace.state, trace.freshness, trace.quality,
@@ -188,48 +224,71 @@ impl<'a> PlotState<'a> {
                 occurrences: 1,
                 plot_points: view.prepared_points(),
                 plot_traces: view.traces.len(),
-                labels: 128,
-                widgets: 256,
-                text_bytes: 16 * 1024,
+                labels: 112,
+                widgets: 224,
+                text_bytes: 8 * 1024,
                 ..Default::default()
             },
         )
     }
-}
 
-/// This is a preview qualification guard, NOT a document/admission limit. The
-/// full legal Unicode legend counterexample exceeds 8 MiB with tessellation.
-/// Include every possible hover unit, even before it is visited, so glyphs
-/// cannot accumulate across changing hover selections beyond this repertoire.
-pub(crate) const MAX_PLOT_TEXT: usize = 1024;
-pub(super) fn preflight(view: &projection::PlotView<'_>) -> bool {
-    // The built-in overlay legend has no scrolling API. Reject, rather than
-    // truncate, labels that can push controls outside this bounded viewport.
-    if view.definition.title.as_str().contains(['\n', '\r']) {
-        return false;
-    }
-    let mut bytes = view.definition.title.as_str().len();
-    for trace in &view.traces {
-        if trace.legend.as_str().len() > 80 || trace.legend.as_str().contains(['\n', '\r']) {
-            return false;
+    fn paint_details(&mut self, ui: &mut egui::Ui, text: &TextPage) {
+        if page::navigate_button(ui, true, "Back to Plot") {
+            self.details = None;
         }
-        for count in [
-            trace.legend.as_str().len(),
-            trace.runtime_unit_id.as_str().len(),
-            trace.runtime_unit_symbol.as_str().len(),
-            trace
-                .definition
-                .display_unit
-                .as_ref()
-                .map_or(0, |u| u.as_str().len()),
-        ] {
-            let Some(total) = bytes.checked_add(count) else {
-                return false;
-            };
-            bytes = total;
+        if text.cursor.field != Field::Title {
+            ui.label(format!("Details {}", plot_text::alias(text.cursor.trace)));
+            ui.horizontal(|ui| {
+                for field in Field::TRACE_FIELDS {
+                    if page::navigate_button(ui, true, field.caption()) {
+                        self.details = Some(Cursor {
+                            field,
+                            page: 0,
+                            ..text.cursor
+                        });
+                    }
+                }
+            });
+        }
+        ui.label(text.cursor.field.caption());
+        ui.label(format!(
+            "Fragment {} / {}; bytes {}..{} of {}",
+            text.cursor.page + 1,
+            text.pages,
+            text.start,
+            text.end,
+            text.total
+        ));
+        ui.horizontal(|ui| {
+            if page::navigate_button(ui, text.cursor.page > 0, "Previous fragment") {
+                self.details = Some(Cursor {
+                    page: text.cursor.page - 1,
+                    ..text.cursor
+                });
+            }
+            if page::navigate_button(ui, text.cursor.page + 1 < text.pages, "Next fragment") {
+                self.details = Some(Cursor {
+                    page: text.cursor.page + 1,
+                    ..text.cursor
+                });
+            }
+        });
+        ui.label("Text fragment (invisible characters escaped):");
+        ui.add(
+            egui::Label::new(text.display.as_str())
+                .wrap()
+                .selectable(false),
+        );
+        ui.label(format!("UTF-8: {}", text.hex.as_str()));
+        if text.absent {
+            ui.label("Not available from validated metadata / definition");
+        } else if text.total == 0 {
+            ui.label("Empty string");
+        }
+        if text.cursor.field == Field::DisplayUnit {
+            ui.label("Cosmetic label only; no conversion");
         }
     }
-    bytes <= MAX_PLOT_TEXT
 }
 
 /// Fixed work even for extreme finite ranges; no range-sized tick allocation.

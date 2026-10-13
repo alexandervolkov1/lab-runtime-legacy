@@ -473,6 +473,7 @@ fn read_only_boundary_and_live_owner_remain_isolated() {
         include_str!("navigation.rs"),
         include_str!("plot_projection.rs"),
         include_str!("plot_widget.rs"),
+        include_str!("plot_text.rs"),
     ] {
         for forbidden in [
             "ClientHandle",

@@ -63,3 +63,44 @@ pub(crate) fn observations_with_lengths(lengths: &[usize]) -> RuntimeObservation
     obs.complete_rebuild();
     obs
 }
+
+/// Exact 512-byte fields from distinct bounded Unicode repertoires; controls,
+/// combining marks and unsupported glyphs still have exact UTF-8 byte display.
+pub(crate) fn unicode_text(seed: usize, repertoire: usize, bytes: usize) -> String {
+    let mut text = String::new();
+    let complex: Vec<char> = "\0\n\r\t\u{301}\u{200d}\u{202e}👩‍🔬汉".chars().collect();
+    for i in 0..bytes {
+        let ch = match repertoire {
+            0 => char::from_u32(0x100 + ((seed * 256 + i) % 8000) as u32).unwrap(),
+            1 => complex[(seed + i) % complex.len()],
+            _ => char::from_u32(0x20000 + ((seed * 128 + i) % 4096) as u32).unwrap(),
+        };
+        if text.len() + ch.len_utf8() > bytes {
+            break;
+        }
+        text.push(ch);
+    }
+    while text.len() < bytes {
+        text.push('x');
+    }
+    text
+}
+
+pub(crate) fn unicode_scene(repertoire: usize) -> (v2::AdmittedV2Document, RuntimeObservations) {
+    let mut value = syntax(32, false);
+    value["plots"][0]["title"] = json!(unicode_text(37, repertoire, 512));
+    let mut obs = observations(32, 4096);
+    for i in 0..32 {
+        value["plots"][0]["traces"][i]["display_label"] = json!(unicode_text(i, repertoire, 512));
+        value["plots"][0]["traces"][i]["display_unit"] =
+            json!(unicode_text(i + 32, repertoire, 512));
+        let unit =
+            json!({"id":unicode_text(i,repertoire,32),"symbol":unicode_text(i+32,repertoire,16)});
+        obs.observe_read_descriptor(
+            target(i),
+            &json!({"value_type":"float","generation":"1","unit":unit}),
+        );
+        obs.entities.get_mut(&target(i)).unwrap().value["unit"] = unit;
+    }
+    (admit(&value), obs)
+}

@@ -10,8 +10,10 @@ The v1 Workbench and its 16 external operations retain their existing owner.
 DGUI-4C7B1 supplies the frame-local [Plot/Trace projection](PLOT_PROJECTION.md).
 DGUI-4C7B2 adds [one interactive read-only Plot mode](PLOT_WIDGET.md), with
 Preview-owned viewport/legend state and actual CPU tessellation measurements.
-Full-schema Plot memory qualification remains blocked; the linked report gives
-the reproducible counterexample and preflight refusal policy.
+DGUI-4C7B2A replaces the old text refusal with [ASCII curve aliases and lossless
+16-scalar title/label/unit fragments](PLOT_LABEL_MEMORY.md), preserving the current
+Plot viewport across Context retirement. The report separates text containment,
+native memory evidence and remaining full-schema/GPU qualification limits.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See

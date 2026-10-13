@@ -1,4 +1,4 @@
-//! Real production lifecycle plus an explicitly UNQUALIFIED text counterexample.
+//! Production graph/details lifetimes, including the former B2 counterexample.
 use super::{ZERO, epoch, meter, readonly_v2};
 use crate::{model::RuntimeObservations, plot_fixtures as fixtures};
 use eframe::egui;
@@ -18,6 +18,14 @@ fn frame(
     obs: &RuntimeObservations,
     events: Vec<egui::Event>,
 ) -> (readonly_v2::RenderReport, usize, usize, Option<egui::Pos2>) {
+    frame_at(preview, obs, events, "T02")
+}
+fn frame_at(
+    preview: &mut readonly_v2::Preview<'_>,
+    obs: &RuntimeObservations,
+    events: Vec<egui::Event>,
+    caption: &str,
+) -> (readonly_v2::RenderReport, usize, usize, Option<egui::Pos2>) {
     let (mut output, report) = preview
         .run(
             obs,
@@ -29,7 +37,7 @@ fn frame(
         .unwrap();
     let legend = output.shapes.iter().find_map(|shape| {
         if let egui::Shape::Text(text) = &shape.shape {
-            (text.galley.text() == "2: Same label").then(|| text.visual_bounding_rect().center())
+            (text.galley.text() == caption).then(|| text.visual_bounding_rect().center())
         } else {
             None
         }
@@ -46,6 +54,190 @@ fn frame(
     drop(meshes);
     output.drop_without_applying_deltas();
     (report, shapes, vertices, legend)
+}
+
+fn click(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations, caption: &str) {
+    let pos = frame_at(preview, obs, vec![], caption)
+        .3
+        .expect("actual visible navigation button");
+    for pressed in [true, false] {
+        frame(
+            preview,
+            obs,
+            vec![egui::Event::PointerMoved(pos), pointer(pos, pressed)],
+        );
+    }
+}
+
+fn read_pages(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations, bytes: &str) {
+    let mut offset = 0;
+    for page in 0..bytes.chars().count().div_ceil(16).max(1) {
+        if page > 0 {
+            click(preview, obs, "Next fragment");
+        }
+        let (mut output, report) = preview.run(obs, egui::RawInput::default()).unwrap();
+        assert!(!report.guarded && report.plot_points == 0);
+        let text = output
+            .shapes
+            .iter()
+            .find_map(|shape| match &shape.shape {
+                egui::Shape::Text(t) => t.galley.text().strip_prefix("UTF-8: "),
+                _ => None,
+            })
+            .expect("actual full-text page output");
+        for token in text.split_whitespace() {
+            assert_eq!(
+                u8::from_str_radix(token, 16).unwrap(),
+                bytes.as_bytes()[offset]
+            );
+            offset += 1;
+        }
+        drop(preview.tessellate(&mut output));
+        output.drop_without_applying_deltas();
+    }
+    assert_eq!(offset, bytes.len());
+}
+
+fn hover_curve(preview: &mut readonly_v2::Preview<'_>, obs: &RuntimeObservations) {
+    let (mut output, _) = preview.run(obs, egui::RawInput::default()).unwrap();
+    let interior = egui::Rect::from_min_max(egui::pos2(300.0, 150.0), egui::pos2(1000.0, 500.0));
+    let pos = output
+        .shapes
+        .iter()
+        .find_map(|shape| match &shape.shape {
+            egui::Shape::Path(path) if path.points.len() >= 256 => path
+                .points
+                .iter()
+                .find(|p| interior.contains(**p) && shape.clip_rect.contains(**p))
+                .copied(),
+            _ => None,
+        })
+        .expect("actual visible curve geometry");
+    drop(preview.tessellate(&mut output));
+    output.drop_without_applying_deltas();
+    frame(preview, obs, vec![egui::Event::PointerMoved(pos)]);
+    let (mut output, _) = preview.run(obs, egui::RawInput::default()).unwrap();
+    assert!(
+        output.shapes.iter().any(|shape| match &shape.shape {
+            egui::Shape::Text(t) => {
+                let text = t.galley.text();
+                text.is_ascii()
+                    && text.contains("\nCurve position:")
+                    && text.contains("no conversion")
+            }
+            _ => false,
+        }),
+        "real bounded Unicode-unit hover output"
+    );
+    drop(preview.tessellate(&mut output));
+    output.drop_without_applying_deltas();
+}
+
+fn unicode_case(repertoire: usize) {
+    let (doc, obs) = fixtures::unicode_scene(repertoire);
+    let mut updated = obs.clone();
+    for buffer in updated.live.values_mut() {
+        buffer
+            .push(crate::model::LivePoint {
+                time_seconds: 4096.0,
+                value: -500.0,
+            })
+            .unwrap();
+    }
+    let before = obs.clone();
+    let canonical = doc.canonical_bytes().to_vec();
+    let mut epochs = [ZERO; 21];
+    meter::start();
+    let mut preview = readonly_v2::Preview::new(&doc, epoch(0));
+    preview.open_plot(0);
+    for _ in 0..4 {
+        let report = frame(&mut preview, &obs, vec![]).0;
+        assert!(!report.guarded && report.plot_points == 16384);
+    }
+    let graph = meter::phase();
+    click(&mut preview, &obs, "Title details");
+    read_pages(&mut preview, &obs, doc.dto().plots.0[0].title.as_str());
+    click(&mut preview, &obs, "Back to Plot");
+    let title = meter::phase();
+    for i in 0..32 {
+        if i > 0 && i % 4 == 0 {
+            click(&mut preview, &obs, "Next traces");
+        }
+        click(&mut preview, &obs, &format!("Details T{:02}", i + 1));
+        read_pages(
+            &mut preview,
+            &obs,
+            doc.dto().plots.0[0].traces.0[i].display_label.as_str(),
+        );
+        click(&mut preview, &obs, "Cosmetic display unit");
+        read_pages(
+            &mut preview,
+            &obs,
+            doc.dto().plots.0[0].traces.0[i]
+                .display_unit
+                .as_ref()
+                .unwrap()
+                .as_str(),
+        );
+        for (caption, field) in [("Runtime unit ID", "id"), ("Runtime unit symbol", "symbol")] {
+            click(&mut preview, &obs, caption);
+            let unit = obs.entities[&fixtures::target(i)].value["unit"][field]
+                .as_str()
+                .unwrap();
+            read_pages(&mut preview, &obs, unit);
+        }
+        click(&mut preview, &obs, "Back to Plot");
+    }
+    let details = meter::phase();
+    hover_curve(&mut preview, &obs);
+    for i in 0..24 {
+        frame(
+            &mut preview,
+            if i % 2 == 0 { &updated } else { &obs },
+            vec![],
+        );
+    }
+    let updates = meter::phase();
+    for (i, reading) in epochs.iter_mut().enumerate() {
+        preview.replace(&doc, epoch(100 + i as u64));
+        preview.open_plot(i % 2);
+        click(&mut preview, &obs, "Title details");
+        click(&mut preview, &obs, "Next fragment");
+        click(&mut preview, &obs, "Back to Plot");
+        hover_curve(&mut preview, &obs);
+        frame(&mut preview, &obs, vec![egui::Event::PointerGone]);
+        for _ in 0..3 {
+            frame(&mut preview, &obs, vec![]);
+        }
+        *reading = meter::phase();
+    }
+    drop(preview);
+    let dropped = meter::phase();
+    meter::stop();
+    for (label, r) in [
+        ("graph", graph),
+        ("title", title),
+        ("all-details", details),
+        ("hover/updates", updates),
+        ("drop", dropped),
+    ] {
+        println!(
+            "Unicode repertoire {repertoire} {label}: {r:?}; accounted={}",
+            charge(r)
+        );
+        bound(r);
+    }
+    for (i, r) in epochs.iter().enumerate() {
+        println!(
+            "Unicode repertoire {repertoire} epoch {i}: {r:?}; accounted={}",
+            charge(*r)
+        );
+        assert_eq!(r.live, epochs[0].live);
+        bound(*r);
+    }
+    assert_eq!(dropped.live, 0);
+    assert_eq!(before, obs);
+    assert_eq!(doc.canonical_bytes(), canonical);
 }
 fn pointer(pos: egui::Pos2, pressed: bool) -> egui::Event {
     egui::Event::PointerButton {
@@ -65,6 +257,20 @@ pub(super) fn run() {
     let mut lengths = [1; 32];
     lengths[0] = 4096;
     let skewed = fixtures::observations_with_lengths(&lengths);
+    let mut turns = fixtures::observations(32, 0);
+    for source in 0..32 {
+        for i in 0..4096 {
+            turns
+                .live
+                .entry(fixtures::target(source))
+                .or_default()
+                .push(crate::model::LivePoint {
+                    time_seconds: i as f64,
+                    value: (if i % 2 == 0 { 100.0 } else { -100.0 }) + source as f64 / 32.0,
+                })
+                .unwrap();
+        }
+    }
     let mut text_syntax = fixtures::syntax(32, false);
     let mut text: String = (0..84)
         .map(|i| char::from_u32(0x100 + i).unwrap())
@@ -81,7 +287,7 @@ pub(super) fn run() {
     egui::Context::default()
         .run_ui(egui::RawInput::default(), |_| {})
         .drop_without_applying_deltas();
-    let mut phases = [ZERO; 10];
+    let mut phases = [ZERO; 11];
     let mut epochs = [ZERO; 21];
     let mut drops = [ZERO; 3];
     meter::start();
@@ -172,6 +378,13 @@ pub(super) fn run() {
         frame(&mut preview, &obs, vec![]);
     }
     phases[9] = meter::phase();
+    preview.replace(&doc, epoch(4));
+    preview.open_plot(0);
+    for _ in 0..4 {
+        let report = frame(&mut preview, &turns, vec![]).0;
+        assert_eq!(report.plot_points, 16384);
+    }
+    phases[10] = meter::phase();
     for (i, reading) in epochs.iter_mut().enumerate() {
         preview.replace(&doc, epoch(10 + i as u64));
         preview.open_plot(i % 2);
@@ -206,6 +419,7 @@ pub(super) fn run() {
         "text_boundary",
         "max_to_empty",
         "width_boundary",
+        "independent_turns",
     ]
     .iter()
     .zip(phases)
@@ -224,96 +438,7 @@ pub(super) fn run() {
     }
     println!("max shapes={max_shapes}, vertices={max_vertices}");
     assert_eq!(before, obs);
-    counterexample();
-}
-
-fn counterexample() {
-    let mut syntax = fixtures::syntax(32, false);
-    for (i, trace) in syntax["plots"][0]["traces"]
-        .as_array_mut()
-        .unwrap()
-        .iter_mut()
-        .enumerate()
-    {
-        let text: String = (0..256)
-            .map(|n| char::from_u32(0x100 + (i * 256 + n) as u32).unwrap())
-            .collect();
-        trace["display_label"] = serde_json::json!(text[..text.floor_char_boundary(512)]);
+    for repertoire in 0..3 {
+        unicode_case(repertoire);
     }
-    let doc = fixtures::admit(&syntax);
-    let obs = fixtures::observations(32, 4096);
-    meter::start();
-    let mut preview = readonly_v2::Preview::new(&doc, epoch(0));
-    preview.open_plot(0);
-    for _ in 0..4 {
-        let (report, _, _, _) = frame(&mut preview, &obs, vec![]);
-        assert!(report.guarded && report.plot_points == 0);
-    }
-    let guarded = meter::phase();
-    drop(preview);
-    let dropped = meter::phase();
-    meter::stop();
-    println!("text_guard: {guarded:?}; accounted={}", charge(guarded));
-    bound(guarded);
-    assert_eq!(dropped.live, 0);
-
-    // Diagnostic ONLY: identical low-level widget, explicitly bypassing Preview's
-    // preflight. This is an over-budget reproduction, NOT qualification evidence.
-    meter::start();
-    let context = egui::Context::default();
-    context.options_mut(|o| {
-        o.max_passes = std::num::NonZeroUsize::new(1).unwrap();
-        o.zoom_with_keyboard = false;
-    });
-    let initial = readonly_v2::plot_projection::project(
-        &doc,
-        &obs,
-        epoch(0),
-        readonly_v2::Location::default(),
-        0,
-        512 * 1024,
-    )
-    .unwrap();
-    let mut state = readonly_v2::plot_widget::PlotState::from_definition(
-        initial.identity.clone(),
-        initial.definition,
-        0,
-    );
-    drop(initial);
-    for i in 0..8 {
-        let view = readonly_v2::plot_projection::project(
-            &doc,
-            &obs,
-            epoch(0),
-            readonly_v2::Location::default(),
-            0,
-            512 * 1024,
-        )
-        .unwrap();
-        let mut output = context.run_ui(
-            egui::RawInput {
-                screen_rect: Some(egui::Rect::from_min_size(
-                    egui::Pos2::ZERO,
-                    egui::vec2(1280.0, 960.0),
-                )),
-                ..Default::default()
-            },
-            |ui| {
-                state.paint(ui, &view, i == 0);
-            },
-        );
-        drop(view);
-        drop(context.tessellate(std::mem::take(&mut output.shapes), output.pixels_per_point));
-        output.drop_without_applying_deltas();
-    }
-    let unqualified = meter::phase();
-    drop(context);
-    let dropped = meter::phase();
-    meter::stop();
-    println!(
-        "UNQUALIFIED full-schema counterexample: {unqualified:?}; accounted={}",
-        charge(unqualified)
-    );
-    assert!(charge(unqualified) > readonly_v2::PREVIEW_RESERVATION);
-    assert_eq!(dropped.live, 0);
 }
