@@ -5,6 +5,10 @@ full-label legend and unit-buffer retirement policy in the historical
 [B2 report](PLOT_WIDGET.md). `ACTIVATION_QUALIFIED` remains **false**. The active
 v1 Workbench, APIs, admission, dependencies and Cargo profiles are unchanged.
 
+Follow-up: [B2B geometry qualification](PLOT_GEOMETRY.md) retains these text
+guarantees but finds legal NaN/dev-panic counterexamples. Its combined geometry
+and Unicode measurements do not establish full-schema CPU qualification.
+
 ## Aliases, full text and identity
 
 The built-in legend now uses fixed ASCII `T01` through `T32` in definition order.

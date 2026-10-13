@@ -3,7 +3,8 @@ param(
     [ValidateSet('dev', 'release')][string]$BuildProfile = 'dev',
     [switch]$DiagnosticProvenance,
     [switch]$ProjectionOnly,
-    [switch]$PlotOnly
+    [switch]$PlotOnly,
+    [switch]$GeometryOnly
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -16,6 +17,7 @@ try {
     if ($DiagnosticProvenance -and $BuildProfile -ne 'dev') { throw 'Diagnostic baseline is dev-only' }
     if ($DiagnosticProvenance -and $ProjectionOnly) { throw 'Projection qualification requires the fixed profiles' }
     if ($DiagnosticProvenance -and $PlotOnly) { throw 'Plot qualification requires the fixed profiles' }
+    if ($DiagnosticProvenance -and $GeometryOnly) { throw 'Geometry qualification requires the fixed profiles' }
     $cargoArgs = @('build', '-p', 'lab-workbench', '--locked', '--profile', $BuildProfile, '--message-format=json')
     if ($DiagnosticProvenance) {
         # Reproduce the reviewed pre-fix dependency cfg, without editing Cargo.toml.
@@ -98,6 +100,7 @@ pub(crate) use v1_probe::V1Scene;
 use gui::readonly_v2;
 #[path = "$sourceRoot/gui/readonly_v2/fixtures.rs"] mod fixtures;
 #[path = "$sourceRoot/gui/readonly_v2/plot_fixtures.rs"] mod plot_fixtures;
+#[path = "$sourceRoot/gui/readonly_v2/plot_geometry_fixtures.rs"] mod plot_geometry_fixtures;
 #[path = "$support/v2-renderer-allocation-probe.rs"] mod probe;
 fn main() { probe::run(); }
 "@
@@ -115,15 +118,19 @@ fn main() { probe::run(); }
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot') }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry') }
     if ($ProjectionOnly) { $scenarios = @('projection') }
     if ($PlotOnly) { $scenarios = @('plot') }
+    if ($GeometryOnly) { $scenarios = @('geometry') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE
         $output | Set-Content -LiteralPath (Join-Path $probeDir "$scenario.txt")
         $output
-        if ($result -ne 0) { throw "Renderer probe failed: $variant/$scenario" }
+        if ($scenario -eq 'geometry' -and $result -eq 2) {
+            throw "CPU Plot geometry qualification BLOCKED: see $probeDir/geometry.txt (exit 2)"
+        }
+        if ($result -ne 0) { throw "Renderer probe failed: $variant/$scenario (exit $result)" }
     }
 } finally {
     Pop-Location

@@ -14,6 +14,10 @@ DGUI-4C7B2A replaces the old text refusal with [ASCII curve aliases and lossless
 16-scalar title/label/unit fragments](PLOT_LABEL_MEMORY.md), preserving the current
 Plot viewport across Context retirement. The report separates text containment,
 native memory evidence and remaining full-schema/GPU qualification limits.
+DGUI-4C7B2B records [full-schema CPU geometry counterexamples and allocation
+evidence](PLOT_GEOMETRY.md): legal coincident/extreme data and zoom-out can yield
+nonfinite geometry or a dev tessellation panic. CPU Plot qualification is
+**BLOCKED**, despite the tested memory totals remaining below 8 MiB.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See
