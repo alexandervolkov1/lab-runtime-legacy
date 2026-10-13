@@ -9,6 +9,10 @@ mod navigation_tests;
 mod page;
 #[cfg(test)]
 mod plot_fixtures;
+#[cfg(test)]
+mod plot_geometry_fixtures;
+#[cfg(test)]
+mod plot_geometry_tests;
 pub(crate) mod plot_projection;
 #[cfg(test)]
 mod plot_projection_tests;
