@@ -279,15 +279,15 @@ fn sequences(width: f64) {
     save(&mut rows, "all-details-updates-hover", 0, s);
     s = GeometryStats::default();
     for after_tessellation in [false, true] {
-        let (mut output, report) = preview.run(&ordinary, egui::RawInput::default()).unwrap();
+        let mut output = preview.run(&ordinary, egui::RawInput::default()).unwrap();
+        let report = output.report();
         assert_eq!(report.allocation_faults, 0);
         if after_tessellation {
-            s.max_assign(GeometryStats::inspect(&preview, &mut output, report));
+            s.max_assign(GeometryStats::inspect(&mut output));
         }
         // Model an owner abandoning processing at either CPU boundary. It must
         // release deltas/output before Context retirement, with no output queue.
-        output.drop_without_applying_deltas();
-        preview.retire_context();
+        output.discard();
         s.max_assign(harness::frame(&mut preview, &ordinary, vec![]));
     }
     save(&mut rows, "output-discard", 0, s);
@@ -399,13 +399,14 @@ fn faults() {
         preview.open_plot(0);
         harness::frame(&mut preview, &obs, vec![]);
         meter::fail((lengths[index] - 1) * element_bytes);
-        let (mut output, report) = preview.run(&obs, egui::RawInput::default()).unwrap();
+        let mut output = preview.run(&obs, egui::RawInput::default()).unwrap();
+        let report = output.report();
         meter::assert_fault_consumed();
         assert_eq!(report.allocation_faults, 1);
         assert_eq!(report.geometry_failures, 1);
         assert_eq!(report.geometry_segments, 16_384 - 32 - (lengths[index] - 1));
         let mut present = [false; 32];
-        for shape in &output.shapes {
+        for shape in output.shapes() {
             if let egui::Shape::Mesh(m) = &shape.shape {
                 let i = usize::from(m.vertices[0].color.r()) - 1;
                 assert!(!present[i]);
@@ -416,10 +417,13 @@ fn faults() {
         }
         assert!(!present[index]);
         assert_eq!(present.into_iter().filter(|v| *v).count(), 31);
-        assert!(output.shapes.iter().any(|shape| matches!(&shape.shape,
+        assert!(output.shapes().iter().any(|shape| matches!(&shape.shape,
             egui::Shape::Text(t) if t.galley.text() == "GeometryUnavailable: Allocation (1 traces)")));
-        let stats = GeometryStats::inspect(&preview, &mut output, report);
-        output.drop_without_applying_deltas();
+        let stats = GeometryStats::inspect(&mut output);
+        assert_eq!(
+            output.finish_cpu().unwrap(),
+            readonly_v2::frame::FrameOutcome::CpuOnly { degraded: true }
+        );
         let reading = Some(meter::phase());
         // No in-frame retry; one later caller-requested frame succeeds normally.
         let recovered = harness::frame(&mut preview, &obs, vec![]);
@@ -468,6 +472,12 @@ fn faults() {
         meter::fail(size);
         assert!(preview.run(&obs, egui::RawInput::default()).is_err());
         meter::assert_fault_consumed();
+        assert!(matches!(
+            preview.last_outcome(),
+            Some(readonly_v2::frame::FrameOutcome::Failed(
+                readonly_v2::frame::FrameError::Preparation(_)
+            ))
+        ));
         let reading = Some(meter::phase());
         drop(preview);
         let dropped = meter::phase();

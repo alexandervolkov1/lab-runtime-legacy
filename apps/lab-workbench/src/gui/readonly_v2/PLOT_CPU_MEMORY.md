@@ -1,5 +1,9 @@
 # DGUI-4C7B2C3: CPU Plot memory qualification
 
+Historical C3 qualification/evidence. C4A implements the caller protocol below
+through [enforced frame ownership and texture retirement](FRAME_OWNERSHIP.md);
+see that report for the current API and repeated native measurements.
+
 This is the isolated CPU Preview qualification and the resource-ownership handoff
 for a later, separately reviewed host stage. `ACTIVATION_QUALIFIED = false`.
 No GPU backend, texture handle, host renderer, release, or Runtime work is added.

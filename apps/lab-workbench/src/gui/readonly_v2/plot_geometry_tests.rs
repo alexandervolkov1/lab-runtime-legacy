@@ -10,7 +10,7 @@ fn geometry_frame(
     obs: &RuntimeObservations,
     events: Vec<egui::Event>,
 ) -> GeometryStats {
-    let (mut output, report) = preview
+    let mut output = preview
         .run(
             obs,
             egui::RawInput {
@@ -19,8 +19,8 @@ fn geometry_frame(
             },
         )
         .unwrap();
-    let stats = GeometryStats::inspect(preview, &mut output, report);
-    output.drop_without_applying_deltas();
+    let stats = GeometryStats::inspect(&mut output);
+    output.finish_cpu().unwrap();
     stats
 }
 

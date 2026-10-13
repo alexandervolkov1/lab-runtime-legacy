@@ -27,6 +27,9 @@ DGUI-4C7B2C3 supplies the [CPU memory audit, native sequence evidence and
 frame-ownership handoff](PLOT_CPU_MEMORY.md), including fallible allocation tests
 and transition-frame Context lifetime. The qualification is scoped to the pinned
 Windows/MSVC CPU configuration; host/GPU activation is still separate.
+DGUI-4C7B2C4A enforces [single-frame ownership, Context generations and bounded
+texture retirement](FRAME_OWNERSHIP.md) through a borrowed frame and serial host
+seam. Its mock backend is lifecycle evidence, not GPU qualification.
 
 DGUI-4C7A2 replaces the original all-occurrences `show(Ui, ...)` traversal with
 hierarchical paging and an explicit Context lifetime. See

@@ -7,7 +7,7 @@ const EPOCH: PresentationEpoch = PresentationEpoch {
     revision: 1,
 };
 
-pub(super) fn painted_text(output: &egui::FullOutput) -> Vec<(String, egui::Rect)> {
+pub(super) fn painted_text(shapes: &[egui::epaint::ClippedShape]) -> Vec<(String, egui::Rect)> {
     fn collect(shape: &egui::epaint::Shape, text: &mut Vec<(String, egui::Rect)>) {
         match shape {
             egui::epaint::Shape::Text(s) => {
@@ -22,7 +22,7 @@ pub(super) fn painted_text(output: &egui::FullOutput) -> Vec<(String, egui::Rect
         }
     }
     let mut text = Vec::new();
-    for shape in &output.shapes {
+    for shape in shapes {
         collect(&shape.shape, &mut text);
     }
     text
@@ -33,7 +33,7 @@ fn frame(
     observations: &RuntimeObservations,
     events: Vec<egui::Event>,
 ) -> (RenderReport, Vec<(String, egui::Rect)>) {
-    let (output, report) = preview
+    let output = preview
         .run(
             observations,
             egui::RawInput {
@@ -42,16 +42,17 @@ fn frame(
             },
         )
         .unwrap();
+    let report = output.report();
     assert!(!report.guarded);
     assert!(report.occurrences <= PAGE_SIZE && report.labels <= MAX_LABELS);
     assert!(report.path_nodes <= MAX_PATH_NODES);
     assert!(report.text_bytes <= MAX_TEXT_BYTES && report.widgets <= MAX_WIDGETS);
-    assert!(output.shapes.len() <= MAX_SHAPES);
-    assert_eq!(output.platform_output.num_completed_passes, 1);
-    let text = painted_text(&output);
+    assert!(output.shapes().len() <= MAX_SHAPES);
+    assert_eq!(output.completed_passes(), 1);
+    let text = painted_text(output.shapes());
     assert!(text.len() <= report.labels);
     assert!(text.iter().map(|(s, _)| s.len()).sum::<usize>() <= report.text_bytes);
-    output.drop_without_applying_deltas();
+    output.finish_cpu().unwrap();
     (report, text)
 }
 
@@ -316,14 +317,15 @@ fn budget_guard_precedes_context_creation_and_text_stress_is_bounded() {
     assert!(preview.run(&obs, egui::RawInput::default()).is_err());
     assert!(preview.context.is_none() && preview.previous.is_none());
     preview.set_allowance(NOTICE_RESERVATION);
-    let (output, report) = preview.run(&obs, egui::RawInput::default()).unwrap();
+    let output = preview.run(&obs, egui::RawInput::default()).unwrap();
+    let report = output.report();
     assert!(report.guarded && report.occurrences == 0);
     assert!(
-        painted_text(&output)
+        painted_text(output.shapes())
             .iter()
             .any(|(s, _)| s == "Read-only preview paused: visual reservation unavailable")
     );
-    output.drop_without_applying_deltas();
+    output.finish_cpu().unwrap();
     preview.set_allowance(PREVIEW_RESERVATION);
     let (report, _) = frame(&mut preview, &obs, vec![]);
     assert_eq!(report.occurrences, 4);

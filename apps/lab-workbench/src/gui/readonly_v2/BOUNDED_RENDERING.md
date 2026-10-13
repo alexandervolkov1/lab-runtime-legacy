@@ -10,7 +10,8 @@ bounded work within the SAME 8 MiB, including projection and CPU tessellation.
 [B2A](PLOT_LABEL_MEMORY.md) adds ASCII curve aliases and lossless text-fragment
 navigation with Context retirement, superseding B2's full-label refusal.
 The later [C3 CPU qualification](PLOT_CPU_MEMORY.md) records the current Plot
-memory scope, allocation audit and frame-ownership contract. Zoom
+memory scope, allocation audit and frame-ownership contract. [C4A](FRAME_OWNERSHIP.md)
+enforces that contract with a borrowed frame and bounded texture owner. Zoom
 events are accepted only in Plot mode and never change the preview's font scale.
 
 ## Work limits and reachability

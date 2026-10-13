@@ -29,7 +29,7 @@ pub(super) fn painted(
     // Research harness only: record a library panic as BLOCKED and continue the
     // finite matrix. No production checks or panic handling are changed.
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let (mut output, report) = preview
+        let mut output = preview
             .run(
                 obs,
                 egui::RawInput {
@@ -39,7 +39,7 @@ pub(super) fn painted(
             )
             .unwrap();
         let target = output
-            .shapes
+            .shapes()
             .iter()
             .find_map(|shape| match (&shape.shape, caption) {
                 (egui::Shape::Text(t), Some(caption)) if t.galley.text() == caption => {
@@ -58,8 +58,8 @@ pub(super) fn painted(
                     }),
                 _ => None,
             });
-        let stats = GeometryStats::inspect(preview, &mut output, report);
-        output.drop_without_applying_deltas();
+        let stats = GeometryStats::inspect(&mut output);
+        output.finish_cpu().unwrap();
         (stats, target)
     }));
     match result {
@@ -152,9 +152,9 @@ pub(super) fn read_pages(
         if i > 0 {
             click(preview, obs, "Next fragment", stats);
         }
-        let (mut out, report) = preview.run(obs, egui::RawInput::default()).unwrap();
+        let mut out = preview.run(obs, egui::RawInput::default()).unwrap();
         let hex = out
-            .shapes
+            .shapes()
             .iter()
             .find_map(|shape| match &shape.shape {
                 egui::Shape::Text(t) => t.galley.text().strip_prefix("UTF-8: "),
@@ -168,8 +168,8 @@ pub(super) fn read_pages(
             );
             offset += 1;
         }
-        stats.max_assign(GeometryStats::inspect(preview, &mut out, report));
-        out.drop_without_applying_deltas();
+        stats.max_assign(GeometryStats::inspect(&mut out));
+        out.finish_cpu().unwrap();
     }
     assert_eq!(offset, text.len());
 }
