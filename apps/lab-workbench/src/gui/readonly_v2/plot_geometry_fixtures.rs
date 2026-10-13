@@ -252,6 +252,8 @@ pub(crate) struct GeometryStats {
     pub(crate) indices: usize,
     pub(crate) bad_shape_positions: usize,
     pub(crate) bad_mesh_positions: usize,
+    pub(crate) invalid_meshes: usize,
+    pub(crate) unsupported_shapes: usize,
     pub(crate) panics: usize,
 }
 impl GeometryStats {
@@ -263,10 +265,16 @@ impl GeometryStats {
         self.indices = self.indices.max(other.indices);
         self.bad_shape_positions = self.bad_shape_positions.max(other.bad_shape_positions);
         self.bad_mesh_positions = self.bad_mesh_positions.max(other.bad_mesh_positions);
+        self.invalid_meshes = self.invalid_meshes.max(other.invalid_meshes);
+        self.unsupported_shapes = self.unsupported_shapes.max(other.unsupported_shapes);
         self.panics += other.panics;
     }
     pub(crate) fn finite(self) -> bool {
-        self.bad_shape_positions == 0 && self.bad_mesh_positions == 0 && self.panics == 0
+        self.bad_shape_positions == 0
+            && self.bad_mesh_positions == 0
+            && self.invalid_meshes == 0
+            && self.unsupported_shapes == 0
+            && self.panics == 0
     }
     fn shape(&mut self, shape: &egui::Shape) {
         self.shapes += 1;
@@ -277,17 +285,54 @@ impl GeometryStats {
                 }
             }
             egui::Shape::Path(p) => {
-                self.bad_shape_positions += p.points.iter().filter(|p| !p.is_finite()).count()
+                self.bad_shape_positions += p.points.iter().filter(|p| !p.is_finite()).count();
+                self.bad_shape_positions += usize::from(!p.stroke.width.is_finite());
             }
-            egui::Shape::LineSegment { points, .. } => {
-                self.bad_shape_positions += points.iter().filter(|p| !p.is_finite()).count()
+            egui::Shape::LineSegment { points, stroke } => {
+                self.bad_shape_positions += points.iter().filter(|p| !p.is_finite()).count();
+                self.bad_shape_positions += usize::from(!stroke.width.is_finite());
             }
             egui::Shape::Circle(c) => {
-                self.bad_shape_positions +=
-                    usize::from(!c.center.is_finite() || !c.radius.is_finite())
+                self.bad_shape_positions += usize::from(
+                    !c.center.is_finite() || !c.radius.is_finite() || !c.stroke.width.is_finite(),
+                );
             }
-            egui::Shape::Text(t) => self.bad_shape_positions += usize::from(!t.pos.is_finite()),
-            _ => {}
+            egui::Shape::Ellipse(e) => {
+                self.bad_shape_positions += usize::from(
+                    !e.center.is_finite() || !e.radius.is_finite() || !e.stroke.width.is_finite(),
+                );
+            }
+            egui::Shape::Rect(r) => {
+                self.bad_shape_positions += usize::from(
+                    !r.rect.is_finite()
+                        || !r.angle.is_finite()
+                        || !r.stroke.width.is_finite()
+                        || !r.blur_width.is_finite(),
+                );
+            }
+            egui::Shape::Text(t) => {
+                self.bad_shape_positions += usize::from(!t.pos.is_finite() || !t.angle.is_finite());
+            }
+            egui::Shape::Mesh(m) => {
+                self.bad_shape_positions += m
+                    .vertices
+                    .iter()
+                    .filter(|v| !v.pos.is_finite() || !v.uv.is_finite())
+                    .count();
+                self.invalid_meshes += usize::from(!m.is_valid());
+            }
+            egui::Shape::QuadraticBezier(b) => {
+                self.bad_shape_positions += b.points.iter().filter(|p| !p.is_finite()).count();
+                self.bad_shape_positions += usize::from(!b.stroke.width.is_finite());
+            }
+            egui::Shape::CubicBezier(b) => {
+                self.bad_shape_positions += b.points.iter().filter(|p| !p.is_finite()).count();
+                self.bad_shape_positions += usize::from(!b.stroke.width.is_finite());
+            }
+            // Backend callbacks cannot be CPU-qualified by this inspector.
+            // The isolated preview never emits them. Treat one as a blocker.
+            egui::Shape::Callback(_) => self.unsupported_shapes += 1,
+            egui::Shape::Noop => {}
         }
     }
     pub(crate) fn inspect(
@@ -326,7 +371,7 @@ impl GeometryStats {
                     .iter()
                     .filter(|v| !v.pos.is_finite() || !v.uv.is_finite())
                     .count();
-                assert!(mesh.is_valid());
+                stats.invalid_meshes += usize::from(!mesh.is_valid());
             }
         }
         stats
