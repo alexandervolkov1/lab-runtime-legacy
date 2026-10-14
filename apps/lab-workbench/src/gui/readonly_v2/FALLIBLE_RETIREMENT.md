@@ -1,5 +1,8 @@
 # DGUI-4C7B2C4B2A: fallible retirement and persistent host ownership
 
+C4B2B1 follow-up: [native rendering and healthy GPU lifecycle](NATIVE_GLOW_RENDERING.md).
+This C4B2A report remains the historical CPU/mock qualification baseline.
+
 C4B1 PR #32 was verified at `9c76a020deb599fab6172b25260c695e090a136b`,
 made Ready and merged normally as `2e516f718fa1cfd3e3d38fae56fe8a6e2afa3641`.
 The approved HEAD is its second parent. Main was synchronized and clean before
