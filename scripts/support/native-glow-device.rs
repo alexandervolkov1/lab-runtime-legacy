@@ -10,6 +10,8 @@
 
 use crate::readonly_v2::{
     completion::{Completion, WaitFailure, WaitRequest},
+    deletion::{DeleteDisposition, DeletionFailure, DeletionResult, ObjectIdentity, ObjectKind},
+    frame::ContextGeneration,
     texture_owner::TextureKey,
 };
 use eframe::{
@@ -35,6 +37,7 @@ pub(super) const WIDTH: usize = 1280;
 pub(super) const HEIGHT: usize = 960;
 const BUFFER_BYTES: usize = 2 * 1024 * 1024;
 const STAGING_BYTES: usize = 4 * 1024 * 1024;
+pub(super) const READBACK_BYTES: usize = WIDTH * HEIGHT * 4;
 type Result<T> = std::result::Result<T, String>;
 
 #[derive(Default, Debug, Clone)]
@@ -101,10 +104,21 @@ pub(super) struct Device {
     textures: [Option<Texture>; 8],
     pipeline: Pipeline,
     fence: Option<glow::Fence>,
+    generation: Option<ContextGeneration>,
+    deletion: Option<DeletionFailure>,
+    pub delete_fault: Option<(ObjectKind, DeleteDisposition, usize)>,
+    pub delete_calls: usize,
+    pub wait_fault: Option<Completion>,
+    terminal_wait: Option<Completion>,
+    pub teardown_fault: bool,
+    delete_matches: usize,
+    is_vertex_array: unsafe extern "system" fn(u32) -> u8,
     busy: bool,
     pub fault: Option<String>,
     device_lost: bool,
-    staging: Vec<u8>,
+    staging: Box<[u8]>,
+    staging_len: usize,
+    readback: Box<[u8]>,
     pub counters: Counters,
 }
 impl Device {
@@ -171,6 +185,19 @@ impl Device {
                     .get_proc_address(&CString::new(name).expect("GL symbol contains no NUL"))
             })
         };
+        let is_vao = config
+            .display()
+            .get_proc_address(&CString::new("glIsVertexArray").unwrap());
+        if is_vao.is_null() {
+            return Err("glIsVertexArray unavailable".into());
+        }
+        // SAFETY: desktop GL 3.3 glIsVertexArray has GLuint -> GLboolean with
+        // the Windows system ABI. The live display supplies the checked symbol.
+        let is_vertex_array = unsafe {
+            std::mem::transmute::<*const std::ffi::c_void, unsafe extern "system" fn(u32) -> u8>(
+                is_vao,
+            )
+        };
         let mut device = Self {
             gl,
             context,
@@ -180,10 +207,21 @@ impl Device {
             textures: [None; 8],
             pipeline: Pipeline::default(),
             fence: None,
+            generation: None,
+            deletion: None,
+            delete_fault: None,
+            delete_calls: 0,
+            wait_fault: None,
+            terminal_wait: None,
+            teardown_fault: false,
+            delete_matches: 0,
+            is_vertex_array,
             busy: false,
             fault: None,
             device_lost: false,
-            staging: Vec::new(),
+            staging: Box::default(),
+            staging_len: 0,
+            readback: Box::default(),
             counters: Counters::default(),
         };
         device.check("context creation")?;
@@ -220,6 +258,9 @@ impl Device {
             Ok(())
         }
     }
+    pub fn current_owner(&self) -> bool {
+        self.current().is_ok()
+    }
     fn check(&mut self, operation: &str) -> Result<()> {
         self.current()?;
         // SAFETY: exact creating context is current. No library error consumer.
@@ -235,6 +276,12 @@ impl Device {
         }
     }
     fn enter(&mut self) -> Result<()> {
+        if self.terminal_wait.is_some() {
+            return Err("terminal completion prohibits GPU work".into());
+        }
+        if self.deletion.is_some() {
+            return Err("unresolved deletion prohibits GPU work".into());
+        }
         if let Some(fault) = &self.fault {
             return Err(fault.clone());
         }
@@ -251,26 +298,35 @@ impl Device {
         if bytes > STAGING_BYTES {
             return Err("host staging bound".into());
         }
-        self.staging.clear();
-        if self.staging.capacity() < bytes {
-            let old_capacity = self.staging.capacity();
-            self.staging
-                .try_reserve_exact(bytes)
-                .map_err(|e| e.to_string())?;
+        self.staging_len = 0;
+        if self.staging.len() < bytes {
+            let old = self.staging.len();
+            // Exact logical storage, no geometric growth. Old and new coexist
+            // only for this assignment; both are bounded by STAGING_BYTES.
+            self.staging = vec![0; bytes].into_boxed_slice();
             self.counters.staging_realloc_overlap = self
                 .counters
                 .staging_realloc_overlap
-                .max(old_capacity + self.staging.capacity());
+                .max(old + self.staging.len());
         }
-        self.counters.staging_capacity = self.staging.capacity();
-        self.counters.peak_staging_capacity = self
-            .counters
-            .peak_staging_capacity
-            .max(self.staging.capacity());
+        self.counters.staging_capacity = self.staging.len();
+        self.counters.peak_staging_capacity =
+            self.counters.peak_staging_capacity.max(self.staging.len());
         Ok(())
+    }
+    fn append(&mut self, bytes: &[u8]) {
+        let end = self
+            .staging_len
+            .checked_add(bytes.len())
+            .expect("validated packing length");
+        self.staging[self.staging_len..end].copy_from_slice(bytes);
+        self.staging_len = end;
     }
     pub fn upload(&mut self, key: TextureKey, delta: &egui::epaint::ImageDelta) -> Result<()> {
         self.enter()?;
+        if self.generation.is_some_and(|g| g != key.generation) {
+            return Err("generation still owned".into());
+        }
         if self.fence.is_some()
             || self
                 .textures
@@ -295,8 +351,9 @@ impl Device {
             return Err("invalid or unsupported image".into());
         }
         self.stage(bytes)?;
+        self.generation = Some(key.generation);
         for pixel in &image.pixels {
-            self.staging.extend_from_slice(&pixel.to_array());
+            self.append(&pixel.to_array());
         }
         let existing = self
             .textures
@@ -372,7 +429,7 @@ impl Device {
                     height,
                     glow::RGBA,
                     glow::UNSIGNED_BYTE,
-                    glow::PixelUnpackData::Slice(Some(&self.staging)),
+                    glow::PixelUnpackData::Slice(Some(&self.staging[..self.staging_len])),
                 );
             }
             self.check("partial upload")?;
@@ -389,7 +446,7 @@ impl Device {
                     0,
                     glow::RGBA,
                     glow::UNSIGNED_BYTE,
-                    glow::PixelUnpackData::Slice(Some(&self.staging)),
+                    glow::PixelUnpackData::Slice(Some(&self.staging[..self.staging_len])),
                 );
             }
             self.check("full upload")?;
@@ -448,7 +505,7 @@ impl Device {
             }
             self.check("compile shader")?;
             if !unsafe { self.gl.get_shader_compile_status(shader) } {
-                return Err(unsafe { self.gl.get_shader_info_log(shader) });
+                return Err("fixed shader compilation failed".into());
             }
         }
         let program = unsafe { self.gl.create_program()? };
@@ -464,7 +521,7 @@ impl Device {
         }
         self.check("link program")?;
         if !unsafe { self.gl.get_program_link_status(program) } {
-            return Err(unsafe { self.gl.get_program_info_log(program) });
+            return Err("fixed program linking failed".into());
         }
         let vao = unsafe { self.gl.create_vertex_array()? };
         self.pipeline.vao = Some(vao);
@@ -533,7 +590,8 @@ impl Device {
             self.counters.buffer_reuses += 1;
         }
         unsafe {
-            self.gl.buffer_sub_data_u8_slice(target, 0, &self.staging);
+            self.gl
+                .buffer_sub_data_u8_slice(target, 0, &self.staging[..self.staging_len]);
         }
         self.check("buffer upload")
     }
@@ -544,6 +602,28 @@ impl Device {
         scale: f32,
     ) -> Result<()> {
         self.enter()?;
+        if self.generation.is_some_and(|g| g != generation) {
+            return Err("generation still owned".into());
+        }
+        // Bound iteration and total packing before any new pipeline allocation.
+        // Native adapter limits leave Preview/B1/FiniteTraceItem unchanged.
+        if meshes.len() > crate::readonly_v2::MAX_SHAPES
+            || meshes
+                .iter()
+                .try_fold((0usize, 0usize), |(v, i), p| {
+                    let egui::epaint::Primitive::Mesh(m) = &p.primitive else {
+                        return None;
+                    };
+                    Some((
+                        v.checked_add(m.vertices.len().checked_mul(20)?)?,
+                        i.checked_add(m.indices.len().checked_mul(4)?)?,
+                    ))
+                })
+                .is_none_or(|(v, i)| v > BUFFER_BYTES || i > BUFFER_BYTES)
+        {
+            return Err("native mesh work bound".into());
+        }
+        self.generation = Some(generation);
         if scale != 1.0 || self.fence.is_some() {
             return Err("scale/fence conflict".into());
         }
@@ -611,16 +691,16 @@ impl Device {
             )?;
             for vertex in &mesh.vertices {
                 for value in [vertex.pos.x, vertex.pos.y, vertex.uv.x, vertex.uv.y] {
-                    self.staging.extend_from_slice(&value.to_ne_bytes());
+                    self.append(&value.to_ne_bytes());
                 }
-                self.staging.extend_from_slice(&vertex.color.to_array());
+                self.append(&vertex.color.to_array());
             }
-            self.buffer(glow::ARRAY_BUFFER, self.staging.len())?;
+            self.buffer(glow::ARRAY_BUFFER, self.staging_len)?;
             self.stage(mesh.indices.len().checked_mul(4).ok_or("index overflow")?)?;
             for index in &mesh.indices {
-                self.staging.extend_from_slice(&index.to_ne_bytes());
+                self.append(&index.to_ne_bytes());
             }
-            self.buffer(glow::ELEMENT_ARRAY_BUFFER, self.staging.len())?;
+            self.buffer(glow::ELEMENT_ARRAY_BUFFER, self.staging_len)?;
             let min = primitive
                 .clip_rect
                 .min
@@ -656,71 +736,76 @@ impl Device {
         self.counters.frames += 1;
         Ok(())
     }
+    fn latch_wait(&mut self, completion: Completion) -> Completion {
+        if !matches!(completion, Completion::Quiesced | Completion::Timeout) {
+            self.terminal_wait = Some(completion);
+        }
+        completion
+    }
     pub fn wait(&mut self, request: WaitRequest) -> Completion {
+        if let Some(completion) = self.terminal_wait {
+            return completion;
+        }
         // An operation error does not excuse missing its cleanup fence. A GL
         // error remains sticky for admission, but a genuine fence may prove idle.
         if self.device_lost {
-            return Completion::DeviceLost;
+            return self.latch_wait(Completion::DeviceLost);
         }
         if self.check("wait entry").is_err() {
-            return Completion::Failed(WaitFailure::WaitError);
+            return self.latch_wait(Completion::Failed(WaitFailure::WaitError));
         }
+        if self.generation.is_some_and(|g| g != request.generation) {
+            return self.latch_wait(Completion::Failed(WaitFailure::InvalidFence));
+        }
+        self.generation = Some(request.generation);
         if self
             .textures
             .iter()
             .flatten()
             .any(|t| t.key.generation != request.generation)
         {
-            return Completion::Failed(WaitFailure::InvalidFence);
+            return self.latch_wait(Completion::Failed(WaitFailure::InvalidFence));
         }
         if self.fence.is_none() {
             // SAFETY: fence follows ALL dependent commands in this same context.
             let fence = match unsafe { self.gl.fence_sync(glow::SYNC_GPU_COMMANDS_COMPLETE, 0) } {
                 Ok(f) if !f.0.is_null() => f,
-                _ => return Completion::Failed(WaitFailure::MissingFence),
+                _ => return self.latch_wait(Completion::Failed(WaitFailure::MissingFence)),
             };
             self.fence = Some(fence);
             self.added();
             self.counters.fences_created += 1;
             if self.check("fence creation").is_err() {
-                return Completion::Failed(WaitFailure::InvalidFence);
+                return self.latch_wait(Completion::Failed(WaitFailure::InvalidFence));
             }
             if !unsafe { self.gl.is_sync(fence) } {
-                return Completion::Failed(WaitFailure::InvalidFence);
+                return self.latch_wait(Completion::Failed(WaitFailure::InvalidFence));
             }
             if self.check("validate fence").is_err() {
-                return Completion::Failed(WaitFailure::InvalidFence);
+                return self.latch_wait(Completion::Failed(WaitFailure::InvalidFence));
             }
             unsafe {
                 self.gl.flush();
             }
             self.counters.flushes += 1;
             if self.check("flush").is_err() {
-                return Completion::Failed(WaitFailure::WaitError);
+                return self.latch_wait(Completion::Failed(WaitFailure::WaitError));
             }
+        }
+        // Deterministic injection AFTER a real owned fence and flush. It never
+        // calls a wait with an invalid pointer or fabricates a Quiesced proof.
+        if let Some(completion) = self.wait_fault {
+            return self.latch_wait(completion);
         }
         let nanos = request.timeout.as_nanos().min(5_000_000) as i32;
         let fence = self.fence.unwrap();
         let status = unsafe { self.gl.client_wait_sync(fence, 0, nanos) };
         self.counters.waits += 1;
         if self.check("client wait").is_err() {
-            return Completion::Failed(WaitFailure::WaitError);
+            return self.latch_wait(Completion::Failed(WaitFailure::WaitError));
         }
         match status {
             glow::ALREADY_SIGNALED | glow::CONDITION_SATISFIED => {
-                unsafe {
-                    self.gl.delete_sync(fence);
-                }
-                if self.check("delete completed fence").is_err() {
-                    return Completion::Failed(WaitFailure::WaitError);
-                }
-                if unsafe { self.gl.is_sync(fence) } || self.check("verify fence deletion").is_err()
-                {
-                    return Completion::Failed(WaitFailure::WaitError);
-                }
-                self.fence = None;
-                self.removed();
-                self.counters.fences_deleted += 1;
                 self.busy = false;
                 self.counters.completions += 1;
                 Completion::Quiesced
@@ -729,59 +814,173 @@ impl Device {
                 self.counters.timeouts += 1;
                 Completion::Timeout
             }
-            _ => Completion::Failed(WaitFailure::WaitError),
+            _ => self.latch_wait(Completion::Failed(WaitFailure::WaitError)),
         }
     }
-    pub fn free(&mut self, key: TextureKey) -> Result<()> {
-        self.check("free entry")?;
-        if self.busy || self.fence.is_some() {
-            return Err("free before Quiesced".into());
+    fn identity(
+        &self,
+        generation: ContextGeneration,
+        kind: ObjectKind,
+        name: u64,
+        texture: Option<TextureKey>,
+    ) -> ObjectIdentity {
+        ObjectIdentity {
+            generation,
+            kind,
+            name,
+            texture,
         }
-        let index = self
-            .textures
-            .iter()
-            .position(|t| t.is_some_and(|t| t.key == key))
-            .ok_or("free unknown key")?;
-        let texture = self.textures[index].unwrap();
-        // SAFETY: all dependent work proved complete; owned nonzero texture.
-        unsafe {
-            self.gl.bind_texture(glow::TEXTURE_2D, None);
-            self.gl.delete_texture(texture.name);
+    }
+    fn failed(
+        &mut self,
+        object: ObjectIdentity,
+        disposition: DeleteDisposition,
+    ) -> DeletionFailure {
+        let failure = DeletionFailure {
+            object,
+            disposition,
+        };
+        *self.deletion.get_or_insert(failure)
+    }
+    /// No retry after either failure disposition. The handle ledger remains exact;
+    /// an ambiguous handle is retained as an obligation, never used again.
+    fn delete(
+        &mut self,
+        object: ObjectIdentity,
+        call: impl FnOnce(&glow::Context),
+        exists: impl FnOnce(&Self) -> bool,
+    ) -> DeletionResult {
+        if let Some(failure) = self.deletion {
+            return Err(failure);
         }
-        self.check("delete texture")?;
-        if unsafe { self.gl.is_texture(texture.name) } {
-            return Err("texture remains after deletion".into());
+        if self.terminal_wait.is_some()
+            || self.busy
+            || self.device_lost
+            || self.check("deletion entry").is_err()
+        {
+            return Err(self.failed(object, DeleteDisposition::NotStarted));
         }
-        self.check("verify texture deletion")?;
-        self.textures[index] = None;
+        let inject = if self.delete_fault.is_some_and(|f| f.0 == object.kind) {
+            self.delete_matches += 1;
+            self.delete_fault
+                .filter(|f| f.2 == self.delete_matches)
+                .map(|f| f.1)
+        } else {
+            None
+        };
+        if inject == Some(DeleteDisposition::NotStarted) {
+            return Err(self.failed(object, DeleteDisposition::NotStarted));
+        }
+        self.delete_calls += 1;
+        call(&self.gl);
+        if self.check("object deletion").is_err() || inject == Some(DeleteDisposition::Ambiguous) {
+            return Err(self.failed(object, DeleteDisposition::Ambiguous));
+        }
+        let remains = exists(self);
+        if self.check("deletion proof query").is_err() || remains {
+            return Err(self.failed(object, DeleteDisposition::Ambiguous));
+        }
         self.removed();
-        self.counters.textures_deleted += 1;
-        self.counters.texture_payload -= texture.size[0] * texture.size[1] * 4;
-        if self.textures.iter().all(Option::is_none) {
-            self.release_pipeline()?;
-            self.counters.generations_released += 1;
+        Ok(())
+    }
+    pub fn release_frame(&mut self, generation: ContextGeneration) -> DeletionResult {
+        if let Some(failure) = self.deletion {
+            return Err(failure);
+        }
+        if let Some(fence) = self.fence {
+            let creating_generation = self.generation.expect("registered fence generation");
+            let object = self.identity(
+                creating_generation,
+                ObjectKind::Fence,
+                fence.0 as usize as u64,
+                None,
+            );
+            if generation != creating_generation {
+                return Err(self.failed(object, DeleteDisposition::NotStarted));
+            }
+            // SAFETY: delete checks currentness/quiescence, only one call per
+            // identity. is_sync observes the original pointer without reuse.
+            self.delete(
+                object,
+                |gl| unsafe { gl.delete_sync(fence) },
+                |d| unsafe { d.gl.is_sync(fence) },
+            )?;
+            self.fence = None;
+            self.counters.fences_deleted += 1;
         }
         Ok(())
     }
-    fn release_pipeline(&mut self) -> Result<()> {
-        if self.busy || self.fence.is_some() {
-            return Err("pipeline still busy".into());
+    pub fn free(&mut self, key: TextureKey) -> DeletionResult {
+        if let Some(failure) = self.deletion {
+            return Err(failure);
         }
-        // SAFETY: no GPU work; unbind references before deleting owned objects.
+        let Some(index) = self
+            .textures
+            .iter()
+            .position(|t| t.is_some_and(|t| t.key == key))
+        else {
+            // An admitted upload rejected before native allocation has no handle.
+            return Ok(());
+        };
+        let texture = self.textures[index].unwrap();
+        let object = self.identity(
+            key.generation,
+            ObjectKind::Texture,
+            texture.name.0.get() as u64,
+            Some(key),
+        );
+        // SAFETY: checked current context, no shared context or FBO attachment;
+        // only TEXTURE0/2D is used. Remove its binding before the one delete.
+        self.delete(
+            object,
+            |gl| unsafe {
+                gl.bind_texture(glow::TEXTURE_2D, None);
+                gl.delete_texture(texture.name);
+            },
+            |d| unsafe { d.gl.is_texture(texture.name) },
+        )?;
+        self.textures[index] = None;
+        self.counters.textures_deleted += 1;
+        self.counters.texture_payload -= texture.size[0] * texture.size[1] * 4;
+        Ok(())
+    }
+    pub fn release_generation(&mut self, generation: ContextGeneration) -> DeletionResult {
+        if let Some(failure) = self.deletion {
+            return Err(failure);
+        }
+        let generation_object = self.identity(generation, ObjectKind::Generation, 0, None);
+        if self.generation.is_some_and(|g| g != generation)
+            || self.busy
+            || self.fence.is_some()
+            || self.textures.iter().any(Option::is_some)
+            || self.check("generation release").is_err()
+        {
+            return Err(self.failed(generation_object, DeleteDisposition::NotStarted));
+        }
+        // SAFETY: one unshared current context; unbind program and VAO before
+        // deletion. Deleting VAO removes its VBO/EBO attachment references.
         unsafe {
             self.gl.use_program(None);
             self.gl.bind_vertex_array(None);
             self.gl.bind_buffer(glow::ARRAY_BUFFER, None);
         }
-        self.check("unbind pipeline")?;
+        if self.check("unbind pipeline").is_err() {
+            return Err(self.failed(generation_object, DeleteDisposition::NotStarted));
+        }
         if let Some(vao) = self.pipeline.vao {
-            unsafe {
-                self.gl.delete_vertex_array(vao);
-            }
-            self.check("delete VAO")?;
+            let object = self.identity(
+                generation,
+                ObjectKind::VertexArray,
+                vao.0.get() as u64,
+                None,
+            );
+            self.delete(
+                object,
+                |gl| unsafe { gl.delete_vertex_array(vao) },
+                |d| unsafe { (d.is_vertex_array)(vao.0.get()) != 0 },
+            )?;
             self.pipeline.vao = None;
             self.counters.vaos_deleted += 1;
-            self.removed();
         }
         for vertex in [true, false] {
             if let Some(buffer) = if vertex {
@@ -789,13 +988,13 @@ impl Device {
             } else {
                 self.pipeline.ebo
             } {
-                unsafe {
-                    self.gl.delete_buffer(buffer);
-                }
-                self.check("delete buffer")?;
-                if unsafe { self.gl.is_buffer(buffer) } {
-                    return Err("buffer remains".into());
-                }
+                let object =
+                    self.identity(generation, ObjectKind::Buffer, buffer.0.get() as u64, None);
+                self.delete(
+                    object,
+                    |gl| unsafe { gl.delete_buffer(buffer) },
+                    |d| unsafe { d.gl.is_buffer(buffer) },
+                )?;
                 if vertex {
                     self.pipeline.vbo = None;
                     self.counters.vbo_bytes = 0;
@@ -803,44 +1002,91 @@ impl Device {
                     self.pipeline.ebo = None;
                     self.counters.ebo_bytes = 0;
                 }
-                self.removed();
                 self.counters.buffers_deleted += 1;
             }
         }
         if let Some(program) = self.pipeline.program {
-            unsafe {
-                self.gl.delete_program(program);
-            }
-            self.check("delete program")?;
-            if unsafe { self.gl.is_program(program) } {
-                return Err("program remains".into());
-            }
+            let object = self.identity(
+                generation,
+                ObjectKind::Program,
+                program.0.get() as u64,
+                None,
+            );
+            self.delete(
+                object,
+                |gl| unsafe { gl.delete_program(program) },
+                |d| unsafe { d.gl.is_program(program) },
+            )?;
             self.pipeline.program = None;
             self.counters.programs_deleted += 1;
-            self.removed();
         }
         for index in 0..2 {
             if let Some(shader) = self.pipeline.shaders[index] {
-                unsafe {
-                    self.gl.delete_shader(shader);
-                }
-                self.check("delete shader")?;
-                if unsafe { self.gl.is_shader(shader) } {
-                    return Err("shader remains".into());
-                }
+                let object =
+                    self.identity(generation, ObjectKind::Shader, shader.0.get() as u64, None);
+                self.delete(
+                    object,
+                    |gl| unsafe { gl.delete_shader(shader) },
+                    |d| unsafe { d.gl.is_shader(shader) },
+                )?;
                 self.pipeline.shaders[index] = None;
                 self.counters.shaders_deleted += 1;
-                self.removed();
             }
         }
-        self.check("pipeline deletion complete")
+        self.generation = None;
+        self.counters.generations_released += 1;
+        Ok(())
     }
-    pub fn readback(&mut self) -> Result<Vec<u8>> {
+    /// Bounded snapshot of remaining obligations, including one latched ambiguous
+    /// identity. Confirmed objects are absent; names are never recreated here.
+    pub fn ledger(&self) -> [Option<ObjectIdentity>; 15] {
+        let mut objects = [None; 15];
+        let Some(generation) = self.generation else {
+            return objects;
+        };
+        for (slot, texture) in self.textures.iter().enumerate() {
+            objects[slot] = texture.map(|t| {
+                self.identity(
+                    generation,
+                    ObjectKind::Texture,
+                    t.name.0.get() as u64,
+                    Some(t.key),
+                )
+            });
+        }
+        objects[8] = self
+            .pipeline
+            .vao
+            .map(|n| self.identity(generation, ObjectKind::VertexArray, n.0.get() as u64, None));
+        objects[9] = self
+            .pipeline
+            .vbo
+            .map(|n| self.identity(generation, ObjectKind::Buffer, n.0.get() as u64, None));
+        objects[10] = self
+            .pipeline
+            .ebo
+            .map(|n| self.identity(generation, ObjectKind::Buffer, n.0.get() as u64, None));
+        objects[11] = self
+            .pipeline
+            .program
+            .map(|n| self.identity(generation, ObjectKind::Program, n.0.get() as u64, None));
+        for i in 0..2 {
+            objects[12 + i] = self.pipeline.shaders[i]
+                .map(|n| self.identity(generation, ObjectKind::Shader, n.0.get() as u64, None));
+        }
+        objects[14] = self
+            .fence
+            .map(|n| self.identity(generation, ObjectKind::Fence, n.0 as usize as u64, None));
+        objects
+    }
+    pub fn readback(&mut self) -> Result<&[u8]> {
         self.enter()?;
         if self.busy || self.fence.is_some() {
             return Err("readback before completion".into());
         }
-        let mut bytes = vec![0; WIDTH * HEIGHT * 4];
+        if self.readback.is_empty() {
+            self.readback = vec![0; READBACK_BYTES].into_boxed_slice();
+        }
         // SAFETY: exact framebuffer-sized output; pack buffer disabled. This is
         // controlled verification after a real fence, never completion by readback.
         unsafe {
@@ -855,11 +1101,11 @@ impl Device {
                 HEIGHT as i32,
                 glow::RGBA,
                 glow::UNSIGNED_BYTE,
-                glow::PixelPackData::Slice(Some(&mut bytes)),
+                glow::PixelPackData::Slice(Some(&mut self.readback)),
             );
         }
         self.check("framebuffer readback")?;
-        Ok(bytes)
+        Ok(&self.readback)
     }
     pub fn present(&mut self) -> Result<()> {
         self.enter()?;
@@ -873,13 +1119,20 @@ impl Device {
         if self.busy || self.fence.is_some() || self.textures.iter().any(Option::is_some) {
             return Err("unresolved GL ownership".into());
         }
-        self.release_pipeline()?;
+        if self.pipeline.program.is_some() || self.generation.is_some() || self.deletion.is_some() {
+            return Err("unreleased generation or deletion obligation".into());
+        }
         if self.counters.objects != 0 {
             return Err("own GL objects remain".into());
         }
-        self.staging = Vec::new();
+        self.staging = Box::default();
+        self.staging_len = 0;
+        self.readback = Box::default();
         self.counters.staging_capacity = 0;
         self.check("healthy close")?;
+        if self.teardown_fault {
+            return Err("NativeContextTeardown: injected failure before make-not-current".into());
+        }
         // No GL call is permitted beyond this point. Session has no registered
         // generation; its subsequent Drop cannot call backend free again.
         self.context

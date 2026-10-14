@@ -2,6 +2,9 @@
 #![allow(dead_code, reason = "isolated pending activation qualification")]
 
 pub(crate) mod completion;
+pub(crate) mod deletion;
+#[cfg(test)]
+mod deletion_tests;
 mod finite_trace;
 #[cfg(test)]
 mod fixtures;

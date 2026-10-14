@@ -96,10 +96,17 @@ impl FrameBackend for Mock {
         }
         result
     }
-    fn free(&mut self, key: TextureKey) {
+    fn release_frame(&mut self, _: ContextGeneration) -> super::deletion::DeletionResult {
+        Ok(())
+    }
+    fn release_generation(&mut self, _: ContextGeneration) -> super::deletion::DeletionResult {
+        Ok(())
+    }
+    fn free(&mut self, key: TextureKey) -> super::deletion::DeletionResult {
         let mut log = self.0.borrow_mut();
         assert!(!log.busy, "free before final dependent work");
         log.events.push(Event::Free(key));
+        Ok(())
     }
 }
 

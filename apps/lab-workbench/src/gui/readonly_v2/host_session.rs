@@ -1,6 +1,7 @@
 //! Persistent serial owner outside Preview; no GPU or native context implementation.
 use super::{
     completion::{WaitObservation, WaitPolicy, WaitPurpose},
+    deletion::DeletionFailure,
     frame::{ContextGeneration, FrameData, FrameError, FrameOutcome},
     texture_owner::{FrameBackend, TextureOwner},
 };
@@ -27,6 +28,8 @@ pub(crate) struct RetirementStatus {
     pub(crate) initial_wait: WaitObservation,
     /// Most recent cleanup observation, distinct from the original frame error.
     pub(crate) wait: WaitObservation,
+    /// First deletion failure; independent of execution and completion evidence.
+    pub(crate) deletion: Option<DeletionFailure>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -133,6 +136,7 @@ impl<B: FrameBackend> HostSession<B> {
                 frame,
                 initial_wait: self.textures.last_wait,
                 wait: self.textures.last_wait,
+                deletion: self.textures.deletion,
             },
             _payload: payload,
         });
@@ -141,7 +145,9 @@ impl<B: FrameBackend> HostSession<B> {
     fn release_if_quiesced(&mut self) -> CleanupOutcome {
         if let Some(pending) = &mut self.pending {
             pending.status.wait = self.textures.last_wait;
-            if self.textures.release() {
+            let released = self.textures.release();
+            pending.status.deletion = self.textures.deletion;
+            if released {
                 self.last = CleanupOutcome::Retired(pending.status);
                 // Free backend keys first, then CPU output, then its Context.
                 let mut retired = self.pending.take().unwrap();

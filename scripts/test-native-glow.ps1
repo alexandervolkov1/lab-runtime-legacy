@@ -1,5 +1,5 @@
 # Native GL smoke is deliberately separate from the allocation-meter processes.
-param([ValidateSet('dev','release')][string]$BuildProfile = 'dev', [switch]$Pending)
+param([ValidateSet('dev','release')][string]$BuildProfile = 'dev', [switch]$Pending, [switch]$Faults)
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 Push-Location $repo
@@ -53,8 +53,10 @@ fn main() { native_glow::run(); }
 "@
     [IO.File]::WriteAllText($source, $wrapper, [Text.UTF8Encoding]::new($false))
     $directory = if ($BuildProfile -eq 'dev') { 'debug' } else { 'release' }
-    $flags = if ($BuildProfile -eq 'dev') { @('-C','debug-assertions=yes','-C','overflow-checks=yes') } else { @('-C','opt-level=3','-C','debug-assertions=no','-C','overflow-checks=no') }
+    $flags = @('-C','debuginfo=2') + $(if ($BuildProfile -eq 'dev') { @('-C','debug-assertions=yes','-C','overflow-checks=yes') } else { @('-C','opt-level=3','-C','debug-assertions=no','-C','overflow-checks=no') })
     $binary = Join-Path $probeDir 'native-glow.exe'
+    $map = Join-Path $probeDir 'native-glow.map'
+    $flags += @('-C', ('link-arg=/MAP:' + $map))
     & rustc --edition=2024 -D warnings $source @externs @flags -L "dependency=$(Join-Path $repo "target/$directory/deps")" -o $binary
     if ($LASTEXITCODE -ne 0) { throw 'Native GL launcher compilation failed' }
     & clippy-driver --edition=2024 -D warnings -W clippy::all -W missing-docs --emit=metadata $source @externs @flags -L "dependency=$(Join-Path $repo "target/$directory/deps")" -o (Join-Path $probeDir 'clippy.rmeta')
@@ -62,31 +64,45 @@ fn main() { native_glow::run(); }
     $artifacts | Where-Object { $_.target.name -in @('eframe','egui','glow','glutin','glutin_winit','winit','raw_window_handle') } | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $probeDir 'artifacts.json')
     # A retained unresolved root must NOT unwind normally. A separate watchdog
     # observes it and terminates only this child; that is BLOCKED, never cleanup.
-    $scenario = if ($Pending) { 'pending' } else { 'smoke' }
-    $out = Join-Path $probeDir "$scenario.txt"
-    $err = Join-Path $probeDir "$scenario-stderr.txt"
-    $launch = @{ FilePath=$binary; PassThru=$true; WindowStyle='Hidden'; RedirectStandardOutput=$out; RedirectStandardError=$err }
-    if ($Pending) { $launch.ArgumentList = '--pending' }
-    $process = Start-Process @launch
-    $deadline = [Diagnostics.Stopwatch]::StartNew()
-    try {
-        do {
-            Start-Sleep -Milliseconds 100
+    $scenarios = if ($Faults) { @('timeout-proof','wait-failed','missing-fence','invalid-fence','device-loss','partial-texture','original-error','native-teardown') + @('texture','buffer','shader','program','vao','fence' | ForEach-Object { "$($_)-before"; "$($_)-after" }) } elseif ($Pending) { @('pending') } else { @('smoke') }
+    foreach ($scenario in $scenarios) {
+        $out = Join-Path $probeDir "$scenario.txt"
+        $err = Join-Path $probeDir "$scenario-stderr.txt"
+        $launch = @{ FilePath=$binary; PassThru=$true; WindowStyle='Hidden'; RedirectStandardOutput=$out; RedirectStandardError=$err }
+        if ($scenario -eq 'pending') { $launch.ArgumentList = '--pending' }
+        elseif ($scenario -ne 'smoke') { $launch.ArgumentList = "--fault=$scenario" }
+        $process = Start-Process @launch
+        $deadline = [Diagnostics.Stopwatch]::StartNew()
+        try {
+            do {
+                Start-Sleep -Milliseconds 100
+                [string]$runText = Get-Content -LiteralPath $out -Raw
+                $process.Refresh()
+            } while (-not $process.HasExited -and $runText -notmatch 'PENDING_READY|TERMINAL GPU LIFECYCLE BLOCKED:.*native root retained' -and $deadline.Elapsed.TotalSeconds -lt 30)
+            if ($process.HasExited) { $process.WaitForExit() }
             [string]$runText = Get-Content -LiteralPath $out -Raw
+            $runText
+            if ($runText -match 'RUST_RESIDUAL_ATTRIBUTION') {
+                $mapped = Join-Path $probeDir "$scenario-attribution.txt"
+                & (Join-Path $PSScriptRoot 'resolve-native-allocations.ps1') -Map $map -Transcript $out | Set-Content -LiteralPath $mapped
+                Get-Content -LiteralPath $mapped
+            }
+            Get-Content -LiteralPath $err
+            if ($Faults -and $scenario -ne 'timeout-proof') {
+                if ($process.HasExited -or $runText -notmatch 'PENDING_READY current=true' -or $runText -notmatch "FAULT $scenario" -or $runText -notmatch 'gl_errors: 0') { throw "Fault ownership witness failed: $scenario" }
+                if ($scenario -eq 'native-teardown' -and $runText -notmatch 'objects: 0,') { throw 'Native teardown injection retained GPU objects' }
+                Write-Output "FAULT $scenario containment witnessed; TERMINAL GPU LIFECYCLE BLOCKED; external termination is not cleanup"
+            } elseif ($scenario -eq 'timeout-proof') {
+                if (-not $process.HasExited -or $process.ExitCode -ne 0 -or $runText -notmatch 'FAULT timeout-proof PASS') { throw 'Real later completion proof failed' }
+            } elseif ($Pending) {
+                if ($process.HasExited -or $runText -notmatch 'PENDING_READY' -or $runText -notmatch 'keys=1, context=true, frame=true') { throw 'Pending ownership witness failed' }
+                Write-Output 'External process termination follows: TERMINAL GPU LIFECYCLE BLOCKED (no teardown receipt)'
+            } elseif (-not $process.HasExited -or $process.ExitCode -ne 0 -or $runText -notmatch 'GPU RENDER SMOKE PASS; HEALTHY GPU LIFECYCLE PASS') {
+                throw 'Native GPU smoke failed or remained unresolved; external termination is not cleanup'
+            }
+        } finally {
             $process.Refresh()
-        } while (-not $process.HasExited -and $runText -notmatch 'PENDING_READY|TERMINAL GPU LIFECYCLE BLOCKED:.*native root retained' -and $deadline.Elapsed.TotalSeconds -lt 30)
-        if ($process.HasExited) { $process.WaitForExit() }
-        [string]$runText = Get-Content -LiteralPath $out -Raw
-        $runText
-        Get-Content -LiteralPath $err
-        if ($Pending) {
-            if ($process.HasExited -or $runText -notmatch 'PENDING_READY' -or $runText -notmatch 'keys=1, context=true, frame=true') { throw 'Pending ownership witness failed' }
-            Write-Output 'External process termination follows: TERMINAL GPU LIFECYCLE BLOCKED (no teardown receipt)'
-        } elseif (-not $process.HasExited -or $process.ExitCode -ne 0 -or $runText -notmatch 'GPU RENDER SMOKE PASS; HEALTHY GPU LIFECYCLE PASS') {
-            throw 'Native GPU smoke failed or remained unresolved; external termination is not cleanup'
+            if (-not $process.HasExited) { Stop-Process -Id $process.Id }
         }
-    } finally {
-        $process.Refresh()
-        if (-not $process.HasExited) { Stop-Process -Id $process.Id }
     }
 } finally { Pop-Location }

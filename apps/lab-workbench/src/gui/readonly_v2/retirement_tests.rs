@@ -388,7 +388,13 @@ impl FrameBackend for ClockBackend<'_> {
         self.clock.set(self.clock.get() + self.delay);
         self.result
     }
-    fn free(&mut self, _: TextureKey) {
+    fn release_frame(&mut self, _: ContextGeneration) -> super::deletion::DeletionResult {
+        unreachable!()
+    }
+    fn release_generation(&mut self, _: ContextGeneration) -> super::deletion::DeletionResult {
+        unreachable!()
+    }
+    fn free(&mut self, _: TextureKey) -> super::deletion::DeletionResult {
         unreachable!()
     }
 }
