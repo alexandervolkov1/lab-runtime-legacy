@@ -14,6 +14,9 @@ from the [User manual](../README.md); ordinary users need no source checkout.
 - [Generic Presentation v2 contract proposal](../generic-controls-v2-contract.md):
   DGUI-4C4 design-only DTOs, bindings, version selection, bounded composition and
   lossless conversion rules for independent architectural review; not implemented.
+- [Native GUI host decision](native-gui-host-adr.md): DGUI-4C7B3A preflight comparing
+  an embedded host with a supervised GUI child, including ownership, containment,
+  memory limits and read-only recovery; GUI v2 remains inactive.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.

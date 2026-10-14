@@ -1,0 +1,48 @@
+DGUI-4C7B3A native host Job preflight / 2026-10-14
+Windows 10 Pro 10.0.19045 / x86_64-pc-windows-msvc
+Rust 1.95.0 (59807616e 2026-04-14); no packages, GUI, GL or Runtime launched.
+Source baseline: 145983461cb8c6754f43a8a221b36230b3bd6ef0
+Reviewed B2B2 commit preserved as second parent: e2eb54300aa7c9908881bc80c901afc272aa2f4f
+
+Five independent OS fixture groups: atomic startup/active count, last-handle close,
+explicit Job termination, committed-memory denial, forced Job-owner death.
+Each process exit is observed through its original process handle with a 2s
+application observation deadline. The external script watchdog is 15s.
+These are measured ordinary OS fixtures, not guarantees for arbitrary driver calls.
+Probe process commit cap=33554432; Job cap=33554432 for one fixture, 67108864
+for the two-fixture owner-death guard. This is NOT a proposed production GUI cap.
+
+DEV
+atomic JOB_LIST membership before ResumeThread PASS; active_process_limit=1 second_create=CreateProcessW: Win32 1816; first_alive=true
+last non-inherited job handle close -> process handle signaled PASS; containment only
+TerminateJobObject -> process handle signaled, exit=77 PASS; containment only
+committed-memory enforcement PASS: small_commit=4194304 large_commit=67108864 denied_error=1455 limit=33554432 peak_process=6594560 peak_job=11431936; not Rust bytes or VRAM
+forced fixture owner death -> inner KILL_ON_JOB_CLOSE -> child process signaled PASS; no inherited job handle
+NATIVE HOST JOB PREFLIGHT PASS: five OS expectations; no GPU cleanup/termination-deadline/GUI-budget qualification; activation=false
+rustc -D warnings -W missing-docs and standalone Clippy -D warnings -W clippy::all -W missing-docs PASS.
+stderr empty; process exit=0.
+
+RELEASE
+atomic JOB_LIST membership before ResumeThread PASS; active_process_limit=1 second_create=CreateProcessW: Win32 1816; first_alive=true
+last non-inherited job handle close -> process handle signaled PASS; containment only
+TerminateJobObject -> process handle signaled, exit=77 PASS; containment only
+committed-memory enforcement PASS: small_commit=4194304 large_commit=67108864 denied_error=1455 limit=33554432 peak_process=6598656 peak_job=11464704; not Rust bytes or VRAM
+forced fixture owner death -> inner KILL_ON_JOB_CLOSE -> child process signaled PASS; no inherited job handle
+NATIVE HOST JOB PREFLIGHT PASS: five OS expectations; no GPU cleanup/termination-deadline/GUI-budget qualification; activation=false
+rustc -D warnings -W missing-docs and standalone Clippy -D warnings -W clippy::all -W missing-docs PASS.
+stderr empty; process exit=0.
+
+Reproduction: scripts/test-native-host-job.ps1 -BuildProfile dev / release.
+Fresh task-owned target/native-host-job/<profile>/<nonce> preserves raw transcripts
+and fixture markers; no existing workspace/cache/data files are deleted.
+Observed OS peaks vary with environment; no equality-to-historical-peak gate.
+
+Scope verdicts:
+Windows Job mechanism preflight PASS for the listed no-GPU fixtures.
+Production supervised GUI containment NOT IMPLEMENTED / integration BLOCKED.
+Terminal GPU lifecycle BLOCKED; no checked GL deletion receipt from process exit.
+Whole host Rust budget BLOCKED; committed-memory cap is a separate OS scope.
+Existing B2B2 rendering/healthy GPU/payload/CPU evidence reused for unchanged sources.
+Cargo fmt, probe rustfmt, scoped Markdown links/fragments, PowerShell AST and diff
+checks PASS. Production Rust/API/DTO/Cargo/B1/FiniteTraceItem/active-v1 unchanged.
+No activation, next-stage implementation or release.
