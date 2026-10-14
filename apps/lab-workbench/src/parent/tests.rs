@@ -33,7 +33,15 @@ struct FakeClient {
     next: AtomicU64,
     stops: Arc<AtomicUsize>,
     late: RefCell<Option<(SyncSender<ClientUpdate>, ClientUpdate)>>,
+    pause: RefCell<Option<ReceivePause>>,
     fail_stop: Cell<bool>,
+}
+/// Test-only receive seam: pause inside the real owner turn after dequeue, then
+/// report Empty once so the published update requires another scheduler turn.
+struct ReceivePause {
+    entered: Arc<Barrier>,
+    release: Arc<Barrier>,
+    polls: usize,
 }
 impl FakeClient {
     fn send(&self, make: impl FnOnce(u64) -> Sent) -> Result<u64, CommandSendError> {
@@ -75,7 +83,20 @@ impl RecoveryStatusSubmitter for FakeClient {
 }
 impl ParentClient for FakeClient {
     fn try_update(&self) -> Result<ClientUpdate, TryRecvError> {
+        let mut pause = self.pause.borrow_mut();
+        if let Some(pause) = pause.as_mut() {
+            pause.polls += 1;
+            if pause.polls == 2 {
+                return Err(TryRecvError::Empty);
+            }
+        }
         let update = self.updates.try_recv()?;
+        if let Some(pause) = pause.as_ref()
+            && pause.polls == 1
+        {
+            pause.entered.wait();
+            pause.release.wait();
+        }
         if let Some((sender, late)) = self.late.borrow_mut().take() {
             sender.try_send(late).unwrap();
         }
@@ -105,6 +126,7 @@ fn fixture() -> (
         next: AtomicU64::new(1),
         stops: stops.clone(),
         late: RefCell::new(None),
+        pause: RefCell::new(None),
         fail_stop: Cell::new(false),
     };
     (
@@ -292,16 +314,25 @@ fn unconfirmed_stop_retains_same_join_and_owner_until_later_observation() {
     })
     .unwrap();
     entered.wait();
+    let join_id = pump.join.as_ref().unwrap().thread().id();
     assert_eq!(
         pump.shutdown_until(Instant::now()),
         Err("parent owner stop remains unconfirmed")
     );
     assert!(pump.join.is_some() && pump.stopped_owner.is_none());
+    assert_eq!(
+        pump.shutdown_until(Instant::now()),
+        Err("parent owner stop remains unconfirmed")
+    );
+    assert_eq!(pump.join.as_ref().unwrap().thread().id(), join_id);
+    assert!(pump.stopped_owner.is_none());
     assert_eq!(stops.load(Ordering::SeqCst), 0);
     release.wait();
     pump.shutdown().unwrap();
     pump.shutdown().unwrap();
     assert!(pump.join.is_none());
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    drop(pump); // Confirmed owner destruction cannot stop the client again.
     assert_eq!(stops.load(Ordering::SeqCst), 1);
 }
 fn hello() -> ClientUpdate {
@@ -548,30 +579,98 @@ fn stopped_renderer_serves_api_updates_recovery_without_replays() {
 
 #[test]
 fn independent_wake_coalesces_and_publish_during_turn_is_not_lost() {
+    assert_publish_during_real_turn(false);
+}
+
+#[test]
+fn stop_precedes_pending_wake_after_real_owner_turn() {
+    assert_publish_during_real_turn(true);
+}
+
+fn assert_publish_during_real_turn(stop: bool) {
+    let (owner, tx, submissions, stops) = fixture();
     let signal = PumpSignal::default();
     for _ in 0..10_000 {
         signal.wake();
     }
-    assert!(signal.next());
-    assert!(!signal.0.0.lock().unwrap().pending);
-    let before = Arc::new(Barrier::new(2));
-    let after = Arc::new(Barrier::new(2));
-    let worker = {
+    assert!(signal.0.0.lock().unwrap().pending);
+    let entered = Arc::new(Barrier::new(2));
+    let release = Arc::new(Barrier::new(2));
+    owner
+        .dispatcher
+        .client()
+        .unwrap()
+        .pause
+        .replace(Some(ReceivePause {
+            entered: entered.clone(),
+            release: release.clone(),
+            polls: 0,
+        }));
+    tx.try_send(ClientUpdate::RecoveryJournalProblem {
+        reason: "first".into(),
+    })
+    .unwrap();
+    let mut pump = ParentPump::spawn(owner, signal.clone()).unwrap();
+    let producer = {
         let signal = signal.clone();
-        let before = before.clone();
-        let after = after.clone();
         thread::spawn(move || {
-            before.wait();
+            entered.wait(); // First update dequeued inside ParentOwner::turn().
+            {
+                let state = signal.0.0.lock().unwrap();
+                assert!(!state.pending); // Initial coalesced wake cleared before turn.
+                assert_eq!(state.applied_updates, 0);
+            }
+            tx.try_send(ClientUpdate::RecoveryJournalProblem {
+                reason: "second".into(),
+            })
+            .unwrap();
             signal.wake();
-            after.wait();
+            assert!(signal.0.0.lock().unwrap().pending);
+            if stop {
+                signal.stop();
+            }
+            release.wait();
         })
     };
-    before.wait();
-    after.wait();
-    worker.join().unwrap();
-    assert!(signal.next());
-    signal.stop();
-    assert!(!signal.next());
+    producer.join().unwrap();
+    signal.wait_updates(if stop { 1 } else { 2 });
+    pump.shutdown().unwrap();
+    pump.shutdown().unwrap();
+    let state = signal.0.0.lock().unwrap();
+    let first = state.first_turns[0].as_ref().unwrap();
+    assert_eq!(
+        first.report,
+        TurnReport {
+            updates: 1,
+            rebuild_steps: 1,
+            external_calls: 0
+        }
+    );
+    assert_eq!(first.client_error.as_deref(), Some("first"));
+    assert_eq!(first.idle_timeouts, 0);
+    if stop {
+        assert_eq!(state.completed_turns, 1);
+        assert_eq!(state.applied_updates, 1);
+        assert!(state.pending); // Stop won; next() did not consume pending wake.
+        assert!(state.first_turns[1].is_none());
+    } else {
+        let second = state.first_turns[1].as_ref().unwrap();
+        assert_eq!(second.report, first.report);
+        assert_eq!(second.client_error.as_deref(), Some("second"));
+        assert_eq!(second.idle_timeouts, 0); // A lost wake cannot pass via idle fallback.
+        assert_eq!(state.applied_updates, 2);
+    }
+    assert_eq!(
+        pump.stopped_owner
+            .as_ref()
+            .unwrap()
+            .dispatcher
+            .client_error
+            .as_deref(),
+        Some(if stop { "first" } else { "second" })
+    );
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    assert!(submissions.try_recv().is_err());
 }
 
 #[test]

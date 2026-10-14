@@ -227,6 +227,18 @@ struct SignalState {
     stop: bool,
     #[cfg(test)]
     applied_updates: usize,
+    #[cfg(test)]
+    idle_timeouts: usize,
+    #[cfg(test)]
+    completed_turns: usize,
+    #[cfg(test)]
+    first_turns: [Option<TurnObservation>; 2],
+}
+#[cfg(test)]
+struct TurnObservation {
+    report: TurnReport,
+    idle_timeouts: usize,
+    client_error: Option<String>,
 }
 /// Constant storage, not a wake/callback queue. Clear-before-turn prevents a lost
 /// publish during processing; producers only set a bit and notify the Condvar.
@@ -250,9 +262,13 @@ impl PumpSignal {
     fn next(&self) -> bool {
         let (lock, cv) = &*self.0;
         let state = lock.lock().unwrap();
-        let (mut state, _) = cv
+        let (mut state, _timeout) = cv
             .wait_timeout_while(state, IDLE_CHECK, |s| !s.pending && !s.stop)
             .unwrap();
+        #[cfg(test)]
+        if _timeout.timed_out() {
+            state.idle_timeouts += 1;
+        }
         if state.stop {
             return false;
         }
@@ -260,9 +276,19 @@ impl PumpSignal {
         true
     }
     #[cfg(test)]
-    fn record(&self, report: TurnReport) {
+    fn record(&self, report: TurnReport, client_error: &Option<String>) {
         let (lock, cv) = &*self.0;
-        lock.lock().unwrap().applied_updates += report.updates;
+        let mut state = lock.lock().unwrap();
+        state.applied_updates += report.updates;
+        let index = state.completed_turns;
+        if index < state.first_turns.len() {
+            state.first_turns[index] = Some(TurnObservation {
+                report,
+                idle_timeouts: state.idle_timeouts,
+                client_error: client_error.clone(),
+            });
+        }
+        state.completed_turns += 1;
         cv.notify_all();
     }
     #[cfg(test)]
@@ -316,7 +342,7 @@ impl<C: ParentClient + Send + 'static> ParentPump<C> {
                     while signal.next() {
                         let report = owner.turn();
                         #[cfg(test)]
-                        signal.record(report);
+                        signal.record(report, &owner.dispatcher.client_error);
                         if report.updates == UPDATES_PER_TURN {
                             signal.wake();
                         }
