@@ -379,7 +379,19 @@ impl Worker {
         request
     }
     fn begin_stop<B: Backend>(&mut self, backend: &mut B, reason: Reason, immediate: bool) {
-        if self.status.phase.replaceable() || self.status.phase == Phase::ExitUnconfirmed {
+        if self.status.phase.replaceable() {
+            return;
+        }
+        if self.status.phase == Phase::ExitUnconfirmed {
+            // Observation failure is not a termination request. An explicit
+            // Terminate or irreversible root stop may contain the original Job
+            // once, without clearing uncertainty or retrying failed retirement.
+            if (immediate || reason == Reason::OwnerDropped)
+                && !self.retire_failed
+                && self.status.alive != Some(false)
+            {
+                self.terminate(backend);
+            }
             return;
         }
         if matches!(self.status.phase, Phase::Starting | Phase::Ready) {
@@ -402,7 +414,9 @@ impl Worker {
             return;
         }
         self.status.termination_requests = 1;
-        self.status.phase = Phase::TerminationRequested;
+        if self.status.phase != Phase::ExitUnconfirmed {
+            self.status.phase = Phase::TerminationRequested;
+        }
         self.terminated = Instant::now();
         self.publish(Some(Call::Terminate));
         if let Err(e) = backend.terminate(!self.resumed) {
@@ -547,9 +561,14 @@ impl Worker {
             Ok(None) => self.status.alive = Some(true),
             Err(e) => {
                 self.status.alive = None;
-                if matches!(self.status.phase, Phase::Starting | Phase::Ready) {
+                if matches!(self.status.phase, Phase::Starting | Phase::Ready)
+                    || (self.status.phase == Phase::ExitUnconfirmed
+                        && self.status.termination_requests == 0)
+                {
                     self.status.original_error.get_or_insert(e);
-                } else {
+                } else if self.status.original_error != Some(e) {
+                    // Re-observing the original failure must not occupy the
+                    // separate cleanup diagnostic before containment is tried.
                     self.status.cleanup_error.get_or_insert(e);
                 }
                 self.status.reason.get_or_insert(Reason::OsFailure);

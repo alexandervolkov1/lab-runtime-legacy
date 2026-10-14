@@ -289,6 +289,132 @@ fn dequeued_restart_reserves_launch_during_initial_retire_and_stop_keeps_priorit
     }
 }
 
+pub(super) fn settled_stop(root: &Supervisor, mode: Stop) -> Status {
+    let before = root.signal.state.lock().unwrap().latest.worker_progress;
+    admit_stop(root, mode);
+    let (state, timeout) = root
+        .signal
+        .changed
+        .wait_timeout_while(
+            root.signal.state.lock().unwrap(),
+            Duration::from_secs(3),
+            |s| {
+                s.pending.is_some() || s.latest.worker_progress <= before || s.latest.call.is_some()
+            },
+        )
+        .unwrap();
+    assert!(!timeout.timed_out(), "stop consumption: {:?}", state.latest);
+    state.latest
+}
+
+#[test]
+fn observation_failure_allows_one_explicit_or_root_containment_until_original_proof() {
+    for shutdown in [false, true] {
+        for termination_fails in [false, true] {
+            let original = lab_windows_job::Error {
+                operation: "injected poll_exit",
+                code: 6,
+            };
+            let cleanup = lab_windows_job::Error {
+                operation: "injected terminate",
+                code: 5,
+            };
+            let entered = Arc::new(Barrier::new(2));
+            let release = Arc::new(Barrier::new(2));
+            let inner = Arc::new(Mutex::new(Fake {
+                auto_progress: true,
+                terminate_error: termination_fails.then_some(cleanup),
+                retire_entered: Some(entered.clone()),
+                retire_release: Some(release.clone()),
+                ..Default::default()
+            }));
+            let mut root = Supervisor::spawn(
+                {
+                    let inner = inner.clone();
+                    move || ControlledFake {
+                        inner,
+                        initial_retire: None,
+                    }
+                },
+                Policy::default(),
+            )
+            .unwrap();
+            root.restart(launch()).unwrap();
+            root.wait_status(|s| s.phase == Phase::Ready);
+            inner.lock().unwrap().wait_error = Some(original);
+            let failed =
+                root.wait_status(|s| s.phase == Phase::ExitUnconfirmed && s.call.is_none());
+            assert_eq!(failed.original_error, Some(original));
+            assert_eq!(failed.alive, None);
+            assert_eq!(failed.termination_requests, 0);
+            assert_eq!(root.restart(launch()), Err(Rejected::ExitUnconfirmed));
+            // A graceful request alone does not silently escalate this uncertainty.
+            let graceful = settled_stop(&root, Stop::Graceful);
+            assert_eq!(graceful.phase, Phase::ExitUnconfirmed);
+            assert_eq!(graceful.termination_requests, 0);
+            assert_eq!(graceful.cleanup_error, None);
+            if shutdown {
+                root.shutdown();
+            } else {
+                admit_stop(&root, Stop::Terminate);
+            }
+            let contained = root.wait_status(|s| s.termination_requests == 1 && s.call.is_none());
+            assert_eq!(contained.phase, Phase::ExitUnconfirmed);
+            assert_eq!(contained.original_error, Some(original));
+            assert_eq!(
+                contained.cleanup_error,
+                termination_fails.then_some(cleanup)
+            );
+            assert_eq!(
+                (contained.objects.jobs, contained.objects.processes),
+                (1, 1)
+            );
+            assert!(contained.last_final.is_none() && !contained.worker_finished);
+            for _ in 0..3 {
+                let repeated = settled_stop(&root, Stop::Terminate);
+                assert_eq!(repeated.phase, Phase::ExitUnconfirmed);
+                assert_eq!(repeated.termination_requests, 1);
+                assert_eq!(repeated.original_error, Some(original));
+                assert_eq!(repeated.cleanup_error, termination_fails.then_some(cleanup));
+                assert_eq!(repeated.incarnation, 1);
+            }
+            root.shutdown();
+            assert!(!root.worker_finished());
+            assert_eq!(root.restart(launch()), Err(Rejected::Closed));
+            {
+                let mut fake = inner.lock().unwrap();
+                assert_eq!((fake.prepares, fake.resumes, fake.terminations), (1, 1, 1));
+                assert_eq!(fake.exited, !termination_fails);
+                // Recover the original witness; failed termination may require
+                // external containment, never an automatic second request.
+                fake.exited = true;
+                fake.wait_error = None;
+            }
+            root.signal.changed.notify_all();
+            entered.wait();
+            let retiring = root.status().unwrap();
+            assert_eq!(retiring.phase, Phase::Stopping);
+            assert_eq!(retiring.alive, Some(false));
+            assert_eq!(retiring.call, Some(Call::Retire));
+            assert_eq!((retiring.objects.jobs, retiring.objects.processes), (1, 1));
+            assert!(!retiring.worker_finished && !root.worker_finished());
+            release.wait();
+            let ended = root.wait_status(|s| s.worker_finished);
+            assert_eq!(ended.phase, Phase::ExitedContained);
+            assert_eq!(ended.objects, lab_windows_job::Objects::default());
+            assert_eq!(ended.last_final.unwrap().original_error, Some(original));
+            assert_eq!(
+                ended.last_final.unwrap().cleanup_error,
+                termination_fails.then_some(cleanup)
+            );
+            root.join.take().unwrap().join().unwrap();
+            println!(
+                "poll failure: root={shutdown}, terminate_error={termination_fails}; Ready -> ExitUnconfirmed -> Stopping/Retire -> ExitedContained; one request"
+            );
+        }
+    }
+}
+
 pub(crate) fn launch() -> Launch {
     Launch {
         executable: std::env::current_exe().unwrap(),

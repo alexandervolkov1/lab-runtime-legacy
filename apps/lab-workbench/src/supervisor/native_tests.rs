@@ -226,6 +226,7 @@ fn crash_hang_helper_pong_and_commit_denial_are_contained() {
     }
 }
 
+#[derive(Default)]
 struct Controlled {
     inner: WindowsBackend,
     entered: Option<Arc<Barrier>>,
@@ -233,6 +234,9 @@ struct Controlled {
     witness: Arc<Mutex<Option<lab_windows_job::ProcessWitness>>>,
     hide_exit: Arc<AtomicBool>,
     injected_gate: bool,
+    poll_failure: Arc<AtomicBool>,
+    terminations: Arc<AtomicU64>,
+    retire_gate: Option<(Arc<Barrier>, Arc<Barrier>)>,
 }
 impl Backend for Controlled {
     fn prepare(&mut self, launch: &Launch, inc: u64) -> Result<(), lab_windows_job::Error> {
@@ -260,7 +264,12 @@ impl Backend for Controlled {
         self.inner.has_process()
     }
     fn poll_exit(&mut self) -> Result<Option<u32>, lab_windows_job::Error> {
-        if self.hide_exit.load(Ordering::Acquire) {
+        if self.poll_failure.load(Ordering::Acquire) {
+            Err(lab_windows_job::Error {
+                operation: "injected original-handle observation failure",
+                code: 6,
+            })
+        } else if self.hide_exit.load(Ordering::Acquire) {
             Ok(None)
         } else {
             self.inner.poll_exit()
@@ -276,9 +285,16 @@ impl Backend for Controlled {
         self.inner.close(i, s)
     }
     fn terminate(&mut self, r: bool) -> Result<(), lab_windows_job::Error> {
+        self.terminations.fetch_add(1, Ordering::SeqCst);
         self.inner.terminate(r)
     }
     fn retire(&mut self) -> Result<lab_windows_job::Reading, lab_windows_job::Error> {
+        if self.inner.has_process()
+            && let Some((entered, release)) = self.retire_gate.take()
+        {
+            entered.wait();
+            release.wait();
+        }
         self.inner.retire()
     }
     fn objects(&self) -> lab_windows_job::Objects {
@@ -314,6 +330,7 @@ fn startup_failure_and_cancel_before_resume_never_execute_child() {
                     witness,
                     hide_exit: Arc::new(AtomicBool::new(false)),
                     injected_gate,
+                    ..Default::default()
                 }
             },
             Policy::default(),
@@ -370,6 +387,7 @@ fn suppressed_exit_proof_retains_same_job_and_blocks_replacement() {
                 witness,
                 hide_exit,
                 injected_gate: false,
+                ..Default::default()
             }
         },
         Policy::default(),
@@ -400,6 +418,97 @@ fn suppressed_exit_proof_retains_same_job_and_blocks_replacement() {
         "simulated exit-proof withholding PASS; same incarnation/Job retained; actual guardian exit=77; later original proof retires"
     );
     finish(&mut root);
+}
+
+#[test]
+#[ignore = "Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1"]
+fn poll_failure_then_first_terminate_or_root_shutdown_uses_original_job_and_witness() {
+    for shutdown in [false, true] {
+        let witness = Arc::new(Mutex::new(None));
+        let poll_failure = Arc::new(AtomicBool::new(false));
+        let terminations = Arc::new(AtomicU64::new(0));
+        let entered = Arc::new(Barrier::new(2));
+        let release = Arc::new(Barrier::new(2));
+        let mut root = Supervisor::spawn(
+            {
+                let witness = witness.clone();
+                let poll_failure = poll_failure.clone();
+                let terminations = terminations.clone();
+                let entered = entered.clone();
+                let release = release.clone();
+                move || Controlled {
+                    witness,
+                    poll_failure,
+                    terminations,
+                    retire_gate: Some((entered, release)),
+                    ..Default::default()
+                }
+            },
+            Policy::default(),
+        )
+        .unwrap();
+        root.restart(plan("normal")).unwrap();
+        root.wait_status(|s| s.phase == Phase::Ready);
+        assert_eq!(
+            witness
+                .lock()
+                .unwrap()
+                .as_ref()
+                .unwrap()
+                .poll_exit()
+                .unwrap(),
+            None
+        );
+        poll_failure.store(true, Ordering::Release);
+        let failed = root.wait_status(|s| s.phase == Phase::ExitUnconfirmed && s.call.is_none());
+        assert_eq!(failed.termination_requests, 0);
+        assert_eq!(
+            failed.original_error.unwrap().operation,
+            "injected original-handle observation failure"
+        );
+        assert_eq!(root.restart(plan("normal")), Err(Rejected::ExitUnconfirmed));
+        if shutdown {
+            root.shutdown();
+        } else {
+            stop(&root, Stop::Terminate);
+        }
+        let pending = root.wait_status(|s| s.termination_requests == 1 && s.call.is_none());
+        assert_eq!(pending.phase, Phase::ExitUnconfirmed);
+        assert_eq!(pending.original_error, failed.original_error);
+        assert_eq!(pending.cleanup_error, None);
+        assert_eq!((pending.objects.jobs, pending.objects.processes), (1, 1));
+        assert!(!pending.worker_finished && pending.last_final.is_none());
+        assert_eq!(wait_witness(witness.lock().unwrap().as_ref().unwrap()), 77);
+        for _ in 0..3 {
+            let repeated = super::tests::settled_stop(&root, Stop::Terminate);
+            assert_eq!(repeated.phase, Phase::ExitUnconfirmed);
+            assert_eq!(repeated.termination_requests, 1);
+        }
+        assert_eq!(terminations.load(Ordering::SeqCst), 1);
+        root.shutdown();
+        assert!(!root.worker_finished());
+        poll_failure.store(false, Ordering::Release); // Same original process handle, never PID lookup.
+        root.signal.changed.notify_all();
+        entered.wait();
+        let retiring = root.status().unwrap();
+        assert_eq!(retiring.phase, Phase::Stopping);
+        assert_eq!(retiring.call, Some(Call::Retire));
+        assert_eq!(retiring.alive, Some(false));
+        assert!(!retiring.worker_finished && !root.worker_finished());
+        release.wait();
+        let ended = root.wait_status(|s| s.worker_finished);
+        assert_eq!(ended.phase, Phase::ExitedContained);
+        assert_eq!(ended.incarnation, 1);
+        assert_eq!(ended.objects, lab_windows_job::Objects::default());
+        assert_eq!(
+            ended.last_final.unwrap().original_error,
+            failed.original_error
+        );
+        root.join.take().unwrap().join().unwrap();
+        println!(
+            "poll failure native root={shutdown}: Ready -> ExitUnconfirmed; one real Job terminate, independent original witness exit=77; original proof + gated retirement -> ExitedContained/worker finished"
+        );
+    }
 }
 
 #[test]
