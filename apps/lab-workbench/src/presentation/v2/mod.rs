@@ -114,7 +114,7 @@ pub(crate) fn parse(bytes: &[u8]) -> Result<ParsedDocument, String> {
 }
 
 #[cfg(test)]
-mod admission_fixtures;
+pub(crate) mod admission_fixtures;
 #[cfg(test)]
 mod admission_tests;
 #[cfg(test)]

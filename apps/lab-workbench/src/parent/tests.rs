@@ -485,6 +485,360 @@ fn record(admission: KnownAdmission) -> RecoveryRecord {
     }
 }
 
+#[cfg(windows)]
+pub(crate) fn assert_native_private_ipc_continuity(mode: &str) {
+    use crate::{
+        private_ipc::{native_tests::launch, parent_bridge::ParentBridge},
+        supervisor::{Phase, Policy, Stop},
+    };
+    let (mut owner, tx, rx, stops) = fixture();
+    let mut adapter = ParentBridge::new(
+        &owner.dispatcher,
+        vec![RuntimeRef::Reference {
+            reference: "1".into(),
+        }],
+    )
+    .unwrap();
+    adapter.turn(&owner.dispatcher);
+    assert_eq!(adapter.error, None);
+    let bridge = adapter.bridge.clone();
+    owner.private_bridge = Some(adapter);
+    let signal = PumpSignal::default();
+    let mut stream = open_api(&mut owner, &signal);
+    let mut pump = ParentPump::spawn(owner, signal.clone()).unwrap();
+    pump.install_supervisor(bridge.worker_factory().unwrap(), Policy::default())
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while pump.supervisor().unwrap().restart(launch(mode)).is_err() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    if mode == "slow" {
+        pump.supervisor()
+            .unwrap()
+            .wait_status(|s| s.phase == Phase::Ready);
+    } else {
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while !bridge.status().is_ok_and(|s| s.handshaken) {
+            assert!(Instant::now() < deadline);
+            thread::yield_now();
+        }
+    }
+    request(&mut stream, "ipc-h", "hello", json!({}));
+    response(&mut stream, "ipc-h");
+    bootstrap(&tx, &rx, &signal);
+    send_update(
+        &tx,
+        &signal,
+        ClientUpdate::RecoveryProjection {
+            active: vec![record(KnownAdmission::Accepted)],
+            quarantined: vec![],
+        },
+    );
+    signal.wait_updates(7);
+    let begin = Instant::now();
+    send_update(
+        &tx,
+        &signal,
+        ClientUpdate::Event {
+            cursor: EventCursor {
+                boot_id: "boot".into(),
+                seq: 6,
+            },
+            envelope: json!({"kind":"reference","target":{"id":"1"},"data":{"reference":"1","value":2.5,"revision":"1"}}),
+        },
+    );
+    signal.wait_updates(8);
+    let progress_time = begin.elapsed();
+    assert!(progress_time < Duration::from_millis(100));
+    request(&mut stream, "ipc-status", "client_status", json!({}));
+    let status = response(&mut stream, "ipc-status");
+    assert_eq!(status["result"]["runtime_client"]["freshness"], "fresh");
+    request(&mut stream, "ipc-doc", "presentation_get", json!({}));
+    let before = response(&mut stream, "ipc-doc");
+    let identity = before["result"]["workbench_id"].clone();
+    request(
+        &mut stream,
+        "ipc-replace",
+        "ui_replace_document",
+        json!({"expected":{"workbench_id":identity,"revision":"1"},"document":PresentationDocument::empty("ipc-parent") }),
+    );
+    assert_eq!(
+        response(&mut stream, "ipc-replace")["result"]["presentation_revision"],
+        "2"
+    );
+    request(
+        &mut stream,
+        "ipc-rec",
+        "recovery_get",
+        json!({"kind":"active","index":"0","expected":null}),
+    );
+    assert_eq!(
+        response(&mut stream, "ipc-rec")["result"]["record"]["admission"],
+        "accepted"
+    );
+    assert!(rx.try_recv().is_err());
+    assert_eq!(stops.load(Ordering::SeqCst), 0);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while pump.supervisor().unwrap().stop(Stop::Terminate).is_err() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::ExitedContained);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while pump
+        .supervisor()
+        .unwrap()
+        .restart(launch("normal"))
+        .is_err()
+    {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::Ready && s.incarnation == 2);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !bridge.status().is_ok_and(|s| s.applied[1] != 0) {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    request(&mut stream, "ipc-restored", "presentation_get", json!({}));
+    let restored = response(&mut stream, "ipc-restored");
+    assert_eq!(restored["result"]["workbench_id"], identity);
+    assert_eq!(restored["result"]["presentation_revision"], "2");
+    assert!(rx.try_recv().is_err());
+    assert_eq!(stops.load(Ordering::SeqCst), 0);
+    pump.supervisor().unwrap().shutdown();
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.worker_finished);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !pump.supervisor().unwrap().worker_finished() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.shutdown().unwrap();
+    pump.shutdown().unwrap();
+    let owner = pump.stopped_owner.as_ref().unwrap();
+    assert_eq!(
+        owner.dispatcher.recovery.mutations,
+        vec![record(KnownAdmission::Accepted)]
+    );
+    assert_eq!(
+        owner.dispatcher.observations.entities[&RuntimeRef::Reference {
+            reference: "1".into()
+        }]
+            .value["value"],
+        2.5
+    );
+    assert_eq!(owner.private_bridge.as_ref().unwrap().error, None);
+    assert!(rx.try_recv().is_err());
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    println!(
+        "PARENT_NATIVE mode={mode} update_progress_us={} zero_mutation_status_retry=true same_workbench_scope_recovery=true",
+        progress_time.as_micros()
+    );
+}
+
+#[cfg(windows)]
+pub(crate) fn assert_native_private_ipc_shutdown() {
+    use crate::{
+        private_ipc::{native_tests::launch, parent_bridge::ParentBridge},
+        supervisor::{Phase, Policy, Stop},
+    };
+    use std::sync::atomic::AtomicBool;
+    let (mut owner, _, rx, stops) = fixture();
+    let mut adapter = ParentBridge::new(&owner.dispatcher, vec![]).unwrap();
+    adapter.turn(&owner.dispatcher);
+    let bridge = adapter.bridge.clone();
+    owner.private_bridge = Some(adapter);
+    let io_gate = Arc::new(AtomicBool::new(true));
+    let retire_gate = Arc::new(AtomicBool::new(false));
+    let factory = bridge.worker_factory().unwrap();
+    let mut pump = ParentPump::spawn(owner, PumpSignal::default()).unwrap();
+    pump.install_supervisor(
+        {
+            let io_gate = io_gate.clone();
+            let retire_gate = retire_gate.clone();
+            move || {
+                let mut backend = factory();
+                backend.hold_io_observation(io_gate);
+                backend.hold_retirement(retire_gate);
+                backend
+            }
+        },
+        Policy::default(),
+    )
+    .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while pump
+        .supervisor()
+        .unwrap()
+        .restart(launch("normal"))
+        .is_err()
+    {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::Ready);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !bridge.status().is_ok_and(|s| s.pending_io > 0) {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    io_gate.store(false, Ordering::Release);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !bridge.status().is_ok_and(|s| s.io_held && s.pending_io > 0) {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while pump.supervisor().unwrap().stop(Stop::Terminate).is_err() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::ExitUnconfirmed && s.alive == Some(false));
+    assert_eq!(
+        pump.shutdown(),
+        Err("supervisor child exit remains unconfirmed")
+    );
+    assert_eq!(
+        pump.shutdown(),
+        Err("supervisor child exit remains unconfirmed")
+    );
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    assert!(!pump.supervisor().unwrap().worker_finished());
+    assert!(
+        bridge
+            .status()
+            .is_ok_and(|s| !s.retired && s.handles == 6 && s.pending_io > 0)
+    );
+    io_gate.store(true, Ordering::Release);
+    retire_gate.store(true, Ordering::Release);
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.worker_finished);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !pump.supervisor().unwrap().worker_finished() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.shutdown().unwrap();
+    pump.shutdown().unwrap();
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    assert!(rx.try_recv().is_err());
+    assert!(
+        bridge
+            .status()
+            .is_ok_and(|s| s.retired && s.handles == 0 && s.pending_io == 0)
+    );
+    println!(
+        "PARENT_SHUTDOWN original_process_proof_preceded_ipc_retirement=true client_stopped_once=true repeated_shutdown_pending_then_confirmed=true"
+    );
+}
+#[cfg(windows)]
+#[test]
+fn private_snapshot_provenance_survives_changed_boot_without_relabeling_cached_values() {
+    use crate::private_ipc::parent_bridge::ParentBridge;
+    let (mut owner, tx, rx, _) = fixture();
+    owner.private_bridge = Some(
+        ParentBridge::new(
+            &owner.dispatcher,
+            vec![RuntimeRef::Reference {
+                reference: "1".into(),
+            }],
+        )
+        .unwrap(),
+    );
+    tx.try_send(hello()).unwrap();
+    owner.turn();
+    assert!(matches!(sent(&rx), Sent::Query(_, _)));
+    tx.try_send(ClientUpdate::Event { cursor:EventCursor { boot_id:"boot".into(), seq:6 }, envelope:json!({"kind":"reference","target":{"id":"1"},"data":{"reference":"1","value":2.5,"revision":"1"}}) }).unwrap();
+    owner.turn();
+    let before = owner
+        .private_bridge
+        .as_ref()
+        .unwrap()
+        .bridge
+        .read_provenance();
+    assert_eq!(before[0].0.as_deref(), Some("boot"));
+    assert_eq!(before[0].1, Some(6));
+    let ClientUpdate::Hello(mut next) = hello() else {
+        unreachable!()
+    };
+    next.boot_id = "new-boot".into();
+    next.event_latest.boot_id = "new-boot".into();
+    next.event_oldest.boot_id = "new-boot".into();
+    tx.try_send(ClientUpdate::Hello(next)).unwrap();
+    owner.turn();
+    let after = owner
+        .private_bridge
+        .as_ref()
+        .unwrap()
+        .bridge
+        .read_provenance();
+    assert_eq!(after[0].0.as_deref(), Some("boot"));
+    assert_eq!(after[0].1, Some(6));
+    assert_ne!(after[0].2, 2);
+    assert_eq!(owner.dispatcher.hello.as_ref().unwrap().boot_id, "new-boot");
+    assert_eq!(
+        owner.dispatcher.observations.entities[&RuntimeRef::Reference {
+            reference: "1".into()
+        }]
+            .value["value"],
+        2.5
+    );
+    while let Ok(sent) = rx.try_recv() {
+        assert!(matches!(sent, Sent::Query(_, _) | Sent::Subscribe(_)));
+    }
+}
+#[cfg(windows)]
+#[test]
+fn private_trace_projection_keeps_only_witnessed_boot_and_generation_points() {
+    use crate::private_ipc::parent_bridge::ParentBridge;
+    let (mut owner, tx, rx, _) = fixture();
+    owner.selected = Some(RuntimeRef::Reference {
+        reference: "keep-test-layout".into(),
+    });
+    let target = RuntimeRef::Signal {
+        instrument: "1".into(),
+        parameter: "1".into(),
+    };
+    tx.try_send(hello()).unwrap();
+    owner.turn();
+    let id = query(&rx, "discover");
+    tx.try_send(reply(id,"discover",json!({"projection":"d","revision":{"boot_id":"boot","event_seq":"6"},"records":[{"kind":"signal","id":{"instrument":"1","parameter":"1"},"value_type":"float","generation":"1","unit":{"id":"v","symbol":"V"}}],"next_index":null,"complete":true}))).unwrap();
+    owner.turn();
+    let _ = query(&rx, "measurements_current");
+    tx.try_send(ClientUpdate::Event { cursor:EventCursor { boot_id:"boot".into(), seq:6 }, envelope:json!({"kind":"signal","target":{"instrument":"1","parameter":"1"},"data":{"signal":{"instrument":"1","parameter":"1"},"generation":"1","value":1.0,"quality":"good","status":"available","observed_at_ns":"1000000000","source_at_ns":"1000000000","unit":{"id":"v","symbol":"V"}}}) }).unwrap();
+    owner.turn();
+    owner.private_bridge =
+        Some(ParentBridge::new(&owner.dispatcher, vec![target.clone()]).unwrap());
+    for (generation, sequence, time) in [(1, 7, 2u64), (2, 8, 3u64)] {
+        tx.try_send(ClientUpdate::Event { cursor:EventCursor { boot_id:"boot".into(), seq:sequence }, envelope:json!({"kind":"signal","target":{"instrument":"1","parameter":"1"},"data":{"signal":{"instrument":"1","parameter":"1"},"generation":generation.to_string(),"value":time as f64,"quality":"good","status":"available","observed_at_ns":(time*1_000_000_000).to_string(),"source_at_ns":(time*1_000_000_000).to_string(),"unit":{"id":"v","symbol":"V"}}}) }).unwrap();
+        owner.turn();
+        let provenance = owner
+            .private_bridge
+            .as_ref()
+            .unwrap()
+            .bridge
+            .trace_provenance();
+        assert_eq!(provenance[0], (Some(generation), Some(time as f64), 1));
+    }
+    assert_eq!(
+        owner.dispatcher.observations.live[&target].points().len(),
+        3,
+        "legacy cache remains unchanged"
+    );
+}
+
 #[test]
 fn stopped_renderer_serves_api_updates_recovery_without_replays() {
     let (mut owner, tx, rx, stops) = fixture();

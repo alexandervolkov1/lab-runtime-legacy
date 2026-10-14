@@ -77,7 +77,7 @@ pub(super) fn collections() -> Vec<Value> {
     cases
 }
 
-pub(super) fn large() -> Value {
+pub(crate) fn large() -> Value {
     let mut doc = empty();
     doc["settings"] = json!({"density":"comfortable"});
     doc["data_bindings"] = json!((0..700).map(|i|json!({"id":format!("d{i}"),"selector":"signal_sample","target":{"kind":"signal","instrument":"i","parameter":"p"},"expect_kind":null})).collect::<Vec<_>>());

@@ -1,0 +1,225 @@
+//! The child owns validated immutable encoded replicas only. Admission uses one
+//! temporary parsed document, drops it, then swaps one slot atomically. Thus a bad
+//! candidate never destroys the accepted bytes and two parsed documents never
+//! overlap. A renderer consumer remains a separate, unimplemented stage.
+use super::{protocol::*, reads};
+use crate::presentation::v2;
+use std::time::{Duration, Instant};
+
+#[derive(Clone, Copy)]
+struct Transfer {
+    index: usize,
+    header: Header,
+    filled: usize,
+    started: Instant,
+}
+pub(crate) struct Replica {
+    pool: Pool,
+    incoming: [Option<Transfer>; 2],
+    accepted: [Option<Header>; 2],
+    parsed_peak: usize,
+    required: [u64; 2],
+    fence_seen: Option<Instant>,
+    read_invalidated: bool,
+}
+impl Replica {
+    pub(crate) fn snapshot(&self, stream: usize) -> Option<(Header, &[u8])> {
+        let header = self.accepted(stream)?;
+        let slot = self
+            .pool
+            .slots
+            .iter()
+            .find(|s| s.credit == Credit::Current(stream) && s.snapshot == header.snapshot)?;
+        Some((header, &slot.bytes[..slot.len]))
+    }
+    pub(crate) fn accepted(&self, stream: usize) -> Option<Header> {
+        self.accepted.get(stream).copied().flatten()
+    }
+    #[cfg(test)]
+    pub(super) fn pool(&self) -> &Pool {
+        &self.pool
+    }
+    #[cfg(test)]
+    pub(super) fn admission_peak(&self) -> usize {
+        self.parsed_peak
+    }
+    pub(crate) fn new() -> Self {
+        Self {
+            pool: Pool::new(),
+            incoming: [None; 2],
+            accepted: [None; 2],
+            parsed_peak: 0,
+            required: [0; 2],
+            fence_seen: None,
+            read_invalidated: true,
+        }
+    }
+    pub(crate) fn fence(&mut self, revision: u64, source: u64, now: Instant) -> Result<()> {
+        if revision == 0 || revision < self.required[0] || source < self.required[1] {
+            return Err("stale parent fence");
+        }
+        self.parent_progress(now);
+        self.required = [revision, source];
+        if self.accepted[1].is_none_or(|h| h.epoch.revision != revision || h.source < source) {
+            self.read_invalidated = true;
+        }
+        Ok(())
+    }
+    pub(crate) fn parent_progress(&mut self, now: Instant) {
+        if self
+            .fence_seen
+            .is_some_and(|seen| now.saturating_duration_since(seen) >= Duration::from_secs(2))
+        {
+            self.read_invalidated = true;
+        }
+        self.fence_seen = Some(now);
+    }
+    /// This predicate can only downgrade validated original read freshness.
+    /// Timeout remains latched until another complete checked read snapshot.
+    pub(crate) fn read_is_current(&mut self, now: Instant) -> bool {
+        if self
+            .fence_seen
+            .is_none_or(|seen| now.saturating_duration_since(seen) >= Duration::from_secs(2))
+        {
+            self.read_invalidated = true;
+        }
+        !self.read_invalidated
+            && self.accepted[1].is_some_and(|h| {
+                h.epoch.revision == self.required[0] && h.source >= self.required[1]
+            })
+    }
+    pub(crate) fn expire(&self, now: Instant) -> Result<()> {
+        if self
+            .incoming
+            .iter()
+            .flatten()
+            .any(|t| now.saturating_duration_since(t.started) >= Duration::from_secs(2))
+        {
+            return Err("incomplete snapshot deadline");
+        }
+        Ok(())
+    }
+    pub(crate) fn chunk(&mut self, header: Header, bytes: &[u8], now: Instant) -> Result<bool> {
+        self.expire(now)?;
+        let stream = header.kind.stream().ok_or("non-snapshot replica message")?;
+        if bytes.len() + HEADER != header.bytes
+            || header.total > SNAPSHOT
+            || header.total == 0
+            || header.bytes > CHUNK
+            || header
+                .offset
+                .checked_add(bytes.len())
+                .is_none_or(|n| n > header.total)
+        {
+            return Err("replica chunk bound");
+        }
+        if let Some(old) = self.accepted[stream] {
+            if header.snapshot <= old.snapshot
+                || header.epoch.owner != old.epoch.owner
+                || header.epoch.revision < old.epoch.revision
+                || header.source < old.source
+            {
+                return Err("stale snapshot identity/source/epoch");
+            }
+            if stream == 0 && header.epoch.revision <= old.epoch.revision {
+                return Err("stale document revision");
+            }
+        }
+        if stream == 1 && self.accepted[0].is_none_or(|doc| doc.epoch != header.epoch) {
+            return Err("read without exact admitted document epoch");
+        }
+        if self.incoming[stream].is_none() {
+            if header.offset != 0 {
+                return Err("snapshot missing initial chunk");
+            }
+            let index = self
+                .pool
+                .slots
+                .iter()
+                .position(|s| s.credit == Credit::Free)
+                .ok_or("replica credits exhausted")?;
+            self.pool.slots[index].credit = Credit::Assembly(stream);
+            self.incoming[stream] = Some(Transfer {
+                index,
+                header,
+                filled: 0,
+                started: now,
+            });
+        }
+        let transfer = self.incoming[stream].as_mut().unwrap();
+        if transfer.header.snapshot != header.snapshot
+            || transfer.header.epoch != header.epoch
+            || transfer.header.source != header.source
+            || transfer.header.total != header.total
+            || transfer.filled != header.offset
+        {
+            return Err("interleaved snapshot");
+        }
+        let slot = &mut self.pool.slots[transfer.index];
+        slot.bytes[transfer.filled..transfer.filled + bytes.len()].copy_from_slice(bytes);
+        transfer.filled += bytes.len();
+        if transfer.filled != header.total {
+            return Ok(false);
+        }
+        slot.len = header.total;
+        slot.epoch = header.epoch;
+        slot.snapshot = header.snapshot;
+        slot.source = header.source;
+        // Validation borrows Assembly storage. Errors leave accepted storage intact.
+        if stream == 0 {
+            let document = v2::admit(&slot.bytes[..header.total])
+                .map_err(|_| "canonical document admission")?;
+            self.parsed_peak = self.parsed_peak.max(document.allocation().accounted_bytes);
+            if document.canonical_bytes() != &slot.bytes[..header.total] {
+                return Err("noncanonical document bytes");
+            }
+            drop(document);
+        } else {
+            reads::validate(&slot.bytes[..header.total])?;
+            if let Some(old) = self.accepted[1] {
+                let current = self
+                    .pool
+                    .slots
+                    .iter()
+                    .find(|s| s.credit == Credit::Current(1))
+                    .ok_or("read credit invariant")?;
+                let incoming = &self.pool.slots[transfer.index];
+                reads::successor(
+                    &current.bytes[..current.len],
+                    &incoming.bytes[..header.total],
+                    header.source > old.source,
+                )?;
+            }
+        }
+        let index = transfer.index;
+        if header.epoch.revision < self.required[0]
+            || (stream == 1 && header.source < self.required[1])
+        {
+            self.pool.slots[index].credit = Credit::Free;
+            self.incoming[stream] = None;
+            return Ok(true); // Valid complete obsolete input is coalesced, never applied.
+        }
+        for slot in &mut self.pool.slots {
+            if slot.credit == Credit::Current(stream) {
+                slot.credit = Credit::Free;
+            }
+        }
+        self.pool.slots[index].credit = Credit::Current(stream);
+        self.accepted[stream] = Some(header);
+        if stream == 1 {
+            self.read_invalidated = false;
+        }
+        self.incoming[stream] = None;
+        if stream == 0 {
+            // Read bytes from an older document epoch cannot accompany the new one.
+            self.accepted[1] = None;
+            self.read_invalidated = true;
+            for slot in &mut self.pool.slots {
+                if slot.credit == Credit::Current(1) {
+                    slot.credit = Credit::Free;
+                }
+            }
+        }
+        Ok(true)
+    }
+}

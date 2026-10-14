@@ -10,6 +10,8 @@ mod model;
 mod ownership;
 mod parent;
 mod presentation;
+#[cfg(windows)]
+mod private_ipc;
 #[path = "gui/rebuild.rs"]
 mod rebuild;
 mod recovery;
