@@ -19,6 +19,7 @@ import signal
 import socket
 import struct
 import subprocess
+import sys
 import threading
 import time
 import zlib
@@ -113,13 +114,29 @@ class Proxy:
         self.listener.setblocking(False)
         self.stop, self.retune, self.release = threading.Event(), threading.Event(), threading.Event()
         self.samples, self.signal_events = threading.Condition(), 0
-        self.session_ends, self.client_eofs = threading.Condition(), 0
+        self.session_ends, self.closures = threading.Condition(), []
         self.requests, self.connections, self.error = [], 0, None
         self.thread = threading.Thread(target=self.run, name="native-smoke-observer")
         self.thread.start()
 
     def run(self):
         peers, clients, partners, outgoing, incoming, held = set(), set(), {}, {}, {}, set()
+
+        def end_client(child, mode):
+            # A Windows TCP close with unread event bytes may be a reset, not EOF.
+            # All complete Runtime-bound frames are recorded before forwarding;
+            # discarded partial frames cannot become admitted Runtime requests.
+            for p in (child, partners[child]):
+                peers.discard(p)
+                clients.discard(p)
+                held.discard(p)
+                incoming.pop(p, None)
+                outgoing.pop(p, None)
+                p.close()
+            with self.session_ends:
+                self.closures.append(mode)
+                self.session_ends.notify_all()
+
         try:
             while not self.stop.is_set():
                 if self.release.is_set():
@@ -142,19 +159,15 @@ class Proxy:
                         continue
                     if peer not in peers:
                         continue
-                    data = peer.recv(16_384)
+                    try:
+                        data = peer.recv(16_384)
+                    except ConnectionResetError:
+                        assert peer in clients, "unexpected Runtime-side reset"
+                        end_client(peer, "gui_reset_on_receive")
+                        continue
                     if not data:
                         assert peer in clients, "Runtime closed before GUI EOF"
-                        for p in (peer, partners[peer]):
-                            peers.discard(p)
-                            clients.discard(p)
-                            held.discard(p)
-                            incoming.pop(p, None)
-                            outgoing.pop(p, None)
-                            p.close()
-                        with self.session_ends:
-                            self.client_eofs += 1
-                            self.session_ends.notify_all()
+                        end_client(peer, "gui_eof")
                         continue
                     target = partners[peer]
                     outgoing[target].extend(data)
@@ -178,10 +191,17 @@ class Proxy:
                                     self.samples.notify_all()
                 for peer in writable:
                     if peer in peers and peer not in held:
-                        count = peer.send(outgoing[peer])
+                        try:
+                            count = peer.send(outgoing[peer])
+                        except ConnectionResetError:
+                            assert peer in clients, "unexpected Runtime-side reset"
+                            end_client(peer, "gui_reset_on_send")
+                            continue
                         del outgoing[peer][:count]
         except Exception as error:
             self.error = repr(error)
+            print(json.dumps({"observer_error": self.error, "connections": self.connections,
+                              "closures": self.closures}), flush=True)
             self.retune.set()
         finally:
             for peer in peers:
@@ -194,6 +214,60 @@ class Proxy:
         self.thread.join(timeout=3)
         assert not self.thread.is_alive(), "observer stop unconfirmed"
         assert self.error is None, self.error
+
+
+def check_reset():
+    """Deterministically reproduce an abortive GUI-side TCP close, then reconnect."""
+    listener = socket.socket()
+    listener.bind(("127.0.0.1", 0))
+    listener.listen(2)
+    listener.settimeout(3)
+    errors = []
+
+    def fake_runtime():
+        try:
+            for _ in range(2):
+                with listener.accept()[0] as peer:
+                    peer.settimeout(3)
+                    frame = bytearray()
+                    while b"\n" not in frame:
+                        data = peer.recv(1024)
+                        assert data and len(frame) < 4096
+                        frame.extend(data)
+                    peer.sendall(b'{"type":"event","kind":"signal"}\n')
+                    assert peer.recv(1) == b""
+        except Exception as error:
+            errors.append(repr(error))
+        finally:
+            listener.close()
+
+    server = threading.Thread(target=fake_runtime, name="smoke-reset-fixture")
+    server.start()
+    proxy = Proxy(listener.getsockname()[1])
+    try:
+        for index in range(2):
+            with socket.create_connection(proxy.listener.getsockname(), timeout=3) as child:
+                child.sendall(b'{"v":1,"msg_id":"1","op":"hello","args":{}}\n')
+                if index == 0:
+                    assert child.recv(1)  # Remaining event bytes deliberately unread.
+                    child.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack("hh", 1, 0))
+                else:
+                    frame = bytearray()
+                    while b"\n" not in frame:
+                        data = child.recv(1024)
+                        assert data and len(frame) < 4096
+                        frame.extend(data)
+                    child.shutdown(socket.SHUT_RDWR)
+            with proxy.session_ends:
+                assert proxy.session_ends.wait_for(lambda: len(proxy.closures) == index + 1, timeout=3)
+        assert proxy.closures[0].startswith("gui_reset_") and proxy.closures[1] == "gui_eof"
+        assert proxy.connections == 2 and len(proxy.requests) == 2
+        server.join(timeout=3)
+        assert not server.is_alive() and not errors, errors
+        print(json.dumps({"reset_regression": "pass", "closures": proxy.closures, "requests": 2}))
+    finally:
+        proxy.close()
+        server.join(timeout=3)
 
 
 def main():
@@ -237,11 +311,11 @@ def main():
             screenshot = capture(child.pid, directory / "window.png")
             proxy.release.set()
             exit_code = child.wait(timeout=35)
-            with proxy.session_ends:
-                assert proxy.session_ends.wait_for(lambda: proxy.client_eofs == 2, timeout=3), "GUI EOF deadline"
-            proxy.close()
             result = json.loads((directory / "smoke.json").read_text(encoding="utf-8"))
             assert exit_code == 0 and result["status"] == "pass", result
+            with proxy.session_ends:
+                assert proxy.session_ends.wait_for(lambda: len(proxy.closures) == 2, timeout=3), "GUI transport-close deadline"
+            proxy.close()
             mutations = [r for r in proxy.requests if "request_id" in r]
             statuses = [r for r in proxy.requests if r["op"] == "operation_status"]
             assert len(mutations) == 1 and mutations[0]["op"] == "reference_retune", mutations
@@ -254,7 +328,7 @@ def main():
             record = {"profile": profile, "rust_source_head": subprocess.check_output(
                 ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(), "gui_exit_code": exit_code,
                 "native_smoke": result, "connections": proxy.connections, "requests": proxy.requests,
-                "client_eof_sessions": proxy.client_eofs,
+                "client_transport_closures": proxy.closures,
                 "mutation_submissions": len(mutations), "status_submissions": len(statuses),
                 "repeat_mutation_submissions": 0, "window_capture": screenshot,
                 "observed_signal_events": proxy.signal_events,
@@ -263,6 +337,10 @@ def main():
             (directory / "result.json").write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
             print(json.dumps({"status": "pass", "result": str(directory / "result.json")}))
         finally:
+            if proxy is not None:
+                (directory / "observer.json").write_text(json.dumps({"error": proxy.error,
+                    "connections": proxy.connections, "client_transport_closures": proxy.closures,
+                    "requests": proxy.requests}, indent=2) + "\n", encoding="utf-8")
             if proxy is not None and proxy.thread.is_alive():
                 proxy.close()
             if child is not None and child.poll() is None:
@@ -279,4 +357,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:] == ["--self-test-reset"]:
+        check_reset()
+    else:
+        main()
