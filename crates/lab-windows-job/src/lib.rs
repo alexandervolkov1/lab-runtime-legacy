@@ -56,6 +56,9 @@ pub struct Objects {
 mod windows;
 
 #[cfg(windows)]
+pub mod pipe;
+
+#[cfg(windows)]
 pub use windows::{Job, ProcessWitness};
 #[cfg(all(windows, feature = "fixture-probes"))]
 pub use windows::{commit_fixture, fixture_guard};
