@@ -79,7 +79,12 @@ try {
     $sourceRoot = (Join-Path $repo 'apps/lab-workbench/src').Replace('\', '/')
     $support = (Join-Path $repo 'scripts/support').Replace('\', '/')
     $rootModules = @()
-    foreach ($name in @('client', 'dispatcher', 'external', 'model', 'ownership', 'parent', 'presentation', 'recovery', 'storage')) {
+    foreach ($name in @('client', 'dispatcher', 'external', 'model', 'ownership', 'parent', 'presentation', 'recovery', 'storage', 'supervisor')) {
+        if ($name -eq 'supervisor') {
+            $path = (Join-Path $repo 'apps/lab-workbench/src/supervisor/mod.rs').Replace('\','/')
+            $rootModules += "#[path = `"$path`"] mod supervisor;"
+            continue
+        }
         $path = "$sourceRoot/$name.rs"
         if (-not (Test-Path -LiteralPath $path)) { $path = "$sourceRoot/$name/mod.rs" }
         if (-not (Test-Path -LiteralPath $path)) { throw "Missing production module $name" }

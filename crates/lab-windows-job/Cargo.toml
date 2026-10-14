@@ -1,0 +1,19 @@
+[package]
+name = "lab-windows-job"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version = "1.95"
+
+[features]
+fixture-probes = []
+
+# Local audited ABI capsule, no third-party dependencies. Workbench retains
+# workspace unsafe_code=forbid; only this crate's windows module permits FFI.
+[lints.rust]
+unsafe_code = "deny"
+missing_docs = "warn"
+
+[lints.clippy]
+all = "warn"

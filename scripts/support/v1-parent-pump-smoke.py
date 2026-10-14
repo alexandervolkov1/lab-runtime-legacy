@@ -106,7 +106,7 @@ def capture(pid, path):
 
 class Proxy:
     """Single test I/O thread, at most four sessions, finite buffers/request log."""
-    def __init__(self, port):
+    def __init__(self, port, hold_first_runtime_close=False):
         self.port = port
         self.listener = socket.socket()
         self.listener.bind(("127.0.0.1", 0))
@@ -116,23 +116,46 @@ class Proxy:
         self.samples, self.signal_events = threading.Condition(), 0
         self.session_ends, self.closures = threading.Condition(), []
         self.requests, self.connections, self.error = [], 0, None
+        self.sessions = []
+        self.hold_first_runtime_close = hold_first_runtime_close
         self.thread = threading.Thread(target=self.run, name="native-smoke-observer")
         self.thread.start()
 
     def run(self):
         peers, clients, partners, outgoing, incoming, held = set(), set(), {}, {}, {}, set()
+        session_ids, retained = {}, set()
+
+        def close_peer(peer):
+            peers.discard(peer)
+            clients.discard(peer)
+            held.discard(peer)
+            incoming.pop(peer, None)
+            outgoing.pop(peer, None)
+            peer.close()
+
+        def release_retained():
+            for peer in retained:
+                self.sessions[session_ids[peer]]["runtime_close_released_ns"] = time.monotonic_ns()
+                close_peer(peer)
+            retained.clear()
 
         def end_client(child, mode):
             # A Windows TCP close with unread event bytes may be a reset, not EOF.
             # All complete Runtime-bound frames are recorded before forwarding;
             # discarded partial frames cannot become admitted Runtime requests.
-            for p in (child, partners[child]):
-                peers.discard(p)
-                clients.discard(p)
-                held.discard(p)
-                incoming.pop(p, None)
-                outgoing.pop(p, None)
-                p.close()
+            index = session_ids[child]
+            self.sessions[index]["gui_close"] = mode
+            self.sessions[index]["gui_close_ns"] = time.monotonic_ns()
+            runtime = partners[child]
+            close_peer(child)
+            if self.hold_first_runtime_close and index == 0:
+                # Controlled observer experiment only: keep the old Runtime
+                # attachment until the next hello receives scope_in_use.
+                peers.discard(runtime)
+                retained.add(runtime)
+                self.sessions[index]["runtime_close_held"] = True
+            else:
+                close_peer(runtime)
             with self.session_ends:
                 self.closures.append(mode)
                 self.session_ends.notify_all()
@@ -148,8 +171,11 @@ class Proxy:
                         child, _ = self.listener.accept()
                         self.connections += 1
                         assert self.connections <= CONNECTION_LIMIT
+                        self.sessions.append({"session": self.connections, "opened_ns": time.monotonic_ns(),
+                                              "request_indices": [], "hello_responses": []})
                         runtime = socket.create_connection(("127.0.0.1", self.port), timeout=2)
                         for p in (child, runtime):
+                            session_ids[p] = self.connections - 1
                             p.setblocking(False)
                             peers.add(p)
                             outgoing[p] = bytearray()
@@ -182,9 +208,16 @@ class Proxy:
                             if peer in clients:
                                 assert len(self.requests) < REQUEST_LIMIT
                                 self.requests.append(message)
+                                self.sessions[session_ids[peer]]["request_indices"].append(len(self.requests) - 1)
                                 if message["op"] == "reference_retune":
                                     held.add(target)
                                     self.retune.set()
+                            elif message.get("msg_id") == "1":
+                                responses = self.sessions[session_ids[peer]]["hello_responses"]
+                                assert not responses, "duplicate hello response"
+                                responses.append({"observed_ns": time.monotonic_ns(), "message": message})
+                                if message.get("code") == "scope_in_use":
+                                    release_retained()
                             elif message.get("type") == "event" and message.get("kind") == "signal":
                                 with self.samples:
                                     self.signal_events += 1
@@ -204,6 +237,7 @@ class Proxy:
                               "closures": self.closures}), flush=True)
             self.retune.set()
         finally:
+            release_retained()
             for peer in peers:
                 peer.close()
             self.listener.close()
@@ -273,7 +307,15 @@ def check_reset():
 def main():
     args = argparse.ArgumentParser()
     args.add_argument("--profile", choices=("dev", "release"), required=True)
-    profile = args.parse_args().profile
+    args.add_argument("--binary-directory", type=Path)
+    args.add_argument("--binary-source-head")
+    args.add_argument("--hold-first-runtime-close", action="store_true",
+                      help="negative observer experiment; exact-two-session assertion stays strict")
+    options = args.parse_args()
+    profile = options.profile
+    assert (options.binary_directory is None) == (options.binary_source_head is None)
+    observer_source_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    binary_source_head = options.binary_source_head or observer_source_head
     assert os.name == "nt", "requires Windows desktop and MSVC binaries"
     directory = ROOT / "target" / ("b3b1-followup-native-" + profile + "-" + str(time.time_ns()))
     directory.mkdir()
@@ -282,7 +324,7 @@ def main():
         'path = "' + (directory / "history.sqlite").as_posix() + '"')
     config_path = directory / "runtime.toml"
     config_path.write_text(config, encoding="utf-8")
-    binaries = ROOT / "target" / ("debug" if profile == "dev" else "release")
+    binaries = options.binary_directory or ROOT / "target" / ("debug" if profile == "dev" else "release")
     env = dict(os.environ)
     env["LAB_RUNTIME_LOG_DIRECTORY"] = str(directory / "diagnostics")
     env["LAB_WORKBENCH_GUI_SMOKE_RESULT"] = str(directory / "smoke.json")
@@ -300,7 +342,7 @@ def main():
                         ready = json.loads(line)
                 threading.Event().wait(0.02)  # Poll observed readiness; no guessed startup delay.
             assert ready is not None, "Runtime readiness deadline"
-            proxy = Proxy(ready["port"])
+            proxy = Proxy(ready["port"], options.hold_first_runtime_close)
             child = subprocess.Popen([str(binaries / "lab-workbench.exe"), "--connect",
                 "127.0.0.1:" + str(proxy.listener.getsockname()[1]), "--workspace", str(directory / "workspace")],
                 stdout=child_log, stderr=child_log, env=env, creationflags=subprocess.CREATE_NO_WINDOW)
@@ -325,10 +367,13 @@ def main():
             assert all(result[key] for key in ("confirmation_observed", "mutation_accepted_observed",
                 "mutation_completed_observed", "authoritative_refresh_observed", "stale_controls_disabled",
                 "controls_reenabled_after_fresh", "minimize_restore_observed"))
-            record = {"profile": profile, "rust_source_head": subprocess.check_output(
-                ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(), "gui_exit_code": exit_code,
+            record = {"profile": profile, "rust_source_head": binary_source_head,
+                "observer_source_head": observer_source_head, "gui_exit_code": exit_code,
                 "native_smoke": result, "connections": proxy.connections, "requests": proxy.requests,
                 "client_transport_closures": proxy.closures,
+                "sessions": proxy.sessions,
+                "binary_source_head": binary_source_head,
+                "held_first_runtime_close": options.hold_first_runtime_close,
                 "mutation_submissions": len(mutations), "status_submissions": len(statuses),
                 "repeat_mutation_submissions": 0, "window_capture": screenshot,
                 "observed_signal_events": proxy.signal_events,
@@ -340,7 +385,9 @@ def main():
             if proxy is not None:
                 (directory / "observer.json").write_text(json.dumps({"error": proxy.error,
                     "connections": proxy.connections, "client_transport_closures": proxy.closures,
-                    "requests": proxy.requests}, indent=2) + "\n", encoding="utf-8")
+                    "requests": proxy.requests, "sessions": proxy.sessions,
+                    "binary_source_head": binary_source_head, "observer_source_head": observer_source_head,
+                    "held_first_runtime_close": options.hold_first_runtime_close}, indent=2) + "\n", encoding="utf-8")
             if proxy is not None and proxy.thread.is_alive():
                 proxy.close()
             if child is not None and child.poll() is None:

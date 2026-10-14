@@ -321,6 +321,8 @@ pub(crate) struct ParentPump<C: ParentClient + Send + 'static> {
     join: Option<JoinHandle<ParentOwner<C>>>,
     stopped_owner: Option<ParentOwner<C>>,
     terminal_error: Option<&'static str>,
+    #[cfg(windows)]
+    supervisor: Option<crate::supervisor::Supervisor>,
 }
 #[cfg_attr(
     not(test),
@@ -363,7 +365,30 @@ impl<C: ParentClient + Send + 'static> ParentPump<C> {
             join: Some(join),
             stopped_owner: None,
             terminal_error: None,
+            #[cfg(windows)]
+            supervisor: None,
         })
+    }
+    /// Install one optional OS owner without putting OS work on ParentOwner.
+    /// Active v1 never calls this inactive composition seam.
+    #[cfg(windows)]
+    pub(crate) fn install_supervisor<B: crate::supervisor::Backend + 'static>(
+        &mut self,
+        factory: impl FnOnce() -> B + Send + 'static,
+        policy: crate::supervisor::Policy,
+    ) -> io::Result<&crate::supervisor::Supervisor> {
+        if self.supervisor.is_some() {
+            return Err(io::Error::new(
+                io::ErrorKind::AlreadyExists,
+                "one supervisor per parent",
+            ));
+        }
+        self.supervisor = Some(crate::supervisor::Supervisor::spawn(factory, policy)?);
+        Ok(self.supervisor.as_ref().unwrap())
+    }
+    #[cfg(windows)]
+    pub(crate) fn supervisor(&self) -> Option<&crate::supervisor::Supervisor> {
+        self.supervisor.as_ref()
     }
     /// Does not drop an unconfirmed join handle on timeout. Caller can observe
     /// the same stopping root again; no replacement worker is started.
@@ -371,6 +396,10 @@ impl<C: ParentClient + Send + 'static> ParentPump<C> {
         self.shutdown_until(Instant::now() + SHUTDOWN_OBSERVATION)
     }
     fn shutdown_until(&mut self, deadline: Instant) -> Result<(), &'static str> {
+        #[cfg(windows)]
+        if let Some(supervisor) = &self.supervisor {
+            supervisor.shutdown();
+        }
         self.signal.stop();
         while self.join.as_ref().is_some_and(|join| !join.is_finished()) {
             if Instant::now() >= deadline {
@@ -393,7 +422,23 @@ impl<C: ParentClient + Send + 'static> ParentPump<C> {
                     .as_ref()
                     .and_then(|owner| owner.shutdown_error)
             })
-            .map_or(Ok(()), Err)
+            .map_or(Ok(()), Err)?;
+        #[cfg(windows)]
+        if let Some(supervisor) = &self.supervisor {
+            let confirmed = supervisor.status().is_ok_and(|s| {
+                matches!(
+                    s.phase,
+                    crate::supervisor::Phase::Stopped
+                        | crate::supervisor::Phase::ExitedHealthy
+                        | crate::supervisor::Phase::ExitedContained
+                ) && s.objects == lab_windows_job::Objects::default()
+                    && s.worker_finished
+            });
+            if !confirmed || !supervisor.worker_finished() {
+                return Err("supervisor child exit remains unconfirmed");
+            }
+        }
+        Ok(())
     }
 }
 impl<C: ParentClient + Send + 'static> Drop for ParentPump<C> {

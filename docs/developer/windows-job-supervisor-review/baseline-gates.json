@@ -1,0 +1,160 @@
+[
+  {
+    "name": "baseline-dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\b3b1-baseline\\Cargo.toml",
+      "--target-dir",
+      "D:\\rust\\lab-runtime\\target",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 24.102,
+    "log_sha256": "4ab1a1ebe13268ecdf473c1b1b038fb84cdf1044a4c7c21c550745f5b61e592d"
+  },
+  {
+    "name": "baseline-dev-v1-native",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev",
+      "--binary-directory",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\baseline-binaries\\dev",
+      "--binary-source-head",
+      "2aaf98fcd77a8b6bf73b2341d0b95298be401df6"
+    ],
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 5.04,
+    "log_sha256": "16fc367537e75759f0d4762a2b6de7fc6b06b30776fb8ff4e8c64ad56aaa5213"
+  },
+  {
+    "name": "baseline-dev-v1-held-close",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev",
+      "--binary-directory",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\baseline-binaries\\dev",
+      "--binary-source-head",
+      "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+      "--hold-first-runtime-close"
+    ],
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 1,
+    "elapsed_seconds": 5.248,
+    "log_sha256": "31fe8bbcd60fdced1d87a3df25821eba1dd116315d3ca5df954b0b60a559101c"
+  },
+  {
+    "name": "baseline-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\b3b1-baseline\\Cargo.toml",
+      "--target-dir",
+      "D:\\rust\\lab-runtime\\target",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 21.74,
+    "log_sha256": "ce76f1fa8dc2f602c28f80b3fa59bf4caabee81aeac9dd7b48c4b4f810f1e6f5"
+  },
+  {
+    "name": "baseline-release-v1-native",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release",
+      "--binary-directory",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\baseline-binaries\\release",
+      "--binary-source-head",
+      "2aaf98fcd77a8b6bf73b2341d0b95298be401df6"
+    ],
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 2.619,
+    "log_sha256": "421dc34a451eef1367a6018dd6247dda0be09f78c87156ace728a22b282eb9d5"
+  },
+  {
+    "name": "baseline-release-v1-held-close",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release",
+      "--binary-directory",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\baseline-binaries\\release",
+      "--binary-source-head",
+      "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+      "--hold-first-runtime-close"
+    ],
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 1,
+    "elapsed_seconds": 5.003,
+    "log_sha256": "31fe8bbcd60fdced1d87a3df25821eba1dd116315d3ca5df954b0b60a559101c"
+  },
+  {
+    "name": "restore-current-dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 3.943,
+    "log_sha256": "89fe8e26ec2c713db037bafe72610e5ae55d457fc8fc069b741218a9b715260f"
+  },
+  {
+    "name": "restore-current-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 10.117,
+    "log_sha256": "f75c8196cf4fdc23f26721cb0552cc49960601f6710947b972d2e13835171e0e"
+  }
+]

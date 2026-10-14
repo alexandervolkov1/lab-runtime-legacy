@@ -1,0 +1,36 @@
+[
+  {
+    "name": "final-snapshot-dev-v1-native",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev",
+      "--binary-directory",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\current-binaries\\dev",
+      "--binary-source-head",
+      "c72e4440d5258679a8313e9894211948294373f7"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 2.929,
+    "log_sha256": "f1942f4472414c704ff7cd1164f98c17241f0abb90c7ec1f1cab08b9192e96e5"
+  },
+  {
+    "name": "final-snapshot-release-v1-native",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release",
+      "--binary-directory",
+      "D:\\rust\\lab-runtime\\target\\b3b2-review\\current-binaries\\release",
+      "--binary-source-head",
+      "c72e4440d5258679a8313e9894211948294373f7"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 2.267,
+    "log_sha256": "4507bf72f2c68e2e0d9756f6de5da909f866599049ec0cfec83c57d5a1ea1856"
+  }
+]

@@ -1,0 +1,83 @@
+{
+  "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "rustfmt",
+        "--edition",
+        "2024",
+        "--check",
+        "scripts/support/windows-supervisor-fixture.rs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-Command",
+        "$reviewTokens=$null; $reviewErrors=$null; foreach ($reviewPath in @(\"scripts/test-windows-supervisor.ps1\", \"scripts/test-v2-renderer-allocation.ps1\")) { [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $reviewPath), [ref]$reviewTokens, [ref]$reviewErrors); if ($reviewErrors.Count) { throw $reviewErrors } }; $PSVersionTable.PSVersion.ToString()"
+      ],
+      "exit_code": 0
+    },
+    {
+      "check": "Python observer AST",
+      "result": "PASS"
+    },
+    {
+      "check": "Exact changed source set since independent review",
+      "paths": [
+        "apps/lab-workbench/src/supervisor/mod.rs",
+        "apps/lab-workbench/src/supervisor/native_tests.rs",
+        "apps/lab-workbench/src/supervisor/tests.rs",
+        "scripts/support/v1-parent-pump-smoke.py"
+      ],
+      "result": "PASS"
+    },
+    {
+      "check": "Changed local Markdown link targets",
+      "result": "PASS"
+    },
+    {
+      "check": "Every preserved binary snapshot has an exact-byte successful strict native smoke",
+      "result": "PASS",
+      "earlier_builds": [
+        {
+          "profile": "dev",
+          "binary": "lab-workbench.exe",
+          "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+          "executed_sha256": "abccb746a24c75eb40e427f7e033ed2559676b2eefb4c653a82d912fb0d102bc",
+          "later_snapshot_sha256": "13bec9ac626c9241f46ed7327272f362faa14f0cf16366d3dbcb9ee1c00d7084",
+          "reason": "Earlier dual-package build; CPU wrapper subsequently rebuilt Workbench independently."
+        },
+        {
+          "profile": "release",
+          "binary": "lab-workbench.exe",
+          "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+          "executed_sha256": "35ae699b87fc14161308c5ded7aedf5f5963588ada2383601f9cf0b466b966f6",
+          "later_snapshot_sha256": "0f0bb9934ed9e20017221f16ef86bb5ae35db5b01c0b6796152743ac2a27c630",
+          "reason": "Earlier dual-package build; CPU wrapper subsequently rebuilt Workbench independently."
+        }
+      ]
+    }
+  ],
+  "log_sha256": "d0e7af22182031671d359c1ec596d623c63664b8648cee1206e4ab069dd36d09"
+}

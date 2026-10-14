@@ -22,11 +22,15 @@ tokio = { version = "1", features = ["rt", "net", "time"] }
 log = { version = "0.4", features = ["max_level_info"] }
 
 [target.'cfg(windows)'.dependencies]
+lab-windows-job = { path = "../../crates/lab-windows-job" }
 win-desktop-utils = { version = "=0.5.7", default-features = false, features = ["instance"] }
 
 [dev-dependencies]
 lab-runtime = { path = "../lab-runtime" }
 rcgen = "0.14"
+
+[target.'cfg(windows)'.dev-dependencies]
+lab-windows-job = { path = "../../crates/lab-windows-job", features = ["fixture-probes"] }
 
 [lints]
 workspace = true

@@ -1,0 +1,678 @@
+[
+  {
+    "directory": "target/b3b1-followup-native-dev-1791996466829473300",
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": false,
+    "connections": 2,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "PASS",
+    "requests": 19,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "f136ca27d5d7841c9f51361a1448dbda:1",
+        "opened_ns": 1236509069700,
+        "gui_close_ns": 1237334698200
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "f136ca27d5d7841c9f51361a1448dbda:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "f136ca27d5d7841c9f51361a1448dbda:1",
+        "opened_ns": 1237340895200,
+        "gui_close_ns": 1237551657200
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-dev-1791996469541481300",
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": true,
+    "connections": 3,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "FAILED",
+    "requests": 20,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "bba374df74ea0d48ec3f064fccb4de39:1",
+        "opened_ns": 1238731027200,
+        "gui_close_ns": 1239547678900
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello"
+        ],
+        "requested_scope": "bba374df74ea0d48ec3f064fccb4de39:1",
+        "hello_type": "error",
+        "hello_error": "scope_in_use",
+        "accepted": false,
+        "authoritative_scope": null,
+        "opened_ns": 1239556032100,
+        "gui_close_ns": 1239581149700
+      },
+      {
+        "session": 3,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "bba374df74ea0d48ec3f064fccb4de39:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "bba374df74ea0d48ec3f064fccb4de39:1",
+        "opened_ns": 1239593885800,
+        "gui_close_ns": 1239853156400
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-dev-1791997395876503600",
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": false,
+    "connections": 2,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "PASS",
+    "requests": 19,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "73da661c5bf6a60490238475abe4aab4:1",
+        "opened_ns": 2167247114200,
+        "gui_close_ns": 2168446332700
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "73da661c5bf6a60490238475abe4aab4:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "73da661c5bf6a60490238475abe4aab4:1",
+        "opened_ns": 2168451918200,
+        "gui_close_ns": 2168737338700
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-dev-1791997400918601600",
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": true,
+    "connections": 3,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "FAILED",
+    "requests": 20,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "f5abf967cc66cd2d2f55a15095b5d584:1",
+        "opened_ns": 2170157970400,
+        "gui_close_ns": 2170931378100
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello"
+        ],
+        "requested_scope": "f5abf967cc66cd2d2f55a15095b5d584:1",
+        "hello_type": "error",
+        "hello_error": "scope_in_use",
+        "accepted": false,
+        "authoritative_scope": null,
+        "opened_ns": 2170937069400,
+        "gui_close_ns": 2170971882200
+      },
+      {
+        "session": 3,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "f5abf967cc66cd2d2f55a15095b5d584:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "f5abf967cc66cd2d2f55a15095b5d584:1",
+        "opened_ns": 2170984583100,
+        "gui_close_ns": 2171236878500
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-dev-1791997675852443100",
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": false,
+    "connections": 2,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "PASS",
+    "requests": 19,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "9e9e071af7a3bc66c83bda480403fb37:1",
+        "opened_ns": 2445716536900,
+        "gui_close_ns": 2446590974300
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "9e9e071af7a3bc66c83bda480403fb37:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "9e9e071af7a3bc66c83bda480403fb37:1",
+        "opened_ns": 2446598536500,
+        "gui_close_ns": 2446808743400
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-release-1791996632136265100",
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": false,
+    "connections": 2,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "PASS",
+    "requests": 19,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_reset_on_receive"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "b23f8b671f0a3c77b38e6592b73c52ae:1",
+        "opened_ns": 1401510141300,
+        "gui_close_ns": 1402157119000
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "b23f8b671f0a3c77b38e6592b73c52ae:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "b23f8b671f0a3c77b38e6592b73c52ae:1",
+        "opened_ns": 1402159788500,
+        "gui_close_ns": 1402386554600
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-release-1791996634320030600",
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": true,
+    "connections": 3,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "FAILED",
+    "requests": 20,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "b4b0e60b1c85f0e2b4d8b2452a0b1cbb:1",
+        "opened_ns": 1403500650800,
+        "gui_close_ns": 1404117436400
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello"
+        ],
+        "requested_scope": "b4b0e60b1c85f0e2b4d8b2452a0b1cbb:1",
+        "hello_type": "error",
+        "hello_error": "scope_in_use",
+        "accepted": false,
+        "authoritative_scope": null,
+        "opened_ns": 1404120118300,
+        "gui_close_ns": 1404157430900
+      },
+      {
+        "session": 3,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "b4b0e60b1c85f0e2b4d8b2452a0b1cbb:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "b4b0e60b1c85f0e2b4d8b2452a0b1cbb:1",
+        "opened_ns": 1404170158700,
+        "gui_close_ns": 1404387910400
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-release-1791997428188315900",
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": false,
+    "connections": 2,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "PASS",
+    "requests": 19,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "cbe9ff8b2e0306d2306c9dcbb5daa37c:1",
+        "opened_ns": 2197988058900,
+        "gui_close_ns": 2198633746600
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "cbe9ff8b2e0306d2306c9dcbb5daa37c:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "cbe9ff8b2e0306d2306c9dcbb5daa37c:1",
+        "opened_ns": 2198636388900,
+        "gui_close_ns": 2198852705700
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-release-1791997430808522700",
+    "binary_source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": true,
+    "connections": 3,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "FAILED",
+    "requests": 20,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "91c2ad5003cf3a185fae29cecfc34c1b:1",
+        "opened_ns": 2199997611000,
+        "gui_close_ns": 2200616410000
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello"
+        ],
+        "requested_scope": "91c2ad5003cf3a185fae29cecfc34c1b:1",
+        "hello_type": "error",
+        "hello_error": "scope_in_use",
+        "accepted": false,
+        "authoritative_scope": null,
+        "opened_ns": 2200619087600,
+        "gui_close_ns": 2200643867100
+      },
+      {
+        "session": 3,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "91c2ad5003cf3a185fae29cecfc34c1b:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "91c2ad5003cf3a185fae29cecfc34c1b:1",
+        "opened_ns": 2200656574900,
+        "gui_close_ns": 2200870888500
+      }
+    ]
+  },
+  {
+    "directory": "target/b3b1-followup-native-release-1791997678787381700",
+    "binary_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "observer_source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "held_close": false,
+    "connections": 2,
+    "observer_error": null,
+    "smoke_status": "pass",
+    "strict_observer_result": "PASS",
+    "requests": 19,
+    "mutations": 1,
+    "statuses": 0,
+    "closures": [
+      "gui_eof",
+      "gui_eof"
+    ],
+    "sessions": [
+      {
+        "session": 1,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe",
+          "reference_retune"
+        ],
+        "requested_scope": null,
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "beb729e0a592c82d22003b63afeeba38:1",
+        "opened_ns": 2448263447800,
+        "gui_close_ns": 2448913288500
+      },
+      {
+        "session": 2,
+        "operations": [
+          "hello",
+          "discover",
+          "measurements_current",
+          "reference",
+          "controller",
+          "recording_status",
+          "configuration_properties",
+          "discover",
+          "subscribe"
+        ],
+        "requested_scope": "beb729e0a592c82d22003b63afeeba38:1",
+        "hello_type": "result",
+        "hello_error": null,
+        "accepted": null,
+        "authoritative_scope": "beb729e0a592c82d22003b63afeeba38:1",
+        "opened_ns": 2448923517800,
+        "gui_close_ns": 2449123058300
+      }
+    ]
+  }
+]

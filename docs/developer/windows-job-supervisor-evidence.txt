@@ -1,0 +1,231 @@
+HISTORICAL PRE-REVIEW EVIDENCE. Independent review of 76471be blocked merge on
+launch-admission and first-containment defects. The original transcripts below
+do not qualify their fixes. Current results: windows-job-supervisor-review-followup.md
+and windows-job-supervisor-review/ (raw logs, audits and source inventories).
+
+DGUI-4C7B3B2 / Windows 10 Pro 10.0.19045 x64 / x86_64-pc-windows-msvc / 2026-10-14
+Rust 1.95.0 (59807616e 2026-04-14); locked dependency artifacts.
+B3B1 verified PR #37 HEAD 67211d1ae95e1b35f49c79c6c804ef57298fc0b0; base 14bbe58aa54ef6b2320a6d11ccfb98cf2ee67697.
+Ordinary merge 2aaf98fcd77a8b6bf73b2341d0b95298be401df6; exact reviewed second parent; synchronized main tree clean.
+Branch feature/dgui-4c7b3b2-windows-job-supervisor; final tested source HEAD b4fd9bfce0fad166b720e9196363fa4f783b65e3.
+Subsequent evidence/capture commit changes no Rust/Cargo/probe inputs; final PR HEAD is in PR body.
+Inactive single-child production lifecycle seam; active v1 remains cooperative.
+No GL, production IPC, snapshot bridge, GUI child rendering/activation, Runtime/DTO/wire changes.
+ACTIVATION_QUALIFIED=false. No B3B2 merge, release or B3B3.
+
+Final source gates (both profiles):
+dev complete Workbench suite: 502 PASS / 0 failures / 21 ignored, elapsed=512.99s.
+dev matching inventory: 523 tests, 502 enabled; ordered names SHA256=d4c90c48914378254d1bf92029e2014cf20cb4960709a378651f4caff2a37574.
+dev final parent/supervisor/GUI-drain/parser-architecture subset: 27 PASS, elapsed=0.36s.
+dev 64-update fixture: rebuild steps=64, external calls=0, elapsed_us=167; not universal payload/scheduler bound.
+dev explicit non-M17.4 virtual process acceptance: 13 PASS, elapsed=8.20s.
+dev native no-GPU process groups: 6 PASS, elapsed=15.92s.
+dev clippy: PASS; transcript raw SHA256=b915b54d86e5da8c825520f9819c8e5d6ef0147c631f545cfd4be8f5d10463c8.
+dev build: PASS; transcript raw SHA256=ac561bba0b53d59694f8f645ab44b9531dfa82e65fbfea9306fe040e27add31a.
+dev local capsule unit/doc build: PASS (0 independent tests; exercised by 12 supervisor units and six native groups).
+release complete Workbench suite: 502 PASS / 0 failures / 21 ignored, elapsed=47.18s.
+release matching inventory: 523 tests, 502 enabled; ordered names SHA256=d4c90c48914378254d1bf92029e2014cf20cb4960709a378651f4caff2a37574.
+release final parent/supervisor/GUI-drain/parser-architecture subset: 27 PASS, elapsed=0.34s.
+release 64-update fixture: rebuild steps=64, external calls=0, elapsed_us=65; not universal payload/scheduler bound.
+release explicit non-M17.4 virtual process acceptance: 13 PASS, elapsed=6.81s.
+release native no-GPU process groups: 6 PASS, elapsed=13.05s.
+release clippy: PASS; transcript raw SHA256=ac8d05eb3892707e0597e372f76c2ecff8d03eabdc3e2370312e926da1cefabf.
+release build: PASS; transcript raw SHA256=47fd96c4f2face66015451934f66d1d7f6b29320122176e509c0d3cc58d6a4d1.
+release local capsule unit/doc build: PASS (0 independent tests; exercised by 12 supervisor units and six native groups).
+
+Deterministic ownership/fault results:
+One latest metadata slot (Status=232 bytes), Shared+pending request=336, mutable Worker=424, Launch=104, Objects=24, Policy=64.
+Sizes are inline sizeof values, not total allocator/OS/thread cost. One pending Launch, <=8 arguments, no observations/snapshot copy or event history.
+One ParentPump root installation; a second is rejected while its real supervisor worker is paused at a Barrier.
+During that OS pause, real ParentOwner continues bounded fake-client bootstrap/Fresh/recovery and real loopback Workbench API requests, revision 1->2.
+No mutation/status/Exact Retry from child lifecycle. Same accepted recovery identity retained; one client stop across repeated shutdown.
+Root shutdown during a stalled OS call returns unconfirmed, keeps the same worker/episode, prohibits restart, later observed worker finish permits success.
+try_lock status/restart/stop reject contention immediately; irreversible shutdown atomic latch cannot lose stop.
+Pending Stop supersedes Restart; immediate Stop cannot be downgraded; active/full-slot/ExitUnconfirmed restart rejected.
+Termination ACK/timeout alone never retires: one termination request, same Job/process retained, later original process proof resolves.
+Injected original wait failure remains independently recorded; failed handle retirement retains remaining ledger, no repeated close.
+Barrier inside actual handle retirement proves no ExitedHealthy/ExitedContained or replacement admission before retirement completes.
+Create/Set/Query/unsupported-attribute/incompatible-nested injected failures: no child/no fallback; initial error survives cleanup error.
+Unexpected inert factory panic is diagnosed ExitUnconfirmed/WorkerPanic and never replaced. Backend panic catcher retains the original backend outside unwind.
+Wrong incarnation/challenge, duplicate ACK and unchanged helper owner counter never fabricate owner progress/healthy close.
+Existing real-turn wake/stop tests still PASS: receive barrier inside ParentOwner::turn, forced Empty, FIFO exactly two updates/no idle rescue/no submissions; Stop variant exactly one applied update.
+
+Required native acceptance mapping (six groups, dev + release):
+1 membership/limits before execution: real JOB_LIST suspended creation, IsProcessInJob/readback/handle flags before Resume; executed marker absent, thread ledger retained.
+2 last handle KILL_ON_JOB_CLOSE: independent original-process witness signals after capsule Drop; containment only.
+3 parent death: original parent forced exit=88; duplicated inner ORIGINAL child witness signals exit=0; no inner Job inherited.
+4 committed-memory enforcement: 4 MiB native commit succeeds, 64 MiB denied Win32 1455 under 33,554,432 process/Job fixture caps; child explicit exit=90.
+5 second active child: same Job prepare rejects second record and actual descendant CreateProcess denied Win32 1816 under ACTIVE_PROCESS=1.
+6 startup failure: missing exe Win32 2 with no child; real post-create gate fault/cancel/expired startup rollback original child, never executes.
+7 normal and forced exit: advancing owner close receipt + original exit=0 + zero handles; forced one TerminateJob request + original exit=77 + zero handles.
+8 unconfirmed exit: deliberately hide supervisor proof; original read-only guardian independently confirms actual containment; replacement remains forbidden until same original proof exposed.
+9 repeated stop/restart: three explicit incarnations healthy/contained/healthy, one terminal diagnostic slot, zero handles after each; no automatic restart.
+10 supervisor stall: real ParentPump/API with Barrier-controlled backend; no OS call on Application worker or model turn.
+11 owner versus helper heartbeat: real child helper answers fresh sequence while owner parks; process alive/heartbeat fresh, owner progress expires, then contained.
+12 no Runtime replay: bounded fake-client audit sees zero lifecycle-created mutations/status/retries; v1 real audit sees only its intentional operator mutation.
+Observed monotonic policy: challenge=250ms, observation=2s, graceful=2s, post-termination=2s. No sleep-based proof; barriers/Condvar timeouts/original handles/markers.
+Polling cadence is not an OS execution guarantee. Real unresolved proof is simulated, never reported as a real GPU/device-loss experiment.
+
+DEV native transcript (compile lines omitted):
+running 6 tests
+test supervisor::native_tests::atomic_job_membership_limits_suspension_and_last_handle_close ... atomic before-execution gates PASS; second record rejected; last-handle kill observed exit=0
+ok
+test supervisor::native_tests::crash_hang_helper_pong_and_commit_denial_are_contained ... mode=crash state=ExitedContained reason=Some(UnexpectedExit) exit=Some(31) process_commit_peak=6565888 job_commit_peak=7102464 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=hang state=ExitedContained reason=Some(StartupDeadline) exit=Some(77) process_commit_peak=6569984 job_commit_peak=7139328 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=helper state=ExitedContained reason=Some(OwnerProgressDeadline) exit=Some(77) process_commit_peak=6561792 job_commit_peak=7155712 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=commit state=ExitedContained reason=Some(UnexpectedExit) exit=Some(90) process_commit_peak=6557696 job_commit_peak=11259904 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=descendant state=ExitedContained reason=Some(UnexpectedExit) exit=Some(91) process_commit_peak=6561792 job_commit_peak=7208960 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+ok
+test supervisor::native_tests::normal_close_explicit_restart_and_termination_keep_one_record ... cycle=1 state=ExitedHealthy exit=Some(0) terminations=0 process_commit_peak=6565888 job_commit_peak=7213056 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+cycle=2 state=ExitedContained exit=Some(77) terminations=1 process_commit_peak=6565888 job_commit_peak=7086080 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+cycle=3 state=ExitedHealthy exit=Some(0) terminations=0 process_commit_peak=6561792 job_commit_peak=7221248 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+ok
+test supervisor::native_tests::parent_death_closes_inner_job_and_incompatible_nested_job_fails_closed ... forced parent death PASS; original child witness exit=0; inner last-handle containment
+incompatible inherited active-count Job: child creation rejected; no uncontrolled fixture execution
+ok
+test supervisor::native_tests::startup_failure_and_cancel_before_resume_never_execute_child ... suspended startup rollback variant=0 gate_injected=false exit confirmed; executed=false
+suspended startup rollback variant=1 gate_injected=true exit confirmed; executed=false
+suspended startup rollback variant=2 gate_injected=false exit confirmed; executed=false
+ok
+test supervisor::native_tests::suppressed_exit_proof_retains_same_job_and_blocks_replacement ... simulated exit-proof withholding PASS; same incarnation/Job retained; actual guardian exit=77; later original proof retires
+ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 517 filtered out; finished in 15.92s
+
+RELEASE native transcript (compile lines omitted):
+running 6 tests
+test supervisor::native_tests::atomic_job_membership_limits_suspension_and_last_handle_close ... atomic before-execution gates PASS; second record rejected; last-handle kill observed exit=0
+ok
+test supervisor::native_tests::crash_hang_helper_pong_and_commit_denial_are_contained ... mode=crash state=ExitedContained reason=Some(UnexpectedExit) exit=Some(31) process_commit_peak=6529024 job_commit_peak=7098368 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=hang state=ExitedContained reason=Some(StartupDeadline) exit=Some(77) process_commit_peak=6537216 job_commit_peak=7102464 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=helper state=ExitedContained reason=Some(OwnerProgressDeadline) exit=Some(77) process_commit_peak=6565888 job_commit_peak=7192576 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=commit state=ExitedContained reason=Some(UnexpectedExit) exit=Some(90) process_commit_peak=6561792 job_commit_peak=11317248 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+mode=descendant state=ExitedContained reason=Some(UnexpectedExit) exit=Some(91) process_commit_peak=6553600 job_commit_peak=7225344 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+ok
+test supervisor::native_tests::normal_close_explicit_restart_and_termination_keep_one_record ... cycle=1 state=ExitedHealthy exit=Some(0) terminations=0 process_commit_peak=6561792 job_commit_peak=7254016 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+cycle=2 state=ExitedContained exit=Some(77) terminations=1 process_commit_peak=6561792 job_commit_peak=7135232 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+cycle=3 state=ExitedHealthy exit=Some(0) terminations=0 process_commit_peak=6569984 job_commit_peak=7262208 objects=Objects { jobs: 0, processes: 0, threads: 0 }
+ok
+test supervisor::native_tests::parent_death_closes_inner_job_and_incompatible_nested_job_fails_closed ... forced parent death PASS; original child witness exit=0; inner last-handle containment
+incompatible inherited active-count Job: child creation rejected; no uncontrolled fixture execution
+ok
+test supervisor::native_tests::startup_failure_and_cancel_before_resume_never_execute_child ... suspended startup rollback variant=0 gate_injected=false exit confirmed; executed=false
+suspended startup rollback variant=1 gate_injected=true exit confirmed; executed=false
+suspended startup rollback variant=2 gate_injected=false exit confirmed; executed=false
+ok
+test supervisor::native_tests::suppressed_exit_proof_retains_same_job_and_blocks_replacement ... simulated exit-proof withholding PASS; same incarnation/Job retained; actual guardian exit=77; later original proof retires
+ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 517 filtered out; finished in 13.05s
+
+Memory scopes:
+Fixture process cap=33,554,432; Job cap=33,554,432. Outer two-process test guard=67,108,864/134,217,728.
+Native peaks above are QueryInformationJobObject process/job committed-memory readings sampled at retirement; neither RSS, Rust bytes nor VRAM.
+Windows allocation denial does not automatically kill the process; fixture handles denial and exits explicitly.
+Deployment GUI cap C remains UNSELECTED. Active-process limit does not bound library thread count, all kernel resources or GPU driver allocations.
+Native scratch: <=4,096 attribute bytes + boxed handle; <=33,818 quoted UTF-8 command simultaneously with <=9,243 UTF-16 units, app/cwd 1,025 units each, env 1,040.
+One admitted launch descriptor and directory clone coexist with startup scratch. Fixture challenge<=64 bytes, ACK<=96, read<=97, <=48 parsed fields.
+No total host Rust allowance or driver/VRAM receipt follows from these controlled capacities/OS commit caps.
+
+CPU regression complete dev/release wrapper run started at source HEAD 563a8f63fb408105584e5d390f668d1bf5159c8d.
+Final patch b4fd9bfce0fad166b720e9196363fa4f783b65e3 changes only three supervisor worker/test files; no Preview/allocator/geometry/memory/GUI/Cargo inputs changed.
+The wrapper starts no supervisor, ParentPump, OS job, Runtime or GUI. Historical heavy CPU tables reused for unchanged allocation behavior.
+Final-source FramesOnly compilation/five borrowing/12 frames/four no-upload/nine pending gates repeated in both profiles.
+dev five borrowing gates E0499/E0505: PASS at initial and final source HEADs.
+dev geometry: 119 PASS, historical exact; max accounted=4610337; normalized SHA256=8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751.
+dev memory: 125 PASS, historical exact; max accounted=4458653; normalized SHA256=48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212.
+dev frames: 12 PASS, historical exact; max accounted=4355499; normalized SHA256=24bba32d439203d7e29a9e91f3c54af681b5577eb34974c6da1bdf9c8ebab74e.
+dev host-no-upload: 4 PASS, historical exact; max accounted=4367945; normalized SHA256=a25f1639aa5509171fb9f69dc96c29d81db4902e7d65f1947d8a116c30482a12.
+dev retirement: 9 PASS, historical exact; max accounted=4367945; normalized SHA256=16aed141737f84299e5097adb9ce8ab057fde0ff0e8168af12aa8825c2244cfe.
+dev Widget/Page/Unicode/navigation table plot: historical bytes exact PASS.
+dev Widget/Page/Unicode/navigation table bounded: historical bytes exact PASS.
+release five borrowing gates E0499/E0505: PASS at initial and final source HEADs.
+release geometry: 119 PASS, historical exact; max accounted=4610337; normalized SHA256=8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751.
+release memory: 125 PASS, historical exact; max accounted=4458653; normalized SHA256=48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212.
+release frames: 12 PASS, historical exact; max accounted=4355499; normalized SHA256=24bba32d439203d7e29a9e91f3c54af681b5577eb34974c6da1bdf9c8ebab74e.
+release host-no-upload: 4 PASS, historical exact; max accounted=4367945; normalized SHA256=a25f1639aa5509171fb9f69dc96c29d81db4902e7d65f1947d8a116c30482a12.
+release retirement: 9 PASS, historical exact; max accounted=4367945; normalized SHA256=16aed141737f84299e5097adb9ce8ab057fde0ff0e8168af12aa8825c2244cfe.
+release Widget/Page/Unicode/navigation table plot: historical bytes exact PASS.
+release Widget/Page/Unicode/navigation table bounded: historical bytes exact PASS.
+CPU Preview max=4,610,337 / 8,388,608 accounted bytes; B1/FiniteTraceItem/profiles unchanged.
+
+dev native v1 existing automated smoke: PASS; fresh data/cyan plot, Confirm, completion/authoritative refresh, minimize/restore, Disconnect/reconnect/Fresh, normal GUI exit=0.
+dev complete Runtime frame audit: 19 requests, connections=2, mutation=1, operation_status=0, repeated mutation=0, closures=['gui_eof', 'gui_eof'].
+dev published windows-job-supervisor-v1-dev.json/.png; capture SHA256=af7cc3fa01997f1058e8e9e08bec6caf04962b80f58128c62cc3d093c7137029.
+release native v1 existing automated smoke: PASS; fresh data/cyan plot, Confirm, completion/authoritative refresh, minimize/restore, Disconnect/reconnect/Fresh, normal GUI exit=0.
+release complete Runtime frame audit: 19 requests, connections=2, mutation=1, operation_status=0, repeated mutation=0, closures=['gui_eof', 'gui_eof'].
+release published windows-job-supervisor-v1-release.json/.png; capture SHA256=f84434a4ddb9abb9e2fe87f3ff0856e9a8499b410aa9691809deaf4b54af9c5e.
+One initial final-source optimized v1 attempt: observer assertion FAILED at exact closures==2; audit had three complete GUI EOFs/three connections.
+Extra intermediate session contained only hello. GUI embedded workflow PASS, one intentional mutation, zero status/retry/repeat; no unknown admitted command.
+Unchanged-source repeat PASS. Cause of extra hello-only connection remains unqualified; neither production GUI nor observer assertion modified.
+See windows-job-supervisor-v1-release-observer-limitation.json. Passing repeat does not prove absence of this transport-count variability.
+Both published GDI 1100x720 client-area captures inspected: Ready/Fresh, displayed temperature and cyan line. No GL readback or mouse/keyboard Confirm qualification.
+
+Development failures retained, not counted as qualification:
+Initial native run prematurely observed terminal phase before checked handle retirement: 1 PASS/5 FAIL. Fixed atomic terminal publication and added real retirement barrier.
+An early nested-job negative fixture waited as long as the controller deadline after known startup refusal. It now fails immediately on observed startup-error status; no assertion relaxed.
+Expired startup discovered at review was fixed before final source gates: rollback before ResumeThread; real Condvar-controlled 2.1s suspended fixture never executes.
+Intermediate warning-denied let_underscore_lock failure fixed with an explicit guard/drop; final Clippy dev/release and standalone fixture Clippy pass.
+Raw failed and final transcripts retained under target/b3b2-*; no cache/data cleanup performed.
+
+Ignored inventory (the 15 existing Runtime process names/reasons remain unchanged; six new explicit native groups):
+runtime_acceptance::b4_scenario_a_runtime_absent_then_manual_connect_reaches_fresh: M14.6B4 scenario A real-process Runtime availability acceptance
+runtime_acceptance::b4_scenario_b_explicit_disconnect_requires_manual_fresh_reconnect: M14.6B4 scenario B explicit Disconnect real-process acceptance
+runtime_acceptance::b4_scenario_d_runtime_restart_quarantines_old_boot_and_builds_new_epoch: M14.6B4 scenario D Runtime restart and quarantine acceptance
+runtime_acceptance::b4_scenario_e_process_crash_preserves_exact_journal_without_auto_send: M14.6B4 scenario E Workbench process-crash recovery journal acceptance
+runtime_acceptance::b4_scenario_j_corrupt_journal_allows_fresh_observation_but_blocks_mutation: M14.6B4 scenario J corrupt journal with real Runtime acceptance
+runtime_acceptance::m17_4_overlap_runtime_child: M17.4 deterministic real-Runtime overlap fixture child
+runtime_acceptance::m17_4_real_runtime_external_endpoint_preserves_owner_and_process_boundaries: M17.4 real Runtime/Workbench endpoint ownership, identity, presentation and lifetime acceptance
+runtime_acceptance::real_runtime_controller_lifecycle_confirms_once_and_rechecks_source_state: DGUI-4B3 virtual Controller lifecycle acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_exact_retry_outcome_unknown_never_reexecutes: M14.6B2B1 real Runtime evicted-outcome Exact Retry acceptance
+runtime_acceptance::real_runtime_exact_retry_retained_outcome_never_reexecutes: M14.6B2B1 real Runtime retained-outcome Exact Retry acceptance
+runtime_acceptance::real_runtime_fixed_reference_operator_workflow_preserves_units_and_revision_fences: DGUI-4B2 virtual fixed Reference acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_operator_layer_confirms_completes_refreshes_and_never_retries_conflict: M14.5 operator process acceptance; run after cargo build -p lab-runtime -p lab-workbench
+runtime_acceptance::real_runtime_property_workflow_uses_existing_virtual_configuration: DGUI-4B4 Required Recorder acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_recording_operator_workflow_confirms_once_and_observes_start_stop: DGUI-4B1 virtual Recorder acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_reference_reconnect_reconcile_and_replay: process acceptance; run after cargo build -p lab-runtime -p lab-workbench
+supervisor::native_tests::atomic_job_membership_limits_suspension_and_last_handle_close: Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1
+supervisor::native_tests::crash_hang_helper_pong_and_commit_denial_are_contained: Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1
+supervisor::native_tests::normal_close_explicit_restart_and_termination_keep_one_record: Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1
+supervisor::native_tests::parent_death_closes_inner_job_and_incompatible_nested_job_fails_closed: Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1
+supervisor::native_tests::startup_failure_and_cancel_before_resume_never_execute_child: Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1
+supervisor::native_tests::suppressed_exit_proof_retains_same_job_and_blocks_replacement: Windows no-GPU native supervisor; run scripts/test-windows-supervisor.ps1
+
+Residual scopes and verdict:
+WINDOWS SINGLE-CHILD JOB / NO-GPU FIXTURE LIFECYCLE: PASS on Windows 10 Pro 19045 x64/MSVC, both profiles.
+PARENT MODEL/API INDEPENDENCE UNDER SUPERVISOR STALL: PASS; one owner/worker, no mutation/status/retry replay.
+CPU PREVIEW REGRESSION: PASS, original allowance unchanged.
+Arbitrary Windows attributes/security policy/nested-job profiles and real driver-stalled OS termination: UNQUALIFIED; fail closed, one retained episode.
+M17.4 Recorder overlap: BLOCKED on unchanged B3A baseline; independent-parent-pump-evidence.txt preserves recording_unavailable reproduction.
+Baseline permalink: https://github.com/alexandervolkov1/lab-runtime/blob/67211d1ae95e1b35f49c79c6c804ef57298fc0b0/docs/developer/independent-parent-pump-evidence.txt
+TERMINAL GPU LIFECYCLE: BLOCKED. WHOLE HOST RUST BUDGET: BLOCKED. No process containment receipt upgrades either.
+Production GUI cap C, private IPC/peer validation/cancellation, snapshot bridge, renderer-owner heartbeat/GL proof and opt-in host selection: NOT IMPLEMENTED.
+Linux backend/portability and third-party library threads/kernel/driver allocations require later reviews.
+Native v1 observer exact-session variability remains documented and unqualified separately; final dev and unchanged release repeat smoke passed.
+B3B2 seam verdict: READY FOR INDEPENDENT REVIEW in the stated no-GPU lifecycle scope; ACTIVATION_QUALIFIED=false.
+Cargo fmt, standalone fixture rustfmt, PowerShell AST, diff check, protected Runtime/API/GUI source equality and scoped documentation links: PASS.
+
+Raw transcript SHA256 (files retained under target, not release assets):
+6bda0a789f2e9f85f8d41ae3c08ed4ba682a9f8899bbce358a4d3512184f920a  target/b3b2-full-dev-final.log
+6b98301e1bb170cbf7077976e72b4e3d79dde8897d6169e178bdf07fd416b561  target/b3b2-inventory-dev-final.log
+d41560ef6e1c0a74bbe8bc5d9e1681adf473fbbcd0e1a420072e2116c89124c6  target/b3b2-targeted-dev-review.log
+0af39621a5729d4b2857cdfe2d1586aa35c4f1cf7dbd56c76541953e1caf01cf  target/b3b2-virtual-dev-final.log
+12fbf005c9bf942ea7216c4c98c765b48b1e9fa95c751449b194debc862a1da0  target/b3b2-native-dev-final.log
+b915b54d86e5da8c825520f9819c8e5d6ef0147c631f545cfd4be8f5d10463c8  target/b3b2-clippy-dev-final.log
+ac561bba0b53d59694f8f645ab44b9531dfa82e65fbfea9306fe040e27add31a  target/b3b2-build-dev-final.log
+24b2daf52c5b7ce4f74938e4ebede35ac75ac1229fc03fa3cb17559c231fdc7c  target/b3b2-cpu-frames-dev-final.log
+a0fd989af6970b87fc6c0cbe64745336104170b30bf98997affa1589401da035  target/b3b2-full-release-final.log
+b3c944ebed085eeb36b46b6fa5cc63ae38ff6baea17dd30b213644ffce874451  target/b3b2-inventory-release-final.log
+46b62fc9d352de648cae15ee16e47f070ad6baf392efde2a5bd5de3431493ecd  target/b3b2-targeted-release-review.log
+a23e28d1b9e4d4babb077b6491b36dce97f5b83649ee03f964830b757582ed8b  target/b3b2-virtual-release-final.log
+5df6218fc1eefd5733717f86be0da1d59481a8dfa045e3fd664592c7ee0130f5  target/b3b2-native-release-final.log
+ac8d05eb3892707e0597e372f76c2ecff8d03eabdc3e2370312e926da1cefabf  target/b3b2-clippy-release-final.log
+47fd96c4f2face66015451934f66d1d7f6b29320122176e509c0d3cc58d6a4d1  target/b3b2-build-release-final.log
+665de595690262fb0fd0ebfc6abb6f0901f271c8b498a438b38891611c855796  target/b3b2-cpu-frames-release-final.log
+b8afd236a71461f2eedb749392a8863d1725d6c0076cc1277ef6b1290cad9462  target/b3b2-cpu-dev.log
+9d78cf62154ef0ce429792d5edaba7ad2aa7a4e79e61372568619006bcfec85c  target/b3b2-cpu-release.log
+62e06ed222595f4a2368d5107ab67a542b9b9af12995b6df205a83dceafb8a82  target/b3b2-v1-native-dev-final.log
+8272991edad38222e32e54ff8b89217fc0158f5acadd097a6308b99d0d0f6095  target/b3b2-v1-native-release-final.log
+ea83d4699e34c6277f88c5b6b91906f882c3954345f993f8b9ddda491b588c67  target/b3b2-v1-native-release-repeat.log
+129854b9639563f195cc3c92a424b85e5348b471165592f8dd7e2ded40e3a35c  target/b3b2-native-dev-initial.log
+04b18742842d37f3f560345c6585f229e7ab42ff50e98c93c38b9be9fc40085d  target/b3b2-format-guards-final.log

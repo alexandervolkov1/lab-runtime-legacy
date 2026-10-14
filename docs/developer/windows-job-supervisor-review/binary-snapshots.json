@@ -1,0 +1,50 @@
+[
+  {
+    "profile": "dev",
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "path": "target\\b3b2-review\\current-binaries\\dev\\lab-runtime.exe",
+    "sha256": "c1c93b6460db9e6da44fd0267715f369f72244debb4b74abc3e8d191977664e7"
+  },
+  {
+    "profile": "dev",
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "path": "target\\b3b2-review\\current-binaries\\dev\\lab-workbench.exe",
+    "sha256": "13bec9ac626c9241f46ed7327272f362faa14f0cf16366d3dbcb9ee1c00d7084"
+  },
+  {
+    "profile": "release",
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "path": "target\\b3b2-review\\current-binaries\\release\\lab-runtime.exe",
+    "sha256": "305a7500b228d49258c9b813fa8feecb341ad1d945397ae3f384ea206c8372ac"
+  },
+  {
+    "profile": "release",
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "path": "target\\b3b2-review\\current-binaries\\release\\lab-workbench.exe",
+    "sha256": "0f0bb9934ed9e20017221f16ef86bb5ae35db5b01c0b6796152743ac2a27c630"
+  },
+  {
+    "profile": "dev",
+    "source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "path": "target\\b3b2-review\\baseline-binaries\\dev\\lab-runtime.exe",
+    "sha256": "e88128f918e7931e1c59ef85fc1041ff0016057db5f1638bf44b830d5541da0f"
+  },
+  {
+    "profile": "dev",
+    "source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "path": "target\\b3b2-review\\baseline-binaries\\dev\\lab-workbench.exe",
+    "sha256": "30cad49490b0dce655066cb1aa44cd5ea03d16b6d272a9d7483becb532133e92"
+  },
+  {
+    "profile": "release",
+    "source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "path": "target\\b3b2-review\\baseline-binaries\\release\\lab-runtime.exe",
+    "sha256": "e9b1a2da0fd779767d23b4cfca8eec4a5f3212df01b20b5883b61208c23ccded"
+  },
+  {
+    "profile": "release",
+    "source_head": "2aaf98fcd77a8b6bf73b2341d0b95298be401df6",
+    "path": "target\\b3b2-review\\baseline-binaries\\release\\lab-workbench.exe",
+    "sha256": "35fce5932e4e93ac1c5747f6e8c5364e9c38f34904686fa68a11eb0017576b22"
+  }
+]
