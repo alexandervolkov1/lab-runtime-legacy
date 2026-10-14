@@ -1,4 +1,4 @@
-//! One bounded projection/bootstrap coordinator for the minimal GUI.
+//! Renderer-neutral bounded projection/bootstrap coordinator for the model owner.
 
 use crate::{
     client::types::{CommandSendError, EventCursor, HelloState, ReplyKind},

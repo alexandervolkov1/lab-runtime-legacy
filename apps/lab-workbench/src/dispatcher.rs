@@ -1103,7 +1103,7 @@ impl<C> WorkbenchDispatcher<C> {
     }
 }
 
-impl WorkbenchDispatcher<ClientHandle> {
+impl<C: crate::rebuild::RebuildClient> WorkbenchDispatcher<C> {
     /// Advances the accepted bounded rebuild coordinator inside the single model owner.
     pub(crate) fn advance_rebuild(
         &mut self,

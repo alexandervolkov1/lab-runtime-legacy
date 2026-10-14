@@ -1,48 +1,37 @@
-//! eframe main-thread owner and thin observational rendering.
+//! Legacy v1 operator/view adapter over the one serial parent model owner.
 
 use super::controls::{OperatorControlUi, controller_control_location, has_recorder_controls};
 use super::presentation::PresentationRenderer;
-use super::rebuild::RebuildCoordinator;
 use crate::{
     client::ClientHandle,
     client::endpoint::RuntimeEndpoint,
     client::types::{ConnectionState, KnownAdmission, RecoveryQuarantineReason},
-    dispatcher::WorkbenchDispatcher,
-    external::{PreparedEndpoint, WorkbenchEndpoint},
+    external::PreparedEndpoint,
     model::{
         ControllerLifecycleIntent, EXACT_RETRY_WARNING, ExactRetryState, ExactRetryWorkflow,
         Freshness, OperatorIntent, OperatorWarning, OperatorWorkflow, OperatorWorkflowState,
         PROPERTY_TEXT_BYTES, PidCandidate, PreparedExactRetry, PropertyMutationCandidate,
         RecoveryAttachment, RecoveryRecordPresentation, RecoveryStatusState, RecoveryStatusTracker,
-        RuntimeObservations, StatusEligibility, UiCommand, WorkbenchModel,
+        RuntimeObservations, StatusEligibility, WorkbenchModel,
     },
     ownership::WorkspaceOwnership,
-    presentation::{
-        AxisOptions, Plot as PresentationPlot, PresentationDocument, RuntimeRef, Trace, TraceStyle,
-    },
+    presentation::{PresentationDocument, RuntimeRef},
 };
 use eframe::egui::{self, Color32, RichText};
 use serde_json::{Value, json};
 use std::{
     path::PathBuf,
     sync::Arc,
-    sync::mpsc::TryRecvError,
     time::{Duration, Instant},
 };
 
-pub(crate) const UPDATES_PER_FRAME: usize = 64;
 const SMOKE_DEADLINE: Duration = Duration::from_secs(30);
 
 pub(crate) struct WorkbenchApp {
     observation_only: bool,
     runtime_label: String,
-    model: WorkbenchDispatcher<ClientHandle>,
+    parent: crate::parent::ParentOwner<ClientHandle>,
     presentation_renderer: PresentationRenderer,
-    rebuild: RebuildCoordinator,
-    operator: OperatorWorkflow,
-    recovery_status: RecoveryStatusTracker,
-    exact_retry: ExactRetryWorkflow,
-    selected: Option<RuntimeRef>,
     editor_target: Option<RuntimeRef>,
     controller_editor_revision: Option<Value>,
     fixed_value: String,
@@ -57,7 +46,6 @@ pub(crate) struct WorkbenchApp {
     _ownership: WorkspaceOwnership,
     smoke: Option<SmokeRun>,
     kill_probe: Option<KillProbe>,
-    endpoint: Option<WorkbenchEndpoint>,
 }
 
 impl WorkbenchApp {
@@ -76,20 +64,15 @@ impl WorkbenchApp {
         let repaint = context.egui_ctx.clone();
         let wake: Arc<dyn Fn() + Send + Sync> = Arc::new(move || repaint.request_repaint());
         let runtime_label = address.label();
-        let client = ClientHandle::spawn_configured(
+        let parent = crate::parent::ParentOwner::connect(
             address,
             observation_only,
-            Some(journal_path),
-            Some(Arc::clone(&wake)),
+            desired_scope,
+            journal_path,
+            presentation,
+            endpoint,
+            wake,
         )?;
-        client.connect(desired_scope)?;
-        let endpoint_readiness = endpoint.as_ref().map(PreparedEndpoint::readiness_line);
-        let endpoint = endpoint
-            .map(|endpoint| WorkbenchEndpoint::start(endpoint, Arc::clone(&wake)))
-            .transpose()?;
-        if let Some(readiness) = endpoint_readiness {
-            println!("{readiness}");
-        }
         let smoke = std::env::var_os("LAB_WORKBENCH_GUI_SMOKE_RESULT")
             .map(PathBuf::from)
             .map(SmokeRun::new);
@@ -99,13 +82,8 @@ impl WorkbenchApp {
         Ok(Self {
             observation_only,
             runtime_label,
-            model: WorkbenchDispatcher::new(WorkbenchModel::new(presentation), client),
+            parent,
             presentation_renderer: PresentationRenderer::default(),
-            rebuild: RebuildCoordinator::default(),
-            operator: OperatorWorkflow::default(),
-            recovery_status: RecoveryStatusTracker::default(),
-            exact_retry: ExactRetryWorkflow::default(),
-            selected: None,
             editor_target: None,
             controller_editor_revision: None,
             fixed_value: String::new(),
@@ -120,76 +98,18 @@ impl WorkbenchApp {
             _ownership: ownership,
             smoke,
             kill_probe,
-            endpoint,
         })
-    }
-
-    fn drain_updates(&mut self) -> usize {
-        let mut updates = Vec::with_capacity(UPDATES_PER_FRAME);
-        let count = {
-            let Some(client) = self.model.client() else {
-                return 0;
-            };
-            drain_bounded(
-                || client.try_recv(),
-                |update| updates.push(update),
-                UPDATES_PER_FRAME,
-            )
-        };
-        for update in updates {
-            let events = self.model.apply_client_update(update.clone());
-            if let Some(endpoint) = &mut self.endpoint {
-                endpoint.route_events(&mut self.model, events);
-            }
-            self.recovery_status.after_update(&update);
-            self.exact_retry
-                .after_update(&update, &self.model, &self.recovery_status);
-            self.operator.after_update(&update);
-            self.model.advance_rebuild(&mut self.rebuild, &update);
-            if let Some(event) = self.model.finish_model_turn()
-                && let Some(endpoint) = &mut self.endpoint
-            {
-                endpoint.route_events(&mut self.model, [event]);
-            }
-        }
-        self.ensure_selection_and_default_plot();
-        count
-    }
-
-    fn ensure_selection_and_default_plot(&mut self) {
-        if self.selected.is_none() {
-            self.selected = self
-                .model
-                .observations
-                .entities
-                .keys()
-                .find(|identity| matches!(identity, RuntimeRef::Signal { .. }))
-                .cloned();
-        }
-        let Some(signal) = self.selected.clone() else {
-            return;
-        };
-        if let Some(command) = default_plot_command(&self.model, signal) {
-            match self.model.apply_gui_ui(command) {
-                Ok(outcome) => {
-                    if let Some(endpoint) = &mut self.endpoint {
-                        endpoint.route_events(&mut self.model, outcome.events);
-                    }
-                }
-                Err(error) => self.model.set_client_error(error.to_string()),
-            }
-        }
     }
 
     fn connection_controls(&mut self, ui: &mut egui::Ui) {
         let connected = matches!(
-            self.model.connection,
+            self.parent.dispatcher.connection,
             ConnectionState::Connecting
                 | ConnectionState::AwaitingHello
                 | ConnectionState::Reattaching
                 | ConnectionState::Ready
         );
-        let new_scope_required = self.model.connection_requires_new_scope();
+        let new_scope_required = self.parent.dispatcher.connection_requires_new_scope();
         let connect_label = if new_scope_required {
             "Connect new scope"
         } else {
@@ -198,22 +118,22 @@ impl WorkbenchApp {
         if ui
             .add_enabled(!connected, egui::Button::new(connect_label))
             .clicked()
-            && let Some(client) = self.model.client()
+            && let Some(client) = self.parent.dispatcher.client()
         {
             let scope = (!new_scope_required)
-                .then(|| self.model.recovery.scope.clone())
+                .then(|| self.parent.dispatcher.recovery.scope.clone())
                 .flatten();
             if let Err(error) = client.connect(scope) {
-                self.model.set_client_error(error.to_string());
+                self.parent.dispatcher.set_client_error(error.to_string());
             }
         }
         if ui
             .add_enabled(connected, egui::Button::new("Disconnect"))
             .clicked()
-            && let Some(client) = self.model.client()
+            && let Some(client) = self.parent.dispatcher.client()
             && let Err(error) = client.disconnect()
         {
-            self.model.set_client_error(error.to_string());
+            self.parent.dispatcher.set_client_error(error.to_string());
         }
     }
 
@@ -224,10 +144,10 @@ impl WorkbenchApp {
         }
         ui.horizontal_wrapped(|ui| {
             ui.strong("Connection:");
-            ui.label(format!("{:?}", self.model.connection));
+            ui.label(format!("{:?}", self.parent.dispatcher.connection));
             ui.separator();
-            freshness_label(ui, self.model.observations.freshness);
-            if let Some(hello) = &self.model.hello {
+            freshness_label(ui, self.parent.dispatcher.observations.freshness);
+            if let Some(hello) = &self.parent.dispatcher.hello {
                 ui.separator();
                 ui.label(format!("boot {}", hello.boot_id));
                 ui.label(format!("scope {}", hello.scope));
@@ -238,31 +158,41 @@ impl WorkbenchApp {
         if let Some(problem) = &self.presentation_problem {
             ui.colored_label(Color32::YELLOW, problem);
         }
-        if let Some(error) = &self.model.client_error {
+        if let Some(error) = &self.parent.dispatcher.client_error {
             ui.colored_label(Color32::YELLOW, error);
         }
-        let (records, unresolved) = recovery_summary(&self.model);
+        let (records, unresolved) = recovery_summary(&self.parent.dispatcher);
         if records > 0 {
             ui.colored_label(
                 Color32::YELLOW,
                 format!("Recovery records: {records}; unresolved: {unresolved}"),
             );
         }
-        if !self.model.recovery.reconciliation_required.is_empty() {
+        if !self
+            .parent
+            .dispatcher
+            .recovery
+            .reconciliation_required
+            .is_empty()
+        {
             ui.colored_label(
                 Color32::LIGHT_RED,
                 format!(
                     "Reconciliation required for {} mutation(s)",
-                    self.model.recovery.reconciliation_required.len()
+                    self.parent
+                        .dispatcher
+                        .recovery
+                        .reconciliation_required
+                        .len()
                 ),
             );
         }
-        if self.model.quarantine_blocks_mutations() {
+        if self.parent.dispatcher.quarantine_blocks_mutations() {
             ui.colored_label(
                 Color32::LIGHT_RED,
                 format!(
                     "Quarantined recovery evidence: {}; new mutations are blocked",
-                    self.model.recovery.quarantined.len()
+                    self.parent.dispatcher.recovery.quarantined.len()
                 ),
             );
         }
@@ -270,31 +200,34 @@ impl WorkbenchApp {
     }
 
     fn render_recovery(&mut self, ui: &mut egui::Ui) {
-        let records = self.recovery_status.presentations(&self.model);
+        let records = self
+            .parent
+            .recovery_status
+            .presentations(&self.parent.dispatcher);
         egui::CollapsingHeader::new("Recovery / reconciliation")
             .default_open(
                 !records.is_empty()
-                    || !self.model.recovery.quarantined.is_empty()
-                    || self.model.recovery_problem.is_some(),
+                    || !self.parent.dispatcher.recovery.quarantined.is_empty()
+                    || self.parent.dispatcher.recovery_problem.is_some(),
             )
             .show(ui, |ui| {
-                if let Some(problem) = &self.model.recovery_problem {
+                if let Some(problem) = &self.parent.dispatcher.recovery_problem {
                     ui.colored_label(Color32::LIGHT_RED, problem);
                 }
-                if records.is_empty() && self.model.recovery.quarantined.is_empty() {
+                if records.is_empty() && self.parent.dispatcher.recovery.quarantined.is_empty() {
                     ui.label("No retained recovery records");
                 }
                 for record in records {
                     self.render_recovery_record(ui, record);
                     ui.separator();
                 }
-                if !self.model.recovery.quarantined.is_empty() {
+                if !self.parent.dispatcher.recovery.quarantined.is_empty() {
                     ui.strong("Quarantined recovery evidence");
                     ui.colored_label(
                         Color32::LIGHT_RED,
                         "Not attached to the current Runtime session. Status/retry unavailable. New experiment mutations remain blocked.",
                     );
-                    for entry in &self.model.recovery.quarantined {
+                    for entry in &self.parent.dispatcher.recovery.quarantined {
                         ui.horizontal_wrapped(|ui| {
                             ui.monospace(format!(
                                 "boot={} scope={} seq={}",
@@ -350,21 +283,23 @@ impl WorkbenchApp {
             }
         }
         let availability = recovery_action_availability(
-            &self.model,
-            &self.recovery_status,
-            &self.exact_retry,
-            &self.operator,
+            &self.parent.dispatcher,
+            &self.parent.recovery_status,
+            &self.parent.exact_retry,
+            &self.parent.operator,
             &record,
         );
         let pending = matches!(record.status, RecoveryStatusState::Pending { .. });
         let response = ui.add_enabled(availability.check_status, egui::Button::new("Check Status"));
         if response.clicked()
-            && let Some(client) = self.model.client()
-            && let Err(error) =
-                self.recovery_status
-                    .check_status(&self.model, client, record.identity.clone())
+            && let Some(client) = self.parent.dispatcher.client()
+            && let Err(error) = self.parent.recovery_status.check_status(
+                &self.parent.dispatcher,
+                client,
+                record.identity.clone(),
+            )
         {
-            self.model.set_client_error(error.to_string());
+            self.parent.dispatcher.set_client_error(error.to_string());
         }
         if !availability.check_status && !pending {
             ui.small(format!(
@@ -378,16 +313,18 @@ impl WorkbenchApp {
                 egui::Button::new("Exact Retry…"),
             )
             .clicked()
-            && let Err(error) =
-                self.exact_retry
-                    .begin(&self.model, &self.recovery_status, record.identity)
+            && let Err(error) = self.parent.exact_retry.begin(
+                &self.parent.dispatcher,
+                &self.parent.recovery_status,
+                record.identity,
+            )
         {
-            self.model.set_client_error(error.to_string());
+            self.parent.dispatcher.set_client_error(error.to_string());
         }
     }
 
     fn render_exact_retry(&mut self, ui: &mut egui::Ui) {
-        let state = self.exact_retry.state.clone();
+        let state = self.parent.exact_retry.state.clone();
         let Some(message) = exact_retry_state_message(&state) else {
             return;
         };
@@ -405,8 +342,9 @@ impl WorkbenchApp {
                 ui.monospace(view.args);
                 ui.colored_label(Color32::YELLOW, view.warning);
                 let current = self
+                    .parent
                     .exact_retry
-                    .confirmation_is_current(&self.model, &self.recovery_status);
+                    .confirmation_is_current(&self.parent.dispatcher, &self.parent.recovery_status);
                 if !current {
                     ui.colored_label(
                         Color32::LIGHT_RED,
@@ -420,14 +358,16 @@ impl WorkbenchApp {
                             egui::Button::new("Confirm Exact Retry"),
                         )
                         .clicked()
-                        && let Some(client) = self.model.client()
+                        && let Some(client) = self.parent.dispatcher.client()
                     {
-                        let _ =
-                            self.exact_retry
-                                .confirm(&self.model, &self.recovery_status, client);
+                        let _ = self.parent.exact_retry.confirm(
+                            &self.parent.dispatcher,
+                            &self.parent.recovery_status,
+                            client,
+                        );
                     }
                     if ui.button("Cancel").clicked() {
-                        self.exact_retry.cancel_or_acknowledge();
+                        self.parent.exact_retry.cancel_or_acknowledge();
                     }
                 });
             }
@@ -441,14 +381,14 @@ impl WorkbenchApp {
                     "Displayed device and experiment state remains authoritative through normal Runtime observations.",
                 );
                 if ui.button("Acknowledge").clicked() {
-                    self.exact_retry.cancel_or_acknowledge();
+                    self.parent.exact_retry.cancel_or_acknowledge();
                 }
             }
             ExactRetryState::Failed { .. } => {
                 ui.colored_label(Color32::LIGHT_RED, message);
                 ui.label("This operation outcome is not a physical-safety claim.");
                 if ui.button("Acknowledge").clicked() {
-                    self.exact_retry.cancel_or_acknowledge();
+                    self.parent.exact_retry.cancel_or_acknowledge();
                 }
             }
             ExactRetryState::OutcomeUnknown { .. }
@@ -456,21 +396,21 @@ impl WorkbenchApp {
             | ExactRetryState::DraftStale { .. } => {
                 ui.colored_label(Color32::YELLOW, message);
                 if ui.button("Acknowledge").clicked() {
-                    self.exact_retry.cancel_or_acknowledge();
+                    self.parent.exact_retry.cancel_or_acknowledge();
                 }
             }
             ExactRetryState::LocalFailure { reason, .. } => {
                 ui.colored_label(Color32::YELLOW, message);
                 ui.monospace(reason);
                 if ui.button("Acknowledge").clicked() {
-                    self.exact_retry.cancel_or_acknowledge();
+                    self.parent.exact_retry.cancel_or_acknowledge();
                 }
             }
             ExactRetryState::ApplicationFailure { code, .. } => {
                 ui.colored_label(Color32::YELLOW, message);
                 ui.monospace(code);
                 if ui.button("Acknowledge").clicked() {
-                    self.exact_retry.cancel_or_acknowledge();
+                    self.parent.exact_retry.cancel_or_acknowledge();
                 }
             }
         }
@@ -479,7 +419,8 @@ impl WorkbenchApp {
     fn render_discovery(&mut self, ui: &mut egui::Ui) {
         ui.heading("Discovery");
         let identities = self
-            .model
+            .parent
+            .dispatcher
             .observations
             .entities
             .keys()
@@ -488,9 +429,9 @@ impl WorkbenchApp {
         egui::ScrollArea::vertical().show(ui, |ui| {
             for identity in identities {
                 let label = runtime_ref_label(&identity);
-                let selected = self.selected.as_ref() == Some(&identity);
+                let selected = self.parent.selected.as_ref() == Some(&identity);
                 if ui.selectable_label(selected, label).clicked() {
-                    self.selected = Some(identity);
+                    self.parent.selected = Some(identity);
                 }
             }
         });
@@ -499,12 +440,12 @@ impl WorkbenchApp {
     fn render_main(&mut self, ui: &mut egui::Ui) {
         let response = self.presentation_renderer.show(
             ui,
-            &self.model.presentation,
-            &self.model.observations,
-            self.model.presentation_revision(),
+            &self.parent.dispatcher.presentation,
+            &self.parent.dispatcher.observations,
+            self.parent.dispatcher.presentation_revision(),
             &mut OperatorControlUi {
-                model: &self.model,
-                operator: &self.operator,
+                model: &self.parent.dispatcher,
+                operator: &self.parent.operator,
                 observation_only: self.observation_only,
                 label: &mut self.recording_label,
             },
@@ -514,18 +455,24 @@ impl WorkbenchApp {
         }
         // Confirmation remains available even when no signal has been discovered.
         self.render_operator_workflow(ui);
-        let Some(selected) = self.selected.clone() else {
+        let Some(selected) = self.parent.selected.clone() else {
             ui.heading("Live signal");
             ui.label("No discovered signal is available.");
-            if !self.operator.state.is_active() {
+            if !self.parent.operator.state.is_active() {
                 self.render_recorder_controls(ui);
             }
             return;
         };
         self.ensure_editor_for(&selected);
         ui.heading(runtime_ref_label(&selected));
-        let unresolved = self.model.unresolved.contains(&selected);
-        let observation = self.model.observations.entities.get(&selected).cloned();
+        let unresolved = self.parent.dispatcher.unresolved.contains(&selected);
+        let observation = self
+            .parent
+            .dispatcher
+            .observations
+            .entities
+            .get(&selected)
+            .cloned();
         match (unresolved, observation.as_ref()) {
             (true, _) => {
                 ui.colored_label(Color32::LIGHT_RED, "Unresolved in the current Runtime view");
@@ -546,11 +493,11 @@ impl WorkbenchApp {
         render_selected_live_plot(
             ui,
             &selected,
-            &self.model.observations,
+            &self.parent.dispatcher.observations,
             response.declarative,
         );
         ui.separator();
-        if matches!(self.operator.state, OperatorWorkflowState::Idle) {
+        if matches!(self.parent.operator.state, OperatorWorkflowState::Idle) {
             self.render_target_controls(
                 ui,
                 &selected,
@@ -562,14 +509,15 @@ impl WorkbenchApp {
 
     fn ensure_editor_for(&mut self, selected: &RuntimeRef) {
         let value = self
-            .model
+            .parent
+            .dispatcher
             .observations
             .entities
             .get(selected)
             .map(|observation| &observation.value);
         let controller_snapshot = match selected {
             RuntimeRef::Controller { controller } => {
-                controller_pid_editor_snapshot(&self.model, controller)
+                controller_pid_editor_snapshot(&self.parent.dispatcher, controller)
             }
             _ => None,
         };
@@ -612,8 +560,8 @@ impl WorkbenchApp {
         if let Some(problem) = &self.operator_problem {
             ui.colored_label(Color32::LIGHT_RED, problem);
         }
-        let state = self.operator.state.clone();
-        let confirmation_current = awaiting_confirmation_current(&state, &self.model);
+        let state = self.parent.operator.state.clone();
+        let confirmation_current = awaiting_confirmation_current(&state, &self.parent.dispatcher);
         match state {
             OperatorWorkflowState::Idle => {
                 ui.label("No operator mutation is active.");
@@ -637,12 +585,17 @@ impl WorkbenchApp {
                     if ui
                         .add_enabled(current, egui::Button::new("Confirm"))
                         .clicked()
-                        && let Some(client) = self.model.client()
+                        && let Some(client) = self.parent.dispatcher.client()
                     {
-                        match self.operator.confirm(&self.model, client) {
+                        match self
+                            .parent
+                            .operator
+                            .confirm(&self.parent.dispatcher, client)
+                        {
                             Ok(command_id) => {
                                 self.operator_problem = self
-                                    .model
+                                    .parent
+                                    .dispatcher
                                     .track_operator_intent(command_id)
                                     .err()
                                     .map(str::to_owned);
@@ -651,7 +604,7 @@ impl WorkbenchApp {
                         }
                     }
                     if ui.button("Cancel").clicked() {
-                        self.operator.cancel_or_acknowledge();
+                        self.parent.operator.cancel_or_acknowledge();
                         self.operator_problem = None;
                     }
                 });
@@ -671,7 +624,7 @@ impl WorkbenchApp {
                 ui.label("Await authoritative projection/event for displayed Runtime state.");
                 ui.monospace(bounded_value_text(&envelope));
                 if ui.button("Acknowledge").clicked() {
-                    self.operator.cancel_or_acknowledge();
+                    self.parent.operator.cancel_or_acknowledge();
                 }
             }
             OperatorWorkflowState::Failed {
@@ -686,7 +639,7 @@ impl WorkbenchApp {
                 }
                 ui.monospace(bounded_value_text(&envelope));
                 if ui.button("Acknowledge").clicked() {
-                    self.operator.cancel_or_acknowledge();
+                    self.parent.operator.cancel_or_acknowledge();
                 }
             }
             OperatorWorkflowState::Ambiguous { prepared, identity } => {
@@ -720,7 +673,7 @@ impl WorkbenchApp {
                 ));
                 ui.label("Resolved from authoritative worker recovery evidence.");
                 if ui.button("Acknowledge").clicked() {
-                    self.operator.cancel_or_acknowledge();
+                    self.parent.operator.cancel_or_acknowledge();
                 }
             }
         }
@@ -788,7 +741,7 @@ impl WorkbenchApp {
                     .and_then(|value| value.get("state"))
                     .and_then(Value::as_str);
                 if let Some(location) =
-                    controller_control_location(&self.model.presentation, controller)
+                    controller_control_location(&self.parent.dispatcher.presentation, controller)
                 {
                     ui.label(format!("Controller lifecycle controls: {location}"));
                 } else {
@@ -847,7 +800,9 @@ impl WorkbenchApp {
                     }
                     if ui
                         .add_enabled(
-                            self.model.controller_detail_is_fresh(controller)
+                            self.parent
+                                .dispatcher
+                                .controller_detail_is_fresh(controller)
                                 && self.control_enabled(selected, "controller_configure_pid"),
                             egui::Button::new("Configure PID"),
                         )
@@ -925,7 +880,7 @@ impl WorkbenchApp {
                 if ui
                     .add_enabled(
                         resource_reconnect_enabled(
-                            &self.model,
+                            &self.parent.dispatcher,
                             resource,
                             capable,
                             self.control_enabled(selected, "reconnect_resource"),
@@ -944,9 +899,10 @@ impl WorkbenchApp {
     }
 
     fn render_recorder_controls(&mut self, ui: &mut egui::Ui) {
-        if has_recorder_controls(&self.model.presentation)
+        if has_recorder_controls(&self.parent.dispatcher.presentation)
             || !self
-                .model
+                .parent
+                .dispatcher
                 .observations
                 .entities
                 .contains_key(&RuntimeRef::Recorder)
@@ -956,8 +912,8 @@ impl WorkbenchApp {
         ui.separator();
         ui.heading("Recorder");
         let intent = OperatorControlUi {
-            model: &self.model,
-            operator: &self.operator,
+            model: &self.parent.dispatcher,
+            operator: &self.parent.operator,
             observation_only: self.observation_only,
             label: &mut self.recording_label,
         }
@@ -969,29 +925,44 @@ impl WorkbenchApp {
 
     fn control_enabled(&self, target: &RuntimeRef, operation: &str) -> bool {
         !self.observation_only
-            && self.model.connection == ConnectionState::Ready
-            && self.model.observations.freshness == Freshness::Fresh
+            && self.parent.dispatcher.connection == ConnectionState::Ready
+            && self.parent.dispatcher.observations.freshness == Freshness::Fresh
             && self
-                .model
+                .parent
+                .dispatcher
                 .observations
                 .entities
                 .get(target)
                 .is_some_and(|observation| observation.freshness == Freshness::Fresh)
             && self
-                .model
+                .parent
+                .dispatcher
                 .hello
                 .as_ref()
                 .is_some_and(|hello| hello.operations.iter().any(|item| item == operation))
-            && self.model.recovery_problem.is_none()
-            && !self.model.quarantine_blocks_mutations()
-            && self.model.recovery.reconciliation_required.is_empty()
-            && !self.model.recovery.mutations.iter().any(|record| {
-                matches!(
-                    record.admission,
-                    KnownAdmission::Pending | KnownAdmission::Accepted | KnownAdmission::Ambiguous
-                )
-            })
-            && matches!(self.operator.state, OperatorWorkflowState::Idle)
+            && self.parent.dispatcher.recovery_problem.is_none()
+            && !self.parent.dispatcher.quarantine_blocks_mutations()
+            && self
+                .parent
+                .dispatcher
+                .recovery
+                .reconciliation_required
+                .is_empty()
+            && !self
+                .parent
+                .dispatcher
+                .recovery
+                .mutations
+                .iter()
+                .any(|record| {
+                    matches!(
+                        record.admission,
+                        KnownAdmission::Pending
+                            | KnownAdmission::Accepted
+                            | KnownAdmission::Ambiguous
+                    )
+                })
+            && matches!(self.parent.operator.state, OperatorWorkflowState::Idle)
     }
 
     fn begin_operator(&mut self, intent: OperatorIntent) {
@@ -1000,7 +971,7 @@ impl WorkbenchApp {
                 Some("Runtime mutations are disabled in observation mode".into());
             return;
         }
-        match self.operator.begin(&self.model, intent) {
+        match self.parent.operator.begin(&self.parent.dispatcher, intent) {
             Ok(()) => self.operator_problem = None,
             Err(error) => self.operator_problem = Some(error.to_string()),
         }
@@ -1039,45 +1010,56 @@ impl WorkbenchApp {
             return;
         };
         if smoke.started.elapsed() >= SMOKE_DEADLINE {
-            smoke.finish(false, &self.model, "deadline", context);
+            smoke.finish(false, &self.parent.dispatcher, "deadline", context);
             return;
         }
         match smoke.phase {
             SmokePhase::InitialFresh
-                if self.model.observations.freshness == Freshness::Fresh
-                    && has_signal_point(&self.model)
-                    && has_fresh_reference(&self.model) =>
+                if self.parent.dispatcher.observations.freshness == Freshness::Fresh
+                    && has_signal_point(&self.parent.dispatcher)
+                    && has_fresh_reference(&self.parent.dispatcher) =>
             {
-                let reference =
-                    self.model
-                        .observations
-                        .entities
-                        .iter()
-                        .find_map(|(identity, observation)| match identity {
-                            RuntimeRef::Reference { reference }
-                                if observation.freshness == Freshness::Fresh
-                                    && observation.value.get("kind").and_then(Value::as_str)
-                                        == Some("ramp") =>
-                            {
-                                Some((reference.clone(), observation.value.clone()))
-                            }
-                            _ => None,
-                        });
+                let reference = self
+                    .parent
+                    .dispatcher
+                    .observations
+                    .entities
+                    .iter()
+                    .find_map(|(identity, observation)| match identity {
+                        RuntimeRef::Reference { reference }
+                            if observation.freshness == Freshness::Fresh
+                                && observation.value.get("kind").and_then(Value::as_str)
+                                    == Some("ramp") =>
+                        {
+                            Some((reference.clone(), observation.value.clone()))
+                        }
+                        _ => None,
+                    });
                 let Some((reference, value)) = reference else {
-                    smoke.finish(false, &self.model, "no_ramp_reference", context);
+                    smoke.finish(false, &self.parent.dispatcher, "no_ramp_reference", context);
                     return;
                 };
                 let Some(revision) = value.get("revision").and_then(Value::as_str) else {
-                    smoke.finish(false, &self.model, "reference_revision_missing", context);
+                    smoke.finish(
+                        false,
+                        &self.parent.dispatcher,
+                        "reference_revision_missing",
+                        context,
+                    );
                     return;
                 };
                 let Some(target) = value.get("target").and_then(Value::as_f64) else {
-                    smoke.finish(false, &self.model, "reference_target_missing", context);
+                    smoke.finish(
+                        false,
+                        &self.parent.dispatcher,
+                        "reference_target_missing",
+                        context,
+                    );
                     return;
                 };
                 let desired = target + 0.25;
-                if let Err(error) = self.operator.begin(
-                    &self.model,
+                if let Err(error) = self.parent.operator.begin(
+                    &self.parent.dispatcher,
                     OperatorIntent::RetuneReference {
                         reference: reference.clone(),
                         target: desired,
@@ -1086,7 +1068,7 @@ impl WorkbenchApp {
                 ) {
                     smoke.finish(
                         false,
-                        &self.model,
+                        &self.parent.dispatcher,
                         &format!("cannot_open_confirmation:{error}"),
                         context,
                     );
@@ -1096,20 +1078,25 @@ impl WorkbenchApp {
                 smoke.original_revision = Some(revision.to_owned());
                 smoke.desired_target = Some(desired);
                 smoke.confirmation_observed = matches!(
-                    self.operator.state,
+                    self.parent.operator.state,
                     OperatorWorkflowState::AwaitingConfirmation(_)
                 );
                 smoke.phase = SmokePhase::ConfirmMutation;
             }
             SmokePhase::ConfirmMutation => {
-                let Some(client) = self.model.client() else {
-                    smoke.finish(false, &self.model, "client_missing", context);
+                let Some(client) = self.parent.dispatcher.client() else {
+                    smoke.finish(false, &self.parent.dispatcher, "client_missing", context);
                     return;
                 };
-                match self.operator.confirm(&self.model, client) {
+                match self
+                    .parent
+                    .operator
+                    .confirm(&self.parent.dispatcher, client)
+                {
                     Ok(command_id) => {
-                        if let Err(error) = self.model.track_operator_intent(command_id) {
-                            smoke.finish(false, &self.model, error, context);
+                        if let Err(error) = self.parent.dispatcher.track_operator_intent(command_id)
+                        {
+                            smoke.finish(false, &self.parent.dispatcher, error, context);
                             return;
                         }
                         smoke.phase = SmokePhase::AwaitMutation;
@@ -1117,7 +1104,7 @@ impl WorkbenchApp {
                     Err(error) => {
                         smoke.finish(
                             false,
-                            &self.model,
+                            &self.parent.dispatcher,
                             &format!("confirm_failed:{error}"),
                             context,
                         );
@@ -1126,14 +1113,18 @@ impl WorkbenchApp {
                 }
             }
             SmokePhase::AwaitMutation => {
-                if self.operator.accepted_observed {
+                if self.parent.operator.accepted_observed {
                     smoke.accepted_observed = true;
                 }
-                if matches!(self.operator.state, OperatorWorkflowState::Completed { .. }) {
+                if matches!(
+                    self.parent.operator.state,
+                    OperatorWorkflowState::Completed { .. }
+                ) {
                     smoke.completed_observed = true;
                 }
                 let updated = smoke.reference.as_ref().is_some_and(|reference| {
-                    self.model
+                    self.parent
+                        .dispatcher
                         .observations
                         .entities
                         .get(&RuntimeRef::Reference {
@@ -1149,7 +1140,7 @@ impl WorkbenchApp {
                 });
                 if smoke.completed_observed && updated {
                     smoke.authoritative_refresh_observed = true;
-                    self.operator.cancel_or_acknowledge();
+                    self.parent.operator.cancel_or_acknowledge();
                     context.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
                     smoke.phase = SmokePhase::AwaitMinimized;
                 }
@@ -1163,7 +1154,7 @@ impl WorkbenchApp {
             SmokePhase::AwaitRestored
                 if context.input(|input| input.viewport().minimized) == Some(false) =>
             {
-                if let Some(client) = self.model.client()
+                if let Some(client) = self.parent.dispatcher.client()
                     && client.disconnect().is_ok()
                 {
                     smoke.phase = SmokePhase::AwaitStale;
@@ -1171,9 +1162,9 @@ impl WorkbenchApp {
             }
             SmokePhase::AwaitStale
                 if matches!(
-                    self.model.connection,
+                    self.parent.dispatcher.connection,
                     ConnectionState::Disconnected | ConnectionState::Stale
-                ) && self.model.observations.freshness == Freshness::Stale =>
+                ) && self.parent.dispatcher.observations.freshness == Freshness::Stale =>
             {
                 smoke.stale_controls_disabled = smoke.reference.as_ref().is_some_and(|reference| {
                     !self.control_enabled(
@@ -1183,23 +1174,31 @@ impl WorkbenchApp {
                         "reference_retune",
                     )
                 });
-                if let Some(client) = self.model.client()
-                    && client.connect(self.model.recovery.scope.clone()).is_ok()
+                if let Some(client) = self.parent.dispatcher.client()
+                    && client
+                        .connect(self.parent.dispatcher.recovery.scope.clone())
+                        .is_ok()
                 {
                     smoke.phase = SmokePhase::ReattachedFresh;
                 }
             }
             SmokePhase::ReattachedFresh
-                if self.model.observations.freshness == Freshness::Fresh
-                    && has_signal_point(&self.model)
-                    && has_fresh_reference(&self.model)
-                    && self.model.observations.entities.keys().any(|target| {
-                        matches!(target, RuntimeRef::Reference { .. })
-                            && self.control_enabled(target, "reference_retune")
-                    }) =>
+                if self.parent.dispatcher.observations.freshness == Freshness::Fresh
+                    && has_signal_point(&self.parent.dispatcher)
+                    && has_fresh_reference(&self.parent.dispatcher)
+                    && self
+                        .parent
+                        .dispatcher
+                        .observations
+                        .entities
+                        .keys()
+                        .any(|target| {
+                            matches!(target, RuntimeRef::Reference { .. })
+                                && self.control_enabled(target, "reference_retune")
+                        }) =>
             {
                 smoke.controls_reenabled_after_fresh = true;
-                smoke.finish(true, &self.model, "pass", context);
+                smoke.finish(true, &self.parent.dispatcher, "pass", context);
                 return;
             }
             _ => {}
@@ -1213,9 +1212,9 @@ impl WorkbenchApp {
             return;
         };
         if !probe.minimize_requested
-            && self.model.observations.freshness == Freshness::Fresh
-            && has_signal_point(&self.model)
-            && has_fresh_reference(&self.model)
+            && self.parent.dispatcher.observations.freshness == Freshness::Fresh
+            && has_signal_point(&self.parent.dispatcher)
+            && has_fresh_reference(&self.parent.dispatcher)
         {
             context.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
             probe.minimize_requested = true;
@@ -1224,8 +1223,8 @@ impl WorkbenchApp {
             && context.input(|input| input.viewport().minimized) == Some(true)
             && !probe.result_path.exists()
         {
-            let controller = authoritative_controller_snapshot(&self.model);
-            let recorder = authoritative_recorder_snapshot(&self.model);
+            let controller = authoritative_controller_snapshot(&self.parent.dispatcher);
+            let recorder = authoritative_recorder_snapshot(&self.parent.dispatcher);
             let _ = std::fs::write(
                 &probe.result_path,
                 json!({
@@ -1251,23 +1250,13 @@ impl WorkbenchApp {
     }
 
     fn shutdown_client(&mut self) {
-        if let Some(mut endpoint) = self.endpoint.take() {
-            endpoint.shutdown(&mut self.model);
-        }
-        if let Some(client) = self.model.take_client()
-            && let Err(error) = client.shutdown()
-        {
-            self.model.set_client_error(error.to_owned());
-        }
+        let _ = self.parent.shutdown();
     }
 }
 
 impl eframe::App for WorkbenchApp {
     fn logic(&mut self, context: &egui::Context, _frame: &mut eframe::Frame) {
-        self.drain_updates();
-        if let Some(endpoint) = &mut self.endpoint {
-            endpoint.service_owner(&mut self.model);
-        }
+        self.parent.turn();
         self.drive_smoke(context);
         self.drive_kill_probe(context);
     }
@@ -1314,51 +1303,6 @@ fn render_selected_live_plot(
     } else if matches!(selected, RuntimeRef::Signal { .. }) {
         ui.label("Waiting for good finite signal events.");
     }
-}
-
-fn default_plot_command<C>(
-    model: &WorkbenchDispatcher<C>,
-    signal: RuntimeRef,
-) -> Option<UiCommand> {
-    (model.should_create_default_plot() && model.presentation.windows.is_empty()).then(|| {
-        UiCommand::AddPlot {
-            plot: PresentationPlot {
-                id: "default-live-plot".into(),
-                title: "Live signal".into(),
-                time_window_seconds: 60.0,
-                axes: AxisOptions::default(),
-                traces: vec![Trace {
-                    id: "default-live-trace".into(),
-                    source: signal,
-                    display_label: "Selected signal".into(),
-                    visible: true,
-                    style: TraceStyle {
-                        color: "cyan".into(),
-                        width: 1.5,
-                    },
-                    display_unit: None,
-                }],
-            },
-        }
-    })
-}
-
-fn drain_bounded<T>(
-    mut receive: impl FnMut() -> Result<T, TryRecvError>,
-    mut apply: impl FnMut(T),
-    limit: usize,
-) -> usize {
-    let mut drained = 0;
-    while drained < limit {
-        match receive() {
-            Ok(update) => {
-                apply(update);
-                drained += 1;
-            }
-            Err(TryRecvError::Empty | TryRecvError::Disconnected) => break,
-        }
-    }
-    drained
 }
 
 fn freshness_label(ui: &mut egui::Ui, freshness: Freshness) {
@@ -1794,8 +1738,8 @@ mod tests {
         model::{ExactRetryError, ExactRetrySubmitter, RecoveryStatusSubmitter},
         presentation::PresentationDocument,
     };
+    use crate::{dispatcher::WorkbenchDispatcher, model::UiCommand, parent::default_plot_command};
     use std::cell::RefCell;
-    use std::sync::mpsc::sync_channel;
 
     #[derive(Default)]
     struct FakeStatusSubmitter {
@@ -1976,19 +1920,7 @@ mod tests {
 
     #[test]
     fn gui_drain_is_bounded_to_the_worker_queue_capacity() {
-        let (sender, receiver) = sync_channel(UPDATES_PER_FRAME + 1);
-        for value in 0..=UPDATES_PER_FRAME {
-            sender.send(value).unwrap();
-        }
-        let mut applied = Vec::new();
-        let drained = drain_bounded(
-            || receiver.try_recv(),
-            |value| applied.push(value),
-            UPDATES_PER_FRAME,
-        );
-        assert_eq!(drained, UPDATES_PER_FRAME);
-        assert_eq!(applied.len(), UPDATES_PER_FRAME);
-        assert_eq!(receiver.try_recv(), Ok(UPDATES_PER_FRAME));
+        crate::parent::tests::assert_bounded_fifo_turn();
     }
 
     #[test]

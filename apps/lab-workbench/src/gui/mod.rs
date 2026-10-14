@@ -4,6 +4,7 @@ mod app;
 mod controls;
 mod presentation;
 mod readonly_v2;
+#[cfg(test)]
 pub(crate) use crate::rebuild;
 
 use crate::{

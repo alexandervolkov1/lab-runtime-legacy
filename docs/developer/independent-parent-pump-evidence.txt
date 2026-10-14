@@ -1,0 +1,92 @@
+DGUI-4C7B3B1 / Windows x86_64 MSVC / Rust 1.95.0 / 2026-10-14
+B3A merge 14bbe58aa54ef6b2320a6d11ccfb98cf2ee67697 preserves f5e2b38ffe437c7452f3e7d3ca104646f615460d.
+Full/final Rust gates tested HEAD 13866c7728db3a8c80be5acef38c209f5ca7a1a1.
+Native observer qualified HEAD c324235126db14f6bfa5c1f06812dc7182f1d127; Rust/Cargo diff from Rust gate HEAD is empty.
+The subsequent evidence commit changes documentation/captures only; final PR HEAD is reported in the PR body.
+Independent parent harness PASS; active v1 cooperative scheduler preserved.
+No child/Job/IPC/v2 host activation or new Runtime API; ACTIVATION_QUALIFIED=false.
+
+dev full Workbench suite: 488 PASS, 15 ignored process fixtures; elapsed=475.84s.
+dev final owner/architecture subset: 13 PASS (11 parent groups, relocated GUI drain gate, architecture guard).
+dev measured 64-update fixture: updates=64, rebuild steps=64, external calls=0, elapsed_us=254; not universal maximum-payload latency.
+dev virtual process acceptance: 13 PASS; additional M17.4 overlap BLOCKED, see baseline reproduction below.
+dev five borrowing compile-fail gates PASS.
+dev geometry: 119 PASS; historical CSV exact; max accounted=4610337; normalized SHA256=8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751.
+dev memory: 125 PASS; historical CSV exact; max accounted=4458653; normalized SHA256=48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212.
+dev frames: 12 PASS; historical CSV exact; max accounted=4355499; normalized SHA256=24bba32d439203d7e29a9e91f3c54af681b5577eb34974c6da1bdf9c8ebab74e.
+dev host-no-upload: 4 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=a25f1639aa5509171fb9f69dc96c29d81db4902e7d65f1947d8a116c30482a12.
+dev retirement: 9 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=16aed141737f84299e5097adb9ce8ab057fde0ff0e8168af12aa8825c2244cfe.
+dev plot: historical Widget/Page bytes exact PASS.
+dev bounded: historical Widget/Page bytes exact PASS.
+
+release full Workbench suite: 488 PASS, 15 ignored process fixtures; elapsed=46.25s.
+release final owner/architecture subset: 13 PASS (11 parent groups, relocated GUI drain gate, architecture guard).
+release measured 64-update fixture: updates=64, rebuild steps=64, external calls=0, elapsed_us=81; not universal maximum-payload latency.
+release virtual process acceptance: 13 PASS; additional M17.4 overlap BLOCKED, see baseline reproduction below.
+release five borrowing compile-fail gates PASS.
+release geometry: 119 PASS; historical CSV exact; max accounted=4610337; normalized SHA256=8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751.
+release memory: 125 PASS; historical CSV exact; max accounted=4458653; normalized SHA256=48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212.
+release frames: 12 PASS; historical CSV exact; max accounted=4355499; normalized SHA256=24bba32d439203d7e29a9e91f3c54af681b5577eb34974c6da1bdf9c8ebab74e.
+release host-no-upload: 4 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=a25f1639aa5509171fb9f69dc96c29d81db4902e7d65f1947d8a116c30482a12.
+release retirement: 9 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=16aed141737f84299e5097adb9ce8ab057fde0ff0e8168af12aa8825c2244cfe.
+release plot: historical Widget/Page bytes exact PASS.
+release bounded: historical Widget/Page bytes exact PASS.
+
+CPU Preview max 4610337 / 8388608 accounted bytes; B1/FiniteTraceItem and allocation profiles unchanged.
+Final full suites both include the final 503-test inventory, including real-turn wake/stop and repeated unconfirmed-join regressions. All 15 ignored names/reasons match the previous inventory.
+Full suites include dispatcher/external partial I/O and detach, operator/recovery/Exact Retry, client worker/reconnect, v1 GUI/Plot/Confirm and architecture guards.
+Cargo fmt, warning-denied Clippy (all targets, dev and release), scoped Markdown links/unchanged PowerShell AST evidence and diff checks PASS.
+
+Additional historical ignored M17.4 real-process overlap: BLOCKED in dev/release.
+Observed: recording_start becomes MutationFailed / recording_failed / recording_unavailable before mutation B is Runtime-accepted.
+Reproduced on unmodified archived B3A merge source (no parent module/new pump): 0 PASS / 1 FAIL; 491 filtered; exit 101.
+Baseline main.rs normalized SHA256=88fac743fcd629698916a8a4579fc2ddb8b3aee644e5560755c586485e73cf1d.
+Archived baseline compiled with the same exact current locked Cargo test artifacts; Runtime/dependency inputs unchanged.
+The fixture drives its dispatcher/rebuild directly and never runs ParentPump. Original fixture and overlap assertion are unchanged in this PR.
+Runtime source shows held_start blocks accepted operation SQL as well as Start; changing to the terminal-operation barrier does not preserve this recording_start overlap (A completes before B). No alternate barrier change is committed.
+Exact remaining gate: qualify a supported healthy Start-only/acceptance-aware Recorder fault fixture, or another separately reviewed deterministic virtual overlap operation; do not weaken assertions or modify Runtime in this stage.
+No hardware absence or required Arduino/Metakon blocks the parent harness. All fixtures are virtual/fake.
+
+Raw full/targeted/virtual/CPU transcripts and archived baseline reproduction remain under target/b3b1-*.
+Root panic and worker-stop failure in parent tests are deterministic expected injections, not unexplained failures.
+GPU terminal and whole host Rust-budget scopes remain BLOCKED; no new GPU or native child qualification claimed.
+
+Independent follow-up qualification:
+dev inventory: 503 tests, 488 enabled/15 ignored; ordered names SHA256=45fe24a23679db6d50d8a30fe7251df0dc76e0629ccdb7d40398870c0521d4c4.
+dev explicit non-M17.4 virtual process gates: 13 PASS, zero failures, elapsed=8.33s; corrected operator fixture included.
+dev native v1 smoke PASS: Ready/Fresh, displayed scalar/cyan curve, automated Confirm, accepted/completed + authoritative refresh, minimize/restore, explicit Disconnect/reconnect/Fresh, GUI exit=0.
+dev complete Runtime-bound frame audit: 19 requests; connections=2; closures=['gui_eof', 'gui_eof']; mutation=1; operation_status=0; repeated mutation=0; observed signal events=8.
+dev native result independent-parent-pump-native-dev.json; capture SHA256=20d90684a5230de8dd424997c1455c7737561c41f79ef54a116aab14d364b5ef; raw result SHA256=370fd07b50c6215eb9ebe119422090783af5478bc8b4c5aa39701b8f6e644fa0.
+release inventory: 503 tests, 488 enabled/15 ignored; ordered names SHA256=45fe24a23679db6d50d8a30fe7251df0dc76e0629ccdb7d40398870c0521d4c4.
+release explicit non-M17.4 virtual process gates: 13 PASS, zero failures, elapsed=7.10s; corrected operator fixture included.
+release native v1 smoke PASS: Ready/Fresh, displayed scalar/cyan curve, automated Confirm, accepted/completed + authoritative refresh, minimize/restore, explicit Disconnect/reconnect/Fresh, GUI exit=0.
+release complete Runtime-bound frame audit: 19 requests; connections=2; closures=['gui_eof', 'gui_eof']; mutation=1; operation_status=0; repeated mutation=0; observed signal events=8.
+release native result independent-parent-pump-native-release.json; capture SHA256=8b772516805693cb31fa3e47965447c178b807ac68a83fe8c6e4bda799ad1184; raw result SHA256=84c5d81a6399bb023047da4002365902121bfd83d0b97f87fa8c54586bcb6b14.
+Native scope: existing automated operator/Confirm workflow; client-area captures inspected; no mouse Confirm, GL readback, device-loss or terminal GPU cleanup claim.
+Real-turn wake PASS: first receive paused inside ParentOwner::turn; producer publishes second update + wake; forced Empty ends first turn at one update; next turn one update with zero idle timeouts; model projections first/second FIFO; exactly two applications, zero submissions.
+Real-turn stop priority PASS: second update/wake pending, stop before barrier release; exactly one completed turn/application; pending bit retained; one client stop, zero submissions.
+Shutdown PASS: two pre-release deadline errors retain the same thread ID/sole join record and zero stopped-owner replicas/client stops; proof permits join/owner destruction; repeated shutdown/Drop leaves one total client stop. Startup/worker-stop/panic failures still preserve single authority.
+Test-only observations: two fixed slots/counters, no production queues/model threads or RuntimeObservations copies.
+Operator fixture pre-fix release explicit process run: 12 PASS/1 FAIL, legitimate intervening Reference revision 3 arriving during conflict wait. A subsequent targeted/full rerun passed; neither was treated as a fix.
+Five unmodified B3A dev and five optimized baseline attempts did not reproduce that operator race; this is not proof of absence. Its unchanged direct model fixture was corrected by checking full observation equality across the exact failed reply, and separately requiring Fresh intervening revision 3/target +1.0 (never stale target +0.75). No Runtime or production GUI changes; final dev/release 13 process gates PASS.
+Native observer pre-fix: one uninstrumented release reconnect deadline, then instrumented reproduction error 10054 with one connection/no EOF; its observer thread/listener had stopped. GUI-side reset now recorded separately from EOF; unexpected Runtime-side close remains failure.
+Deterministic observer reset regression PASS: abortive close with unread event bytes -> gui_reset_on_receive, next session -> gui_eof, exactly two complete hello frames. Three consecutive corrected native release runs PASS, then final native dev/release PASS. Initial failure audits retained; no fake EOF receipt or command replay.
+CPU wrapper gates rerun dev/release: five borrowing gates, 119 geometry, 125 C3 memory, 12 C4A frames, four C4B1 no-upload, nine C4B2A pending, Widget/Page/Unicode/navigation scenarios PASS with exact historical accounting. Later main.rs change is confined to the ignored operator fixture; allocation wrapper never includes root main.rs and all its Rust/Cargo inputs are unchanged.
+Existing ignored inventory (unchanged names and reasons):
+runtime_acceptance::b4_scenario_a_runtime_absent_then_manual_connect_reaches_fresh: M14.6B4 scenario A real-process Runtime availability acceptance
+runtime_acceptance::b4_scenario_b_explicit_disconnect_requires_manual_fresh_reconnect: M14.6B4 scenario B explicit Disconnect real-process acceptance
+runtime_acceptance::b4_scenario_d_runtime_restart_quarantines_old_boot_and_builds_new_epoch: M14.6B4 scenario D Runtime restart and quarantine acceptance
+runtime_acceptance::b4_scenario_e_process_crash_preserves_exact_journal_without_auto_send: M14.6B4 scenario E Workbench process-crash recovery journal acceptance
+runtime_acceptance::b4_scenario_j_corrupt_journal_allows_fresh_observation_but_blocks_mutation: M14.6B4 scenario J corrupt journal with real Runtime acceptance
+runtime_acceptance::m17_4_overlap_runtime_child: M17.4 deterministic real-Runtime overlap fixture child
+runtime_acceptance::m17_4_real_runtime_external_endpoint_preserves_owner_and_process_boundaries: M17.4 real Runtime/Workbench endpoint ownership, identity, presentation and lifetime acceptance
+runtime_acceptance::real_runtime_controller_lifecycle_confirms_once_and_rechecks_source_state: DGUI-4B3 virtual Controller lifecycle acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_exact_retry_outcome_unknown_never_reexecutes: M14.6B2B1 real Runtime evicted-outcome Exact Retry acceptance
+runtime_acceptance::real_runtime_exact_retry_retained_outcome_never_reexecutes: M14.6B2B1 real Runtime retained-outcome Exact Retry acceptance
+runtime_acceptance::real_runtime_fixed_reference_operator_workflow_preserves_units_and_revision_fences: DGUI-4B2 virtual fixed Reference acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_operator_layer_confirms_completes_refreshes_and_never_retries_conflict: M14.5 operator process acceptance; run after cargo build -p lab-runtime -p lab-workbench
+runtime_acceptance::real_runtime_property_workflow_uses_existing_virtual_configuration: DGUI-4B4 Required Recorder acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_recording_operator_workflow_confirms_once_and_observes_start_stop: DGUI-4B1 virtual Recorder acceptance; run after cargo build -p lab-runtime
+runtime_acceptance::real_runtime_reference_reconnect_reconcile_and_replay: process acceptance; run after cargo build -p lab-runtime -p lab-workbench
+
+Review verdict: READY FOR INDEPENDENT REVIEW within B3B1 scope. M17.4 overlap BLOCKED separately; baseline reproduction retained unchanged. GPU terminal/whole host Rust budget remain BLOCKED; active v1 cooperative; ACTIVATION_QUALIFIED=false. No merge/release/B3B2.
