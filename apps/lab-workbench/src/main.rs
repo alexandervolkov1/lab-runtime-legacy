@@ -2166,16 +2166,33 @@ mod runtime_acceptance {
             }
         }
 
-        let observation_before_conflict = model.observations.entities[&target].value.clone();
-        stale_draft.confirm(&model, &client).unwrap();
+        let stale_command = stale_draft.confirm(&model, &client).unwrap();
         loop {
             let update = client.recv_timeout(ACCEPTANCE_TIMEOUT).unwrap();
+            // The deliberately withheld intervening Reference event can arrive
+            // before the conflict reply. Check that reply's effect separately;
+            // legitimate authoritative updates must still be applied normally.
+            let is_conflict_reply = matches!(
+                &update,
+                ClientUpdate::Reply {
+                    command_id,
+                    kind: super::client::types::ReplyKind::MutationFailed,
+                    ..
+                } if *command_id == stale_command
+            );
+            let observation_before_reply =
+                is_conflict_reply.then(|| model.observations.entities[&target].value.clone());
             stale_draft.after_update(&update);
             model.apply_client_update(update);
             if matches!(
                 stale_draft.state,
                 OperatorWorkflowState::Failed { conflict: true, .. }
             ) {
+                assert!(is_conflict_reply);
+                assert_eq!(
+                    model.observations.entities[&target].value,
+                    observation_before_reply.unwrap()
+                );
                 break;
             }
         }
@@ -2183,10 +2200,16 @@ mod runtime_acceptance {
             stale_draft.state,
             OperatorWorkflowState::Failed { conflict: true, .. }
         ));
+        apply_until(&client, &mut model, &mut rebuild, |_, model| {
+            model.observations.entities[&target].freshness == Freshness::Fresh
+                && model.observations.entities[&target].value["target"]
+                    == json!(original_target + 1.0)
+        });
+        assert_eq!(model.observations.entities[&target].value["revision"], "3");
         assert_eq!(
-            model.observations.entities[&target].value,
-            observation_before_conflict
-        );
+            model.observations.entities[&target].value["target"],
+            json!(original_target + 1.0)
+        ); // The rejected stale target (+0.75) never becomes authoritative.
 
         client.disconnect().unwrap();
         wait_for(&client, |update| {
