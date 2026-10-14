@@ -1,5 +1,6 @@
 //! Bounded, serial host seam. No GPU backend or GPU qualification lives here.
 use super::completion::{self, Completion, WaitObservation, WaitPolicy, WaitPurpose, WaitRequest};
+use super::deletion::{DeletionFailure, DeletionResult};
 use super::frame::{ContextGeneration, FrameError};
 use eframe::egui::{self, TextureId, epaint::ImageDelta};
 
@@ -18,8 +19,11 @@ pub(crate) struct TextureKey {
 /// only Quiesced permits free. A real adapter must establish/flush a valid fence
 /// on its current creating context and distinguish timeout, wait error and loss.
 /// Borrowed input cannot be retained after a call: backend staging is host-owned.
-/// `free` releases an entire registered key, including partial creation, after
-/// proven quiescence. It and backend destruction must not release in-use objects.
+/// `release_frame` confirms disposal of completion objects after Quiesced.
+/// `free` confirms an entire registered key, including partial creation.
+/// `release_generation` confirms ALL remaining non-texture objects. A failure
+/// retains its exact identity and forbids retries until separately resolved.
+/// Backend destruction must not release in-use or ambiguous objects.
 /// Real context/device teardown remains a separate qualification obligation.
 pub(crate) trait FrameBackend {
     const CPU_ONLY: bool;
@@ -36,7 +40,9 @@ pub(crate) trait FrameBackend {
         pixels_per_point: f32,
     ) -> Result<(), FrameError>;
     fn wait(&mut self, request: WaitRequest) -> Completion;
-    fn free(&mut self, key: TextureKey);
+    fn release_frame(&mut self, generation: ContextGeneration) -> DeletionResult;
+    fn free(&mut self, key: TextureKey) -> DeletionResult;
+    fn release_generation(&mut self, generation: ContextGeneration) -> DeletionResult;
 }
 
 /// Explicit CPU-only sink: consumes CPU images, never acknowledges a GPU render.
@@ -65,7 +71,15 @@ impl FrameBackend for CpuOnly {
     fn wait(&mut self, _: WaitRequest) -> Completion {
         Completion::Quiesced
     }
-    fn free(&mut self, _: TextureKey) {}
+    fn release_frame(&mut self, _: ContextGeneration) -> DeletionResult {
+        Ok(())
+    }
+    fn free(&mut self, _: TextureKey) -> DeletionResult {
+        Ok(())
+    }
+    fn release_generation(&mut self, _: ContextGeneration) -> DeletionResult {
+        Ok(())
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -82,6 +96,7 @@ pub(crate) struct TextureOwner<B: FrameBackend> {
     generation: Option<ContextGeneration>,
     textures: [Option<Texture>; MAX_TEXTURES],
     in_flight: bool,
+    pub(super) deletion: Option<DeletionFailure>,
     pub(super) last_wait: WaitObservation,
 }
 impl<B: FrameBackend> TextureOwner<B> {
@@ -91,11 +106,15 @@ impl<B: FrameBackend> TextureOwner<B> {
             generation: None,
             textures: [None; MAX_TEXTURES],
             in_flight: false,
+            deletion: None,
             last_wait: WaitObservation::IDLE,
         }
     }
     pub(crate) fn begin(&mut self, generation: ContextGeneration) -> Result<(), FrameError> {
-        if self.in_flight || (self.generation.is_some() && self.generation != Some(generation)) {
+        if self.deletion.is_some()
+            || self.in_flight
+            || (self.generation.is_some() && self.generation != Some(generation))
+        {
             return Err(FrameError::RetirementPending);
         }
         if self.generation != Some(generation) {
@@ -132,18 +151,31 @@ impl<B: FrameBackend> TextureOwner<B> {
     }
     /// Releases only after a structural or backend quiescence proof. No wait.
     pub(super) fn release(&mut self) -> bool {
-        if self.in_flight {
+        if self.in_flight || self.deletion.is_some() {
             return false;
         }
-        if let Some(generation) = self.generation.take() {
-            for texture in &mut self.textures {
-                if let Some(texture) = texture.take() {
-                    self.backend.free(TextureKey {
+        if let Some(generation) = self.generation {
+            if let Err(error) = self.backend.release_frame(generation) {
+                self.deletion = Some(error);
+                return false;
+            }
+            for slot in 0..MAX_TEXTURES {
+                if let Some(texture) = self.textures[slot] {
+                    if let Err(error) = self.backend.free(TextureKey {
                         generation,
                         id: texture.id,
-                    });
+                    }) {
+                        self.deletion = Some(error);
+                        return false;
+                    }
+                    self.textures[slot] = None;
                 }
             }
+            if let Err(error) = self.backend.release_generation(generation) {
+                self.deletion = Some(error);
+                return false;
+            }
+            self.generation = None;
         }
         true
     }
@@ -158,7 +190,7 @@ impl<B: FrameBackend> TextureOwner<B> {
         output: &mut egui::FullOutput,
         meshes: &[egui::ClippedPrimitive],
     ) -> Result<(), FrameError> {
-        if self.generation != Some(generation) || self.in_flight {
+        if self.generation != Some(generation) || self.in_flight || self.deletion.is_some() {
             return Err(FrameError::TextureProtocol);
         }
         let delta = &output.textures_delta;
@@ -238,14 +270,22 @@ impl<B: FrameBackend> TextureOwner<B> {
         {
             return Err(FrameError::Completion);
         }
+        if let Err(error) = self.backend.release_frame(generation) {
+            self.deletion = Some(error);
+            return Err(FrameError::Deletion);
+        }
         // A free is effective only after the last dependent draw completed.
         for texture in &mut self.textures {
             if texture.is_some_and(|t| delta.free.contains(&t.id)) {
-                let texture = texture.take().unwrap();
-                self.backend.free(TextureKey {
+                let key = TextureKey {
                     generation,
-                    id: texture.id,
-                });
+                    id: texture.unwrap().id,
+                };
+                if let Err(error) = self.backend.free(key) {
+                    self.deletion = Some(error);
+                    return Err(FrameError::Deletion);
+                }
+                *texture = None;
             }
         }
         output.textures_delta.clear();

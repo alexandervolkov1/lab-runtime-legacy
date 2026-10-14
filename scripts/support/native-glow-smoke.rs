@@ -4,7 +4,8 @@ use crate::{
     plot_fixtures,
     readonly_v2::{
         self, Preview,
-        completion::{Completion, WaitPolicy, WaitRequest},
+        completion::{Completion, WaitFailure, WaitPolicy, WaitRequest},
+        deletion::{DeleteDisposition, ObjectKind},
         frame::{ContextGeneration, FrameError, FrameOutcome},
         host_session::{HostSession, ShutdownOutcome},
         texture_owner::{FrameBackend, TextureKey, TextureOwner},
@@ -21,7 +22,7 @@ use winit::{
 
 #[path = "native-glow-device.rs"]
 mod device;
-#[path = "allocation-meter.rs"]
+#[path = "native-allocation-meter.rs"]
 mod meter;
 use device::{Device, HEIGHT, WIDTH};
 type Result<T> = std::result::Result<T, String>;
@@ -29,6 +30,7 @@ type Result<T> = std::result::Result<T, String>;
 struct Backend {
     device: Rc<RefCell<Device>>,
     inject_unresolved: bool,
+    fail_submission: bool,
 }
 impl FrameBackend for Backend {
     const CPU_ONLY: bool = false;
@@ -86,13 +88,20 @@ impl FrameBackend for Backend {
         meshes: &[egui::ClippedPrimitive],
         scale: f32,
     ) -> std::result::Result<(), FrameError> {
-        self.device
+        let result = self
+            .device
             .borrow_mut()
             .draw(generation, meshes, scale)
             .map_err(|error| {
                 eprintln!("submit: {error}");
                 FrameError::Submission
-            })
+            });
+        result?;
+        if self.fail_submission {
+            Err(FrameError::Submission)
+        } else {
+            Ok(())
+        }
     }
     fn wait(&mut self, request: WaitRequest) -> Completion {
         if self.inject_unresolved {
@@ -101,13 +110,20 @@ impl FrameBackend for Backend {
             self.device.borrow_mut().wait(request)
         }
     }
-    fn free(&mut self, key: TextureKey) {
-        let mut device = self.device.borrow_mut();
-        if let Err(error) = device.free(key) {
-            device.fault.get_or_insert(error);
-        }
-        // The trait's void free is not itself deletion evidence. The native root
-        // independently requires the checked device ledger and zero objects.
+    fn release_frame(
+        &mut self,
+        generation: ContextGeneration,
+    ) -> readonly_v2::deletion::DeletionResult {
+        self.device.borrow_mut().release_frame(generation)
+    }
+    fn free(&mut self, key: TextureKey) -> readonly_v2::deletion::DeletionResult {
+        self.device.borrow_mut().free(key)
+    }
+    fn release_generation(
+        &mut self,
+        generation: ContextGeneration,
+    ) -> readonly_v2::deletion::DeletionResult {
+        self.device.borrow_mut().release_generation(generation)
     }
 }
 struct Root {
@@ -121,6 +137,7 @@ struct App {
     root: Option<Root>,
     result: Option<Result<()>>,
     inject: bool,
+    scenario: Option<String>,
 }
 impl ApplicationHandler for App {
     fn resumed(&mut self, events: &ActiveEventLoop) {
@@ -133,6 +150,7 @@ impl ApplicationHandler for App {
                 let backend = Backend {
                     device: device.clone(),
                     inject_unresolved: self.inject,
+                    fail_submission: self.scenario.as_deref() == Some("original-error"),
                 };
                 self.root = Some(Root {
                     session: HostSession::new(backend),
@@ -165,12 +183,44 @@ impl ApplicationHandler for App {
             return;
         }
         root.attempted = true;
-        let result = exercise(root, self.inject);
+        let result = if let Some(scenario) = &self.scenario {
+            fault_exercise(root, scenario)
+        } else {
+            exercise(root, self.inject)
+        };
+        // Raw adapter conformance owns its ledger directly. Do not ask an idle
+        // session for a release receipt while that separate obligation exists.
+        if matches!(
+            root.session.status(),
+            readonly_v2::host_session::CleanupOutcome::Idle
+                | readonly_v2::host_session::CleanupOutcome::Retired(_)
+        ) && root.device.borrow().ledger().iter().any(Option::is_some)
+        {
+            root.unresolved = true;
+            println!(
+                "HOST_RUST_DELETION_PENDING {:?}; native ledger retained",
+                meter::phase()
+            );
+            println!(
+                "TERMINAL GPU LIFECYCLE BLOCKED: GPU object deletion unresolved; native context teardown not attempted; native root retained"
+            );
+            println!(
+                "PENDING_READY current={} counters={:?} ledger={:?}",
+                root.device.borrow().current_owner(),
+                root.device.borrow().counters,
+                root.device.borrow().ledger()
+            );
+            return;
+        }
         if matches!(
             root.session.shutdown(WaitPolicy::default()),
             ShutdownOutcome::Unresolved(_)
         ) {
             root.unresolved = true;
+            println!(
+                "HOST_RUST_PENDING {:?}; readback/staging remain owned by native root",
+                meter::phase()
+            );
             println!(
                 "TERMINAL GPU LIFECYCLE BLOCKED: retained native root, keys={}, context={}, frame={}, status={:?}; no ordinary Drop, no cleanup receipt",
                 root.session.owned_keys(),
@@ -178,7 +228,12 @@ impl ApplicationHandler for App {
                 root.session.retained_cpu_frame(),
                 root.session.status()
             );
-            println!("PENDING_READY {:?}", root.device.borrow().counters);
+            println!(
+                "PENDING_READY current={} counters={:?} ledger={:?}",
+                root.device.borrow().current_owner(),
+                root.device.borrow().counters,
+                root.device.borrow().ledger()
+            );
             use std::io::Write;
             let _ = std::io::stdout().flush();
             return;
@@ -186,12 +241,25 @@ impl ApplicationHandler for App {
         let cleanup = root.device.borrow_mut().healthy_close();
         if cleanup.is_err() {
             root.unresolved = true;
-            println!("TERMINAL GPU LIFECYCLE BLOCKED: {cleanup:?}; native root retained");
+            println!(
+                "HOST_RUST_TEARDOWN_PENDING {:?}; native context owner retained",
+                meter::phase()
+            );
+            println!(
+                "TERMINAL GPU LIFECYCLE BLOCKED: NativeContextTeardown {cleanup:?}; native root retained"
+            );
+            println!(
+                "PENDING_READY current={} counters={:?} ledger={:?}",
+                root.device.borrow().current_owner(),
+                root.device.borrow().counters,
+                root.device.borrow().ledger()
+            );
             return;
         }
         println!(
-            "FINAL keys={} unresolved=0 counters={:?}",
+            "FINAL keys={} unresolved=0 delete_calls={} counters={:?}",
             root.session.owned_keys(),
+            root.device.borrow().delete_calls,
             root.device.borrow().counters
         );
         self.result = Some(result.and(cleanup));
@@ -202,6 +270,7 @@ impl ApplicationHandler for App {
 }
 pub(crate) fn run() {
     let mut app = App {
+        scenario: std::env::args().find_map(|a| a.strip_prefix("--fault=").map(str::to_owned)),
         inject: std::env::args().any(|a| a == "--pending"),
         ..Default::default()
     };
@@ -217,15 +286,30 @@ pub(crate) fn run() {
         .with_dpi_aware(false)
         .build()
         .expect("native event loop");
-    events
-        .run_app(&mut app)
-        .expect("native event loop execution");
+    if let Err(error) = events.run_app(&mut app) {
+        eprintln!(
+            "NativeContextTeardown BLOCKED: event loop failed: {error}; child process exit is containment, no cleanup receipt"
+        );
+        // Never unwind/drop an unresolved native root after losing its loop.
+        std::process::exit(1);
+    }
+    if app.root.is_some() {
+        eprintln!(
+            "NativeContextTeardown BLOCKED: loop ended with an owned native root; child process exit is containment, no cleanup receipt"
+        );
+        std::process::exit(1);
+    }
     let memory = meter::phase();
     meter::stop();
+    meter::attribution();
     println!(
         "HOST_RUST_AFTER_WINDOW {memory:?} (includes Preview during frames; retained platform/singleton allocations are not GPU objects)"
     );
     match app.result {
+        Some(Ok(())) if app.scenario.is_some() => println!(
+            "FAULT {} verified healthy release PASS; ACTIVATION_QUALIFIED=false",
+            app.scenario.as_deref().unwrap()
+        ),
         Some(Ok(())) => println!(
             "GPU RENDER SMOKE PASS; HEALTHY GPU LIFECYCLE PASS; TERMINAL GPU LIFECYCLE BLOCKED; HOST BUDGET QUALIFICATION BLOCKED; ACTIVATION_QUALIFIED=false"
         ),
@@ -234,6 +318,224 @@ pub(crate) fn run() {
             std::process::exit(1);
         }
     }
+}
+fn fault_exercise(root: &mut Root, scenario: &str) -> Result<()> {
+    let (document, observations) = fixture();
+    let wait = match scenario {
+        "timeout-proof" => Some(Completion::Timeout),
+        "wait-failed" => Some(Completion::Failed(WaitFailure::WaitError)),
+        "missing-fence" => Some(Completion::Failed(WaitFailure::MissingFence)),
+        "invalid-fence" => Some(Completion::Failed(WaitFailure::InvalidFence)),
+        "device-loss" => Some(Completion::DeviceLost),
+        _ => None,
+    };
+    {
+        let mut device = root.device.borrow_mut();
+        device.wait_fault = wait;
+        device.teardown_fault = scenario == "native-teardown";
+        let kind = if scenario == "original-error" {
+            Some(ObjectKind::Shader)
+        } else {
+            match scenario.split('-').next().unwrap_or("") {
+                "texture" => Some(ObjectKind::Texture),
+                "buffer" => Some(ObjectKind::Buffer),
+                "shader" => Some(ObjectKind::Shader),
+                "program" => Some(ObjectKind::Program),
+                "vao" => Some(ObjectKind::VertexArray),
+                "fence" => Some(ObjectKind::Fence),
+                _ => None,
+            }
+        };
+        if let Some(kind) = kind {
+            device.delete_fault = Some((
+                kind,
+                if scenario.ends_with("before") {
+                    DeleteDisposition::NotStarted
+                } else {
+                    DeleteDisposition::Ambiguous
+                },
+                1,
+            ));
+        }
+    }
+    if scenario == "partial-texture" {
+        return partial_fault(root);
+    }
+    let mut preview = Preview::with_session(&document, EPOCH, &mut root.session);
+    let mut frame = preview
+        .run(&observations, Default::default())
+        .map_err(|e| format!("fault preparation: {e:?}"))?;
+    frame
+        .tessellate()
+        .map_err(|e| format!("fault tessellation: {e:?}"))?;
+    let outcome = frame.finish();
+    if wait.is_some() && outcome != Err(FrameError::Completion) {
+        return Err("wait injection did not fail completion".into());
+    }
+    if scenario.starts_with("fence-") && outcome != Err(FrameError::Deletion) {
+        return Err("fence delete injection did not fail deletion".into());
+    }
+    if scenario == "original-error" && outcome != Err(FrameError::Submission) {
+        return Err("original execution error lost".into());
+    }
+    if scenario == "timeout-proof" {
+        let before = root.device.borrow().counters.clone();
+        if !matches!(
+            preview.cleanup_outcome(),
+            readonly_v2::host_session::CleanupOutcome::Pending(_)
+        ) {
+            return Err("timeout was retired".into());
+        }
+        if before.fences_created != 1 || before.fences_deleted != 0 || before.textures_deleted != 0
+        {
+            return Err("resources freed before proof".into());
+        }
+        root.device.borrow_mut().wait_fault = None;
+        let cleanup = preview.poll_retirement(WaitPolicy::default());
+        if !matches!(
+            cleanup,
+            readonly_v2::host_session::CleanupOutcome::Retired(_)
+        ) {
+            return Err("real later fence proof missing".into());
+        }
+        drop(preview);
+        let after = root.device.borrow().counters.clone();
+        if after.frames != before.frames
+            || after.draws != before.draws
+            || after.full_uploads != before.full_uploads
+            || after.objects != 0
+            || after.completions != 1
+        {
+            return Err("proof replayed work or missed cleanup".into());
+        }
+        println!(
+            "FAULT timeout-proof PASS: actual fence+flush retained -> timeout -> actual Quiesced -> all deletion receipts; no draw/upload replay; counters={after:?}"
+        );
+        return Ok(());
+    }
+    drop(preview);
+    if scenario == "native-teardown" {
+        println!(
+            "FAULT native-teardown armed: session obligations released, context owner retained on teardown failure"
+        );
+        return Ok(());
+    }
+    let before = root.device.borrow().ledger();
+    if wait.is_some() {
+        // Remove the simulated return: the native terminal latch itself must
+        // retain the obligation, never wait on a quarantined sync or render.
+        let mut device = root.device.borrow_mut();
+        device.wait_fault = None;
+        let generation = before.iter().flatten().next().unwrap().generation;
+        if device.draw(generation, &[], 1.0).is_ok() || device.present().is_ok() {
+            return Err("terminal completion admitted native rendering".into());
+        }
+    }
+    if !root.device.borrow().current_owner() {
+        return Err("fault root lost its current context".into());
+    }
+    if scenario == "original-error"
+        && !matches!(root.session.status(), readonly_v2::host_session::CleanupOutcome::Pending(s) if s.frame == Some(FrameOutcome::Failed(FrameError::Submission)))
+    {
+        return Err("cleanup erased the original frame error".into());
+    }
+    let calls = root.device.borrow().delete_calls;
+    for _ in 0..25 {
+        if !matches!(
+            root.session.shutdown(WaitPolicy::default()),
+            ShutdownOutcome::Unresolved(_)
+        ) {
+            return Err("false Released under injection".into());
+        }
+        let mut rejected = Preview::with_session(&document, EPOCH, &mut root.session);
+        if !matches!(
+            rejected.run(&observations, Default::default()),
+            Err(FrameError::RetirementPending)
+        ) {
+            return Err("pending admitted new generation".into());
+        }
+        drop(rejected);
+        if root.device.borrow().ledger() != before || root.device.borrow().delete_calls != calls {
+            return Err("shutdown changed unresolved ledger or double-freed".into());
+        }
+    }
+    println!(
+        "FAULT {scenario} PASS: deterministic injection; no false Released, 25 repeated shutdowns and generations blocked; delete_calls={calls} ledger={before:?}; simulated loss is not hardware evidence"
+    );
+    Err("terminal obligations unresolved (expected containment only)".into())
+}
+fn partial_fault(root: &mut Root) -> Result<()> {
+    let generation = ContextGeneration::allocate().map_err(|e| format!("generation: {e:?}"))?;
+    let mut device = root.device.borrow_mut();
+    for id in [7, 8] {
+        device.upload(
+            TextureKey {
+                generation,
+                id: egui::TextureId::Managed(id),
+            },
+            &egui::epaint::ImageDelta::full(
+                egui::ColorImage::filled([4, 4], egui::Color32::WHITE),
+                Default::default(),
+            ),
+        )?;
+    }
+    device.draw(generation, &[], 1.0)?;
+    let start = std::time::Instant::now();
+    let mut completion = Completion::Timeout;
+    for _ in 0..20 {
+        if start.elapsed() >= std::time::Duration::from_millis(100) {
+            break;
+        }
+        completion = device.wait(WaitRequest {
+            generation,
+            purpose: readonly_v2::completion::WaitPurpose::Retirement,
+            timeout: std::time::Duration::from_millis(5),
+        });
+        if completion != Completion::Timeout {
+            break;
+        }
+    }
+    if completion != Completion::Quiesced {
+        return Err(format!("partial real completion: {completion:?}"));
+    }
+    device
+        .release_frame(generation)
+        .map_err(|e| format!("fence: {e:?}"))?;
+    device.delete_fault = Some((ObjectKind::Texture, DeleteDisposition::Ambiguous, 2));
+    device
+        .free(TextureKey {
+            generation,
+            id: egui::TextureId::Managed(7),
+        })
+        .map_err(|e| format!("first texture: {e:?}"))?;
+    let second = TextureKey {
+        generation,
+        id: egui::TextureId::Managed(8),
+    };
+    let failure = device
+        .free(second)
+        .expect_err("second delete must be ambiguous");
+    let ledger = device.ledger();
+    let calls = device.delete_calls;
+    for _ in 0..25 {
+        if device.free(second) != Err(failure)
+            || device.release_generation(generation) != Err(failure)
+            || device.delete_calls != calls
+            || device.ledger() != ledger
+        {
+            return Err("partial deletion retried or forgot identity".into());
+        }
+    }
+    if device.counters.textures_deleted != 1
+        || ledger.iter().flatten().count() != 7
+        || device.counters.gl_errors != 0
+    {
+        return Err("partial ledger incorrect".into());
+    }
+    println!(
+        "FAULT partial-texture PASS: first texture confirmed, second ambiguous exact key retained, six pipeline objects untouched; calls={calls} ledger={ledger:?}"
+    );
+    Err("partial native deletion unresolved; root remains owner".into())
 }
 const EPOCH: readonly_v2::PresentationEpoch = readonly_v2::PresentationEpoch {
     owner: [71; 16],
@@ -372,9 +674,9 @@ fn frame(
         (hash ^ u64::from(*b)).wrapping_mul(0x100000001b3)
     });
     let colored = (80..520)
-        .map(|y| (200..1000).filter(|&x| cyan(pixel(&bytes, x, y))).count())
+        .map(|y| (200..1000).filter(|&x| cyan(pixel(bytes, x, y))).count())
         .sum();
-    let matched = score(&bytes, &points);
+    let matched = score(bytes, &points);
     println!(
         "frame {name} generation={generation:?} traces={} points={} curve_samples={} matched={} cyan_pixels={colored} framebuffer_fnv64={digest:016x}",
         report.plot_traces,
@@ -611,9 +913,12 @@ fn exercise(root: &mut Root, inject: bool) -> Result<()> {
         return Err(format!("incomplete GPU counters: {c:?}"));
     }
     println!(
-        "ACCOUNTING fixed_device={} fixed_root={} readback_peak={} host_staging_peak={} texture_payload_peak={} buffer_payload_peak={} simultaneous_generations=1; payload is not driver VRAM; native/driver/transient allocation budget unqualified",
+        "ACCOUNTING fixed_device={} fixed_root={} fixed_native_session={} fixed_cpu_preview={} fixed_cpu_owner={} readback_peak={} host_staging_peak={} texture_payload_peak={} buffer_payload_peak={} simultaneous_generations=1; payload is not driver VRAM; native/driver/transient allocation budget unqualified",
         std::mem::size_of::<Device>(),
         std::mem::size_of::<Root>(),
+        std::mem::size_of::<HostSession<Backend>>(),
+        std::mem::size_of::<Preview<'_>>(),
+        std::mem::size_of::<TextureOwner<readonly_v2::texture_owner::CpuOnly>>(),
         WIDTH * HEIGHT * 4,
         c.peak_staging_capacity,
         c.peak_texture_payload,
@@ -627,6 +932,7 @@ fn texture_sequence(root: &Root, generation: ContextGeneration) -> Result<()> {
     let mut owner = TextureOwner::new(Backend {
         device: root.device.clone(),
         inject_unresolved: false,
+        fail_submission: false,
     });
     owner
         .begin(generation)
@@ -709,17 +1015,22 @@ fn texture_sequence(root: &Root, generation: ContextGeneration) -> Result<()> {
     owner
         .process(generation, &mut output, &meshes)
         .map_err(|e| format!("texture sequence: {e:?}"))?;
-    let bytes = root.device.borrow_mut().readback()?;
-    if pixel(&bytes, 250, 250)[..3] != [0, 0, 255]
-        || pixel(&bytes, 210, 210)[..3] == [0, 0, 255]
+    root.device
+        .borrow_mut()
+        .release_generation(generation)
+        .map_err(|e| format!("conformance release: {e:?}"))?;
+    let mut device = root.device.borrow_mut();
+    let bytes = device.readback()?;
+    if pixel(bytes, 250, 250)[..3] != [0, 0, 255]
+        || pixel(bytes, 210, 210)[..3] == [0, 0, 255]
         || owner.owned_keys() != 0
     {
         return Err("ordered partial/scissor readback failed".into());
     }
     println!(
         "texture_sequence full->partial-green->partial-blue->draw->fence->free PASS center={:?} clipped={:?} keys=0",
-        pixel(&bytes, 250, 250),
-        pixel(&bytes, 210, 210)
+        pixel(bytes, 250, 250),
+        pixel(bytes, 210, 210)
     );
     Ok(())
 }

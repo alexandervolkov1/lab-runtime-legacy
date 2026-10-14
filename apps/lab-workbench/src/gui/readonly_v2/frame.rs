@@ -55,6 +55,7 @@ pub(crate) enum FrameError {
     PlatformOutput,
     Submission,
     Completion,
+    Deletion,
     RetirementPending,
     HostClosed,
 }

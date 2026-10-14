@@ -115,7 +115,19 @@ impl FrameBackend for Host<'_> {
         }
         result
     }
-    fn free(&mut self, key: TextureKey) {
+    fn release_frame(
+        &mut self,
+        _: ContextGeneration,
+    ) -> crate::readonly_v2::deletion::DeletionResult {
+        Ok(())
+    }
+    fn release_generation(
+        &mut self,
+        _: ContextGeneration,
+    ) -> crate::readonly_v2::deletion::DeletionResult {
+        Ok(())
+    }
+    fn free(&mut self, key: TextureKey) -> crate::readonly_v2::deletion::DeletionResult {
         assert!(!self.0.busy.get(), "premature free");
         let mut keys = self.0.keys.get();
         *keys
@@ -124,6 +136,7 @@ impl FrameBackend for Host<'_> {
             .expect("double free") = None;
         self.0.keys.set(keys);
         self.0.frees.set(self.0.frees.get() + 1);
+        Ok(())
     }
 }
 fn include(total: &mut meter::Reading, reading: meter::Reading) {

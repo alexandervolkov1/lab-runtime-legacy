@@ -1,5 +1,8 @@
 # DGUI-4C7B2B1: native rendering and healthy GPU lifecycle
 
+C4B2B2 follow-up: [fallible deletion, terminal ownership and host budget](TERMINAL_GPU_OWNERSHIP.md).
+This report preserves the reviewed C4B2B1 evidence and qualification scope.
+
 Qualification is limited to this isolated Windows/MSVC smoke. No Runtime,
 physical instrument, active Workbench v2 integration or release is involved.
 `ACTIVATION_QUALIFIED = false`. This is a Draft for independent review, not C4B2B2.

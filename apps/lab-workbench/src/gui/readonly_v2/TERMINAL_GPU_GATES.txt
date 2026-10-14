@@ -1,0 +1,34 @@
+DGUI-4C7B2B2 / Windows x86_64 MSVC / Rust 1.95.0 / 2026-10-14
+Merge C4B2B1: 76ec5620ff9feed0b536df3d7140f8d0a2f87635; second parent f75c885cbbb9b14966fa28f51dd3b835910688cd
+CPU allowance: 8388608 accounted bytes; activation=false; no Runtime/hardware/release.
+dev: targeted 314 PASS (308 baseline + 6 deletion regression groups).
+dev: 5 borrowing compile-fail gates PASS.
+dev: geometry 119 PASS; max accounted=4610337. All historical CSV rows unchanged.
+dev: memory 125 PASS; max accounted=4458653. All historical CSV rows unchanged.
+dev: frames 12 PASS; max accounted=4355499. All historical CSV rows unchanged.
+dev: host-no-upload 4 PASS; max accounted=4367945. All historical CSV rows unchanged.
+dev: retirement 9 PASS; max accounted=4367945. Only host_fixed_bytes changed 1496 -> 1664.
+dev: plot historical Widget/Page evidence unchanged PASS.
+dev: bounded historical Widget/Page evidence unchanged PASS.
+dev: native healthy GPU/readback PASS; 20 native fault expectations PASS; 19 roots externally contained (never cleanup). Native launcher Clippy -D warnings PASS.
+dev: native pending peak requested=3987706; max live retained=1400902. First-Page faults only; CPU maximum-Plot retention remains separately qualified.
+dev: link-map SHA256 07f066a43d7787092e2ba642d461c3c889b751179b10a91927ac5fcd7f86032b
+release: targeted 314 PASS (308 baseline + 6 deletion regression groups).
+release: 5 borrowing compile-fail gates PASS.
+release: geometry 119 PASS; max accounted=4610337. All historical CSV rows unchanged.
+release: memory 125 PASS; max accounted=4458653. All historical CSV rows unchanged.
+release: frames 12 PASS; max accounted=4355499. All historical CSV rows unchanged.
+release: host-no-upload 4 PASS; max accounted=4367945. All historical CSV rows unchanged.
+release: retirement 9 PASS; max accounted=4367945. Only host_fixed_bytes changed 1496 -> 1664.
+release: plot historical Widget/Page evidence unchanged PASS.
+release: bounded historical Widget/Page evidence unchanged PASS.
+release: native healthy GPU/readback PASS; 20 native fault expectations PASS; 19 roots externally contained (never cleanup). Native launcher Clippy -D warnings PASS.
+release: native pending peak requested=3987706; max live retained=1400902. First-Page faults only; CPU maximum-Plot retention remains separately qualified.
+release: link-map SHA256 32afc46257c44fcd4eb858665f71dfe1121e9a40c47389124d5366a6143c3d7b
+Admission/conversion/export allocation and failure probes PASS (scripts/test-v2-allocation.ps1).
+v1 GUI/Plot/Confirm and architecture guards included in targeted 314 PASS.
+Fixed layout: Preview 16280; HostSession<Mock> 1400; CpuOnly owner 376; FrameData 640; Page 13800; conservative inline subtotal 45008 < 65536 PASS.
+Cargo fmt, rustfmt support sources, Workbench Clippy -D warnings, native Clippy, diff check PASS.
+No dependency/profile/API/DTO/B1/FiniteTraceItem/active-v1 source changes.
+Healthy GPU PASS; terminal category C BLOCKED; complete native host budget BLOCKED; controlled Device storage and GPU payload bounds separately qualified.
+Raw child logs/maps/PDB and full CPU/test transcripts remain under target; committed summaries preserve outcome evidence without ASLR address noise.

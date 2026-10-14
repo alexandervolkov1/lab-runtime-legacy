@@ -1,0 +1,38 @@
+native host Rust allocation interval begins (separate from CPU qualification)
+native framebuffer config color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0
+GL vendor="ATI Technologies Inc." renderer="AMD Radeon(TM) Graphics" version="3.3.0 Core Profile Context 25.10.30.02.250923" OS_scale=1 pixels_per_point=1 viewport=1280x960
+HOST_RUST_BEFORE_PREVIEW Reading { live: 1778483, blocks: 1557, peak_blocks: 2550, peak: 3987706, overlap_peak: 3987706 } (native root, GL loader, virtual fixture; no Preview yet)
+texture full key=TextureKey { generation: ContextGeneration(1), id: Managed(0) } size=[2048, 32] format=RGBA8 payload=262144
+frame Page-Unicode generation=ContextGeneration(1) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=99e5f73b28327a19
+frame locate generation=ContextGeneration(1) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=99e5f73b28327a19
+frame click generation=ContextGeneration(1) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=bbad72d76e78cf52
+texture full key=TextureKey { generation: ContextGeneration(2), id: Managed(0) } size=[2048, 32] format=RGBA8 payload=262144
+frame click generation=ContextGeneration(2) traces=32 points=16384 curve_samples=32 matched=32 cyan_pixels=86006 framebuffer_fnv64=f1e07eaf15895cc6
+frame Plot-no-data-control generation=ContextGeneration(2) traces=32 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=2eafef27951a0850
+frame Plot-32 generation=ContextGeneration(2) traces=32 points=16384 curve_samples=32 matched=32 cyan_pixels=85972 framebuffer_fnv64=ad06e0ff24beb95c
+frame Plot-repeat generation=ContextGeneration(2) traces=32 points=16384 curve_samples=32 matched=32 cyan_pixels=85972 framebuffer_fnv64=ad06e0ff24beb95c
+frame measurements-updated generation=ContextGeneration(2) traces=32 points=16384 curve_samples=32 matched=32 cyan_pixels=85954 framebuffer_fnv64=9abeee32df89b6dc
+frame hover-enter generation=ContextGeneration(2) traces=32 points=16384 curve_samples=32 matched=32 cyan_pixels=85589 framebuffer_fnv64=527b8b7dc884fcb8
+frame hover-tooltip generation=ContextGeneration(2) traces=32 points=16384 curve_samples=32 matched=32 cyan_pixels=79100 framebuffer_fnv64=be7fbb89af622629
+frame zoom generation=ContextGeneration(2) traces=32 points=16384 curve_samples=20 matched=20 cyan_pixels=35579 framebuffer_fnv64=96c60de4ca8f3f8a
+frame locate generation=ContextGeneration(2) traces=32 points=16384 curve_samples=20 matched=20 cyan_pixels=35579 framebuffer_fnv64=96c60de4ca8f3f8a
+frame click generation=ContextGeneration(2) traces=32 points=16384 curve_samples=20 matched=20 cyan_pixels=35736 framebuffer_fnv64=995f207932a83cc7
+texture full key=TextureKey { generation: ContextGeneration(3), id: Managed(0) } size=[2048, 32] format=RGBA8 payload=262144
+frame click generation=ContextGeneration(3) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=da337db38c5c913c
+frame Details-Unicode generation=ContextGeneration(3) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=8cc94b5dd6fdfd71
+frame locate generation=ContextGeneration(3) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=8cc94b5dd6fdfd71
+frame click generation=ContextGeneration(3) traces=0 points=0 curve_samples=0 matched=0 cyan_pixels=0 framebuffer_fnv64=4d5952bd3d1c996d
+texture full key=TextureKey { generation: ContextGeneration(4), id: Managed(0) } size=[2048, 32] format=RGBA8 payload=262144
+frame click generation=ContextGeneration(4) traces=32 points=16384 curve_samples=20 matched=20 cyan_pixels=33914 framebuffer_fnv64=b273595ac7f1148c
+frame Plot-restored generation=ContextGeneration(4) traces=32 points=16384 curve_samples=20 matched=20 cyan_pixels=35736 framebuffer_fnv64=d0bb48ba51482c57
+texture full key=TextureKey { generation: ContextGeneration(5), id: Managed(0) } size=[2048, 32] format=RGBA8 payload=262144
+frame next-generation generation=ContextGeneration(5) traces=32 points=16384 curve_samples=20 matched=20 cyan_pixels=33914 framebuffer_fnv64=b273595ac7f1148c
+malformed image short/long payload rejected before staging or GL allocation PASS
+texture full key=TextureKey { generation: ContextGeneration(6), id: Managed(7) } size=[4, 4] format=RGBA8 payload=64
+texture_sequence full->partial-green->partial-blue->draw->fence->free PASS center=[0, 0, 255, 255] clipped=[5, 8, 10, 255] keys=0
+ACCOUNTING fixed_device=6824 fixed_root=1424 fixed_native_session=1408 fixed_cpu_preview=16280 fixed_cpu_owner=376 readback_peak=4915200 host_staging_peak=1312400 texture_payload_peak=262144 buffer_payload_peak=1707992 simultaneous_generations=1; payload is not driver VRAM; native/driver/transient allocation budget unqualified
+lifecycle resource deletion verified -> zero objects -> current-context release -> window destruction
+FINAL keys=0 unresolved=0 delete_calls=63 counters=Counters { textures_created: 6, textures_deleted: 6, programs_created: 6, programs_deleted: 6, shaders_created: 12, shaders_deleted: 12, vaos_created: 6, vaos_deleted: 6, full_uploads: 6, partial_uploads: 6, frames: 21, draws: 76, vertices: 596028, indices: 931788, buffers_created: 12, buffers_deleted: 12, buffer_reuses: 124, fences_created: 21, fences_deleted: 21, flushes: 21, waits: 21, completions: 21, timeouts: 0, gl_errors: 0, objects: 0, peak_objects: 8, texture_payload: 0, peak_texture_payload: 262144, vbo_bytes: 0, ebo_bytes: 0, peak_vbo_bytes: 1312400, peak_ebo_bytes: 395592, peak_buffer_bytes: 1707992, staging_capacity: 0, peak_staging_capacity: 1312400, staging_realloc_overlap: 2624400, generations_released: 6 }
+RUST_RESIDUAL_ATTRIBUTION bytes=342780 blocks=31 incomplete=false static_probe_bytes=983040
+HOST_RUST_AFTER_WINDOW Reading { live: 342780, blocks: 31, peak_blocks: 3246, peak: 12420002, overlap_peak: 12420002 } (includes Preview during frames; retained platform/singleton allocations are not GPU objects)
+GPU RENDER SMOKE PASS; HEALTHY GPU LIFECYCLE PASS; TERMINAL GPU LIFECYCLE BLOCKED; HOST BUDGET QUALIFICATION BLOCKED; ACTIVATION_QUALIFIED=false

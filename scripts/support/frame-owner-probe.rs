@@ -89,10 +89,23 @@ impl FrameBackend for &mut Host {
             Completion::Quiesced
         }
     }
-    fn free(&mut self, key: TextureKey) {
+    fn release_frame(
+        &mut self,
+        _: ContextGeneration,
+    ) -> crate::readonly_v2::deletion::DeletionResult {
+        Ok(())
+    }
+    fn release_generation(
+        &mut self,
+        _: ContextGeneration,
+    ) -> crate::readonly_v2::deletion::DeletionResult {
+        Ok(())
+    }
+    fn free(&mut self, key: TextureKey) -> crate::readonly_v2::deletion::DeletionResult {
         assert!(!self.busy);
         *self.keys.iter_mut().find(|k| **k == Some(key)).unwrap() = None;
         self.frees += 1;
+        Ok(())
     }
 }
 

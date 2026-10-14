@@ -1,6 +1,7 @@
 # DGUI-4C7B2C4B2A: fallible retirement and persistent host ownership
 
 C4B2B1 follow-up: [native rendering and healthy GPU lifecycle](NATIVE_GLOW_RENDERING.md).
+C4B2B2 follow-up: [fallible GPU deletion and terminal ownership](TERMINAL_GPU_OWNERSHIP.md).
 This C4B2A report remains the historical CPU/mock qualification baseline.
 
 C4B1 PR #32 was verified at `9c76a020deb599fab6172b25260c695e090a136b`,
