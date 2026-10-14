@@ -147,6 +147,9 @@ enum Request {
 struct Shared {
     latest: Status,
     pending: Option<Request>,
+    // Dequeue reserves admission until publication transfers it to the phase.
+    // In particular, the initial retire call may block before Starting exists.
+    launch_in_flight: bool,
 }
 struct Signal {
     state: Mutex<Shared>,
@@ -215,6 +218,7 @@ impl Supervisor {
             state: Mutex::new(Shared {
                 latest: Status::new(),
                 pending: None,
+                launch_in_flight: false,
             }),
             changed: Condvar::new(),
             owner_gone: AtomicBool::new(false),
@@ -254,7 +258,7 @@ impl Supervisor {
         if state.pending.is_some() {
             return Err(Rejected::Busy);
         }
-        if !state.latest.phase.replaceable() {
+        if state.launch_in_flight || !state.latest.phase.replaceable() {
             return Err(Rejected::Active);
         }
         state.pending = Some(Request::Restart(launch));
@@ -363,10 +367,16 @@ impl Worker {
         self.status.worker_progress = Instant::now();
         let mut shared = self.signal.state.lock().unwrap();
         shared.latest = self.status;
+        shared.launch_in_flight = false;
         self.signal.changed.notify_all();
     }
     fn take(&self) -> Option<Request> {
-        self.signal.state.lock().unwrap().pending.take()
+        let mut shared = self.signal.state.lock().unwrap();
+        let request = shared.pending.take();
+        if matches!(request, Some(Request::Restart(_))) {
+            shared.launch_in_flight = true;
+        }
+        request
     }
     fn begin_stop<B: Backend>(&mut self, backend: &mut B, reason: Reason, immediate: bool) {
         if self.status.phase.replaceable() || self.status.phase == Phase::ExitUnconfirmed {

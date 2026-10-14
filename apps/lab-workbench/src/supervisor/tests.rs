@@ -150,6 +150,145 @@ impl Backend for Fake {
         }
     }
 }
+
+/// Drives the real worker while the test controls its sole process obligation.
+struct ControlledFake {
+    inner: Arc<Mutex<Fake>>,
+    initial_retire: Option<(Arc<Barrier>, Arc<Barrier>)>,
+}
+impl Backend for ControlledFake {
+    fn prepare(&mut self, l: &Launch, i: u64) -> Result<(), lab_windows_job::Error> {
+        self.inner.lock().unwrap().prepare(l, i)
+    }
+    fn resume(&mut self) -> Result<(), lab_windows_job::Error> {
+        self.inner.lock().unwrap().resume()
+    }
+    fn has_process(&self) -> bool {
+        self.inner.lock().unwrap().has_process()
+    }
+    fn poll_exit(&mut self) -> Result<Option<u32>, lab_windows_job::Error> {
+        self.inner.lock().unwrap().poll_exit()
+    }
+    fn challenge(&mut self, i: u64, s: u64) -> Result<(), lab_windows_job::Error> {
+        self.inner.lock().unwrap().challenge(i, s)
+    }
+    fn progress(&mut self) -> Result<Option<Progress>, lab_windows_job::Error> {
+        self.inner.lock().unwrap().progress()
+    }
+    fn close(&mut self, i: u64, s: u64) -> Result<(), lab_windows_job::Error> {
+        self.inner.lock().unwrap().close(i, s)
+    }
+    fn terminate(&mut self, r: bool) -> Result<(), lab_windows_job::Error> {
+        self.inner.lock().unwrap().terminate(r)
+    }
+    fn retire(&mut self) -> Result<lab_windows_job::Reading, lab_windows_job::Error> {
+        if let Some((entered, release)) = self.initial_retire.take() {
+            entered.wait();
+            release.wait();
+        }
+        self.inner.lock().unwrap().retire()
+    }
+    fn objects(&self) -> lab_windows_job::Objects {
+        self.inner.lock().unwrap().objects()
+    }
+}
+
+fn admit_stop(root: &Supervisor, mode: Stop) {
+    let deadline = Instant::now() + Duration::from_secs(2);
+    loop {
+        match root.stop(mode) {
+            Ok(()) => return,
+            Err(Rejected::Busy) if Instant::now() < deadline => thread::yield_now(),
+            result => panic!("stop admission: {result:?}"),
+        }
+    }
+}
+
+#[test]
+fn dequeued_restart_reserves_launch_during_initial_retire_and_stop_keeps_priority() {
+    for variant in ["run", "stop", "shutdown", "startup failure"] {
+        let entered = Arc::new(Barrier::new(2));
+        let release = Arc::new(Barrier::new(2));
+        let original = lab_windows_job::Error {
+            operation: "injected suspended startup gate",
+            code: 5,
+        };
+        let inner = Arc::new(Mutex::new(Fake {
+            auto_progress: true,
+            hidden: true,
+            prepare_error: (variant == "startup failure").then_some(original),
+            ..Default::default()
+        }));
+        let mut root = Supervisor::spawn(
+            {
+                let inner = inner.clone();
+                let entered = entered.clone();
+                let release = release.clone();
+                move || ControlledFake {
+                    inner,
+                    initial_retire: Some((entered, release)),
+                }
+            },
+            Policy::default(),
+        )
+        .unwrap();
+        root.restart(launch()).unwrap();
+        entered.wait(); // R1 dequeued, before Starting; no guessed scheduling delay.
+        assert_eq!(root.status().unwrap().phase, Phase::Stopped);
+        assert!(root.signal.state.lock().unwrap().pending.is_none());
+        assert_eq!(root.restart(launch()), Err(Rejected::Active));
+        if variant == "stop" {
+            root.stop(Stop::Graceful).unwrap();
+            assert_eq!(root.restart(launch()), Err(Rejected::StopPending));
+        } else if variant == "shutdown" {
+            root.shutdown();
+            assert_eq!(root.restart(launch()), Err(Rejected::Closed));
+        }
+        release.wait();
+        if variant == "run" {
+            let ready = root.wait_status(|s| s.phase == Phase::Ready);
+            assert_eq!(ready.incarnation, 1);
+            admit_stop(&root, Stop::Terminate);
+        }
+        let pending = root.wait_status(|s| s.phase == Phase::TerminationRequested);
+        assert_eq!(pending.incarnation, 1);
+        assert_eq!(pending.termination_requests, 1);
+        assert_eq!((pending.objects.jobs, pending.objects.processes), (1, 1));
+        assert!(pending.last_final.is_none() && !pending.worker_finished);
+        {
+            let mut fake = inner.lock().unwrap();
+            assert_eq!(fake.prepares, 1);
+            assert_eq!(fake.resumes, usize::from(variant == "run"));
+            assert_eq!(fake.terminations, 1);
+            assert!(fake.process && fake.exited);
+            fake.hidden = false; // Only now may the original proof retire R1.
+        }
+        root.signal.changed.notify_all();
+        let ended = root.wait_status(|s| s.phase == Phase::ExitedContained);
+        assert_eq!(ended.incarnation, 1);
+        assert_eq!(ended.objects, lab_windows_job::Objects::default());
+        assert_eq!(ended.last_final.unwrap().incarnation, 1);
+        assert_eq!(
+            ended.original_error,
+            (variant == "startup failure").then_some(original)
+        );
+        assert_eq!(inner.lock().unwrap().prepares, 1);
+        if variant == "run" {
+            root.restart(launch()).unwrap(); // New explicit request after retirement.
+            let ready = root.wait_status(|s| s.phase == Phase::Ready && s.incarnation == 2);
+            assert_eq!(ready.last_final.unwrap().incarnation, 1);
+            admit_stop(&root, Stop::Terminate);
+            root.wait_status(|s| s.phase == Phase::ExitedContained && s.incarnation == 2);
+        }
+        root.shutdown();
+        root.wait_status(|s| s.worker_finished);
+        root.join.take().unwrap().join().unwrap();
+        println!(
+            "dequeue/retire barrier: variant={variant}, one launch, cancellation before resume, terminal proof observed"
+        );
+    }
+}
+
 pub(crate) fn launch() -> Launch {
     Launch {
         executable: std::env::current_exe().unwrap(),
@@ -167,6 +306,7 @@ fn machine() -> Worker {
             state: Mutex::new(Shared {
                 latest: Status::new(),
                 pending: None,
+                launch_in_flight: false,
             }),
             changed: Condvar::new(),
             owner_gone: AtomicBool::new(false),
