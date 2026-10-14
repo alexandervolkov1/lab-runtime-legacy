@@ -14,6 +14,8 @@ mod presentation;
 mod rebuild;
 mod recovery;
 mod storage;
+#[cfg(windows)]
+mod supervisor;
 
 use client::endpoint::RuntimeEndpoint;
 use presentation::default_presentation_path;

@@ -582,9 +582,168 @@ fn independent_wake_coalesces_and_publish_during_turn_is_not_lost() {
     assert_publish_during_real_turn(false);
 }
 
+#[cfg(windows)]
+#[test]
+fn stalled_supervisor_keeps_parent_updates_api_and_recovery_independent() {
+    use crate::supervisor::{Phase, Policy, Stop, tests::StalledBackend};
+    let (mut owner, tx, rx, stops) = fixture();
+    let signal = PumpSignal::default();
+    let mut stream = open_api(&mut owner, &signal);
+    let mut pump = ParentPump::spawn(owner, signal.clone()).unwrap();
+    request(&mut stream, "hello", "hello", json!({}));
+    response(&mut stream, "hello");
+    bootstrap(&tx, &rx, &signal);
+    let entered = Arc::new(Barrier::new(2));
+    let release = Arc::new(Barrier::new(2));
+    pump.install_supervisor(
+        {
+            let entered = entered.clone();
+            let release = release.clone();
+            move || StalledBackend::new(entered, release)
+        },
+        Policy::default(),
+    )
+    .unwrap();
+    pump.supervisor()
+        .unwrap()
+        .restart(crate::supervisor::tests::launch())
+        .unwrap();
+    entered.wait(); // Real supervisor worker is blocked inside prepare.
+    assert_eq!(
+        pump.supervisor().unwrap().status().unwrap().phase,
+        Phase::Starting
+    );
+    assert_eq!(
+        pump.install_supervisor(
+            || StalledBackend::new(Arc::new(Barrier::new(1)), Arc::new(Barrier::new(1))),
+            Policy::default()
+        )
+        .err()
+        .unwrap()
+        .kind(),
+        io::ErrorKind::AlreadyExists
+    );
+    send_update(
+        &tx,
+        &signal,
+        ClientUpdate::RecoveryProjection {
+            active: vec![record(KnownAdmission::Accepted)],
+            quarantined: vec![],
+        },
+    );
+    signal.wait_updates(7);
+    request(&mut stream, "status-stalled", "client_status", json!({}));
+    let status = response(&mut stream, "status-stalled");
+    assert_eq!(status["result"]["runtime_client"]["freshness"], "fresh");
+    request(&mut stream, "get-stalled", "presentation_get", json!({}));
+    let document = response(&mut stream, "get-stalled");
+    request(
+        &mut stream,
+        "replace-stalled",
+        "ui_replace_document",
+        json!({
+            "expected": {"workbench_id":document["result"]["workbench_id"],"revision":"1"},
+            "document":PresentationDocument::empty("while-os-stalled")
+        }),
+    );
+    assert_eq!(
+        response(&mut stream, "replace-stalled")["result"]["presentation_revision"],
+        "2"
+    );
+    assert!(rx.try_recv().is_err()); // No mutation/status/retry from child lifetime.
+    assert_eq!(stops.load(Ordering::SeqCst), 0);
+    pump.supervisor().unwrap().stop(Stop::Graceful).unwrap();
+    release.wait(); // Stop during prepare wins before resume.
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::ExitedContained);
+    request(&mut stream, "after-child", "client_status", json!({}));
+    assert_eq!(
+        response(&mut stream, "after-child")["result"]["presentation"]["presentation_revision"],
+        "2"
+    );
+    assert_eq!(stops.load(Ordering::SeqCst), 0);
+    pump.supervisor().unwrap().shutdown();
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.worker_finished);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !pump.supervisor().unwrap().worker_finished() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.shutdown().unwrap();
+    pump.shutdown().unwrap();
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    assert!(rx.try_recv().is_err());
+    assert_eq!(
+        pump.stopped_owner
+            .as_ref()
+            .unwrap()
+            .dispatcher
+            .recovery
+            .mutations,
+        vec![record(KnownAdmission::Accepted)]
+    );
+}
+
 #[test]
 fn stop_precedes_pending_wake_after_real_owner_turn() {
     assert_publish_during_real_turn(true);
+}
+
+#[cfg(windows)]
+#[test]
+fn parent_shutdown_does_not_acknowledge_stalled_supervisor_or_repeat_client_stop() {
+    use crate::supervisor::{Policy, tests::StalledBackend};
+    let (owner, _, rx, stops) = fixture();
+    let mut pump = ParentPump::spawn(owner, PumpSignal::default()).unwrap();
+    let entered = Arc::new(Barrier::new(2));
+    let release = Arc::new(Barrier::new(2));
+    pump.install_supervisor(
+        {
+            let entered = entered.clone();
+            let release = release.clone();
+            move || StalledBackend::new(entered, release)
+        },
+        Policy::default(),
+    )
+    .unwrap();
+    pump.supervisor()
+        .unwrap()
+        .restart(crate::supervisor::tests::launch())
+        .unwrap();
+    entered.wait();
+    assert_eq!(
+        pump.shutdown(),
+        Err("supervisor child exit remains unconfirmed")
+    );
+    assert_eq!(
+        pump.shutdown(),
+        Err("supervisor child exit remains unconfirmed")
+    );
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    assert!(!pump.supervisor().unwrap().worker_finished());
+    assert!(pump.stopped_owner.is_some() && pump.join.is_none());
+    assert_eq!(
+        pump.supervisor()
+            .unwrap()
+            .restart(crate::supervisor::tests::launch()),
+        Err(crate::supervisor::Rejected::Closed)
+    );
+    release.wait();
+    pump.supervisor()
+        .unwrap()
+        .wait_status(|s| s.worker_finished);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while !pump.supervisor().unwrap().worker_finished() {
+        assert!(Instant::now() < deadline);
+        thread::yield_now();
+    }
+    pump.shutdown().unwrap();
+    pump.shutdown().unwrap();
+    assert_eq!(stops.load(Ordering::SeqCst), 1);
+    assert!(rx.try_recv().is_err());
 }
 
 fn assert_publish_during_real_turn(stop: bool) {
