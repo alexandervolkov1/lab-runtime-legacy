@@ -1,0 +1,232 @@
+{
+  "profile": "release",
+  "rust_source_head": "c324235126db14f6bfa5c1f06812dc7182f1d127",
+  "gui_exit_code": 0,
+  "native_smoke": {
+    "authoritative_refresh_observed": true,
+    "boot_id": "19f2f8082133b3f59e9c00ee5c39f464",
+    "confirmation_observed": true,
+    "connection": "Ready",
+    "controller": {
+      "controller": "1",
+      "revision": "1",
+      "state": "ready"
+    },
+    "controls_reenabled_after_fresh": true,
+    "desired_reference_target": 50.25,
+    "entities": 11,
+    "final_reference_revision": "2",
+    "final_reference_target": 50.25,
+    "freshness": "Fresh",
+    "live_signal_points": 1,
+    "minimize_restore_observed": true,
+    "mutation_accepted_observed": true,
+    "mutation_completed_observed": true,
+    "original_reference_revision": "1",
+    "presentation_plots": 1,
+    "reason": "pass",
+    "recorder": {
+      "active_run": null,
+      "run_id": null,
+      "state": "idle"
+    },
+    "renderer": "glow",
+    "scope": "19f2f8082133b3f59e9c00ee5c39f464:1",
+    "stale_controls_disabled": true,
+    "status": "pass"
+  },
+  "connections": 2,
+  "requests": [
+    {
+      "args": {
+        "scope": null
+      },
+      "msg_id": "1",
+      "op": "hello",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "2",
+      "op": "discover",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "3",
+      "op": "measurements_current",
+      "v": 1
+    },
+    {
+      "args": {
+        "reference": "1"
+      },
+      "msg_id": "4",
+      "op": "reference",
+      "v": 1
+    },
+    {
+      "args": {
+        "controller": "1"
+      },
+      "msg_id": "5",
+      "op": "controller",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "6",
+      "op": "recording_status",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "7",
+      "op": "configuration_properties",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "8",
+      "op": "discover",
+      "v": 1
+    },
+    {
+      "args": {
+        "after": {
+          "boot_id": "19f2f8082133b3f59e9c00ee5c39f464",
+          "seq": "6"
+        },
+        "filter": {
+          "kinds": [
+            "signal",
+            "reference",
+            "controller",
+            "resource",
+            "recorder",
+            "configuration"
+          ],
+          "targets": []
+        }
+      },
+      "msg_id": "9",
+      "op": "subscribe",
+      "v": 1
+    },
+    {
+      "args": {
+        "expected_revision": "1",
+        "rate": 2.0,
+        "reference": "1",
+        "target": 50.25
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "19f2f8082133b3f59e9c00ee5c39f464:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    {
+      "args": {
+        "scope": "19f2f8082133b3f59e9c00ee5c39f464:1"
+      },
+      "msg_id": "1",
+      "op": "hello",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "2",
+      "op": "discover",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "3",
+      "op": "measurements_current",
+      "v": 1
+    },
+    {
+      "args": {
+        "reference": "1"
+      },
+      "msg_id": "4",
+      "op": "reference",
+      "v": 1
+    },
+    {
+      "args": {
+        "controller": "1"
+      },
+      "msg_id": "5",
+      "op": "controller",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "6",
+      "op": "recording_status",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "7",
+      "op": "configuration_properties",
+      "v": 1
+    },
+    {
+      "args": {},
+      "msg_id": "8",
+      "op": "discover",
+      "v": 1
+    },
+    {
+      "args": {
+        "after": {
+          "boot_id": "19f2f8082133b3f59e9c00ee5c39f464",
+          "seq": "20"
+        },
+        "filter": {
+          "kinds": [
+            "signal",
+            "reference",
+            "controller",
+            "resource",
+            "recorder",
+            "configuration"
+          ],
+          "targets": []
+        }
+      },
+      "msg_id": "9",
+      "op": "subscribe",
+      "v": 1
+    }
+  ],
+  "client_transport_closures": [
+    "gui_eof",
+    "gui_eof"
+  ],
+  "mutation_submissions": 1,
+  "status_submissions": 0,
+  "repeat_mutation_submissions": 0,
+  "window_capture": {
+    "method": "visible window client GDI capture, not GL readback",
+    "width": 1100,
+    "height": 720,
+    "sha256": "8b772516805693cb31fa3e47965447c178b807ac68a83fe8c6e4bda799ad1184",
+    "path": "target\\b3b1-followup-native-release-1791979378556799100\\window.png"
+  },
+  "observed_signal_events": 8,
+  "binaries_sha256": {
+    "lab-runtime.exe": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79",
+    "lab-workbench.exe": "e86db2657cb1c8d78142fd31b7486101dadecba8bfbfde9a08ba5dc25cad3677"
+  },
+  "scope": "existing automated Confirm semantics; visible window capture; no mouse Confirm or GL readback",
+  "published_capture_path": "docs/developer/independent-parent-pump-native-release.png",
+  "qualified_rust_gate_head": "13866c7728db3a8c80be5acef38c209f5ca7a1a1",
+  "raw_result_path": "target/b3b1-followup-native-release-1791979378556799100/result.json",
+  "raw_result_sha256": "84c5d81a6399bb023047da4002365902121bfd83d0b97f87fa8c54586bcb6b14"
+}

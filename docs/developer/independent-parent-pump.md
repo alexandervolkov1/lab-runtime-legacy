@@ -145,6 +145,81 @@ external-service path and enforce one production ClientHandle creation site in
 the parent component. The stopped-renderer claim covers this deterministic
 headless harness, not actual GPU device loss or a native child implementation.
 
+The follow-up wake regression starts the real ParentPump with its bounded fake
+client. The receive seam pauses inside ParentOwner::turn after dequeuing the first
+update, before applying it. A separate producer sends the second update and wake
+while the initial pending bit is already clear. The seam returns Empty once to
+end that first turn at one applied update; no saturated-turn self-wake is possible.
+The second turn must apply the other update with zero idle timeouts. Two fixed
+test-only observations record reports and client-error projections: one update
+and one rebuild step per turn, first then second, exactly two total applications,
+and zero submissions. Thus a lost wake cannot be concealed by the 100 ms fallback.
+No sleep establishes ordering and no full RuntimeObservations copy is introduced.
+The separate stop test publishes the same second update and wake, sets stop before
+releasing the barrier, and verifies that only the in-progress turn completes:
+the pending bit remains set, no second turn runs, and the client stops once.
+
+The shutdown barrier also requests shutdown twice before releasing the owner.
+Both calls return unconfirmed, retain the same thread ID in the sole join slot,
+retain no stopped-owner replica and submit zero client stops. After actual exit,
+repeated shutdown and root destruction retain a total of exactly one client stop.
+
+## Native v1 follow-up smoke
+
+[v1-parent-pump-smoke.py](../../scripts/support/v1-parent-pump-smoke.py) drives the
+existing LAB_WORKBENCH_GUI_SMOKE_RESULT mechanism with the real MSVC Workbench
+and a fresh copy of the virtual deployment. Its sole test proxy observes actual
+Application requests through explicit disconnect/reconnect and both GUI transport
+closures (EOF or a separately recorded Windows reset). This observer is not a new
+model owner, product transport or child host.
+It permits at most four connections, 256 request records and 1 MiB per directional
+buffer/frame; overflow fails the probe. No dependency or production GUI hook is
+added. Python uses only its existing standard library.
+
+The sole reference_retune is held before forwarding while real signal events
+continue flowing. A Condvar waits for at least five observed signal events before
+capturing the native client area. The committed captures were inspected and show
+Ready/Fresh, the scalar data and a cyan curve in the live graph. After release,
+the unchanged smoke verifies Confirm state, one accepted/completed mutation,
+authoritative revision 1 -> 2 and target 50.25, minimize/restore, disabled stale
+controls, reconnect and controls re-enabled only after Fresh. The GUI closes
+normally with exit code zero. The proxy observes both transport closures before
+stopping: exactly one mutation, zero operation_status and zero repeated mutation
+identities, including the close path. recording_status remains a normal rebuild
+query and is not counted as an operation_status submission.
+
+A qualification attempt exposed a test-observer defect: a Windows TCP reset with
+unread event bytes ended its I/O thread and listener, so native reconnect reached
+the smoke deadline. The instrumented reproduction captured error 10054 with one
+connection. The observer now accepts only GUI-side reset as a transport closure,
+records its distinct mode, and continues accepting the next session. Unexpected
+Runtime-side EOF/reset still fails. A deterministic abortive-close/reconnect probe
+verifies one reset, one EOF and exactly two forwarded hello requests; native
+release then passed three consecutive attempts. Original failure audits remain
+under target. Complete Runtime-bound frames are recorded before forwarding; a
+discarded partial frame cannot become an admitted Runtime request. This audit
+does not claim to count locally rejected commands that never enter the transport.
+
+Reproducible per-profile request inventories, binary/capture digests and existing
+smoke results are in [dev JSON](independent-parent-pump-native-dev.json) and
+[release JSON](independent-parent-pump-native-release.json). The client-area
+captures are [dev](independent-parent-pump-native-dev.png) and
+[release](independent-parent-pump-native-release.png). This qualifies the existing
+automated operator/Confirm path and native presentation. The harness does not
+click Confirm with a mouse or perform GL framebuffer readback, device-loss or
+terminal GPU cleanup qualification. Active v1 remains cooperative.
+
+An extra release ignored-process run exposed an existing operator-fixture race:
+its comparison across the entire conflict wait also included a legitimate
+Reference event from the deliberately intervening successful mutation. A passing
+targeted rerun did not settle that failure. The fixture now correlates the failed
+reply to the exact stale command, preserves full observation equality immediately
+before/after that reply, applies other updates normally, and independently waits
+for the intervening mutation's Fresh revision 3/target +1.0. The stale target
++0.75 must never become authoritative. Runtime and production GUI behavior are
+unchanged; the final dev/release process runs exercise the corrected fixture. This is
+separate from the unchanged M17.4 Recorder overlap fixture below.
+
 ## Validation and next prerequisite
 
 Windows x86_64 MSVC dev/release results, operation counts, full regression scope
@@ -159,17 +234,30 @@ An additional historical ignored M17.4 process-overlap gate remains **BLOCKED**:
 its held Recorder Start fixture returns recording_unavailable before the second
 mutation is accepted. The same failure was reproduced by compiling and running
 the unmodified archived B3A merge source with the exact locked test artifacts,
-without the new parent component. This gate drives dispatcher/rebuild directly.
+without the new parent component; see the [original baseline reproduction](https://github.com/alexandervolkov1/lab-runtime/blob/4bfec46962851351f7452ef80cf4d8ce6a3380bb/docs/developer/independent-parent-pump-evidence.txt#L40).
+This gate drives dispatcher/rebuild directly.
 Its original fixture/assertion remains unchanged; thirteen other virtual process
 acceptance cases pass in each profile. A suitable acceptance-aware Recorder fault
 fixture requires separate qualification, not weakened overlap assertions or a
 Runtime change hidden in this refactor. The new parent accepted/detach/status
 harness is separately PASS.
 
+The [final evidence](independent-parent-pump-evidence.txt) records the exact tested
+Rust and native-observer HEADs and the 503-test inventory: 488 passed and the same 15 documented
+ignored fixtures in each full suite. Thirteen non-M17.4 virtual process fixtures
+are also run explicitly in each profile. The subsequent evidence commit changes
+only documentation and captured artifacts. The observer correction changes no
+Rust/Cargo inputs, so the full Rust gates retain their exact tested HEAD. The
+source inventory makes this distinction
+checkable, without embedding a commit's own SHA in its contents.
+
 ```powershell
 cargo test -p lab-workbench --locked -- --test-threads=1
 cargo test -p lab-workbench --release --locked -- --test-threads=1
 cargo test -p lab-workbench --locked -- parent::tests --test-threads=1 --nocapture
+python scripts/support/v1-parent-pump-smoke.py --profile dev
+python scripts/support/v1-parent-pump-smoke.py --profile release
+python -B scripts/support/v1-parent-pump-smoke.py --self-test-reset
 ./scripts/test-v2-renderer-allocation.ps1 -BuildProfile dev
 ./scripts/test-v2-renderer-allocation.ps1 -BuildProfile release
 cargo clippy -p lab-workbench --all-targets --locked -- -D warnings
