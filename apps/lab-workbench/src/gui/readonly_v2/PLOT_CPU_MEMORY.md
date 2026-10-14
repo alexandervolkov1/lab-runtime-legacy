@@ -2,7 +2,8 @@
 
 Historical C3 qualification/evidence. C4A implements the caller protocol below
 through [enforced frame ownership and texture retirement](FRAME_OWNERSHIP.md);
-see that report for the current API and repeated native measurements.
+see that report for its qualification evidence. The current internal host API
+and retained-payload measurements are in [fallible retirement](FALLIBLE_RETIREMENT.md).
 
 This is the isolated CPU Preview qualification and the resource-ownership handoff
 for a later, separately reviewed host stage. `ACTIVATION_QUALIFIED = false`.

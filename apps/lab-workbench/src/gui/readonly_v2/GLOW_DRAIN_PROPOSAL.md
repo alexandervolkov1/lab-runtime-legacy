@@ -1,5 +1,8 @@
 # C4B1 review proposal: fallible GPU retirement
 
+Accepted direction for C4B2A: [implementation and remaining native-host blockers](FALLIBLE_RETIREMENT.md).
+The original C4B1 proposal is preserved below as review history.
+
 **Proposal only; not implemented or authorized as a follow-on stage.** The
 [C4B1 preflight](NATIVE_GLOW_PREFLIGHT.md) found that the C4A cleanup contract
 cannot represent a bounded GL fence wait that did not complete. This proposal

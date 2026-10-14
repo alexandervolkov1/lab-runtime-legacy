@@ -1,4 +1,5 @@
 //! Bounded, serial host seam. No GPU backend or GPU qualification lives here.
+use super::completion::{self, Completion, WaitObservation, WaitPolicy, WaitPurpose, WaitRequest};
 use super::frame::{ContextGeneration, FrameError};
 use eframe::egui::{self, TextureId, epaint::ImageDelta};
 
@@ -12,14 +13,14 @@ pub(crate) struct TextureKey {
     pub(crate) id: TextureId,
 }
 
-/// Trusted host contract, deliberately synchronous and without a submission queue.
-/// `set`/`platform`/`submit`/`complete` errors may leave work in flight, even when
-/// the frame has no texture updates. `drain` MUST establish
-/// that no dependent platform operation/draw/upload can use resources on return,
-/// including after partial failure. `free` then releases the entire key, including
-/// partially created resources. Neither cleanup operation may panic. A real GPU
-/// implementation needs independently reviewed fences, device-loss handling and
-/// bounded shutdown; an implementation that merely returns violates this trait.
+/// Trusted serial host. Every operation may start work before reporting failure.
+/// `wait` observes ALL dependent uses, including partial upload/platform failure;
+/// only Quiesced permits free. A real adapter must establish/flush a valid fence
+/// on its current creating context and distinguish timeout, wait error and loss.
+/// Borrowed input cannot be retained after a call: backend staging is host-owned.
+/// `free` releases an entire registered key, including partial creation, after
+/// proven quiescence. It and backend destruction must not release in-use objects.
+/// Real context/device teardown remains a separate qualification obligation.
 pub(crate) trait FrameBackend {
     const CPU_ONLY: bool;
     fn set(&mut self, key: TextureKey, delta: &ImageDelta) -> Result<(), FrameError>;
@@ -34,8 +35,7 @@ pub(crate) trait FrameBackend {
         meshes: &[egui::ClippedPrimitive],
         pixels_per_point: f32,
     ) -> Result<(), FrameError>;
-    fn complete(&mut self) -> Result<(), FrameError>;
-    fn drain(&mut self);
+    fn wait(&mut self, request: WaitRequest) -> Completion;
     fn free(&mut self, key: TextureKey);
 }
 
@@ -62,10 +62,9 @@ impl FrameBackend for CpuOnly {
     ) -> Result<(), FrameError> {
         Ok(())
     }
-    fn complete(&mut self) -> Result<(), FrameError> {
-        Ok(())
+    fn wait(&mut self, _: WaitRequest) -> Completion {
+        Completion::Quiesced
     }
-    fn drain(&mut self) {}
     fn free(&mut self, _: TextureKey) {}
 }
 
@@ -83,6 +82,7 @@ pub(crate) struct TextureOwner<B: FrameBackend> {
     generation: Option<ContextGeneration>,
     textures: [Option<Texture>; MAX_TEXTURES],
     in_flight: bool,
+    pub(super) last_wait: WaitObservation,
 }
 impl<B: FrameBackend> TextureOwner<B> {
     pub(crate) fn new(backend: B) -> Self {
@@ -91,18 +91,49 @@ impl<B: FrameBackend> TextureOwner<B> {
             generation: None,
             textures: [None; MAX_TEXTURES],
             in_flight: false,
+            last_wait: WaitObservation::IDLE,
         }
     }
-    pub(crate) fn begin(&mut self, generation: ContextGeneration) {
+    pub(crate) fn begin(&mut self, generation: ContextGeneration) -> Result<(), FrameError> {
+        if self.in_flight || (self.generation.is_some() && self.generation != Some(generation)) {
+            return Err(FrameError::RetirementPending);
+        }
         if self.generation != Some(generation) {
-            self.retire();
-            self.generation = Some(generation);
+            self.last_wait = WaitObservation::IDLE;
         }
+        self.generation = Some(generation);
+        Ok(())
     }
-    pub(crate) fn retire(&mut self) {
+    pub(super) fn generation(&self) -> Option<ContextGeneration> {
+        self.generation
+    }
+    pub(crate) fn owned_keys(&self) -> usize {
+        self.textures.iter().flatten().count()
+    }
+    pub(super) fn quiesced(&self) -> bool {
+        !self.in_flight
+    }
+    fn started(&mut self) {
+        self.in_flight = true;
+        self.last_wait = WaitObservation {
+            completion: Completion::Unobserved,
+            ..WaitObservation::IDLE
+        };
+    }
+    pub(super) fn wait(&mut self, purpose: WaitPurpose, policy: WaitPolicy) -> WaitObservation {
         if self.in_flight {
-            self.backend.drain();
-            self.in_flight = false;
+            self.last_wait =
+                completion::observe(&mut self.backend, self.generation.unwrap(), purpose, policy);
+            if self.last_wait.completion == Completion::Quiesced {
+                self.in_flight = false;
+            }
+        }
+        self.last_wait
+    }
+    /// Releases only after a structural or backend quiescence proof. No wait.
+    pub(super) fn release(&mut self) -> bool {
+        if self.in_flight {
+            return false;
         }
         if let Some(generation) = self.generation.take() {
             for texture in &mut self.textures {
@@ -114,6 +145,12 @@ impl<B: FrameBackend> TextureOwner<B> {
                 }
             }
         }
+        true
+    }
+    #[cfg(test)]
+    fn retire(&mut self) {
+        self.wait(WaitPurpose::Retirement, WaitPolicy::default());
+        assert!(self.release());
     }
     pub(crate) fn process(
         &mut self,
@@ -168,13 +205,13 @@ impl<B: FrameBackend> TextureOwner<B> {
                     id: self.textures[slot].unwrap().id,
                 };
                 // Upload failure can be ambiguous too; drain before freeing.
-                self.in_flight = true;
+                self.started();
                 self.backend.set(key, update)?;
             }
         }
         // Platform output can start dependent work even with an empty set delta.
         // Arm cleanup before calling it, including its ambiguous error path.
-        self.in_flight = true;
+        self.started();
         self.backend
             .platform(&output.platform_output, &output.viewport_output)?;
         // No user textures or callbacks enter this isolated seam. Validate every
@@ -191,11 +228,16 @@ impl<B: FrameBackend> TextureOwner<B> {
                 return Err(FrameError::TextureProtocol);
             }
         }
-        self.in_flight = true;
+        self.started();
         self.backend
             .submit(generation, meshes, output.pixels_per_point)?;
-        self.backend.complete()?;
-        self.in_flight = false;
+        if self
+            .wait(WaitPurpose::Frame, WaitPolicy::default())
+            .completion
+            != Completion::Quiesced
+        {
+            return Err(FrameError::Completion);
+        }
         // A free is effective only after the last dependent draw completed.
         for texture in &mut self.textures {
             if texture.is_some_and(|t| delta.free.contains(&t.id)) {
@@ -208,11 +250,6 @@ impl<B: FrameBackend> TextureOwner<B> {
         }
         output.textures_delta.clear();
         Ok(())
-    }
-}
-impl<B: FrameBackend> Drop for TextureOwner<B> {
-    fn drop(&mut self) {
-        self.retire();
     }
 }
 
@@ -246,7 +283,7 @@ mod tests {
         let log = Rc::new(RefCell::new(Log::default()));
         let mut owner = TextureOwner::new(Mock(log.clone()));
         let generation = ContextGeneration::allocate().unwrap();
-        owner.begin(generation);
+        owner.begin(generation).unwrap();
         let key = TextureKey {
             generation,
             id: TextureId::Managed(0),
@@ -282,7 +319,7 @@ mod tests {
                 let log = Rc::new(RefCell::new(Log::default()));
                 let mut owner = TextureOwner::new(Mock(log.clone()));
                 let generation = ContextGeneration::allocate().unwrap();
-                owner.begin(generation);
+                owner.begin(generation).unwrap();
                 let key = TextureKey {
                     generation,
                     id: TextureId::Managed(0),
@@ -329,7 +366,7 @@ mod tests {
             let log = Rc::new(RefCell::new(Log::default()));
             let mut owner = TextureOwner::new(Mock(log.clone()));
             let generation = ContextGeneration::allocate().unwrap();
-            owner.begin(generation);
+            owner.begin(generation).unwrap();
             if existing {
                 owner
                     .process(
@@ -362,7 +399,7 @@ mod tests {
         let log = Rc::new(RefCell::new(Log::default()));
         let mut owner = TextureOwner::new(Mock(log.clone()));
         let generation = ContextGeneration::allocate().unwrap();
-        owner.begin(generation);
+        owner.begin(generation).unwrap();
         for id in 0..MAX_TEXTURES {
             owner
                 .process(
@@ -388,7 +425,9 @@ mod tests {
         );
         out.textures_delta.clear();
         let next = ContextGeneration::allocate().unwrap();
-        owner.begin(next);
+        assert_eq!(owner.begin(next), Err(FrameError::RetirementPending));
+        owner.retire();
+        owner.begin(next).unwrap();
         assert_eq!(owner.generation, Some(next));
         assert!(owner.textures.iter().all(Option::is_none));
         assert_eq!(
@@ -413,7 +452,7 @@ mod tests {
         }));
         let mut owner = TextureOwner::new(Mock(log.clone()));
         let generation = ContextGeneration::allocate().unwrap();
-        owner.begin(generation);
+        owner.begin(generation).unwrap();
         let mut out = output(TextureId::Managed(0), false, false);
         out.textures_delta.push(TextureId::Managed(1), image(false));
         out.textures_delta.push(TextureId::Managed(2), image(false));

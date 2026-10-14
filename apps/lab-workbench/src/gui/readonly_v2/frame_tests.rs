@@ -1,5 +1,6 @@
 //! Ownership and mock host regressions.
 use super::{
+    completion::{Completion, WaitFailure, WaitPurpose, WaitRequest},
     frame::*,
     plot_fixtures as fixtures,
     plot_widget_tests::{EPOCH, click},
@@ -23,6 +24,8 @@ pub(super) struct Log {
     pub(super) fault: Option<FrameError>,
     pub(super) fail_set_on: usize,
     pub(super) busy: bool,
+    pub(super) frame_wait: Option<Completion>,
+    pub(super) retirement_wait: Option<Completion>,
 }
 pub(super) struct Mock(pub(super) Rc<RefCell<Log>>);
 impl FrameBackend for Mock {
@@ -74,20 +77,24 @@ impl FrameBackend for Mock {
             Ok(())
         }
     }
-    fn complete(&mut self) -> Result<(), FrameError> {
+    fn wait(&mut self, request: WaitRequest) -> Completion {
         let mut log = self.0.borrow_mut();
-        log.events.push(Event::Complete);
-        if log.fault == Some(FrameError::Completion) {
-            Err(FrameError::Completion)
+        let result = if request.purpose == WaitPurpose::Frame {
+            log.events.push(Event::Complete);
+            log.frame_wait
+                .unwrap_or(if log.fault == Some(FrameError::Completion) {
+                    Completion::Failed(WaitFailure::WaitError)
+                } else {
+                    Completion::Quiesced
+                })
         } else {
+            log.events.push(Event::Drain);
+            log.retirement_wait.unwrap_or(Completion::Quiesced)
+        };
+        if result == Completion::Quiesced {
             log.busy = false;
-            Ok(())
         }
-    }
-    fn drain(&mut self) {
-        let mut log = self.0.borrow_mut();
-        log.events.push(Event::Drain);
-        log.busy = false;
+        result
     }
     fn free(&mut self, key: TextureKey) {
         let mut log = self.0.borrow_mut();
@@ -338,13 +345,21 @@ fn host_faults_drain_partial_work_then_free_without_success_or_retry() {
             fault: Some(error),
             ..Default::default()
         }));
-        let mut preview = Preview::with_backend(&doc, EPOCH, Mock(log.clone()));
+        let mut session = HostSession::new(Mock(log.clone()));
+        let mut preview = Preview::with_session(&doc, EPOCH, &mut session);
         let mut frame = preview
             .run(&Default::default(), Default::default())
             .unwrap();
         let generation = frame.generation();
         frame.tessellate().unwrap();
         assert_eq!(frame.finish(), Err(error));
+        if error == FrameError::Completion {
+            assert!(matches!(
+                preview.cleanup_outcome(),
+                CleanupOutcome::Pending(_)
+            ));
+            preview.poll_retirement(WaitPolicy::default());
+        }
         assert!(preview.context.is_none() && preview.pending.is_none());
         assert_eq!(preview.last_outcome(), Some(FrameOutcome::Failed(error)));
         let events = &log.borrow().events;
@@ -369,7 +384,8 @@ fn warmed_frame_faults_without_uploads_never_acknowledge_or_retry() {
         FrameError::Completion,
     ] {
         let log = Rc::new(RefCell::new(Log::default()));
-        let mut preview = Preview::with_backend(&doc, EPOCH, Mock(log.clone()));
+        let mut session = HostSession::new(Mock(log.clone()));
+        let mut preview = Preview::with_session(&doc, EPOCH, &mut session);
         let mut warm = preview
             .run(&Default::default(), Default::default())
             .unwrap();
@@ -385,6 +401,13 @@ fn warmed_frame_faults_without_uploads_never_acknowledge_or_retry() {
         assert_eq!(frame.generation(), generation);
         frame.tessellate().unwrap();
         assert_eq!(frame.finish(), Err(error));
+        if error == FrameError::Completion {
+            assert!(matches!(
+                preview.cleanup_outcome(),
+                CleanupOutcome::Pending(_)
+            ));
+            preview.poll_retirement(WaitPolicy::default());
+        }
         assert_eq!(preview.last_outcome(), Some(FrameOutcome::Failed(error)));
         assert!(preview.context.is_none() && preview.pending.is_none());
         let events = log.borrow().events.clone();
@@ -409,7 +432,8 @@ fn warmed_frame_faults_without_uploads_never_acknowledge_or_retry() {
 fn host_shutdown_and_cancel_retire_even_without_final_free_delta() {
     let doc = fixtures::admit(&fixtures::syntax(1, false));
     let log = Rc::new(RefCell::new(Log::default()));
-    let mut preview = Preview::with_backend(&doc, EPOCH, Mock(log.clone()));
+    let mut session = HostSession::new(Mock(log.clone()));
+    let mut preview = Preview::with_session(&doc, EPOCH, &mut session);
     let mut frame = preview
         .run(&Default::default(), Default::default())
         .unwrap();
@@ -463,15 +487,19 @@ fn fixed_owner_and_page_storage_fit_the_existing_inline_charge() {
     let owner = std::mem::size_of::<TextureOwner<CpuOnly>>();
     let frame = std::mem::size_of::<FrameData>();
     let page = std::mem::size_of::<Page>();
+    let session = std::mem::size_of::<HostSession<Mock>>();
     // Preview includes its retained Page and FrameData. Charge a new Page plan
     // and bounded text scratch as well; library heap stays in the native meter.
+    // Also charge an external session, conservatively including its one moved
+    // frame header even though no second heap payload can coexist with it.
     let inline = preview
+        + session
         + page
         + std::mem::size_of::<TextBuffer>()
         + std::mem::size_of::<plot_bounds::Preflight>()
         + std::mem::size_of::<plot_projection::PlotView<'_>>();
     assert!(inline < 65_536);
     println!(
-        "Preview={preview}; TextureOwner<CpuOnly>={owner}; FrameData={frame}; Page={page}; inline subtotal={inline}"
+        "Preview={preview}; HostSession<Mock>={session}; TextureOwner<CpuOnly>={owner}; FrameData={frame}; Page={page}; inline subtotal={inline}"
     );
 }

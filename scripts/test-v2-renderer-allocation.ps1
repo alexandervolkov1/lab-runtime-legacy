@@ -124,7 +124,9 @@ fn main() { probe::run(); }
     $borrowCases = @(
         @('next-frame', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); let _ = p.run(&Default::default(), Default::default()); f.discard(); }'),
         @('retire-context', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); p.retire_context(); f.discard(); }'),
-        @('drop-preview', 'E0505', 'fn denied(mut p: readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); drop(p); f.discard(); }')
+        @('drop-preview', 'E0505', 'fn denied(mut p: readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); drop(p); f.discard(); }'),
+        @('second-host-preview', 'E0499', 'fn denied(d: &presentation::v2::AdmittedV2Document, s: &mut readonly_v2::host_session::HostSession<readonly_v2::texture_owner::CpuOnly>) { let mut a = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, s); let _b = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, s); a.retire_context(); }'),
+        @('drop-host-session', 'E0505', 'fn denied(d: &presentation::v2::AdmittedV2Document, mut s: readonly_v2::host_session::HostSession<readonly_v2::texture_owner::CpuOnly>) { let mut p = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, &mut s); drop(s); p.retire_context(); }')
     )
     foreach ($case in $borrowCases) {
         $deniedSource = Join-Path $probeDir "denied-$($case[0]).rs"
@@ -141,12 +143,12 @@ fn main() { probe::run(); }
         ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $evidence
     $provenance = if ($DiagnosticProvenance) { 'on' } else { 'off' }
     $scenarios = @('hash-baseline', 'empty', 'ids-numeric', 'ids-object', 'small', 'v1', 'maximum')
-    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory', 'frames', 'host-no-upload') }
+    if (-not $DiagnosticProvenance) { $scenarios += @('bounded', 'projection', 'plot', 'geometry', 'memory', 'frames', 'host-no-upload', 'retirement') }
     if ($ProjectionOnly) { $scenarios = @('projection') }
     if ($PlotOnly) { $scenarios = @('plot') }
     if ($GeometryOnly) { $scenarios = @('geometry') }
     if ($MemoryOnly) { $scenarios = @('memory') }
-    if ($FramesOnly) { $scenarios = @('frames', 'host-no-upload') }
+    if ($FramesOnly) { $scenarios = @('frames', 'host-no-upload', 'retirement') }
     foreach ($scenario in $scenarios) {
         $output = & $binary $scenario $provenance
         $result = $LASTEXITCODE

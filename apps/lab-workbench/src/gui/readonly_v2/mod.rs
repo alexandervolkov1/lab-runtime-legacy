@@ -1,12 +1,14 @@
 //! Isolated bounded read-only preview. No active presentation consumer or drafts.
 #![allow(dead_code, reason = "isolated pending activation qualification")]
 
+pub(crate) mod completion;
 mod finite_trace;
 #[cfg(test)]
 mod fixtures;
 pub(crate) mod frame;
 #[cfg(test)]
 mod frame_tests;
+pub(crate) mod host_session;
 mod navigation;
 #[cfg(test)]
 mod navigation_tests;
@@ -31,15 +33,19 @@ pub(crate) mod plot_widget;
 mod plot_widget_tests;
 mod read;
 #[cfg(test)]
+mod retirement_tests;
+#[cfg(test)]
 mod tests;
 pub(crate) mod texture_owner;
 
 use crate::{model::RuntimeObservations, presentation::v2};
+use completion::WaitPolicy;
 use eframe::egui;
 use frame::{ContextGeneration, FrameData, FrameError, FrameOutcome, PreviewFrame};
+use host_session::{CleanupOutcome, HostSession, RetirementPayload, RetirementReason, Session};
 pub(crate) use navigation::Location;
 use page::{Page, TextBuffer, label};
-use texture_owner::{CpuOnly, FrameBackend, TextureOwner};
+use texture_owner::{CpuOnly, FrameBackend};
 
 /// Identity supplied by the owner; replacement must advance revision.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -106,7 +112,7 @@ pub(crate) struct Preview<'a, B: FrameBackend = CpuOnly> {
     location: Location,
     context: Option<egui::Context>,
     generation: Option<ContextGeneration>,
-    textures: TextureOwner<B>,
+    session: Session<'a, B>,
     pending: Option<FrameData>,
     last_outcome: Option<FrameOutcome>,
     previous: Option<Page>,
@@ -117,15 +123,23 @@ pub(crate) struct Preview<'a, B: FrameBackend = CpuOnly> {
 
 impl<'a> Preview<'a> {
     pub(crate) fn new(document: &'a v2::AdmittedV2Document, epoch: PresentationEpoch) -> Self {
-        Self::with_backend(document, epoch, CpuOnly)
+        Self::with_owner(document, epoch, Session::Cpu(HostSession::new(CpuOnly)))
     }
 }
 
 impl<'a, B: FrameBackend> Preview<'a, B> {
-    pub(crate) fn with_backend(
+    pub(crate) fn with_session(
         document: &'a v2::AdmittedV2Document,
         epoch: PresentationEpoch,
-        backend: B,
+        session: &'a mut HostSession<B>,
+    ) -> Self {
+        Self::with_owner(document, epoch, Session::Host(session))
+    }
+
+    fn with_owner(
+        document: &'a v2::AdmittedV2Document,
+        epoch: PresentationEpoch,
+        session: Session<'a, B>,
     ) -> Self {
         Self {
             document,
@@ -133,7 +147,7 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
             location: Location::default(),
             context: None,
             generation: None,
-            textures: TextureOwner::new(backend),
+            session,
             pending: None,
             last_outcome: None,
             previous: None,
@@ -147,7 +161,10 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
         &mut self,
         document: &'a v2::AdmittedV2Document,
         epoch: PresentationEpoch,
-    ) {
+    ) -> bool {
+        if self.session.admit_work().is_err() {
+            return false;
+        }
         // Retaining the actual borrow prevents allocator-address reuse from
         // confusing two immutable admissions, even if the caller forgot revision.
         if !std::ptr::eq(self.document, document) || self.epoch != epoch {
@@ -158,10 +175,14 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
             self.document = document;
             self.epoch = epoch;
         }
+        true
     }
 
     /// Local navigation only. Invalid addresses fail without changing the view.
     pub(crate) fn navigate(&mut self, location: Location) -> bool {
+        if self.session.admit_work().is_err() {
+            return false;
+        }
         if location == self.location {
             return true;
         }
@@ -190,18 +211,34 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
     }
 
     fn retire(&mut self) {
-        self.textures.retire();
-        if self.pending.take().is_some() {
-            self.last_outcome = Some(FrameOutcome::Abandoned);
-        }
-        self.context = None;
+        let outcome = self.pending.as_ref().map(|_| FrameOutcome::Abandoned);
+        self.retire_with(RetirementReason::ViewChanged, outcome);
+    }
+
+    fn retire_with(
+        &mut self,
+        reason: RetirementReason,
+        outcome: Option<FrameOutcome>,
+    ) -> CleanupOutcome {
+        let payload = RetirementPayload {
+            context: self.context.take(),
+            frame: self.pending.take(),
+        };
         self.generation = None;
         self.previous = None;
+        if let Some(outcome) = outcome {
+            self.last_outcome = Some(outcome);
+        }
+        self.session.retire(reason, outcome, payload)
     }
 
     fn abort_frame(&mut self, outcome: FrameOutcome) {
-        self.retire();
-        self.last_outcome = Some(outcome);
+        let reason = if outcome == FrameOutcome::Discarded {
+            RetirementReason::Discarded
+        } else {
+            RetirementReason::Abandoned
+        };
+        self.retire_with(reason, Some(outcome));
     }
 
     pub(crate) fn last_outcome(&self) -> Option<FrameOutcome> {
@@ -211,26 +248,43 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
     fn ensure_context(&mut self) -> Result<(), FrameError> {
         if self.context.is_none() {
             let generation = ContextGeneration::allocate()?;
+            self.session.begin(generation)?;
             self.context = Some(new_context());
             self.generation = Some(generation);
-            self.textures.begin(generation);
         }
         Ok(())
     }
 
-    /// Release only the library caches, preserving the single current Plot slot.
-    pub(crate) fn retire_context(&mut self) {
-        self.retire();
+    /// Request retirement, preserving the logical Plot slot. Unresolved host
+    /// work retains the caches/frame in HostSession and blocks further rendering.
+    pub(crate) fn retire_context(&mut self) -> CleanupOutcome {
+        let outcome = self.pending.as_ref().map(|_| FrameOutcome::Abandoned);
+        self.retire_with(RetirementReason::Explicit, outcome)
     }
 
-    pub(crate) fn close_plot(&mut self) {
+    pub(crate) fn cleanup_outcome(&self) -> CleanupOutcome {
+        self.session.status()
+    }
+
+    pub(crate) fn poll_retirement(&mut self, policy: WaitPolicy) -> CleanupOutcome {
+        self.session.poll_retirement(policy)
+    }
+
+    pub(crate) fn close_plot(&mut self) -> bool {
+        if self.session.admit_work().is_err() {
+            return false;
+        }
         self.retire();
         self.plot = None;
+        true
     }
 
     /// Open only an admitted Plot on the current four-cell page. No projection
     /// or allocation is needed merely to choose this local viewing mode.
     pub(crate) fn open_plot(&mut self, index: usize) -> bool {
+        if self.session.admit_work().is_err() {
+            return false;
+        }
         if self.select_plot(index) {
             self.retire();
             true
@@ -284,6 +338,7 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
         observations: &RuntimeObservations,
         input: egui::RawInput,
     ) -> Result<PreviewFrame<'_, 'a, B>, FrameError> {
+        self.session.admit_work()?;
         if self.pending.is_some() {
             return Err(FrameError::OutstandingFrame);
         }
@@ -291,8 +346,10 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
         let (output, report) = match self.prepare(observations, input) {
             Ok(frame) => frame,
             Err(error) => {
-                self.retire();
-                self.last_outcome = Some(FrameOutcome::Failed(error));
+                self.retire_with(
+                    RetirementReason::FrameFailed,
+                    Some(FrameOutcome::Failed(error)),
+                );
                 return Err(error);
             }
         };
@@ -400,7 +457,8 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
 
 impl<B: FrameBackend> Drop for Preview<'_, B> {
     fn drop(&mut self) {
-        self.retire();
+        let outcome = self.pending.as_ref().map(|_| FrameOutcome::Abandoned);
+        self.retire_with(RetirementReason::PreviewDropped, outcome);
     }
 }
 

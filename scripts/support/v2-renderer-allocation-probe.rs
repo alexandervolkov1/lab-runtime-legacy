@@ -249,6 +249,8 @@ mod plot_memory;
 mod plot_widget;
 #[path = "plot-projection-probe.rs"]
 mod projection;
+#[path = "retirement-probe.rs"]
+mod retirement;
 
 pub(crate) fn run() {
     let args: Vec<_> = std::env::args().collect();
@@ -260,6 +262,10 @@ pub(crate) fn run() {
     }
     if scenario == "host-no-upload" {
         frame_owner::run_no_upload_faults();
+        return;
+    }
+    if scenario == "retirement" {
+        retirement::run();
         return;
     }
     if scenario == "memory" {
