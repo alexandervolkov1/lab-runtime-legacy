@@ -1,0 +1,22 @@
+{
+  "source_head": "82d8ad12e3cf71f7b389a21e94e456b214da9e0d",
+  "baseline": "5190760603ddbef4e567dc6b08a52001e046fe78",
+  "protected_paths_unchanged": [
+    "crates/lab-core",
+    "crates/lab-protocol",
+    "crates/lab-runtime",
+    "apps/lab-runtime",
+    "apps/lab-workbench/src/client",
+    "apps/lab-workbench/src/dispatcher.rs",
+    "apps/lab-workbench/src/external.rs",
+    "apps/lab-workbench/src/model",
+    "apps/lab-workbench/src/recovery",
+    "apps/lab-workbench/src/gui",
+    "Cargo.toml",
+    "Cargo.lock",
+    "apps/lab-workbench/Cargo.toml",
+    "crates/lab-windows-job/Cargo.toml"
+  ],
+  "source_input_count": 368,
+  "activation_qualified": false
+}

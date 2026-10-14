@@ -1,0 +1,9 @@
+Supplemental evidence-audit helper attempt, exit code 1.
+The link checker ran before generating the hash inventory it was checking.
+The generated file is now checked after creation; no product source/test changed.
+
+Traceback (most recent call last):
+  File "D:\rust\lab-runtime\target\b3b3-review\final-verification.py", line 40, in <module>
+    assert ((ROOT/document).parent/target).exists(),(document,target)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+AssertionError: ('docs/developer/private-readonly-ipc.md', 'private-readonly-ipc-sha256.txt')

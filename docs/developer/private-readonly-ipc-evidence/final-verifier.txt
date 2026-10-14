@@ -1,0 +1,66 @@
+import ast
+import hashlib
+import json
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import zipfile
+
+ROOT = Path(__file__).resolve().parents[2]
+DEST = ROOT / 'docs/developer/private-readonly-ipc-evidence'
+HEAD = '82d8ad12e3cf71f7b389a21e94e456b214da9e0d'
+sha = lambda data: hashlib.sha256(data).hexdigest()
+inputs = json.loads((DEST/'source-inputs.json').read_text())
+count = 0
+for row in inputs['files']:
+    path = row['path']
+    if path.endswith(('.rs','.toml','.lock','.ps1','.py')) or path.startswith('examples/'):
+        actual = (ROOT/path).read_bytes()
+        assert sha(actual) == row['tested_windows_bytes_sha256'],path
+        blob = subprocess.check_output(['git','show',HEAD+':'+path],cwd=ROOT)
+        assert sha(blob)==row['git_blob_sha256'] and actual.replace(b'\r\n',b'\n')==blob.replace(b'\r\n',b'\n'),path
+        count += 1
+
+manifest = json.loads((DEST/'raw-manifest.json').read_text())
+assert sha((DEST/'raw-evidence.zip').read_bytes())==manifest['sha256']
+with zipfile.ZipFile(DEST/'raw-evidence.zip') as archive:
+    assert set(archive.namelist())=={r['path'] for r in manifest['files']}
+    for row in manifest['files']:
+        data = archive.read(row['path'])
+        assert sha(data)==row['sha256'] and len(data)==row['bytes'],row['path']
+
+documents=['docs/developer/private-readonly-ipc.md','docs/developer/private-ipc-license-safety.md','docs/developer/README.md']
+links = 0
+for document in documents:
+    text=(ROOT/document).read_text(encoding='utf-8')
+    for target in re.findall(r'\[[^\]]+\]\(([^)]+)\)',text):
+        if '://' in target or target.startswith('#'): continue
+        target=target.split('#')[0]
+        if target=='private-readonly-ipc-sha256.txt':
+            links+=1
+            continue # This inventory is generated after all document checks.
+        assert ((ROOT/document).parent/target).exists(),(document,target)
+        links+=1
+
+for helper in ['target/b3b3-review/run-qualification.py','target/b3b3-review/package-evidence.py',str(Path(__file__).relative_to(ROOT))]:
+    ast.parse((ROOT/helper).read_text(encoding='utf-8'))
+command=['pwsh','-NoProfile','-Command',"$tokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path 'scripts/test-private-ipc.ps1'),[ref]$tokens,[ref]$parseErrors) | Out-Null; if ($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }; Write-Output 'PowerShell AST PASS'"]
+result=subprocess.run(command,cwd=ROOT,capture_output=True,text=True)
+assert result.returncode==0,result.stderr
+diff=subprocess.run(['git','diff','--check'],cwd=ROOT,capture_output=True,text=True)
+assert diff.returncode==0,diff.stdout+diff.stderr
+shutil.copy2(Path(__file__),DEST/'final-verifier.txt')
+checks=dict(source_head=HEAD,tested_code_and_example_inputs_equal=count,markdown_local_links_checked=links,raw_manifest_members_verified=len(manifest['files']),powershell_ast=dict(command=command,exit_code=result.returncode,stdout=result.stdout),python_helpers_ast='PASS',diff_check=dict(command=['git','diff','--check'],exit_code=diff.returncode),verifier_sha256=sha(Path(__file__).read_bytes()),source_policy='All inventoried Rust/Cargo/script/example inputs equal qualified source; documentation/evidence follow-up only',activation_qualified=False)
+(DEST/'final-checks.json').write_text(json.dumps(checks,indent=2)+'\n',encoding='utf-8')
+
+paths=[ROOT/p for p in documents]+sorted(DEST.iterdir())
+inventory=['# SHA256 of Git LF text representation; binary bytes unchanged.','## Pinned source inputs: see private-readonly-ipc-evidence/source-inputs.json','## Final documentation and evidence; this inventory excludes itself.']
+for path in paths:
+    assert path.is_file()
+    data=path.read_bytes()
+    if path.suffix not in ['.zip','.png']: data=data.replace(b'\r\n',b'\n')
+    inventory.append(sha(data)+'  '+path.relative_to(ROOT).as_posix())
+(ROOT/'docs/developer/private-readonly-ipc-sha256.txt').write_text('\n'.join(inventory)+'\n',encoding='utf-8')
+assert (ROOT/'docs/developer/private-readonly-ipc-sha256.txt').is_file()
+print(json.dumps(dict(status='PASS',code_inputs=count,links=links,archive_members=len(manifest['files']),inventory_files=len(paths)),indent=2))

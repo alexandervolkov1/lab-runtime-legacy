@@ -24,6 +24,9 @@ from the [User manual](../README.md); ordinary users need no source checkout.
   production seam, original-process exit proof and no-GPU containment fixtures.
   [Independent review follow-up](windows-job-supervisor-review-followup.md)
   records launch admission and first-containment fixes and their qualification.
+- [Private read-only IPC](private-readonly-ipc.md): DGUI-4C7B3B3 owner-only
+  overlapped pipes, closed snapshot codec, shared credits and original I/O
+  retirement receipts; qualified no-GPU fixtures, GUI v2 remains inactive.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.

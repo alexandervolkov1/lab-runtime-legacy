@@ -1,0 +1,28 @@
+{
+  "source_head": "82d8ad12e3cf71f7b389a21e94e456b214da9e0d",
+  "tested_code_and_example_inputs_equal": 332,
+  "markdown_local_links_checked": 34,
+  "raw_manifest_members_verified": 146,
+  "powershell_ast": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-Command",
+      "$tokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path 'scripts/test-private-ipc.ps1'),[ref]$tokens,[ref]$parseErrors) | Out-Null; if ($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }; Write-Output 'PowerShell AST PASS'"
+    ],
+    "exit_code": 0,
+    "stdout": "PowerShell AST PASS\n"
+  },
+  "python_helpers_ast": "PASS",
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  "verifier_sha256": "919ef9214f08b3885b946b939295d7bea5e167beb702799766ee87e1bac1a696",
+  "source_policy": "All inventoried Rust/Cargo/script/example inputs equal qualified source; documentation/evidence follow-up only",
+  "activation_qualified": false
+}

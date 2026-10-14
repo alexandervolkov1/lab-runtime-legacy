@@ -1,0 +1,23 @@
+# SHA256 of Git LF text representation; binary bytes unchanged.
+## Pinned source inputs: see private-readonly-ipc-evidence/source-inputs.json
+## Final documentation and evidence; this inventory excludes itself.
+87cc74ed5e581cbc9dde680dd579ec6ebb05b5eb66a03dee23354ee3aea74848  docs/developer/private-readonly-ipc.md
+ffb3806dbaf4eca8ec3837d87afbff47df9b71e3293592562b1f987b97ebf715  docs/developer/private-ipc-license-safety.md
+efbc3d0883f31fd7359ec36385565b26918565fbf6adca21e541d31dd33019c3  docs/developer/README.md
+bb09e7520c96526ac7e4f3c451a83420d3d410ca3f397de654a1dbf207353a70  docs/developer/private-readonly-ipc-evidence/binary-identities.json
+602b2f81814f9a296b3bc17742338072aa45aa70bd8a9f2d42451bf78d911cb4  docs/developer/private-readonly-ipc-evidence/cpu-comparison.json
+c87bc0ce019d91c1c41176447e457a5b86edbd8748cf53018b40fef25e5eb3a1  docs/developer/private-readonly-ipc-evidence/final-audit-attempt-1.txt
+7f1ff94761be8137eab128ce79f7fc71829780858f8a6a8cbd05465f1733a285  docs/developer/private-readonly-ipc-evidence/final-checks.json
+919ef9214f08b3885b946b939295d7bea5e167beb702799766ee87e1bac1a696  docs/developer/private-readonly-ipc-evidence/final-verifier.txt
+886474721840470e84177379d4f9d3c6db0e80b1269ae7ebbb1bd2b9acf4fa96  docs/developer/private-readonly-ipc-evidence/memory-ledger.json
+3e2f71dd05a743989df4ad6b9b853bc680fa2714e9cfa045a7b544faa81fc9e9  docs/developer/private-readonly-ipc-evidence/qualification-gates.json
+cd4d3cd85150139aaa1c7f46a759511a7c2842a3aa2bcde681b4dd1037412962  docs/developer/private-readonly-ipc-evidence/raw-evidence.zip
+45d356fca5f96422c278c24e76940d4a8855299a2576f41c251e6b49cfc36919  docs/developer/private-readonly-ipc-evidence/raw-manifest.json
+ae0411a14f5355638d7c23c64d820784a3ef919d7a63906b77174a36be0ea11c  docs/developer/private-readonly-ipc-evidence/source-boundaries.json
+3414420f69a44756c81649d4324ea1d8a01cd2b642ce7347366d7676ac6b62e3  docs/developer/private-readonly-ipc-evidence/source-inputs.json
+e82a3fec5ea4f3dc01c09cf81a022f4869f21faa3a47fe6d2cd34bc1f6a70e1f  docs/developer/private-readonly-ipc-evidence/test-inventory.json
+37ace04e6619b0cd7d874bd789df99df8bfcb6c869c06e4d32381ffe04c45714  docs/developer/private-readonly-ipc-evidence/test-inventory.txt
+73b427109803912a60d84424a0768de61837d5b1fa7638c1e1b7200abba2aaaa  docs/developer/private-readonly-ipc-evidence/v1-dev.json
+fecf2649422174812354134583c09d5677f1db1f82c01f70aad902cb2bde203a  docs/developer/private-readonly-ipc-evidence/v1-dev.png
+9190edc5e214a981a92d7e1c883fc2b864f8190d989b84c85e32d28d26e9f259  docs/developer/private-readonly-ipc-evidence/v1-release.json
+e3ade4cfbe132c42e821143087dd1b108e7abf4eb6dd9431af952ea92f6099ea  docs/developer/private-readonly-ipc-evidence/v1-release.png

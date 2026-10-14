@@ -1,0 +1,58 @@
+[
+  {
+    "source_head": "82d8ad12e3cf71f7b389a21e94e456b214da9e0d",
+    "profile": "dev",
+    "binaries": [
+      {
+        "path": "target/b3b3-review/qualified-82d8ad12e3cf/binaries/dev/lab-runtime.exe",
+        "sha256": "e88128f918e7931e1c59ef85fc1041ff0016057db5f1638bf44b830d5541da0f"
+      },
+      {
+        "path": "target/b3b3-review/qualified-82d8ad12e3cf/binaries/dev/lab-workbench.exe",
+        "sha256": "d3de300ebf046b7351d80d918e53260033bc0e628765b6de5d543805638cd548"
+      },
+      {
+        "path": "target/private-ipc/dev/private-ipc-fixture.exe",
+        "sha256": "e4297362beb23d24de8df2e49455fa63f8ed7aa3701ee661d601a79747605550"
+      },
+      {
+        "path": "target/v2-renderer-allocation-probe/dev/v2-renderer-allocation-probe.exe",
+        "sha256": "62bfe1c863188789205b84865f5bf7341d0d158a56d747eb4557188dd179c354",
+        "role": "qualification probe"
+      },
+      {
+        "path": "target/windows-supervisor/dev/055c0426425d4bdfb28544e88d5f24f1/supervisor-fixture.exe",
+        "sha256": "1bddb7ee79a18fd525f7d3fa005d8b9d05be9ee09b124fd343009d7dce2bd7d9",
+        "role": "B3B2 native qualification fixture"
+      }
+    ]
+  },
+  {
+    "source_head": "82d8ad12e3cf71f7b389a21e94e456b214da9e0d",
+    "profile": "release",
+    "binaries": [
+      {
+        "path": "target/b3b3-review/qualified-82d8ad12e3cf/binaries/release/lab-runtime.exe",
+        "sha256": "e9b1a2da0fd779767d23b4cfca8eec4a5f3212df01b20b5883b61208c23ccded"
+      },
+      {
+        "path": "target/b3b3-review/qualified-82d8ad12e3cf/binaries/release/lab-workbench.exe",
+        "sha256": "601badbd7062d191b34bab46c736932552637697720b720fbe13935be07b93d6"
+      },
+      {
+        "path": "target/private-ipc/release/private-ipc-fixture.exe",
+        "sha256": "e91b38e4019fdd77e4c2a5c301ce2a99e54c473fa080277dc6a83deea9b44de6"
+      },
+      {
+        "path": "target/v2-renderer-allocation-probe/release/v2-renderer-allocation-probe.exe",
+        "sha256": "88380b2eb7060b38cd3ab152bf446c35aa5876a2d15e7519a957a9591c130282",
+        "role": "qualification probe"
+      },
+      {
+        "path": "target/windows-supervisor/release/892abb13148043afa695b919273b21b8/supervisor-fixture.exe",
+        "sha256": "43feecc0748cc9391a3524c0a1a3a791f54942154f3b2067e259d5550b247457",
+        "role": "B3B2 native qualification fixture"
+      }
+    ]
+  }
+]
