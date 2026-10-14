@@ -8,6 +8,7 @@ mod external;
 mod gui;
 mod model;
 mod ownership;
+mod parent;
 mod presentation;
 #[path = "gui/rebuild.rs"]
 mod rebuild;
@@ -346,7 +347,33 @@ mod operator_boundary_tests {
         assert!(!source.contains(".apply_ui_command("));
         assert!(!source.contains(".presentation ="));
         assert!(!source.contains(".client_error ="));
-        assert_eq!(source.matches("ClientHandle::spawn_configured").count(), 1);
+        let parent = include_str!("parent.rs");
+        assert_eq!(source.matches("ClientHandle::spawn_configured").count(), 0);
+        assert_eq!(parent.matches("ClientHandle::spawn_configured").count(), 1);
+        for dependency in [
+            "use egui",
+            "use eframe",
+            "crate::gui",
+            "request_repaint",
+            "RuntimeObservations::clone",
+            "mpsc::channel(",
+        ] {
+            assert!(
+                !parent.contains(dependency),
+                "parent pump acquired renderer/unbounded dependency: {dependency}"
+            );
+        }
+        for apply in [
+            ".apply_client_update(",
+            ".advance_rebuild(",
+            ".service_owner(",
+            ".try_recv(",
+        ] {
+            assert!(
+                !production_source(source).contains(apply),
+                "GUI retained a parallel model pump: {apply}"
+            );
+        }
         assert!(!dispatcher.contains("ClientHandle::spawn"));
         assert!(!dispatcher.contains("DerefMut"));
         assert!(!dispatcher.contains("model_and_client"));

@@ -1,0 +1,28 @@
+DGUI-4C7B3B1 source/evidence SHA256; UTF-8 normalized to LF, no BOM.
+Inventory excludes itself. No new dependencies or toolchain.
+Baseline reproduction and exact CPU comparisons: independent-parent-pump-evidence.txt.
+
+c871b80fe71ee7854479a6de92bfede5ef8fa8172c898be422ccc377c9f096ef  Cargo.lock
+cd4e3d42e330d89c7e412af909626314ed113c4697451af72ab486adfaaf6efe  Cargo.toml
+30eb9ad45a4d4da2b149b1cb63a4300b96dd4dc737da7c69fd81e7d6667ef918  apps/lab-workbench/Cargo.toml
+2044a620b747f8ff08e157fbe1e9a07594683d5229c33ae8617f811ccdbbcc51  apps/lab-workbench/src/client/types.rs
+54d3dda313463a511fe4cafe6355443dcf0dbccb92ff3868f827c6e8ac687dee  apps/lab-workbench/src/client/worker.rs
+e724d46e103f707abc6ffe8157283dcf46a0a86f039b1bb10de857cd01cc7c64  apps/lab-workbench/src/dispatcher.rs
+c57f4a02fb2dc708de47c204adf639b2ed6e6b0ad669c18e5ab020bc8cc28754  apps/lab-workbench/src/external.rs
+f5832e0655731772b1897bdd55ff8ae6dfe81fe2bcdb465fc2fdb4cd774a5ff0  apps/lab-workbench/src/gui/app.rs
+e909c1b354a9d8dd925b784269468421459d154c95f3bd170feddda80dbb0623  apps/lab-workbench/src/gui/mod.rs
+8b194ffb5c0e3b494afbdfaadae409f133f16c57b311ee86a762ad401f9e2e09  apps/lab-workbench/src/gui/readonly_v2/finite_trace.rs
+58bb94a03ae021681eb138442405329a9893aa2a877fe4ebfc0aad2cbe1dc09c  apps/lab-workbench/src/gui/readonly_v2/mod.rs
+7c76b1ed5860f8b91816f67be3393a6028ec3d682447abba61549bea5b4b1495  apps/lab-workbench/src/gui/rebuild.rs
+651bde45043da21a49fdc2377549298f9345c7fa876ec3858bc88de4f2ba3173  apps/lab-workbench/src/main.rs
+18b9cc2aeecec8eece2b9dc140c846ef489560aaffcfea1e7e6b9f6b7ffb527b  apps/lab-workbench/src/model/exact_retry.rs
+21c7d13152a51283c37f20771a9f669d9a739fac9bbdf39002323f4c00c5fc8f  apps/lab-workbench/src/model/mod.rs
+47cfedc694da2e6e74c109a1d6aef15abe6e83316abf2313cda00fd874eb1f24  apps/lab-workbench/src/model/recovery_status.rs
+1dc43bb7a7da1b9501ecf3a555e1cbc710ada6a73cda96bd0e3f544ad67e8ec9  apps/lab-workbench/src/parent.rs
+259af98c181e390d1e902cba5f694724da6bc3f24dd09975cd558c6339911795  apps/lab-workbench/src/parent/tests.rs
+61ff3079e744621ffb1ec33cd2599aff6a469681328b6e7818ac5e4495f96410  docs/developer/README.md
+ab126dc6bc8a177182c02d917f4e8ea815a9310eafb715071a7351cc7bcd28eb  docs/developer/independent-parent-pump-evidence.txt
+0db93a0122b42f20c047850901056ca46b8e5fb5adab3d075c18a9aa912fcef5  docs/developer/independent-parent-pump.md
+70aeac054f855f080bcaadd484092c8d826ac197acff1966fcd3ecbac17be5d2  docs/developer/native-gui-host-adr.md
+ffc0e28021ac72de922c6b6fd8f23e8fc853d9816b50eee491d548465972e490  docs/developer/native-gui-host-contract.md
+50cf8b08b38176f376aaad3bdbc7d4475d133a3896e3a335331d197c198331c2  scripts/test-v2-renderer-allocation.ps1

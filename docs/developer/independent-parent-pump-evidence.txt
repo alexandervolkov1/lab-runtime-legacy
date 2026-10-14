@@ -1,0 +1,49 @@
+DGUI-4C7B3B1 / Windows x86_64 MSVC / Rust 1.95.0 / 2026-10-14
+B3A merge 14bbe58aa54ef6b2320a6d11ccfb98cf2ee67697 preserves f5e2b38ffe437c7452f3e7d3ca104646f615460d.
+Independent parent harness PASS; active v1 cooperative scheduler preserved.
+No child/Job/IPC/v2 host activation or new Runtime API; ACTIVATION_QUALIFIED=false.
+
+dev full Workbench suite: 486 PASS, 15 ignored process fixtures; elapsed=504.77s.
+dev final owner/architecture subset: 12 PASS (10 new parent groups, relocated GUI drain gate, architecture guard).
+dev measured 64-update fixture: updates=64, rebuild steps=64, external calls=0, elapsed_us=385; not universal maximum-payload latency.
+dev virtual process acceptance: 13 PASS; additional M17.4 overlap BLOCKED, see baseline reproduction below.
+dev five borrowing compile-fail gates PASS.
+dev geometry: 119 PASS; historical CSV exact; max accounted=4610337; normalized SHA256=8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751.
+dev memory: 125 PASS; historical CSV exact; max accounted=4458653; normalized SHA256=48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212.
+dev frames: 12 PASS; historical CSV exact; max accounted=4355499; normalized SHA256=24bba32d439203d7e29a9e91f3c54af681b5577eb34974c6da1bdf9c8ebab74e.
+dev host-no-upload: 4 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=a25f1639aa5509171fb9f69dc96c29d81db4902e7d65f1947d8a116c30482a12.
+dev retirement: 9 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=16aed141737f84299e5097adb9ce8ab057fde0ff0e8168af12aa8825c2244cfe.
+dev plot: historical Widget/Page bytes exact PASS.
+dev bounded: historical Widget/Page bytes exact PASS.
+
+release full Workbench suite: 487 PASS, 15 ignored process fixtures; elapsed=43.66s.
+release final owner/architecture subset: 12 PASS (10 new parent groups, relocated GUI drain gate, architecture guard).
+release measured 64-update fixture: updates=64, rebuild steps=64, external calls=0, elapsed_us=149; not universal maximum-payload latency.
+release virtual process acceptance: 13 PASS; additional M17.4 overlap BLOCKED, see baseline reproduction below.
+release five borrowing compile-fail gates PASS.
+release geometry: 119 PASS; historical CSV exact; max accounted=4610337; normalized SHA256=8a4f331dc246b325f9d1329e9c47908b47035e96192fa7ef3163f46011010751.
+release memory: 125 PASS; historical CSV exact; max accounted=4458653; normalized SHA256=48363c9e796797b35aa5350722cf8dffb049447275b1aa5598f65be6fbcd1212.
+release frames: 12 PASS; historical CSV exact; max accounted=4355499; normalized SHA256=24bba32d439203d7e29a9e91f3c54af681b5577eb34974c6da1bdf9c8ebab74e.
+release host-no-upload: 4 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=a25f1639aa5509171fb9f69dc96c29d81db4902e7d65f1947d8a116c30482a12.
+release retirement: 9 PASS; historical CSV exact; max accounted=4367945; normalized SHA256=16aed141737f84299e5097adb9ce8ab057fde0ff0e8168af12aa8825c2244cfe.
+release plot: historical Widget/Page bytes exact PASS.
+release bounded: historical Widget/Page bytes exact PASS.
+
+CPU Preview max 4610337 / 8388608 accounted bytes; B1/FiniteTraceItem and allocation profiles unchanged.
+Full dev suite ran before adding the final join-timeout regression/helper extraction; final dev/release 12-test subset covers that final lifecycle source. Full release suite includes the final 502-test inventory.
+Full suites include dispatcher/external partial I/O and detach, operator/recovery/Exact Retry, client worker/reconnect, v1 GUI/Plot/Confirm and architecture guards.
+Cargo fmt, warning-denied Clippy (all targets), scoped Markdown links/PowerShell AST and diff checks PASS.
+
+Additional historical ignored M17.4 real-process overlap: BLOCKED in dev/release.
+Observed: recording_start becomes MutationFailed / recording_failed / recording_unavailable before mutation B is Runtime-accepted.
+Reproduced on unmodified archived B3A merge source (no parent module/new pump): 0 PASS / 1 FAIL; 491 filtered; exit 101.
+Baseline main.rs normalized SHA256=88fac743fcd629698916a8a4579fc2ddb8b3aee644e5560755c586485e73cf1d.
+Archived baseline compiled with the same exact current locked Cargo test artifacts; Runtime/dependency inputs unchanged.
+The fixture drives its dispatcher/rebuild directly and never runs ParentPump. Original fixture and overlap assertion are unchanged in this PR.
+Runtime source shows held_start blocks accepted operation SQL as well as Start; changing to the terminal-operation barrier does not preserve this recording_start overlap (A completes before B). No alternate barrier change is committed.
+Exact remaining gate: qualify a supported healthy Start-only/acceptance-aware Recorder fault fixture, or another separately reviewed deterministic virtual overlap operation; do not weaken assertions or modify Runtime in this stage.
+No hardware absence or required Arduino/Metakon blocks the parent harness. All fixtures are virtual/fake.
+
+Raw full/targeted/virtual/CPU transcripts and archived baseline reproduction remain under target/b3b1-*.
+Root panic and worker-stop failure in parent tests are deterministic expected injections, not unexplained failures.
+GPU terminal and whole host Rust-budget scopes remain BLOCKED; no new GPU or native child qualification claimed.
