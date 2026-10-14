@@ -457,6 +457,12 @@ impl Worker {
             );
             return;
         }
+        // An OS call may exceed the observation deadline. Once control returns,
+        // do not execute a child whose startup window is already expired.
+        if self.started.elapsed() >= self.policy.observation {
+            self.begin_stop(backend, Reason::StartupDeadline, true);
+            return;
+        }
         self.publish(Some(Call::Resume));
         match backend.resume() {
             Ok(()) => self.resumed = true,
@@ -531,7 +537,11 @@ impl Worker {
             Ok(None) => self.status.alive = Some(true),
             Err(e) => {
                 self.status.alive = None;
-                self.status.cleanup_error.get_or_insert(e);
+                if matches!(self.status.phase, Phase::Starting | Phase::Ready) {
+                    self.status.original_error.get_or_insert(e);
+                } else {
+                    self.status.cleanup_error.get_or_insert(e);
+                }
                 self.status.reason.get_or_insert(Reason::OsFailure);
                 self.status.phase = Phase::ExitUnconfirmed;
             }

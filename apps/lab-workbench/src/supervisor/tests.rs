@@ -289,6 +289,7 @@ fn wait_failure_and_retirement_failure_keep_obligations_without_implicit_retries
     worker.tick(&mut backend);
     assert_eq!(worker.status.phase, Phase::ExitUnconfirmed);
     assert_eq!(worker.status.alive, None);
+    assert_eq!(worker.status.original_error, backend.wait_error);
     worker.start(&mut backend, launch());
     assert_eq!(backend.prepares, 1);
     assert_eq!(backend.terminations, 0);

@@ -297,7 +297,8 @@ fn startup_failure_and_cancel_before_resume_never_execute_child() {
     assert_eq!(failure.original_error.unwrap().operation, "CreateProcessW");
     assert_eq!(failure.objects, lab_windows_job::Objects::default());
     finish(&mut root);
-    for injected_gate in [false, true] {
+    for variant in 0..3 {
+        let injected_gate = variant == 1;
         let entered = Arc::new(Barrier::new(2));
         let release = Arc::new(Barrier::new(2));
         let witness = Arc::new(Mutex::new(None));
@@ -323,17 +324,31 @@ fn startup_failure_and_cancel_before_resume_never_execute_child() {
         root.restart(launch).unwrap();
         entered.wait(); // Exact process exists, gated and still suspended.
         assert!(!dir.join("executed").exists());
-        if !injected_gate {
+        if variant == 0 {
             stop(&root, Stop::Graceful);
+        }
+        if variant == 2 {
+            let guard = root.signal.state.lock().unwrap();
+            let (guard, elapsed) = root
+                .signal
+                .changed
+                .wait_timeout_while(guard, Duration::from_millis(2100), |_| true)
+                .unwrap();
+            assert!(elapsed.timed_out());
+            drop(guard);
+            assert!(root.status().unwrap().degraded);
         }
         release.wait();
         let ended = root.wait_status(|s| s.phase == Phase::ExitedContained);
         assert_eq!(ended.termination_requests, 1);
         assert_eq!(ended.objects, lab_windows_job::Objects::default());
+        if variant == 2 {
+            assert_eq!(ended.reason, Some(Reason::StartupDeadline));
+        }
         assert!(!dir.join("executed").exists());
         assert_eq!(wait_witness(witness.lock().unwrap().as_ref().unwrap()), 77);
         println!(
-            "suspended startup rollback gate_injected={injected_gate} exit confirmed; executed=false"
+            "suspended startup rollback variant={variant} gate_injected={injected_gate} exit confirmed; executed=false"
         );
         finish(&mut root);
     }
