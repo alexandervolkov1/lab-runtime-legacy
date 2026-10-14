@@ -250,7 +250,8 @@ fn dequeued_restart_reserves_launch_during_initial_retire_and_stop_keeps_priorit
             assert_eq!(ready.incarnation, 1);
             admit_stop(&root, Stop::Terminate);
         }
-        let pending = root.wait_status(|s| s.phase == Phase::TerminationRequested);
+        let pending =
+            root.wait_status(|s| s.phase == Phase::TerminationRequested && s.call.is_none());
         assert_eq!(pending.incarnation, 1);
         assert_eq!(pending.termination_requests, 1);
         assert_eq!((pending.objects.jobs, pending.objects.processes), (1, 1));
