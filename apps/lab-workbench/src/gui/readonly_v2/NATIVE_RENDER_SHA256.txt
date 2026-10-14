@@ -1,0 +1,21 @@
+C4B2B1 source and native evidence SHA256; UTF-8 normalized to LF (no BOM).
+License file byte hashes and exact Cargo archive/source hashes: third-party-licenses/native-glow/README.txt.
+CPU evidence comparisons and exact-byte Widget/Page hashes: NATIVE_RENDER_GATES.txt.
+
+cd4e3d42e330d89c7e412af909626314ed113c4697451af72ab486adfaaf6efe  Cargo.toml
+c871b80fe71ee7854479a6de92bfede5ef8fa8172c898be422ccc377c9f096ef  Cargo.lock
+30eb9ad45a4d4da2b149b1cb63a4300b96dd4dc737da7c69fd81e7d6667ef918  apps/lab-workbench/Cargo.toml
+e4124238e96313c2f9b6666ce4426916905e33d7b4040bf2a15e9d09b8b3597a  apps/lab-workbench/src/gui/readonly_v2/frame.rs
+de0a4be133100f327219631eccc144fdffc2cb21da0739675416958f862aec53  apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT.md
+6e9223a66620ecfd177f2e4aa019414fd16810821b3f8fec9a4fbc8e8ddeb71d  apps/lab-workbench/src/gui/readonly_v2/NATIVE_GLOW_RENDERING.md
+50876ecb6507da23f75b00de00d58be4a80e68b616d863b6d0e1eca99d5ca609  scripts/test-native-glow.ps1
+2ea25e599ee35cb57e14da36c976bf37d81f525550e9920dc9f9d8b051bd7d12  scripts/support/native-glow-device.rs
+c7f2097c69f840330afd8118d8aaed05786a7af350cad078e1ec263d670e6de1  scripts/support/native-glow-smoke.rs
+5e6e6cd08ab87a1856baa2fee1a35de34e35a9b65d80ec4a0b6bac17bfe00666  scripts/support/allocation-meter.rs
+ae1f6cf1e673332cb37dc1a1c802483ba00ed0e7f70a1be1cd172a0ed894cfd1  third-party-licenses/native-glow/README.txt
+d7a68228faf0bd29723cc8379dbd1d7d31512cdcab970fc71dfab602320f8522  apps/lab-workbench/src/gui/readonly_v2/NATIVE_RENDER_DEV.txt
+af05c70c78bccc05e76b999b07fad4e4c263e07e6de9e235ae8cb3fd00840566  apps/lab-workbench/src/gui/readonly_v2/NATIVE_RENDER_GATES.txt
+761691e147a22e770a898399fcc3efd48988cf8f4f667715522f0a01f417ab2e  apps/lab-workbench/src/gui/readonly_v2/NATIVE_RENDER_PENDING_DEV.txt
+e473b8ae778c14fed8b7867c518d4aacbc1ef0e60284bfd12b44cfa722205d73  apps/lab-workbench/src/gui/readonly_v2/NATIVE_RENDER_PENDING_RELEASE.txt
+65176cca1c5f510f70bd8cd6640b3da1319405a7f3d87b61867a935cebf02beb  apps/lab-workbench/src/gui/readonly_v2/NATIVE_RENDER_RELEASE.txt
+996574ee31a1ba9e287991c35719244b2f551e6e47af2ff303be8f10495a427c  .gitattributes

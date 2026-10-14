@@ -13,7 +13,9 @@ static NEXT_GENERATION: AtomicU64 = AtomicU64::new(1);
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub(crate) struct ContextGeneration(u64);
 impl ContextGeneration {
-    pub(super) fn allocate() -> Result<Self, FrameError> {
+    // Native backend conformance frames use the same never-reused namespace
+    // allocator even when no egui Context is needed for their synthetic meshes.
+    pub(crate) fn allocate() -> Result<Self, FrameError> {
         Self::from_counter(&NEXT_GENERATION)
     }
     fn from_counter(counter: &AtomicU64) -> Result<Self, FrameError> {
