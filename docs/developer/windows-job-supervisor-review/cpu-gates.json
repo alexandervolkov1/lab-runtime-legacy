@@ -1,0 +1,36 @@
+[
+  {
+    "name": "dev-cpu-preview-pwsh7",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 527.144,
+    "log_sha256": "a1410828798a9ae4e33d5e499e50982797400e378768fcba351ed47a1df5ba4c"
+  },
+  {
+    "name": "release-cpu-preview-pwsh7",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 59.499,
+    "log_sha256": "86c0218fe7c48456827565d62b8c14f66fbad797045772cd1590c96ae208c1a7"
+  }
+]

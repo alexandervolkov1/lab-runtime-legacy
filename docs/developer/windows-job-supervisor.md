@@ -4,6 +4,11 @@ Inactive production supervisor seam and Windows/MSVC no-GPU qualification.
 ACTIVATION_QUALIFIED=false. This stage adds no renderer, GUI child host, production
 IPC, snapshot bridge, Runtime operation or public API/DTO.
 
+The independent review of `76471bebdcb147148c34fcff23fbf2cba686f120`
+blocked merge on two lifecycle defects. See the
+[review follow-up](windows-job-supervisor-review-followup.md) for their root
+causes, fixes, final-source qualification and separate hello-only investigation.
+
 PR #37 was verified unchanged at 67211d1ae95e1b35f49c79c6c804ef57298fc0b0, with
 main base 14bbe58aa54ef6b2320a6d11ccfb98cf2ee67697, made Ready and merged as
 2aaf98fcd77a8b6bf73b2341d0b95298be401df6. The reviewed HEAD is its second parent.
@@ -102,6 +107,11 @@ stateDiagram-v2
 
 Restart is explicit and admitted only from Stopped/confirmed terminal states.
 Active, pending-stop, concurrent/full-slot and unconfirmed requests are rejected.
+Dequeue reserves one fixed admission flag under the same mutex as the pending
+slot. The initial backend retirement can block before Starting is published;
+the reservation prevents another Restart from being accepted in that interval.
+The next status publication atomically transfers admission exclusion to the
+published phase (or releases it after root cancellation without a launch).
 There is no automatic restart loop. Accepted stop replaces the pending restart;
 an immediate stop cannot be downgraded by a repeated graceful request. Irreversible
 parent shutdown has an atomic latch, rejects late restarts and requests stop even
@@ -123,6 +133,13 @@ absent. Starting and an unfinished worker always prevent successful root shutdow
 Native query/termination/wait failures preserve original startup/operation error
 independently from cleanup error. ExitUnconfirmed retains one process/Job episode
 and continues original-handle observation; no termination retry or second worker.
+If observation failed before any termination request, an explicit Terminate or
+irreversible root shutdown may issue one containment request to the same owned
+Job. ExitUnconfirmed remains published even if that call succeeds. Repeated
+observation of the original error does not consume its separate cleanup error
+slot; termination failure is recorded there. A graceful Stop alone does not
+escalate this state. An already proved exit or failed retirement never triggers
+another containment request.
 An unresolved handle-retirement failure keeps its remaining ledger and blocks
 replacement without blind repeated close. Operator/OS recovery can be required.
 
@@ -203,7 +220,7 @@ remains BLOCKED; no Preview quota or numeric policy is increased.
 ## Qualification and remaining stages
 
 The [native runner](../../scripts/test-windows-supervisor.ps1) compiles the fixture
-against the exact local capsule and real supervisor source, then runs six real
+against the exact local capsule and real supervisor source, then runs seven real
 process groups. Deterministic unit/barrier tests cover pending request priority,
 wait/delete uncertainty, startup errors, duplicate/wrong-incarnation progress,
 retirement publication, inert factory panic, root shutdown and independent parent
@@ -215,9 +232,9 @@ explicitly simulated and guarded by a real original-handle witness.
 Parent turn limits stay at 64 FIFO updates/rebuild steps and at most four distinct
 external callers per fair owner turn. The 100 ms idle check and measured small
 64-update fixture are scheduling observations, not a Windows latency guarantee.
-Supervisor observations add no work to ParentOwner::turn. The final suites contain
-523 tests: 502 enabled and 21 ignored; 13 existing virtual process fixtures and six
-new native process groups were run explicitly, with the two historical M17.4
+Supervisor observations add no work to ParentOwner::turn. The follow-up suites contain
+526 tests: 504 enabled and 22 ignored; 13 existing virtual process fixtures and seven
+native process groups are qualified explicitly, with the two historical M17.4
 fixtures left separately BLOCKED.
 
 ~~~powershell
@@ -231,17 +248,20 @@ cargo test -p lab-workbench --locked -- supervisor::tests parent::tests --test-t
 cargo clippy -p lab-workbench -p lab-windows-job --all-targets --all-features --locked -- -D warnings
 ~~~
 
-Exact tested source HEADs, inventory, native and regression results are in
-[evidence](windows-job-supervisor-evidence.txt) and [SHA256 inventory](windows-job-supervisor-sha256.txt).
-The final evidence commit changes no Rust/Cargo/probe inputs.
+Current tested source HEADs, inventory, raw native and regression results are in
+the [review follow-up](windows-job-supervisor-review-followup.md) and
+[SHA256 inventory](windows-job-supervisor-sha256.txt).
+The [original evidence](windows-job-supervisor-evidence.txt) remains historical.
 
 Existing virtual v1 native smoke was also repeated in both profiles using its
 automated Confirm workflow. Published JSON audits and inspected window captures
 are linked in the evidence. One optimized attempt passed the GUI workflow but
 failed the observer's exact two-session assertion: it observed a third complete
 hello-only session and three GUI EOFs, one mutation and no status/retry. The
-unchanged repeat passed. The extra connection's cause remains unqualified; neither
-production GUI nor that observer assertion was changed. Captures are GDI client
+unchanged repeat passed. That historical attempt lacks Runtime hello replies and
+remains UNQUALIFIED. The follow-up observer records bounded per-session hello
+replies and offers a controlled delayed-close experiment; the production GUI and
+strict two-session assertion remain unchanged. Captures are GDI client
 images, not GL readback or a mouse/keyboard Confirm test.
 
 M17.4 Recorder overlap remains the separately reproduced B3A baseline BLOCKED

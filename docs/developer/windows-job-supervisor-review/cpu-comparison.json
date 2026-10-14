@@ -1,0 +1,130 @@
+[
+  {
+    "profile": "dev",
+    "suite": "geometry",
+    "cases": 119,
+    "max_accounted": 4610337,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_GEOMETRY_DEV.csv",
+    "normalized_sha256": "f36719f34b32fdadd0d249ee5cb0fe550e4f00403c067ef0cf470883931a76bb"
+  },
+  {
+    "profile": "dev",
+    "suite": "memory",
+    "cases": 125,
+    "max_accounted": 4458653,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_MEMORY_DEV.csv",
+    "normalized_sha256": "cc4454e0b3d5bf5dc683f93f83709808f9dd440905b9ad4fe8544f2ce739a7bd"
+  },
+  {
+    "profile": "dev",
+    "suite": "frames",
+    "cases": 12,
+    "max_accounted": 4355499,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_FRAMES_DEV.csv",
+    "normalized_sha256": "89bca34975518a0943c6dcb5ec4e7fe2c851d8f20cbaa9a344f86fec501a994c"
+  },
+  {
+    "profile": "dev",
+    "suite": "host-no-upload",
+    "cases": 4,
+    "max_accounted": 4367945,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_NO_UPLOAD_DEV.csv",
+    "normalized_sha256": "68a32658a0148914b3ce15e16bc71ecce99903e5ea18de9f2de7f6fd0f29c694"
+  },
+  {
+    "profile": "dev",
+    "suite": "retirement",
+    "cases": 9,
+    "max_accounted": 4367945,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/TERMINAL_GPU_PENDING_DEV.csv",
+    "current_host_fixed_bytes": [
+      1664
+    ],
+    "historical_host_fixed_bytes": [
+      1664
+    ],
+    "pre_deletion_diagnostics_host_fixed_bytes": [
+      1496
+    ],
+    "normalized_sha256": "c6f1d0704a5951bfb95bb7d15c118c0a52ec559fe91605c07865179a01442242"
+  },
+  {
+    "profile": "dev",
+    "suite": "plot",
+    "comparison": "exact historical normalized text"
+  },
+  {
+    "profile": "dev",
+    "suite": "bounded",
+    "comparison": "exact historical normalized text"
+  },
+  {
+    "profile": "release",
+    "suite": "geometry",
+    "cases": 119,
+    "max_accounted": 4610337,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_GEOMETRY_RELEASE.csv",
+    "normalized_sha256": "f36719f34b32fdadd0d249ee5cb0fe550e4f00403c067ef0cf470883931a76bb"
+  },
+  {
+    "profile": "release",
+    "suite": "memory",
+    "cases": 125,
+    "max_accounted": 4458653,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_MEMORY_RELEASE.csv",
+    "normalized_sha256": "cc4454e0b3d5bf5dc683f93f83709808f9dd440905b9ad4fe8544f2ce739a7bd"
+  },
+  {
+    "profile": "release",
+    "suite": "frames",
+    "cases": 12,
+    "max_accounted": 4355499,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_FRAMES_RELEASE.csv",
+    "normalized_sha256": "89bca34975518a0943c6dcb5ec4e7fe2c851d8f20cbaa9a344f86fec501a994c"
+  },
+  {
+    "profile": "release",
+    "suite": "host-no-upload",
+    "cases": 4,
+    "max_accounted": 4367945,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_NO_UPLOAD_RELEASE.csv",
+    "normalized_sha256": "68a32658a0148914b3ce15e16bc71ecce99903e5ea18de9f2de7f6fd0f29c694"
+  },
+  {
+    "profile": "release",
+    "suite": "retirement",
+    "cases": 9,
+    "max_accounted": 4367945,
+    "comparison": "all columns exact except retirement wait_calls scheduling count",
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/TERMINAL_GPU_PENDING_RELEASE.csv",
+    "current_host_fixed_bytes": [
+      1664
+    ],
+    "historical_host_fixed_bytes": [
+      1664
+    ],
+    "pre_deletion_diagnostics_host_fixed_bytes": [
+      1496
+    ],
+    "normalized_sha256": "c6f1d0704a5951bfb95bb7d15c118c0a52ec559fe91605c07865179a01442242"
+  },
+  {
+    "profile": "release",
+    "suite": "plot",
+    "comparison": "exact historical normalized text"
+  },
+  {
+    "profile": "release",
+    "suite": "bounded",
+    "comparison": "exact historical normalized text"
+  }
+]

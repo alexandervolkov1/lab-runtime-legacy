@@ -1,0 +1,455 @@
+[
+  {
+    "name": "environment",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-Command",
+      "rustc -vV; cargo -V; python --version; Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,OSArchitecture; git rev-parse HEAD; git status --short"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.307,
+    "log_sha256": "cefbc2062a04140b68f53682fd3ed11b9a2a696b6a3016e5f46f9af525fffcfe"
+  },
+  {
+    "name": "observer-reset",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--self-test-reset"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.158,
+    "log_sha256": "67ed6caff9398d24f7cd23d02cceb885f8997956448bb1b4743d8017c0170885"
+  },
+  {
+    "name": "dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.296,
+    "log_sha256": "f591e097f22f91dd5c31fbbf7e587d80c0a4e0ed594f9c9012a544f38c52d926"
+  },
+  {
+    "name": "dev-native",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 20.467,
+    "log_sha256": "846b9c2b0cb510d110e47d51fb790667d519369d2b4e8c88d0a60cc1b610fc22"
+  },
+  {
+    "name": "dev-inventory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--list"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.32,
+    "log_sha256": "d3635f6fb11a01808bbd8b1aeb1b4a170a14b6dc97b7d010af218238e20237da"
+  },
+  {
+    "name": "dev-full",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 156.787,
+    "log_sha256": "34d89e30d2b96418ede0305097944525967867c554fd003efe5500d6888d2d32"
+  },
+  {
+    "name": "dev-targeted",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "parent::",
+      "supervisor::tests",
+      "architecture",
+      "ordinary_gui",
+      "gui::app::tests",
+      "--nocapture"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.488,
+    "log_sha256": "8d1b21c49c1fba2d3f033a24a285204ed7f30ed62b5b3c7cbfdc54d83bebdb15"
+  },
+  {
+    "name": "dev-virtual",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 7.111,
+    "log_sha256": "9f524031e3e77c13676ec9b2e7ae15338900692048f9a2d0442bec4274f79a8a"
+  },
+  {
+    "name": "dev-v1-native",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 2.744,
+    "log_sha256": "b7d09bf4aebb0757648fd4a9051de24d950707b2a25a8dcf9d8e6f5164912560"
+  },
+  {
+    "name": "dev-v1-held-close",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev",
+      "--hold-first-runtime-close"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 1,
+    "elapsed_seconds": 5.248,
+    "log_sha256": "31fe8bbcd60fdced1d87a3df25821eba1dd116315d3ca5df954b0b60a559101c"
+  },
+  {
+    "name": "dev-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 13.465,
+    "log_sha256": "cad11c934e448ee333a6b6d305d5b17f26134ff597e037b8d7e7ca9013c0a425"
+  },
+  {
+    "name": "dev-capsule",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.468,
+    "log_sha256": "0a7c65ab5020b6357e1d5b0aebe5d05b318a16aaadde6a79a871250c67b484c6"
+  },
+  {
+    "name": "dev-cpu-preview",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 1,
+    "elapsed_seconds": 42.45,
+    "log_sha256": "244f2467ffd6e4364d23f82c624e79aecd88c49b3187051aa417c74183bd8253"
+  },
+  {
+    "name": "release-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 40.866,
+    "log_sha256": "a7a86fa2e769eeae39c87d70babbb519c02efccaae922cd4615b03d435f02e1b"
+  },
+  {
+    "name": "release-native",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 45.004,
+    "log_sha256": "e1c384946edece5355732e5bfdb3947ce84bdaaa1e65cc5923768b59f9755a77"
+  },
+  {
+    "name": "release-inventory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--list"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.318,
+    "log_sha256": "ed12be35a31f5b9b078dec270d58a7d6cdf321fba002118ec0bf96fd6dd7b86d"
+  },
+  {
+    "name": "release-full",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 7.35,
+    "log_sha256": "185f8785c2dde90f056bf988aaf6a1277c7c04016a8b625c00102982f440c27a"
+  },
+  {
+    "name": "release-targeted",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "parent::",
+      "supervisor::tests",
+      "architecture",
+      "ordinary_gui",
+      "gui::app::tests",
+      "--nocapture"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.443,
+    "log_sha256": "ed6cc5f7d81dfe071ebce2905e25d40bb9a7c0ab4bab64cd87d25d8235ee331f"
+  },
+  {
+    "name": "release-virtual",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 6.77,
+    "log_sha256": "b29758012393f4fb633daa7a25049195b81c1a0e052b65c0fb897adb5a7fbd40"
+  },
+  {
+    "name": "release-v1-native",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 2.189,
+    "log_sha256": "52af2ab7299ee4bdba799982dace6074eb6e9e60b033ef74cdd0fb1434dc94c3"
+  },
+  {
+    "name": "release-v1-held-close",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release",
+      "--hold-first-runtime-close"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 1,
+    "elapsed_seconds": 5.0,
+    "log_sha256": "31fe8bbcd60fdced1d87a3df25821eba1dd116315d3ca5df954b0b60a559101c"
+  },
+  {
+    "name": "release-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 25.963,
+    "log_sha256": "32201ffac0c472e50d83e88f39406671c614223910b2be00b0c49992dd643300"
+  },
+  {
+    "name": "release-capsule",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "release"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.431,
+    "log_sha256": "1d34a1b620eb4cbe927144e6dc448d4eb0f8dc75a3e8174f29a78fae628b6636"
+  },
+  {
+    "name": "release-cpu-preview",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 1,
+    "elapsed_seconds": 37.743,
+    "log_sha256": "eedc04aa4756329c001753ece4383877105ecfc564fba89d5ecba6c322c3e69e"
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 1.123,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "source_head": "c72e4440d5258679a8313e9894211948294373f7",
+    "exit_code": 0,
+    "elapsed_seconds": 0.027,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

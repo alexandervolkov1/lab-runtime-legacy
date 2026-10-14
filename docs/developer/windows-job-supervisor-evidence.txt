@@ -1,3 +1,8 @@
+HISTORICAL PRE-REVIEW EVIDENCE. Independent review of 76471be blocked merge on
+launch-admission and first-containment defects. The original transcripts below
+do not qualify their fixes. Current results: windows-job-supervisor-review-followup.md
+and windows-job-supervisor-review/ (raw logs, audits and source inventories).
+
 DGUI-4C7B3B2 / Windows 10 Pro 10.0.19045 x64 / x86_64-pc-windows-msvc / 2026-10-14
 Rust 1.95.0 (59807616e 2026-04-14); locked dependency artifacts.
 B3B1 verified PR #37 HEAD 67211d1ae95e1b35f49c79c6c804ef57298fc0b0; base 14bbe58aa54ef6b2320a6d11ccfb98cf2ee67697.

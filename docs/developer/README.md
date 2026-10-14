@@ -22,6 +22,8 @@ from the [User manual](../README.md); ordinary users need no source checkout.
   existing host and GUI v2 remains inactive.
 - [Windows Job supervisor](windows-job-supervisor.md): DGUI-4C7B3B2 inactive
   production seam, original-process exit proof and no-GPU containment fixtures.
+  [Independent review follow-up](windows-job-supervisor-review-followup.md)
+  records launch admission and first-containment fixes and their qualification.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.

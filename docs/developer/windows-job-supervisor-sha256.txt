@@ -1,6 +1,12 @@
-DGUI-4C7B3B2 source/evidence SHA256; UTF-8 normalized to LF, no BOM; PNG raw bytes.
-Inventory excludes itself. One new local MIT path crate; no third-party dependency/toolchain changes.
-Tested source HEAD b4fd9bfce0fad166b720e9196363fa4f783b65e3; B3B1 merge 2aaf98fcd77a8b6bf73b2341d0b95298be401df6; final evidence commit is documentation/captures only.
+DGUI-4C7B3B2 independent review follow-up: source/evidence inventory
+Tested Rust/Cargo/probe source: c72e4440d5258679a8313e9894211948294373f7.
+Reviewed source: 76471bebdcb147148c34fcff23fbf2cba686f120.
+B3B1 baseline: 2aaf98fcd77a8b6bf73b2341d0b95298be401df6.
+Final report/evidence commit changes no Rust/Cargo/probe inputs; its HEAD is recorded in PR #38.
+Hashes below are exact Git blob bytes (text normalized to LF), excluding this self-referential inventory.
+318 source Git-blob AND tested Windows working-byte hashes: windows-job-supervisor-review/source-inputs.json.
+Raw logs/captures/probes retain their original bytes inside raw-evidence.zip; raw-manifest.json hashes every entry.
+Executed and preserved binary hashes remain separate from source identity; see binary-snapshots.json and per-run audits.
 
 f2a42194ac057cda54c9417b3e67b975782360f32e199886e4cb35402bed7870  AGENTS.md
 3595d8143457a39f5ca743f31f014b9315ebfb02d66effdf5376981853d83df6  Cargo.lock
@@ -21,28 +27,45 @@ a54409cc4e77c634b7bdde84efc39fb4005698704edba277238614218126715b  apps/lab-workb
 b366a68006ec205215324c24cb87c216ff5f3f30cedd42300be3bd4a9123cca7  apps/lab-workbench/src/parent.rs
 0c795f5e183cddeabe53d4aca5dbf9dde25160c5dd5d74aff13c998f320e735c  apps/lab-workbench/src/parent/tests.rs
 77e28897850eb99dbfcd622949836f7e7d5cf94c3a2f7c0abf8f51efc49c7436  apps/lab-workbench/src/presentation/v2/limits.rs
-598ea3da6f432bcd78b52908fdc0b0337072ff309dacea7ab49cad2ed509ef8e  apps/lab-workbench/src/supervisor/mod.rs
-d9abfb6d9ebddcd4be8c39efced080241ce6b6d65533851fca5989a0a7e21368  apps/lab-workbench/src/supervisor/native_tests.rs
-f95f0e7f3192ce1d659491f8f29b919ebceec82d06010842a0b95b541ebe3ecb  apps/lab-workbench/src/supervisor/tests.rs
+55c1645a4699982dfb5919857d882455a0ddbc962c4e8ee4897dc7f535b336a0  apps/lab-workbench/src/supervisor/mod.rs
+daa9059e37a06494d8dbbf51af886a66884393209a7d8300d8c68e4ecc096656  apps/lab-workbench/src/supervisor/native_tests.rs
+697fb06cb6d7d283467c952bcb98e22182d9f22379667b5bcd04fbac066c79a4  apps/lab-workbench/src/supervisor/tests.rs
 e13baa2286c51809aca0c34f6a39ded2bd7862ef41deea2233b3e9c97d93baa1  apps/lab-workbench/src/supervisor/windows.rs
 c4cd0e7b1693b0456be544c7f9318a91ad05dd34944f2ff3d9ce580d66de4ce9  crates/lab-windows-job/Cargo.toml
 89ba7cfce59d374e6e2c02c8c38e1648b022e0c62cf288beea5a90163b5551d9  crates/lab-windows-job/src/lib.rs
 e643c82dacc3f552bdefe7b95f5b769f34585fe03e7623764557b053f8261512  crates/lab-windows-job/src/windows.rs
-58fbeb93abaf8d94e241388bbbe447dd7bee1db135734fc87de72ff3e14ab74f  docs/developer/README.md
+dfbc19975c5ef27c25cee60a3c65f77d7bec8b040ed2fe755fb1b5a0b25ea32b  docs/developer/README.md
 8663eb34765d9e9e4e2ddf280b6e5234f5dd52febe5594723a1f1e91a7d3f525  docs/developer/independent-parent-pump-evidence.txt
 94b3b7ac572ddd6a105371e2e7de1f5198566ed30b8afe98383c3ff16f5dc568  docs/developer/independent-parent-pump.md
 70aeac054f855f080bcaadd484092c8d826ac197acff1966fcd3ecbac17be5d2  docs/developer/native-gui-host-adr.md
 ffc0e28021ac72de922c6b6fd8f23e8fc853d9816b50eee491d548465972e490  docs/developer/native-gui-host-contract.md
 4bd2b34dc276f9c189a70e8872ff3788d41f84c7e3e7f9cdc1f9e8e258219306  docs/developer/native-gui-host-probe.txt
-369b597996e34ee88c5edf252c38e9fe45b7857d1013e628b71ff2a18d5bdfad  docs/developer/windows-job-supervisor-evidence.txt
+59977854118739d937cdee07ca7efb03c45aa0f0f3aafa5ae6e3a80b531cc7d6  docs/developer/windows-job-supervisor-evidence.txt
+f18bc7e4d9348b08736fe6af033f7bfa77ad4d25482d103a1e159db7192075b9  docs/developer/windows-job-supervisor-review-followup.md
+7e505c409ffa48a708ed1d233b6f564db1da0cfc06a9520800b0edf4b439b0be  docs/developer/windows-job-supervisor-review/baseline-gates.json
+f5469ee43eb533c091f72db44fef9db083bd3b65a85b71bb938969dfa46dcc7a  docs/developer/windows-job-supervisor-review/binary-snapshots.json
+76b80bc03bbdaf650902377cca9f8d343dc500f76714e4d7a39d4840a8bdb772  docs/developer/windows-job-supervisor-review/cpu-comparison.json
+4f5d015dc0d2b46b6dbb30a6351cd93643b0c6cab745757d04f80bb4c885360d  docs/developer/windows-job-supervisor-review/cpu-gates.json
+561481588c127e31f4ec74767c4f9498484393cc8985353dd405c69ef8bfd517  docs/developer/windows-job-supervisor-review/final-checks.json
+d178218fec68b7d973b59688c17b3134ff95d9282c31cf3d7c6b5c9bbcd5fdc7  docs/developer/windows-job-supervisor-review/hello-session-summary.json
+7a31f2c8ad9c0c7edafbf575d5b2010476196d753954c442c373a090738698e1  docs/developer/windows-job-supervisor-review/qualification-gates.json
+41e9ae2f30955e1420d36aacf6d7e9346c6517062ccff8b3dc4c7e0950e41d86  docs/developer/windows-job-supervisor-review/raw-evidence.zip
+579ccfd970851fc3b127ca5b8fbc7760acc066d95f549f033c7fd526eec49716  docs/developer/windows-job-supervisor-review/raw-manifest.json
+0ababe93b042a85b55cdf3ba689220ad10ce0e62d2616155e18b16d321dfed9f  docs/developer/windows-job-supervisor-review/snapshot-smoke-gates.json
+f0996549d592a980e1638e51a213bd7f4a86925fd52b3bcbae0ccafc1f8d7d21  docs/developer/windows-job-supervisor-review/source-inputs.json
+dbf27ca9fbbb41e741929af6baa462c7ff945298111f3abe93a562e3ea36e8e7  docs/developer/windows-job-supervisor-review/test-inventory.txt
+8b8b67ca5322461c06fb4a83eb256a478d97df81ed5cb86cace900d3228debae  docs/developer/windows-job-supervisor-review/v1-dev.json
+37042e8be1f5a5982c45ccc4bc1f9619ab193fa005020592ad4d53338c5edfc6  docs/developer/windows-job-supervisor-review/v1-dev.png
+b512fa5a4b174ed046f6b6344bab38b314e70e0a0f9e447d3b1d63b78f704647  docs/developer/windows-job-supervisor-review/v1-release.json
+88e71144e97b3204880a857d59358b841c99b8cd347e9eb9f0931a99b6597b59  docs/developer/windows-job-supervisor-review/v1-release.png
 196462fb0d65cdd011d1cd8c75e818abe4ef3503f4247bae4aed4a79b658f152  docs/developer/windows-job-supervisor-v1-dev.json
 af7cc3fa01997f1058e8e9e08bec6caf04962b80f58128c62cc3d093c7137029  docs/developer/windows-job-supervisor-v1-dev.png
 2d995a4c3d349266a79fceb50821bce26dd3b60fe83568890447f7ed7d66c6d6  docs/developer/windows-job-supervisor-v1-release-observer-limitation.json
 e03fee21e1ee2c500740837f132611c6e512c5ac46807948736d5d970746f3cf  docs/developer/windows-job-supervisor-v1-release.json
 f84434a4ddb9abb9e2fe87f3ff0856e9a8499b410aa9691809deaf4b54af9c5e  docs/developer/windows-job-supervisor-v1-release.png
-a95addc3eec3125ae018dcb5b53d6b64fb1ec565237e670cbfe5df2d9b3ba1c7  docs/developer/windows-job-supervisor.md
+a3b3e3072618c7517c7ee1dd473dadf48e0c1ed2d44408e2aa85bb86632d6058  docs/developer/windows-job-supervisor.md
 07eac3c341bea0ab5cba450ce75b675be825961e29fc3ede7691495769dae27a  docs/developer/windows-supervisor-license-safety.md
-20447bdf22539059c0daab5a0dd2a410b6c44f151fbc0fde0703a8d19f4352ad  scripts/support/v1-parent-pump-smoke.py
+6decb96de26951c22ca2d55464a5236de307b26c3cbd76524c33606d7aac7d3c  scripts/support/v1-parent-pump-smoke.py
 d8699379b40e1abe5b3b32e45326cba131cb7a97ef783e91d8833590f630c8d4  scripts/support/v2-renderer-allocation-probe.rs
 cef9aaba34f81b1dfb73ac886b0e0d2db6eca380aac7418f9967cf6f47e9c478  scripts/support/windows-supervisor-fixture.rs
 02b0dbe8d5b6c30bea97dc5abb0bbda664b2630a188f85fac4decd62503506a7  scripts/test-v2-renderer-allocation.ps1
