@@ -1,0 +1,227 @@
+{
+  "qualification": "observer exact-two-session assertion FAILED; GUI workflow passed; extra connection cause unqualified",
+  "source_head": "b4fd9bfce0fad166b720e9196363fa4f783b65e3",
+  "raw_directory": "target\\b3b1-followup-native-release-1791988305176281700",
+  "observer": {
+    "error": null,
+    "connections": 3,
+    "client_transport_closures": [
+      "gui_eof",
+      "gui_eof",
+      "gui_eof"
+    ],
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "cec116632d59e290d213c1f99a8ffa8a",
+            "seq": "16"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 2.0,
+          "reference": "1",
+          "target": 50.25
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "cec116632d59e290d213c1f99a8ffa8a:1",
+          "seq": "1"
+        },
+        "v": 1
+      },
+      {
+        "args": {
+          "scope": "cec116632d59e290d213c1f99a8ffa8a:1"
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {
+          "scope": "cec116632d59e290d213c1f99a8ffa8a:1"
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "cec116632d59e290d213c1f99a8ffa8a",
+            "seq": "30"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ]
+  },
+  "native_smoke": {
+    "authoritative_refresh_observed": true,
+    "boot_id": "cec116632d59e290d213c1f99a8ffa8a",
+    "confirmation_observed": true,
+    "connection": "Ready",
+    "controller": {
+      "controller": "1",
+      "revision": "1",
+      "state": "ready"
+    },
+    "controls_reenabled_after_fresh": true,
+    "desired_reference_target": 50.25,
+    "entities": 11,
+    "final_reference_revision": "2",
+    "final_reference_target": 50.25,
+    "freshness": "Fresh",
+    "live_signal_points": 2,
+    "minimize_restore_observed": true,
+    "mutation_accepted_observed": true,
+    "mutation_completed_observed": true,
+    "original_reference_revision": "1",
+    "presentation_plots": 1,
+    "reason": "pass",
+    "recorder": {
+      "active_run": null,
+      "run_id": null,
+      "state": "idle"
+    },
+    "renderer": "glow",
+    "scope": "cec116632d59e290d213c1f99a8ffa8a:1",
+    "stale_controls_disabled": true,
+    "status": "pass"
+  },
+  "observer_raw_sha256": "5c931a08db033bb05b7bcfab79e30e03fee47c335667e26fa5e296c1170cdc84",
+  "smoke_raw_sha256": "4e02f76817c8c1d6c67592d31ff0398ee774183ec3ef2ebbbfae60adfe43ab03",
+  "transcript": "Traceback (most recent call last):\n  File \"D:\\rust_projects\\lab-runtime\\scripts\\support\\v1-parent-pump-smoke.py\", line 363, in <module>\n    main()\n    ~~~~^^\n  File \"D:\\rust_projects\\lab-runtime\\scripts\\support\\v1-parent-pump-smoke.py\", line 317, in main\n    assert proxy.session_ends.wait_for(lambda: len(proxy.closures) == 2, timeout=3), \"GUI transport-close deadline\"\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: GUI transport-close deadline\n"
+}
