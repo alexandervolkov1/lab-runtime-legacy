@@ -397,7 +397,9 @@ fn native_parent_shutdown_with_pending_gpu_and_original_ipc() {
     wait(|| h.pump.supervisor().unwrap().worker_finished());
     h.pump.shutdown().unwrap();
     h.retired();
-    fs::write(directory.join("parent-shutdown-result.json"),serde_json::to_vec_pretty(&json!({"initial_shutdown":format!("{first:?}"),"original_exit_before_ipc_retirement":format!("{pending:?}"),"original_receipts_later_retired":true,"runtime_stopped_once":true,"extra_submissions":0,"gpu_cleanup":"BLOCKED/OS containment","peak_process_commit":pending.reading.peak_process_commit,"peak_job_commit":pending.reading.peak_job_commit})).unwrap()).unwrap();
+    let retired = h.pump.supervisor().unwrap().status().unwrap();
+    assert!(retired.reading.peak_process_commit > 0 && retired.reading.peak_job_commit > 0);
+    fs::write(directory.join("parent-shutdown-result.json"),serde_json::to_vec_pretty(&json!({"initial_shutdown":format!("{first:?}"),"original_exit_before_ipc_retirement":format!("{pending:?}"),"original_receipts_later_retired":true,"runtime_stopped_once":true,"extra_submissions":0,"gpu_cleanup":"BLOCKED/OS containment","peak_process_commit":retired.reading.peak_process_commit,"peak_job_commit":retired.reading.peak_job_commit,"reading_obtained_after_original_job_retirement":true})).unwrap()).unwrap();
 }
 
 #[test]
