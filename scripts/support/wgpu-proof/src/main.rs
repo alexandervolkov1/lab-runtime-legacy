@@ -45,6 +45,11 @@ fn contained_failure(dir: &std::path::Path, error: impl std::fmt::Display) -> ! 
         &dir.join("failure.json"),
         &serde_json::json!({"error": error.to_string(), "root_retained": true}),
     );
+    wait_for_containment()
+}
+
+#[cfg(windows)]
+fn wait_for_containment() -> ! {
     loop {
         std::thread::park_timeout(std::time::Duration::from_millis(100));
     }
@@ -73,7 +78,14 @@ fn main() {
             if case == "glow" {
                 glow_proof::run(dir);
             } else if let Err(error) = gpu::run(case, dir) {
-                contained_failure(dir, error);
+                // Root::new has not published a GPU root or issued queue writes.
+                // Initialization references may have dropped: do not describe
+                // this as retention or as native memory cleanup.
+                write(
+                    &dir.join("failure.json"),
+                    &serde_json::json!({"error":error,"stage":"initialization before published root","root_retained":false,"native_memory_cleanup":false}),
+                );
+                wait_for_containment();
             }
         }
         _ => panic!("test-only usage: --controller ABSOLUTE_EVIDENCE_DIRECTORY"),

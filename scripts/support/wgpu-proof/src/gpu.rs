@@ -347,6 +347,28 @@ impl Root {
                 let mut bounds = Bounds::default();
                 for index in 0..fixtures::FRAMES {
                     let mut frame = fixture.frame(index);
+                    if index == 7 {
+                        let before = bounds.textures.clone();
+                        let id = egui::TextureId::Managed(1);
+                        let update = frame
+                            .output
+                            .textures_delta
+                            .set
+                            .get_mut(&id)
+                            .ok_or("fixture partial ID")?
+                            .first_mut()
+                            .ok_or("fixture partial update")?;
+                        let position = update.pos.replace([63, 63]);
+                        let refused = bounds.validate(&frame).is_err();
+                        if !refused || bounds.textures != before {
+                            contained_failure(
+                                dir,
+                                "partial gate must reject atomically before any GPU write",
+                            );
+                        }
+                        frame.output.textures_delta.set.get_mut(&id).unwrap()[0].pos = position;
+                        frame.receipt["invalid_partial_rejected_before_gpu"] = json!(true);
+                    }
                     bounds.validate(&frame)?;
                     if let Err(error) = self.frame(dir, generation, &frame) {
                         write(
