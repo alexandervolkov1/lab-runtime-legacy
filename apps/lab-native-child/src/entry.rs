@@ -674,14 +674,21 @@ pub(super) fn run() -> Result<()> {
         b"{\"stage\":\"startup\",\"deployment_C\":null}",
     )
     .map_err(|e| e.to_string())?;
-    let mut events = EventLoop::new().map_err(|e| {
-        let error = e.to_string();
-        let _ = fs::write(
-            directory.join("startup-error.json"),
-            serde_json::to_vec(&json!({"stage":"event_loop","error":error})).unwrap(),
-        );
-        error
-    })?;
+    // Exact existing B2B2 qualification profile: the compositor may scale the
+    // window, but Preview, GL drawable and readback stay 1280x960 at scale one.
+    // This is process-local, not a change to the desktop's DPI configuration.
+    use winit::platform::windows::EventLoopBuilderExtWindows;
+    let mut events = EventLoop::builder()
+        .with_dpi_aware(false)
+        .build()
+        .map_err(|e| {
+            let error = e.to_string();
+            let _ = fs::write(
+                directory.join("startup-error.json"),
+                serde_json::to_vec(&json!({"stage":"event_loop","error":error})).unwrap(),
+            );
+            error
+        })?;
     let mut boot = Bootstrap::default();
     while boot.device.is_none() && boot.error.is_none() {
         events.pump_app_events(Some(Duration::from_millis(1)), &mut boot);
