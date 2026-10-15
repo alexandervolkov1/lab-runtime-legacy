@@ -175,9 +175,41 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
             "NATIVE_STARTUP_BLOCKED evidence={} error={error} profile={profile} status={startup:?}",
             directory.display()
         );
+        request(
+            &mut stream,
+            "blocked-presentation",
+            "presentation_get",
+            json!({}),
+        );
+        let current = response(&mut stream, "blocked-presentation");
+        assert_eq!(current["result"]["workbench_id"], identity);
+        assert_eq!(current["result"]["presentation_revision"], "2");
+        request(&mut stream, "blocked-status", "client_status", json!({}));
+        assert!(
+            response(&mut stream, "blocked-status")
+                .get("result")
+                .is_some()
+        );
+        assert!(rx.try_recv().is_err());
+        assert_eq!(stops.load(Ordering::SeqCst), 0);
+        let retired = bridge.status().unwrap();
+        assert!(retired.retired);
+        assert_eq!(retired.pending_io, 0);
+        assert_eq!(retired.handles, 0);
+        assert_eq!(retired.credits.iter().sum::<usize>(), 4);
+        fs::write(directory.join("parent-startup-blocked.json"),serde_json::to_vec_pretty(&json!({
+            "first_isolated_real_gl_frame":"BLOCKED/no frame", "error":error,"profile":serde_json::from_str::<Value>(&profile).unwrap(),
+            "parent_api_available":true,"workbench_id":identity,"presentation_revision":"2","extra_runtime_submissions":0,
+            "original_process_exit_confirmed":startup.alive==Some(false),"exit_code":startup.exit_code,
+            "original_ipc_retired":retired.retired,"ipc_handles":retired.handles,"pending_io":retired.pending_io,"encoded_slots":4,
+            "test_only_job_commit_cap":TEST_ONLY_COMMIT_CAP,"deployment_C":null,
+            "startup_peak_process_commit":startup.reading.peak_process_commit,"startup_peak_job_commit":startup.reading.peak_job_commit,
+            "renderer_healthy_lifecycle":"UNQUALIFIED/not reached"
+        })).unwrap()).unwrap();
         // Do not panic while holding the supervisor's status mutex. Preserve its
         // original process/IPC retirement and observe the parent worker join.
         pump.shutdown().unwrap();
+        assert_eq!(stops.load(Ordering::SeqCst), 1);
         panic!("native startup did not reach Ready: {error}");
     }
     let (empty_path, empty) = find_frame(&directory, |v| {
