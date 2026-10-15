@@ -1,0 +1,1026 @@
+[
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec857c261504d-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "PASS/actual later fence proof",
+        "old_exit_code": 0,
+        "old_peak_job_commit": 153022464,
+        "old_peak_process_commit": 146477056,
+        "old_phase": "ExitedHealthy"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152121344,
+      "restart_peak_process_commit": 145547264,
+      "scenario": "gpu-timeout-proof",
+      "workbench_id": "0000000000002d0418dec857c261504d"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85822994aa2-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151646208,
+        "old_peak_process_commit": 145076224,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152104960,
+      "restart_peak_process_commit": 145526784,
+      "scenario": "gpu-wait-failed",
+      "workbench_id": "0000000000002d0418dec85822994aa2"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec858f0a03623-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152064000,
+        "old_peak_process_commit": 145494016,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151871488,
+      "restart_peak_process_commit": 145309696,
+      "scenario": "gpu-device-loss",
+      "workbench_id": "0000000000002d0418dec858f0a03623"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec859c7d58cac-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152096768,
+        "old_peak_process_commit": 145522688,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 150810624,
+      "restart_peak_process_commit": 144244736,
+      "scenario": "gpu-native-teardown",
+      "workbench_id": "0000000000002d0418dec859c7d58cac"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85a7ddb9071-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 138760192,
+        "old_peak_process_commit": 132194304,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152682496,
+      "restart_peak_process_commit": 146108416,
+      "scenario": "gpu-original-error",
+      "workbench_id": "0000000000002d0418dec85a7ddb9071"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85b3b435c3a-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151588864,
+        "old_peak_process_commit": 145014784,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151224320,
+      "restart_peak_process_commit": 144654336,
+      "scenario": "gpu-texture-before",
+      "workbench_id": "0000000000002d0418dec85b3b435c3a"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85c0a3dba63-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152961024,
+        "old_peak_process_commit": 146391040,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151240704,
+      "restart_peak_process_commit": 144674816,
+      "scenario": "gpu-texture-after",
+      "workbench_id": "0000000000002d0418dec85c0a3dba63"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85ce090e804-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152666112,
+        "old_peak_process_commit": 146108416,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152219648,
+      "restart_peak_process_commit": 145653760,
+      "scenario": "gpu-buffer-before",
+      "workbench_id": "0000000000002d0418dec85ce090e804"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85daf812419-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152862720,
+        "old_peak_process_commit": 146313216,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152653824,
+      "restart_peak_process_commit": 146092032,
+      "scenario": "gpu-buffer-after",
+      "workbench_id": "0000000000002d0418dec85daf812419"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85e7f691556-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152129536,
+        "old_peak_process_commit": 145567744,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152199168,
+      "restart_peak_process_commit": 145666048,
+      "scenario": "gpu-shader-before",
+      "workbench_id": "0000000000002d0418dec85e7f691556"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85f4e5b2553-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151142400,
+        "old_peak_process_commit": 144576512,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152756224,
+      "restart_peak_process_commit": 146190336,
+      "scenario": "gpu-shader-after",
+      "workbench_id": "0000000000002d0418dec85f4e5b2553"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8601e473930-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 150159360,
+        "old_peak_process_commit": 143589376,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152416256,
+      "restart_peak_process_commit": 145850368,
+      "scenario": "gpu-program-before",
+      "workbench_id": "0000000000002d0418dec8601e473930"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec860ec4fd2dd-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 150867968,
+        "old_peak_process_commit": 144297984,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152268800,
+      "restart_peak_process_commit": 145702912,
+      "scenario": "gpu-program-after",
+      "workbench_id": "0000000000002d0418dec860ec4fd2dd"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec861bb43c4da-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151556096,
+        "old_peak_process_commit": 144986112,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151654400,
+      "restart_peak_process_commit": 145121280,
+      "scenario": "gpu-vao-before",
+      "workbench_id": "0000000000002d0418dec861bb43c4da"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8628b2b2143-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152690688,
+        "old_peak_process_commit": 146120704,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151277568,
+      "restart_peak_process_commit": 144707584,
+      "scenario": "gpu-vao-after",
+      "workbench_id": "0000000000002d0418dec8628b2b2143"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec86359340828-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152338432,
+        "old_peak_process_commit": 145756160,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152244224,
+      "restart_peak_process_commit": 145678336,
+      "scenario": "gpu-fence-before",
+      "workbench_id": "0000000000002d0418dec86359340828"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8642aed1911-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 150990848,
+        "old_peak_process_commit": 144429056,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152166400,
+      "restart_peak_process_commit": 145596416,
+      "scenario": "gpu-fence-after",
+      "workbench_id": "0000000000002d0418dec8642aed1911"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-frames",
+    "path": "target/debug/target/isolated-native-renderer/17116-00000000000042dc18dec854cefd3abd-1/parent-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "final_phase": "ExitedHealthy",
+      "first_isolated_real_gl_frame": "PASS",
+      "original_ipc_retired": true,
+      "own_objects": 0,
+      "peak_job_commit": 159801344,
+      "peak_process_commit": 153235456,
+      "presentation_revision": "3",
+      "runtime_extra_query_mutation_status_retry": 0,
+      "test_only_job_commit_cap": 536870912,
+      "workbench_id": "00000000000042dc18dec854cefd3abd"
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-pending",
+    "path": "target/debug/target/isolated-native-renderer/6584-00000000000019b818dec855f43e4271-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "bounded_complete_assembly_survived_transfer_deadline": true,
+        "max_live_parsed": 1,
+        "old_applied_unchanged": 3,
+        "old_gpu_cleanup": "BLOCKED/pending until OS containment",
+        "old_peak_job_commit": 150294528,
+        "old_peak_process_commit": 143724544,
+        "pending": {
+          "assembly_retained": true,
+          "candidate": "None",
+          "cleanup": "Pending(RetirementStatus { generation: ContextGeneration(2), reason: FrameFailed, frame: Some(Failed(Completion)), initial_wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 94.4\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 35.5\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, deletion: None })",
+          "ledger": "[Some(ObjectIdentity { generation: ContextGeneration(2), kind: Texture, name: 1, texture: Some(TextureKey { generation: ContextGeneration(2), id: Managed(0) }) }), None, None, None, None, None, None, None, Some(ObjectIdentity { generation: ContextGeneration(2), kind: VertexArray, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Program, name: 3, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Fence, name: 1, texture: None })]",
+          "max_live_parsed": 1,
+          "old_document_snapshot": 3
+        }
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151511040,
+      "restart_peak_process_commit": 144932864,
+      "scenario": "pending-gpu-document-handoff-stop",
+      "workbench_id": "00000000000019b818dec855f43e4271"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87ced7b3445-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "PASS/actual later fence proof",
+        "old_exit_code": 0,
+        "old_peak_job_commit": 151904256,
+        "old_peak_process_commit": 145334272,
+        "old_phase": "ExitedHealthy"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151965696,
+      "restart_peak_process_commit": 145391616,
+      "scenario": "gpu-timeout-proof",
+      "workbench_id": "0000000000000c7018dec87ced7b3445"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87d3caecf5a-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151552000,
+        "old_peak_process_commit": 144982016,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151191552,
+      "restart_peak_process_commit": 144650240,
+      "scenario": "gpu-wait-failed",
+      "workbench_id": "0000000000000c7018dec87d3caecf5a"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87df83e5c9b-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151654400,
+        "old_peak_process_commit": 145092608,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151756800,
+      "restart_peak_process_commit": 145219584,
+      "scenario": "gpu-device-loss",
+      "workbench_id": "0000000000000c7018dec87df83e5c9b"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87eb2dd3d5c-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151298048,
+        "old_peak_process_commit": 144723968,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151040000,
+      "restart_peak_process_commit": 144478208,
+      "scenario": "gpu-native-teardown",
+      "workbench_id": "0000000000000c7018dec87eb2dd3d5c"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87f67032489-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 139059200,
+        "old_peak_process_commit": 132489216,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151044096,
+      "restart_peak_process_commit": 144482304,
+      "scenario": "gpu-original-error",
+      "workbench_id": "0000000000000c7018dec87f67032489"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88021a34e9e-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151494656,
+        "old_peak_process_commit": 144920576,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151715840,
+      "restart_peak_process_commit": 145174528,
+      "scenario": "gpu-texture-before",
+      "workbench_id": "0000000000000c7018dec88021a34e9e"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec880dd30c513-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151035904,
+        "old_peak_process_commit": 144470016,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151523328,
+      "restart_peak_process_commit": 144949248,
+      "scenario": "gpu-texture-after",
+      "workbench_id": "0000000000000c7018dec880dd30c513"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec881a4bdf2f8-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152735744,
+        "old_peak_process_commit": 146198528,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151609344,
+      "restart_peak_process_commit": 145039360,
+      "scenario": "gpu-buffer-before",
+      "workbench_id": "0000000000000c7018dec881a4bdf2f8"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8826ff8e621-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 149942272,
+        "old_peak_process_commit": 143372288,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151814144,
+      "restart_peak_process_commit": 145244160,
+      "scenario": "gpu-buffer-after",
+      "workbench_id": "0000000000000c7018dec8826ff8e621"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88338770156-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 149843968,
+        "old_peak_process_commit": 143269888,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151752704,
+      "restart_peak_process_commit": 145178624,
+      "scenario": "gpu-shader-before",
+      "workbench_id": "0000000000000c7018dec88338770156"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec883f229c21b-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151166976,
+        "old_peak_process_commit": 144588800,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 152846336,
+      "restart_peak_process_commit": 146276352,
+      "scenario": "gpu-shader-after",
+      "workbench_id": "0000000000000c7018dec883f229c21b"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec884bb8ed170-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 149774336,
+        "old_peak_process_commit": 143204352,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 150876160,
+      "restart_peak_process_commit": 144306176,
+      "scenario": "gpu-program-before",
+      "workbench_id": "0000000000000c7018dec884bb8ed170"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88585e36de5-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151420928,
+        "old_peak_process_commit": 144850944,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 150908928,
+      "restart_peak_process_commit": 144330752,
+      "scenario": "gpu-program-after",
+      "workbench_id": "0000000000000c7018dec88585e36de5"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8865124003e-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152162304,
+        "old_peak_process_commit": 145584128,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 150872064,
+      "restart_peak_process_commit": 144306176,
+      "scenario": "gpu-vao-before",
+      "workbench_id": "0000000000000c7018dec8865124003e"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8870cae959f-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 151613440,
+        "old_peak_process_commit": 145072128,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151339008,
+      "restart_peak_process_commit": 144760832,
+      "scenario": "gpu-vao-after",
+      "workbench_id": "0000000000000c7018dec8870cae959f"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec887d7029cd4-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152084480,
+        "old_peak_process_commit": 145514496,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151138304,
+      "restart_peak_process_commit": 144568320,
+      "scenario": "gpu-fence-before",
+      "workbench_id": "0000000000000c7018dec887d7029cd4"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88891a375c1-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "artificial": true,
+        "gpu_cleanup": "BLOCKED/original root retained until OS containment",
+        "old_exit_code": 77,
+        "old_peak_job_commit": 152674304,
+        "old_peak_process_commit": 146112512,
+        "old_phase": "ExitedContained"
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151674880,
+      "restart_peak_process_commit": 145100800,
+      "scenario": "gpu-fence-after",
+      "workbench_id": "0000000000000c7018dec88891a375c1"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-frames",
+    "path": "target/release/target/isolated-native-renderer/16116-0000000000003ef418dec879e621f9b1-1/parent-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "final_phase": "ExitedHealthy",
+      "first_isolated_real_gl_frame": "PASS",
+      "original_ipc_retired": true,
+      "own_objects": 0,
+      "peak_job_commit": 158720000,
+      "peak_process_commit": 152145920,
+      "presentation_revision": "3",
+      "runtime_extra_query_mutation_status_retry": 0,
+      "test_only_job_commit_cap": 536870912,
+      "workbench_id": "0000000000003ef418dec879e621f9b1"
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-pending",
+    "path": "target/release/target/isolated-native-renderer/7752-0000000000001e4818dec87b2339dfc5-1/parent-fault-result.json",
+    "receipt": {
+      "deployment_C": null,
+      "details": {
+        "bounded_complete_assembly_survived_transfer_deadline": true,
+        "max_live_parsed": 1,
+        "old_applied_unchanged": 3,
+        "old_gpu_cleanup": "BLOCKED/pending until OS containment",
+        "old_peak_job_commit": 151470080,
+        "old_peak_process_commit": 144908288,
+        "pending": {
+          "assembly_retained": true,
+          "candidate": "None",
+          "cleanup": "Pending(RetirementStatus { generation: ContextGeneration(2), reason: FrameFailed, frame: Some(Failed(Completion)), initial_wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 127.6\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 164.8\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, deletion: None })",
+          "ledger": "[Some(ObjectIdentity { generation: ContextGeneration(2), kind: Texture, name: 1, texture: Some(TextureKey { generation: ContextGeneration(2), id: Managed(0) }) }), None, None, None, None, None, None, None, Some(ObjectIdentity { generation: ContextGeneration(2), kind: VertexArray, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Program, name: 3, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Fence, name: 1, texture: None })]",
+          "max_live_parsed": 1,
+          "old_document_snapshot": 3
+        }
+      },
+      "explicit_restart_latest_snapshots": true,
+      "extra_runtime_query_mutation_status_retry": 0,
+      "final_incarnation": 2,
+      "final_phase": "ExitedHealthy",
+      "original_process_exit_and_ipc_retirement": true,
+      "os_containment_is_not_gpu_cleanup": true,
+      "presentation_revision": "3",
+      "restart_peak_job_commit": 151261184,
+      "restart_peak_process_commit": 144687104,
+      "scenario": "pending-gpu-document-handoff-stop",
+      "workbench_id": "0000000000001e4818dec87b2339dfc5"
+    }
+  }
+]

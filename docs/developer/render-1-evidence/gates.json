@@ -1,0 +1,351 @@
+[
+  {
+    "name": "dev-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-native-child",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:45:57.239184+00:00",
+    "elapsed_seconds": 5.545,
+    "exit_code": 0,
+    "log_sha256": "59dd10d575f7648ba5ab5d5772a9b8969495a393ffd5ee51f04cf52ee6a31adc",
+    "executed_test_binaries": [],
+    "experiment_directories": [],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-glow-faults",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_isolated_gpu_fault_matrix"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:46:18.698256+00:00",
+    "elapsed_seconds": 59.614,
+    "exit_code": 0,
+    "log_sha256": "25d212eeeef4a98734847ce30b6f5e61e99cd7474962bae56fe83c55e8111660",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T1846189865934"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 56.80s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-glow-frames",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_first_isolated_renderer_frames_from_parent_approved_snapshots"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:46:02.785334+00:00",
+    "elapsed_seconds": 8.112,
+    "exit_code": 0,
+    "log_sha256": "dc1ec72980cab0fddb1ff24d9f6cf8ae2c8498f72e6d1321f5e11ccd312b6226",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T1846031120755"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 2.22s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-glow-pending",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_renderer_pending_completion_handoff_stop_retains_original_root"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:46:10.898539+00:00",
+    "elapsed_seconds": 7.799,
+    "exit_code": 0,
+    "log_sha256": "bd6bf3c34c4c60d99f155fc9ab76a826791cf801056945bc2351149109e7c5f5",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T1846112035226"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 5.31s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-workbench",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--test-threads=1"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:41:08.015682+00:00",
+    "elapsed_seconds": 289.222,
+    "exit_code": 0,
+    "log_sha256": "8e56466eccfdcff9f5dcde4f6d914e6c3bff94e2e24278ee09d87d532410a40e",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+      }
+    ],
+    "experiment_directories": [],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 537 passed; 0 failed; 58 ignored; 0 measured; 0 filtered out; finished in 269.01s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:41:06.251636+00:00",
+    "elapsed_seconds": 1.743,
+    "exit_code": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "executed_test_binaries": [],
+    "experiment_directories": [],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-native-child",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:48:25.477009+00:00",
+    "elapsed_seconds": 10.113,
+    "exit_code": 0,
+    "log_sha256": "58172e8cefc46010ef13b2ddd0ed9c883447aa35231b27c38f36a7b3b4aab816",
+    "executed_test_binaries": [],
+    "experiment_directories": [],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-glow-faults",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_isolated_gpu_fault_matrix"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:48:58.250215+00:00",
+    "elapsed_seconds": 56.042,
+    "exit_code": 0,
+    "log_sha256": "e75ddf8116bd092a48b48aed371d9643ecfb65b502146f962607db199532d191",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T1848585695196"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 53.15s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-glow-frames",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_first_isolated_renderer_frames_from_parent_approved_snapshots"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:48:35.590928+00:00",
+    "elapsed_seconds": 14.945,
+    "exit_code": 0,
+    "log_sha256": "9c9222062849bf5cbc7bcfaa08298ab78899b1894d4a6fba520caa334a546c25",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T1848358889346"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 1.95s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-glow-pending",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_renderer_pending_completion_handoff_stop_retains_original_root"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:48:50.537012+00:00",
+    "elapsed_seconds": 7.712,
+    "exit_code": 0,
+    "log_sha256": "a60104dc90b11c72371ef9e6e5006ab83ae65540dd6e352faf3d1cd7439d5802",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T1848508532722"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 5.17s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-workbench",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--test-threads=1"
+    ],
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "started_utc": "2026-10-15T18:47:18.313416+00:00",
+    "elapsed_seconds": 67.162,
+    "exit_code": 0,
+    "log_sha256": "d028a14be0fe324fd7c1f9b2ffa9c57dad96c6891372b6ced98cba2c9982d713",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+      }
+    ],
+    "experiment_directories": [],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 537 passed; 0 failed; 58 ignored; 0 measured; 0 filtered out; finished in 25.41s"
+    ],
+    "verdict": "PASS"
+  }
+]

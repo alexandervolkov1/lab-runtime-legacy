@@ -1,0 +1,56 @@
+[
+  {
+    "gate": "dev-glow-faults",
+    "sha256": "FE4709968EE5D75F0EFDC79BC72E353B2973A174174897E0E1A0A75413145797",
+    "deployment_C": null,
+    "test_only_job_commit_cap": 536870912,
+    "activation_qualified": false,
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "binary": "D:\\rust\\lab-runtime\\target\\debug\\lab-native-child.exe"
+  },
+  {
+    "gate": "dev-glow-frames",
+    "sha256": "FE4709968EE5D75F0EFDC79BC72E353B2973A174174897E0E1A0A75413145797",
+    "test_only_job_commit_cap": 536870912,
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "binary": "D:\\rust\\lab-runtime\\target\\debug\\lab-native-child.exe",
+    "activation_qualified": false,
+    "deployment_C": null
+  },
+  {
+    "gate": "dev-glow-pending",
+    "test_only_job_commit_cap": 536870912,
+    "activation_qualified": false,
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "deployment_C": null,
+    "binary": "D:\\rust\\lab-runtime\\target\\debug\\lab-native-child.exe",
+    "sha256": "FE4709968EE5D75F0EFDC79BC72E353B2973A174174897E0E1A0A75413145797"
+  },
+  {
+    "gate": "release-glow-faults",
+    "sha256": "FB9E8D4813ADB5E4A82175F5D0C065F4509C1DD3C31F3A9A8BDAD5325857882E",
+    "activation_qualified": false,
+    "binary": "D:\\rust\\lab-runtime\\target\\release\\lab-native-child.exe",
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "deployment_C": null,
+    "test_only_job_commit_cap": 536870912
+  },
+  {
+    "gate": "release-glow-frames",
+    "test_only_job_commit_cap": 536870912,
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+    "activation_qualified": false,
+    "sha256": "FB9E8D4813ADB5E4A82175F5D0C065F4509C1DD3C31F3A9A8BDAD5325857882E",
+    "deployment_C": null,
+    "binary": "D:\\rust\\lab-runtime\\target\\release\\lab-native-child.exe"
+  },
+  {
+    "gate": "release-glow-pending",
+    "sha256": "FB9E8D4813ADB5E4A82175F5D0C065F4509C1DD3C31F3A9A8BDAD5325857882E",
+    "activation_qualified": false,
+    "deployment_C": null,
+    "test_only_job_commit_cap": 536870912,
+    "binary": "D:\\rust\\lab-runtime\\target\\release\\lab-native-child.exe",
+    "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed"
+  }
+]

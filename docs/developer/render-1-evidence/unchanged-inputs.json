@@ -1,0 +1,1463 @@
+{
+  "qualified_source": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+  "render_1_base": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+  "checked_utc": "2026-10-15T18:47:41.186721+00:00",
+  "protected_roots": [
+    "apps",
+    "crates",
+    "scripts",
+    "clients",
+    "Cargo.toml",
+    "Cargo.lock"
+  ],
+  "executable_delta": false,
+  "inputs": [
+    {
+      "path": "Cargo.lock",
+      "git_sha256": "ef14437aa6c05ef6c1ee283aa0b1af4a9b7670a5b64f978d89ce9269b99d621e"
+    },
+    {
+      "path": "Cargo.toml",
+      "git_sha256": "b376009e9246ca9149244783cb40bba5865ed7614056fb2222d39ca52f86dcba"
+    },
+    {
+      "path": "apps/lab-native-child/Cargo.toml",
+      "git_sha256": "0f70fc1a8386f2fe766a1312326d2bdf971ae376066cb4f96924af8bbe470b71"
+    },
+    {
+      "path": "apps/lab-native-child/src/consumer.rs",
+      "git_sha256": "56ff1015e03e9351b2ce38fdd057e602c401a91729728d56c2b149b925b32806"
+    },
+    {
+      "path": "apps/lab-native-child/src/drawable.rs",
+      "git_sha256": "8ccbe80b125cbeecac4b82cac8821aaa84c9690bb8bb07f8ca732bea01c9e1b0"
+    },
+    {
+      "path": "apps/lab-native-child/src/entry.rs",
+      "git_sha256": "133c311717e8943c924f56e6190537e30cb936aca893ac17385395c6e2550352"
+    },
+    {
+      "path": "apps/lab-native-child/src/fault.rs",
+      "git_sha256": "171827a15c99c8524c0344f6da27b9de1de8f7a181dc946a5aeabc1a0c307801"
+    },
+    {
+      "path": "apps/lab-native-child/src/main.rs",
+      "git_sha256": "add7d0fa3a658185d954a9a291dbdc120a323d93cd357b16ab4be166e6b8abb0"
+    },
+    {
+      "path": "apps/lab-native-child/src/presentation.rs",
+      "git_sha256": "368d2918cc974ffc089fc00125f0130c7fb9c90b037f8a462a6ee539edd50c11"
+    },
+    {
+      "path": "apps/lab-native-child/src/private_ipc.rs",
+      "git_sha256": "3f3d8ca7a97d5bd2e3ccfab70e74a0fcda7d34410df368a43da0b4987fabd3a9"
+    },
+    {
+      "path": "apps/lab-runtime/Cargo.toml",
+      "git_sha256": "0233fdaed55b9da7adca2d9332d918fb4eb25b76904a0e0666686b453b700ef9"
+    },
+    {
+      "path": "apps/lab-runtime/src/application.rs",
+      "git_sha256": "417560c70d0ff4201bec36fc7f211cdc100675e57c6c84e1646349834ea300e8"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/common.rs",
+      "git_sha256": "301d4f7ba6d1c01805fd55d54b622822df697d305899f44aad96a93f296923d5"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/controllers.rs",
+      "git_sha256": "cb7b39dcffdf1c666df6ec63ea3078adafdb64fb7a44b49f5bbd4cf0a6313240"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/delivery.rs",
+      "git_sha256": "c479f4d70ac525c07e11142b6071686d211de50ecbd8b08c998f7a9c3db9067c"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/discovery.rs",
+      "git_sha256": "1d7fc284832409d6665a15b9272c52e22c19ee089dfbf0c0ccd2f6626759cf13"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/operations.rs",
+      "git_sha256": "e548ae6f3d75d3c224dff7c15728c7746b7a8218879e44a40f1e74b36e7850d3"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/projections.rs",
+      "git_sha256": "72c89edb525f7d7d7431f3d27382cdb4acdb7fca4710d88ee01f63413f30b223"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/recording.rs",
+      "git_sha256": "5800cf2ca6e14765ed038227497e3dd9bdf1e8570aebf78eab109d12dd017071"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/references.rs",
+      "git_sha256": "592ae4ac7e236ec6948c90872a37cab879ddc8f5964e4799b5ee9b2727171a0f"
+    },
+    {
+      "path": "apps/lab-runtime/src/application/virtuals.rs",
+      "git_sha256": "48a891e8ee624bdf2f18a926381355bfb956f5ab1b1c337f7e3d007c041e76c2"
+    },
+    {
+      "path": "apps/lab-runtime/src/build_identity.rs",
+      "git_sha256": "9057c6220d922b0c1f86398d6fb3d65fe08182024ba046286a78aa5bf8f21628"
+    },
+    {
+      "path": "apps/lab-runtime/src/configuration.rs",
+      "git_sha256": "fb9675c987b66fcf16dc6ccfc81606eda4ddbf6228c2234a42f42b4ce66fe7ea"
+    },
+    {
+      "path": "apps/lab-runtime/src/configuration_api.rs",
+      "git_sha256": "a4af5723f886a1d6acf354be7587dab8bfc4270e0dcdf276f272555f7291fb1f"
+    },
+    {
+      "path": "apps/lab-runtime/src/configuration_api/instrument_property_projection_tests.rs",
+      "git_sha256": "86532a903007acb6c6df0a71ecc233f18b2ecc9aa950cddb9986adcebaa9de67"
+    },
+    {
+      "path": "apps/lab-runtime/src/definition.rs",
+      "git_sha256": "aeb7a4abb03474d62caf935adb9a87966612702982ca4ffbe3d1428679685094"
+    },
+    {
+      "path": "apps/lab-runtime/src/deployment.rs",
+      "git_sha256": "f0c9f2d6837c5fbc773a568558d048f2d70e938a0230428ff821070537a91262"
+    },
+    {
+      "path": "apps/lab-runtime/src/diagnostics.rs",
+      "git_sha256": "aaf2ec948d3ef0e71678c41da634dce5282c57c1c2756460e3ddcb52b8b419c7"
+    },
+    {
+      "path": "apps/lab-runtime/src/events.rs",
+      "git_sha256": "49ce6dfe3ab6c15e519fa24bdd15e066fe33ac81a6189cd1d5e1bd24f83ff6f1"
+    },
+    {
+      "path": "apps/lab-runtime/src/host.rs",
+      "git_sha256": "80380663297a6fd26f4f811d12953d105880cb608aeb1f127581e325bb12c4c7"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/components.rs",
+      "git_sha256": "2dfa4cfebacc7c83d290e6a6f778d98ce13289dcee0048ce0691f5b856f0ee0d"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/configuration.rs",
+      "git_sha256": "bff6a57da1f6989640368d98cec170c45dbdcda5ca45bec19fc09fa4d219f195"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/instruments.rs",
+      "git_sha256": "56d8350639d48be6fb618853ae500a3a3804a06ad832203fd7c371923a2bcbcc"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/lifecycle.rs",
+      "git_sha256": "29bc217fbfe72e6a21fcc7e78f19d855fac1a925ad5dfc94cd2452a16c2d5db2"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/reconnect_recorder_ordering_tests.rs",
+      "git_sha256": "8ff1842606b6e8dddc03d2336140413c8bb4e131a3135c2d81aa80041713ffe9"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/recording.rs",
+      "git_sha256": "aab23b3abdf109055d12aab9a73ee507d95f6b3b06125568c69f0eee4c387bf1"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/reference_completion_tests.rs",
+      "git_sha256": "0ca39353b751799acd15de2d3a12a8fa82e050c77f6d82e764a6d064fea60d66"
+    },
+    {
+      "path": "apps/lab-runtime/src/host/scheduler.rs",
+      "git_sha256": "87385c41c86144ef175ba234a4fbb416a1344a5bf827e4b8a2de5960f6569aaf"
+    },
+    {
+      "path": "apps/lab-runtime/src/lib.rs",
+      "git_sha256": "46cd8aaf3f733fab752fbc0e0363a438d8c4d1f9642e0f77724b2606546d725b"
+    },
+    {
+      "path": "apps/lab-runtime/src/main.rs",
+      "git_sha256": "0241287c85bf84dbb04954ac6780a9f9d543fcd030b6e3358574d3c7be52f2c7"
+    },
+    {
+      "path": "apps/lab-runtime/src/managed_executor.rs",
+      "git_sha256": "7b90a58d7da8e5d32eba3bb00c3d92d0683e3ed8fd2ed054239d8e375ffb11a4"
+    },
+    {
+      "path": "apps/lab-runtime/src/managed_executor/moving_mean.rs",
+      "git_sha256": "9a92a9fe0e7b590b3ad24b80ca3e5b570c4789088a84ac34d181545e294aa189"
+    },
+    {
+      "path": "apps/lab-runtime/src/managed_executor/reference_component.rs",
+      "git_sha256": "ebb86c7344bb67a2625cf144c8d0928a3d1f56c9a6c3d332b482ec53160108fa"
+    },
+    {
+      "path": "apps/lab-runtime/src/managed_executor/registry.rs",
+      "git_sha256": "db22be39de25fc5b5d30f73b33e8f374784f2dda81d843fa141b544a433b64a6"
+    },
+    {
+      "path": "apps/lab-runtime/src/measurements.rs",
+      "git_sha256": "4fd5463c78a50281291971d72fccb1e2fab0e1170c2165d4ca1a98bf18b60094"
+    },
+    {
+      "path": "apps/lab-runtime/src/platform.rs",
+      "git_sha256": "03cd21abe214115f608efed80f42e33f1c259b71ada7d25ee740fd28526f82df"
+    },
+    {
+      "path": "apps/lab-runtime/src/protocol.rs",
+      "git_sha256": "1f4f9e8d7ac880a22c2afb6c0356c6578ced56b9b294c98213ce3f2549efbd65"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder.rs",
+      "git_sha256": "7fabc3518ee14d30e42c17b878525a5c40feccb285938dee99a48976ac5da319"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/history.rs",
+      "git_sha256": "c9ddefb3b154dda8d44404631a70e25069b5475d2d46fcbd53402dcbf3da9779"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/property_lifecycle_tests.rs",
+      "git_sha256": "9e4351c5343f021287b6f8188678a9195f272c4fe4d4024c9309a25b827fbc73"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/provenance.rs",
+      "git_sha256": "7749f95faaf80820607b3b450a5fd1dfde2c801c51edb174771f39ae572e62f0"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/encoding.rs",
+      "git_sha256": "a4cb1b964097daa94ec299c1d828bf685a3a34f27c63811e1dca422799bf4307"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/history.rs",
+      "git_sha256": "5b689074e4726e1fd34d9862feeb9f194e3cb2049ccd5ed0df05c4ff1fdd036c"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/mod.rs",
+      "git_sha256": "4631566baa968917bbd2414a31f1993d8b0243a6a4b408186708890eaa108cf0"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/open.rs",
+      "git_sha256": "636f7a898b00b2390672ac21580611400a613f2d1a2b01eabdf0a17f799c3a12"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/provenance.rs",
+      "git_sha256": "a9b75fcb198c555d5f4ab41dd73c4e23467189fdcf2638437d634c84cb8daa1f"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/schema.rs",
+      "git_sha256": "adf3005c9dfdffc71ed4f5346556bb334209dd3564a32766c3a6be410df97a14"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/sqlite/write.rs",
+      "git_sha256": "d162aacd74d56cbf80205d50c7553f430a081ae0a83c1af8297dfbf0134ed36b"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/time.rs",
+      "git_sha256": "39319823647476353710d4f56c2948d0c00974f7ea24fce1430aff95052b4ae4"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker.rs",
+      "git_sha256": "0550a3abd25afac7569d75565aca15d6f89ceb35972bcb4e8bff0e4a821536b9"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/fault_injection.rs",
+      "git_sha256": "cdbe7b7623624661b61ad1f85a2c64a5141ba40f3297d11a9453d085da368d40"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/history.rs",
+      "git_sha256": "b8ca7fd788a66a905accb9e274abc8ede837b3851aefa392c79da65c95900083"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/ingress.rs",
+      "git_sha256": "755cdadb170599afb48e37ee7221a6e1fa2f56251ad23b691f8cd58d0811e344"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/lifecycle.rs",
+      "git_sha256": "709f0b520bd2f2ed5e247671b1ac5063911f7cd82f22aef9162074957342d0b4"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/reference_completion.rs",
+      "git_sha256": "d3635b11447e4a08bc874d817e835ffffc9ccb3753776cc29cf07feb6a60699e"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/reserved_facts.rs",
+      "git_sha256": "041d27c40df4333a6db5a311d1ec489e8627fde55a25aa7c1e07ba45b6f86eee"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder/worker/storage_loop.rs",
+      "git_sha256": "24c5203eac072fac949dd0e61f7c463be64b8432e55a7fa6ef52eec38119b7b4"
+    },
+    {
+      "path": "apps/lab-runtime/src/recorder_api.rs",
+      "git_sha256": "4418ca4276992895be8b229a71751faed0148d7f85026d41c042efa3a36f352d"
+    },
+    {
+      "path": "apps/lab-runtime/src/serial.rs",
+      "git_sha256": "66ca1666774fd036c53b8ad904090f98bda4f6d65f56e194c7a2fe050a93761c"
+    },
+    {
+      "path": "apps/lab-runtime/src/serial/tests.rs",
+      "git_sha256": "ce2fe4dce125f7509dde5225fcc24a1a0359f2070838529554df916966ebf6b3"
+    },
+    {
+      "path": "apps/lab-runtime/src/server.rs",
+      "git_sha256": "73b9df5adee5ee7a5336a57fdd93962e9e308dd0f0547c280f1de18ac1ae198f"
+    },
+    {
+      "path": "apps/lab-runtime/src/server/coordination.rs",
+      "git_sha256": "a696d0f8f303d99a6e443fa7c6a8bb321a767857e5f9acd223587503480389cf"
+    },
+    {
+      "path": "apps/lab-runtime/src/server/websocket_peer.rs",
+      "git_sha256": "a7d78de091c61ad04d23a13833dcb94dfba7c378a5fe9f61690e6cdc3fd0e0d7"
+    },
+    {
+      "path": "apps/lab-runtime/src/service.rs",
+      "git_sha256": "ac7d4bf232e90a0f089fba4f8cbcc5985ced7f00fe3840b3f4a6ea642918b8c8"
+    },
+    {
+      "path": "apps/lab-runtime/src/service/configuration.rs",
+      "git_sha256": "b4571dbdcfb8c1f0eca247c91f71309629d28edb61384d73b8982c8bf9fc03f7"
+    },
+    {
+      "path": "apps/lab-runtime/src/service/property_lifecycle_tests.rs",
+      "git_sha256": "b4453837ab26aa7c34b47e7bbbae799b7b941325256ef4a3837c02c5a69c1eea"
+    },
+    {
+      "path": "apps/lab-runtime/src/service/reconnect.rs",
+      "git_sha256": "19a1d91c4cc95c86ffac299d35783d422d1107e52bd333737e347f4bcc87132d"
+    },
+    {
+      "path": "apps/lab-runtime/src/service/shutdown.rs",
+      "git_sha256": "ca8e2cd58b32fc0a7ad017f6d2a71e3b8b794896c43aa3ed53d87033ac9a7602"
+    },
+    {
+      "path": "apps/lab-runtime/src/sessions.rs",
+      "git_sha256": "c74e8d78ad464a98407ac87a5fb1f144d6fd83b48a524a0b68dd1778ad212cae"
+    },
+    {
+      "path": "apps/lab-runtime/src/simple_device.rs",
+      "git_sha256": "7eafa2eb056ca24b09c6b56829456d4c4b101e91998fb1e13b60086e81e99338"
+    },
+    {
+      "path": "apps/lab-runtime/src/test_support.rs",
+      "git_sha256": "2cb6515bfc4690577d197f00ce39a68312c148b28324d3df67eb59e2aa5903a3"
+    },
+    {
+      "path": "apps/lab-runtime/src/websocket.rs",
+      "git_sha256": "4bccf87b2c8bda793d245ebfb6805dde56c1190ba5b072126f9c884505249b1c"
+    },
+    {
+      "path": "apps/lab-runtime/src/wire.rs",
+      "git_sha256": "09ed8abc2ad709331615dda6ef32aebda8fbe7aa4592b48b538b9e611844865d"
+    },
+    {
+      "path": "apps/lab-runtime/tests/api_owner_queries.rs",
+      "git_sha256": "382b770cd87f1f420379313ba854c2d0ec87edc712bad49c012901fb034fa940"
+    },
+    {
+      "path": "apps/lab-runtime/tests/api_protocol.rs",
+      "git_sha256": "2d3d2f5b0846025ac105ad071b062c96b8554229a6a8961a1c0aeecd79b13549"
+    },
+    {
+      "path": "apps/lab-runtime/tests/client_isolation.rs",
+      "git_sha256": "879f794991480503e39d193a2994bf9bc79cbde76dd600064628b6ea07933f2c"
+    },
+    {
+      "path": "apps/lab-runtime/tests/com_recorder_shutdown.rs",
+      "git_sha256": "45023f6498202d9b6849c58eb16888b6070789911645cc04d3e4197068bb40f4"
+    },
+    {
+      "path": "apps/lab-runtime/tests/configuration_provenance.rs",
+      "git_sha256": "af49b27faaa47abac95c611805ad41840af90c2be45018f0084ff2418abc91a0"
+    },
+    {
+      "path": "apps/lab-runtime/tests/configuration_reload.rs",
+      "git_sha256": "b0bfe15beae5098c705e4dcaa09535aea98e5a556a139b5044aeed4a57a3758b"
+    },
+    {
+      "path": "apps/lab-runtime/tests/configuration_startup.rs",
+      "git_sha256": "80321358ae79c316bd446cfdcc94a73f1f92ac7ebf52a48933fe69b938c25b98"
+    },
+    {
+      "path": "apps/lab-runtime/tests/configuration_validation.rs",
+      "git_sha256": "373efddeed3cf8793a2c37d8633aac911ebfa71e636adfd89ed191ee1f760075"
+    },
+    {
+      "path": "apps/lab-runtime/tests/configured_physical.rs",
+      "git_sha256": "89147f253dd3f1030e5a8c61a9c6853501d8fabbfdd3b56dc22b6ef816bbf489"
+    },
+    {
+      "path": "apps/lab-runtime/tests/configured_physical_output.rs",
+      "git_sha256": "7b7172ab5cced89b0abc53ec48073ab396bfa9e5e3151fefcc34482f8f3df1a3"
+    },
+    {
+      "path": "apps/lab-runtime/tests/control_api.rs",
+      "git_sha256": "aa8fc91448e5f8eebd2dd070858a696b5790cf7238b0cdf4912cca1f0b2ebedb"
+    },
+    {
+      "path": "apps/lab-runtime/tests/definitions.rs",
+      "git_sha256": "8f6e479e068359f14f26ff47cd2c29f70aaf9407b2fc74805123b44eeaa35b93"
+    },
+    {
+      "path": "apps/lab-runtime/tests/demo.rs",
+      "git_sha256": "2d0e5472df5d001acf733282a485d1f88262e829a3a248698fd5e5e3b786ddea"
+    },
+    {
+      "path": "apps/lab-runtime/tests/diagnostic_logging.rs",
+      "git_sha256": "394ad8929bc5c01bba7a88ac986f10b33b9334b9c06b69c3422ef664a1a53bd5"
+    },
+    {
+      "path": "apps/lab-runtime/tests/emulator_api.rs",
+      "git_sha256": "9921ca4b0c8355828f0f79ffbdd1af1879103f61339a999d7921bc8f302f5ee7"
+    },
+    {
+      "path": "apps/lab-runtime/tests/host_scheduler.rs",
+      "git_sha256": "868131c17b284b6f9b879ca2002ee968d85960b7d3e9d56219fdbfa8d3247084"
+    },
+    {
+      "path": "apps/lab-runtime/tests/linux_process.rs",
+      "git_sha256": "30d673670423d4a438a1fb2b20e43ab6230c49102f4e3d1338d34f1fb50b4359"
+    },
+    {
+      "path": "apps/lab-runtime/tests/m9b8_fault_acceptance.rs",
+      "git_sha256": "6afadabbf677d7f8b4eccf6ffae242a1c9086ca0894da90f53b349ae9caa9c6b"
+    },
+    {
+      "path": "apps/lab-runtime/tests/measurement_api.rs",
+      "git_sha256": "d7a350724c889fcf9af1970c9d6a508d5bd04566f50fafe3571eb97943f9f3db"
+    },
+    {
+      "path": "apps/lab-runtime/tests/milestone9a_native.rs",
+      "git_sha256": "2678b996d741a06551b496cc12238f6fc73e9effeb39d9ca60205f4580f24026"
+    },
+    {
+      "path": "apps/lab-runtime/tests/operation_outcomes.rs",
+      "git_sha256": "5b66b9c6570008863c7c4b13ea1352e094297fc15e535fabbdaf970dacda4b94"
+    },
+    {
+      "path": "apps/lab-runtime/tests/preview_soak.rs",
+      "git_sha256": "89d2d4bda5b14e93b3d2ec492d267fd5167d23a10357e1e66c668df0e7c0d197"
+    },
+    {
+      "path": "apps/lab-runtime/tests/process_readiness.rs",
+      "git_sha256": "97678ff9be499a2637f1581e1d5ac44e9b65b4135fc8d820366116a66f550ac0"
+    },
+    {
+      "path": "apps/lab-runtime/tests/protocol_foundation.rs",
+      "git_sha256": "3e77e654628d98f089f167531650648107b596e3d2cf89050b7ac40bceed5e82"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_admission.rs",
+      "git_sha256": "49901708403566acbe0502d1d410d7986b567033acb45d998a7846353ff1e308"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_api.rs",
+      "git_sha256": "4e84fe21a247261e38e74375ba40b57e6ea95729d475c1d7e22fbbf57c7a71e2"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_backpressure.rs",
+      "git_sha256": "38e688b9c9edab02a5fc0f3fda9fc59e130824b884061bc44d8e839d6f45ac48"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_evidence.rs",
+      "git_sha256": "4a6c0e36d3d0c5316e7526925e70252a5cdd83c207105c53c44b086440b572fd"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_failure.rs",
+      "git_sha256": "80795e57bc79e98ae5ef29155961602d25900fec3de35d799a63b9d3f853eecf"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_history.rs",
+      "git_sha256": "21a48fa4ed194979d251f231e38f4b0e365c90c451d34cddd8a2d9023f83af10"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_history_api.rs",
+      "git_sha256": "c6e7154bdce36e47d5691bd7710dc77ecc28024f90ed31ad3317e05b5f56a01c"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_isolation.rs",
+      "git_sha256": "03c0e75b60af71efee353d5af4f3f56a7a7989941ff423a442bf61269dea630a"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_operations.rs",
+      "git_sha256": "d42946b976c73234dbd362fde581a7ab90a6943177672909055c5646cd5f0fa1"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_process_reopen.rs",
+      "git_sha256": "739ab7036e02fab0c629ecf1995ac9b132542256645f44886ede0f17543115ff"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_property_lifecycle.rs",
+      "git_sha256": "cc06a657319e5e34835969e57e54193f5d008696bd8d543c04b202fe7a883706"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_provenance.rs",
+      "git_sha256": "aeadeb425fb48f1b15616af6b49f8630723e0b79c0cb23c0a267c7efc848269c"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_quality.rs",
+      "git_sha256": "493a0aa0a5b0c30a4ddd846509678fa483e5205d9a6421e2051e70a6932e72e0"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_receipts.rs",
+      "git_sha256": "1bfb4541df56c5a1a92f50c73e49be1b6e38e93b0bcea6da284408d8dbac0b07"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_reload_budget.rs",
+      "git_sha256": "65e74be45cb4a6b75403ef64fc0fc35744ad37c0712b7286071098854fb4eedb"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_reopen.rs",
+      "git_sha256": "32bbdd2d0c77cb0390c556d6867375386467dda758bd29fbfa0928cb9bddeb06"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_required.rs",
+      "git_sha256": "e523fa85e2ee0ba4191cd138c35a59cfd246e22f164ced5b324100bd3b3d70bc"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_shutdown.rs",
+      "git_sha256": "05101469d336bbed60057068dd1d97101a71d0fbf6d9b664aedb80ae15768990"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_shutdown_process.rs",
+      "git_sha256": "cced9ad660fb46b97dcd15778e91e99774c64a72e6ae907eb0db5bc07b68a116"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_sqlite.rs",
+      "git_sha256": "3543d78888ea315e43f6a6910dc61beda617d772a3cc435c52df64e1d9bcfa4c"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_startup.rs",
+      "git_sha256": "7e7f78be6e325055cc5e593d842f50f55fa244c297620bbf356e93b35e1fef22"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_time.rs",
+      "git_sha256": "648dce20e261614b65c21ea0f86eb66e5b27123a5416f70613963303e16dfe6e"
+    },
+    {
+      "path": "apps/lab-runtime/tests/recorder_transactions.rs",
+      "git_sha256": "c1ba6879b06cece3cfc641b42dd7e3df8ef6af6b42a5e18088a52c9c4b1be2b6"
+    },
+    {
+      "path": "apps/lab-runtime/tests/request_deduplication.rs",
+      "git_sha256": "e561d1d583c7769dd22efb79728f7e86e62c85bd19347aa5e8bb3e2bb15c8419"
+    },
+    {
+      "path": "apps/lab-runtime/tests/resource_configuration_api.rs",
+      "git_sha256": "ea80465cb6f048de1b6bcd64f7a1e6c51019d9cb1bf1cc639dd5e3fb8217c13d"
+    },
+    {
+      "path": "apps/lab-runtime/tests/runtime_events.rs",
+      "git_sha256": "83b4824cfea075c7a739174f05d16e84ae4100c846709dce12c179890ce69c79"
+    },
+    {
+      "path": "apps/lab-runtime/tests/runtime_lifecycle_operations.rs",
+      "git_sha256": "e404be0af27c89a025d13cc916898b9e43c8e9b084b05bdcdf1ec74fbb58e6f7"
+    },
+    {
+      "path": "apps/lab-runtime/tests/runtime_shutdown.rs",
+      "git_sha256": "9c9c0dba9ceb21d3291d7be21dd7ce15b21a479896d93d90ada328cd05a58904"
+    },
+    {
+      "path": "apps/lab-runtime/tests/runtime_startup.rs",
+      "git_sha256": "5349a74d3c0081d9dcdb0319842d1b8b0921e83f41f1470ca343d8b6207b6ff8"
+    },
+    {
+      "path": "apps/lab-runtime/tests/simple_device.rs",
+      "git_sha256": "424909c4a6389c475db92e6c71c31c8f338692de10bdb8f057b708267bb81c06"
+    },
+    {
+      "path": "apps/lab-runtime/tests/subscription_recovery.rs",
+      "git_sha256": "d10fd6a582eb001fa923468f9826ce1eef113d89d1c2e49063d4acb81c807205"
+    },
+    {
+      "path": "apps/lab-runtime/tests/support/mod.rs",
+      "git_sha256": "381cd48b3314c3db3ce8485b21bec726b01ea58af2f080b3d0e59f93a7c41db0"
+    },
+    {
+      "path": "apps/lab-runtime/tests/tcp_lan.rs",
+      "git_sha256": "8da8a82186338d345603ec4e303d18d3f5f5be8f151657865d1d59cd099cfc8a"
+    },
+    {
+      "path": "apps/lab-runtime/tests/transport_parity.rs",
+      "git_sha256": "ad6dde348af90b09e03cb5ed6617c0ec2ce593489fc21782c80456246d266c39"
+    },
+    {
+      "path": "apps/lab-runtime/tests/websocket_transport.rs",
+      "git_sha256": "cc1790cef3565383a70b31a241db1af2615999d794d63dbdb6d02c7453d6b4db"
+    },
+    {
+      "path": "apps/lab-workbench/Cargo.toml",
+      "git_sha256": "a227b8c050ee8883a88ac9c02899b97e46535e24fa94f198cc7b92e7ce945f19"
+    },
+    {
+      "path": "apps/lab-workbench/run-gui-smoke.ps1",
+      "git_sha256": "a3028bc69f6632738af5abd2a0d0f93914517a4101b9fd5ae173615402f9296a"
+    },
+    {
+      "path": "apps/lab-workbench/src/client/endpoint.rs",
+      "git_sha256": "e2201ab20205042e96c3f4560fe8f3c9c4010b2192c8683454765f3b549cf139"
+    },
+    {
+      "path": "apps/lab-workbench/src/client/framing.rs",
+      "git_sha256": "11beadf2606ec29a1b6033d7ebdbab0328d2366db15e3c4a636b810c7164d54a"
+    },
+    {
+      "path": "apps/lab-workbench/src/client/mod.rs",
+      "git_sha256": "fcba323c57d6b54c2be274c223419ca901ccb3445f3ed9897370228af6bfad5a"
+    },
+    {
+      "path": "apps/lab-workbench/src/client/transport.rs",
+      "git_sha256": "259ad73c3e2fea5870cf2b6e2eacd846fc0d4ed0ca2b94ead8c77587ad4d20ec"
+    },
+    {
+      "path": "apps/lab-workbench/src/client/types.rs",
+      "git_sha256": "2044a620b747f8ff08e157fbe1e9a07594683d5229c33ae8617f811ccdbbcc51"
+    },
+    {
+      "path": "apps/lab-workbench/src/client/worker.rs",
+      "git_sha256": "54d3dda313463a511fe4cafe6355443dcf0dbccb92ff3868f827c6e8ac687dee"
+    },
+    {
+      "path": "apps/lab-workbench/src/dispatcher.rs",
+      "git_sha256": "e724d46e103f707abc6ffe8157283dcf46a0a86f039b1bb10de857cd01cc7c64"
+    },
+    {
+      "path": "apps/lab-workbench/src/distributed_tests.rs",
+      "git_sha256": "abfd5c5e2e400997da658bee38ffa07ae4567f52469280728029820e3e0519f7"
+    },
+    {
+      "path": "apps/lab-workbench/src/external.rs",
+      "git_sha256": "66bec1f92e8ad15b1ea8e14b7ae818e1b8ef74e6fd06d5ed70d4b42a9a4e121d"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/app.rs",
+      "git_sha256": "f5832e0655731772b1897bdd55ff8ae6dfe81fe2bcdb465fc2fdb4cd774a5ff0"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/controls.rs",
+      "git_sha256": "f593b76898bbc32dee0f82a0932eb2200aa96c4fa05180893d977c7fd6b4003d"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/mod.rs",
+      "git_sha256": "f1c88b1cf68cdafaea20b1d019d541bad78bcf4a39d801f3003aaaaaa15cd6f6"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/presentation.rs",
+      "git_sha256": "bb160c60a3553a205e01a4f2895df45b080c3b60dd8362295724db3ffe68ab8b"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/completion.rs",
+      "git_sha256": "1bd8b2c49e9c7c9a5c049c72c77976efc5ac4250ce8afb4600f1f69ad4f0cd02"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/deletion.rs",
+      "git_sha256": "34547143536c973ece2fd2aec5a7aa9d380c6dd5975a713327db7b2dd2b7db44"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/deletion_tests.rs",
+      "git_sha256": "333e6590dc42546dc2d7a87e09e3383870f4e9f9ed6b976bfe1e46a7c7d5d587"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/finite_trace.rs",
+      "git_sha256": "8b194ffb5c0e3b494afbdfaadae409f133f16c57b311ee86a762ad401f9e2e09"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/fixtures.rs",
+      "git_sha256": "8309915ad2958727b139a0a17861dd46bf613f11d2c846cfb9b042ee630b8d44"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/frame.rs",
+      "git_sha256": "947f8c1b057d379c16ccded20763f094f4ca8045ffc50ea3e2a6f22d5d921b65"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/frame_tests.rs",
+      "git_sha256": "89e151619ea47aaafa93502dcc9267f1344f3c4aef1c6f116fac7bae6a484b43"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/host_session.rs",
+      "git_sha256": "981a6fc6c678e5f716364ad8af9974c51b099183b6ae62d2d6993bace1d82bd6"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/mod.rs",
+      "git_sha256": "3b80f7c8be7d0f146d96649d41af0bb25600076df8a95039bc6e9987e69b7995"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/native_types.rs",
+      "git_sha256": "4bf88b46a8e3cfb0cf533fc7ac09d2bb0dad2657816d2721cb92ffe3d65e5272"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/navigation.rs",
+      "git_sha256": "62f93d972338ea78b557f09a1762a7491a78c92778925493892a1ebe462256d7"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/navigation_tests.rs",
+      "git_sha256": "b9204cfc6b982451c6fb0c9d0599b85d02bd65d8e40d2c4dbe7bdc6fe5d7396b"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/observation_source.rs",
+      "git_sha256": "4b01b0c2cf435def8b5c420297e512ff79ad70c2eb8c16bda5a01c3b0db69e50"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/page.rs",
+      "git_sha256": "c7ef7d6443f5bad415584673f89bc6b585634aee4a75660402f0be6e192cf3cc"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_bounds.rs",
+      "git_sha256": "8583d37e2a666c4666417b3eff95fb80c6f2d8e1ee8fc77d0c58f5a7b187e82a"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_fixtures.rs",
+      "git_sha256": "d0cc31faae45bd4861708bd610d9a8cb6266d583b1339d5709b78be7aea5a882"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_geometry_fixtures.rs",
+      "git_sha256": "7619edd0eeafd81d5dad4aa1f363cd01ebf1f1925c8ae1273213c690f032c29a"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_geometry_tests.rs",
+      "git_sha256": "d3f8f824861a6b010b6361a20a2e990a2b723d9c6a687cc4d75265d21c9bc3ca"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_projection.rs",
+      "git_sha256": "b498567491ba3c1a48c94ed5d5f3d1312812bcdf5e23211060a4adc260c8c9ad"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_projection_tests.rs",
+      "git_sha256": "20d3bfa6d5710334092987d9352ff9a646e37037846c089b4ff840da61d5ba7b"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_seam_tests.rs",
+      "git_sha256": "be3f43c24456b669a3e4506e71eb079262a41fc2c3e54a61d5e7ce18c7736b56"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_text.rs",
+      "git_sha256": "a5006b91a49d44db9c7f17e2b8dc89b079e94828bc26e65607e41bf642ccedab"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_text_tests.rs",
+      "git_sha256": "a874be485c0726af7b65ee294b8cc0672e385384ab7a7bb7d2c500668d2dfd1b"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_widget.rs",
+      "git_sha256": "5412d01fd5006b75fdd2e919b45f511952fdb932c9c397f9338ab92e6251ed26"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_widget_tests.rs",
+      "git_sha256": "7ebf14661c8a9a34ee41ed2cbf58ff0e891353ce68d6f1a07632003ca5dd4b73"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/read.rs",
+      "git_sha256": "a1934405e308207321ea0ee905f79821e222df74623861d69f923c9647cce7e4"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/retirement_tests.rs",
+      "git_sha256": "58728b2445ec6c16a7918eb0ca06e75d4a46ee1f94eaad16d1d5b355b9fbd4f5"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/tests.rs",
+      "git_sha256": "55762f19fdfafe52832343c2fcd3e67f07a055d7b14d5762888e80bb720460cf"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/texture_owner.rs",
+      "git_sha256": "58824887efbe60aee26738dee48f99700dbfd64aac2f242f1e508df3b0ad14af"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/rebuild.rs",
+      "git_sha256": "7c76b1ed5860f8b91816f67be3393a6028ec3d682447abba61549bea5b4b1495"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/rebuild_test_support.rs",
+      "git_sha256": "9e755f300b506dd4b28e681ed19448ccf50e561b41087859d7c969ba9a3a3816"
+    },
+    {
+      "path": "apps/lab-workbench/src/main.rs",
+      "git_sha256": "45bc57ce7f8b57ba782b15fe011264152276b362292a9d94ffd235561388b9e7"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/command.rs",
+      "git_sha256": "14b66d1efd1753d11639cc4682a01bf4a321bb6cb7d019415926fb53ec46a114"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/exact_retry.rs",
+      "git_sha256": "18b9cc2aeecec8eece2b9dc140c846ef489560aaffcfea1e7e6b9f6b7ffb527b"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/mod.rs",
+      "git_sha256": "21c7d13152a51283c37f20771a9f669d9a739fac9bbdf39002323f4c00c5fc8f"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/operator.rs",
+      "git_sha256": "9a833138ca9bcd16cfed42470d2bfe04a85f3bc57b1f48c16363971afbf34928"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/projections.rs",
+      "git_sha256": "1961eab4c8929e7c1f79af56c81439e695cbc40f4d22d8fa3ae9645a9dabefff"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/read_binding.rs",
+      "git_sha256": "023fb476a26e623a412b55d527dd42c2d82c0a81df3544940092dc36dfcaa234"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/recovery_status.rs",
+      "git_sha256": "47cfedc694da2e6e74c109a1d6aef15abe6e83316abf2313cda00fd874eb1f24"
+    },
+    {
+      "path": "apps/lab-workbench/src/model/tests.rs",
+      "git_sha256": "4c3abb746761a8336e17001a4905a8d4febc9c7f5e948c66885f9f4bca35682e"
+    },
+    {
+      "path": "apps/lab-workbench/src/ownership.rs",
+      "git_sha256": "628d4c3e8ddf1ed047c455389ad89ac3048418223f260fd85578f8f88269044a"
+    },
+    {
+      "path": "apps/lab-workbench/src/parent.rs",
+      "git_sha256": "ede751fbf349cac13494d49a2f279e0667dda4fe3d6777aa08b11ae0d0ce37d9"
+    },
+    {
+      "path": "apps/lab-workbench/src/parent/renderer_qualification.rs",
+      "git_sha256": "2df007aefd89bcbd96cb675e08a39bdf8d3a95ed4d8d3ab68287ae20aa061af4"
+    },
+    {
+      "path": "apps/lab-workbench/src/parent/renderer_tests.rs",
+      "git_sha256": "8a900c6c9afa07f2d749bcd69518f9f9607c6e8b5d1d150fdd59cf7a3051b276"
+    },
+    {
+      "path": "apps/lab-workbench/src/parent/tests.rs",
+      "git_sha256": "83cb2c82d1454e481e66ce2234dcc56168e05c8e67096b31122aae63f8a37a59"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/document.rs",
+      "git_sha256": "e39184acb9df8dc759b1cb468d31b930992ca07dafd7b04f78c699ad092ad838"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/mod.rs",
+      "git_sha256": "516bd27ee0ad74fd835a895068e93a1fceacb67de31a52b585be3c9f2a955ad0"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/persistence.rs",
+      "git_sha256": "054d28c24c21a991b9887eb0c15c35e464cc41fc4eef86f3714663bf84befdc2"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/reference.rs",
+      "git_sha256": "20fba89a29cbe4ff9faeef51df860040de58b9efc611b7684f74a0504f32555e"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/tests.rs",
+      "git_sha256": "07703d7440cac598404c9f2f8605f5f88b83ae3eb37be1ee64be5681d0de56f1"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/admission.rs",
+      "git_sha256": "de0415a84427a799b68f5c2f9f9f4acb123156a6be8fad2e5200d2e6416b4fb3"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/admission_fixtures.rs",
+      "git_sha256": "0af0ae876e701210116956725dc92e51c62b3e739fa7564e865152bb80ec2180"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/admission_tests.rs",
+      "git_sha256": "281ae01edea104995481c704185116470a12a9930cfa1c5b61bbf79075a6b774"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/allocation.rs",
+      "git_sha256": "b59ff97ce0e4f63728d7f68c922ddf1b2a81064fd7df9c9e71035b793cddcf15"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/bounded.rs",
+      "git_sha256": "602a1f4e1df280543f642a2df64b2a707b2b558af6e1afbc1ea642f59b73de8e"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/canonical.rs",
+      "git_sha256": "c19de00f7b6a1e07505005cdd1ca080a36d125f89e19e8224e6d3ab4467acf15"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/canonical_tests.rs",
+      "git_sha256": "77bd95c38ce1674e786c44066466612d13c2c07ffb07a145e3ae02fd58127125"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/consumer.rs",
+      "git_sha256": "4ba1f1516ca7918e6e328ea50464130cb42196b51283414c585bd9694afffd23"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion.rs",
+      "git_sha256": "6c7a2b6c9554ab33c1f2f50a73a824dc51e38c02b78dd28a46d553d67e986bea"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion_fixtures.rs",
+      "git_sha256": "98008d95811816bd25a76a74820f7751171c80351124a7c39f2c4e0e9cf69753"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion_model_tests.rs",
+      "git_sha256": "e5edb76ff0df204a7e84fbf29bcce5623dfd463ceaec9aa6d5864b25bcdefbb2"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion_tests.rs",
+      "git_sha256": "c6bc2d82db314d1ce302cc55449776d9527271eee4ba8faa31b036b9685780a5"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/dto.rs",
+      "git_sha256": "72fc256c79dc63f3cb7c662325522781b462cef9ef1ca40481814b03c4e1de0b"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/encoding.rs",
+      "git_sha256": "85bb86cd31ce1130895836ee258a87c0017c40edc45e707ce924581e7afa429d"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/export.rs",
+      "git_sha256": "e28ae93aa2c5544bd43dffb0527c7997e1b7dd6274f42c9b29c71bdc6de37f5a"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/export_fixtures.rs",
+      "git_sha256": "1a3b4d482b5cf4a20d39345bbc4723fadea3fab62161e2947211046d4b1bcba5"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/export_tests.rs",
+      "git_sha256": "890f251bc68cc46f9f846c52cf3bd6d65a3e509498f4d5a59d7fb8edbb412a43"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/graph.rs",
+      "git_sha256": "d2db6ec8b42aa11d531fa685e164308e38478cf47c2ed9087b3ba8d045dc4a35"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/limits.rs",
+      "git_sha256": "d8a5783602e891b0c7bfe4d611cd97ba2853268081039b5d06a03c58a404434e"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/mod.rs",
+      "git_sha256": "e435444687d549ed2f7e0fd42268f58bea1be693e85649a88e21558606371b4e"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/source_v1.rs",
+      "git_sha256": "55c1155129fa3252b0abba21186ee62c66c997700dce06ff56b4a164d1469a17"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/structure.rs",
+      "git_sha256": "05d3057272ba7184b84e893492efbb839ef9d2383e19b7e6d10b0e76c0f13e71"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/structure_tests.rs",
+      "git_sha256": "fe4bdb65929143ac76aae16637cb45839d6fe1d53e616763822534de964817b2"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/tests.rs",
+      "git_sha256": "5fb5d9d7c6c8c0bf4a9ad658aa564ba98e17fee469e08826b94eec536b23807e"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/validation.rs",
+      "git_sha256": "5b8ccd74e9efd71083e6fab3ba2644f9d2514fca45a1a140e80e9f9ae51c106d"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/visual_budget.rs",
+      "git_sha256": "734de8594174e548e19fd90b3dd86d643ed8644dae40eaff3e377fe34319dfc5"
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/wire.rs",
+      "git_sha256": "930693171a2d5c54d7cc629b37970c54f1a86ec6d6f15be6f2bd8ce14ef2efce"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/backend.rs",
+      "git_sha256": "da1d8d6bb8d0e8bcfeddc1397ab690eb0e7107a4187b3c761b923513c4353455"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/document_owner.rs",
+      "git_sha256": "1458ffb19bf39f980370b12660142eadbb5bfe3d94297760248a074cc61cb994"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/fixture.rs",
+      "git_sha256": "14d9f676b739cafbcb47a869ecf548d8070ddc3f9f63d52b7462b867de706761"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/handoff_tests.rs",
+      "git_sha256": "b63f4d2f20ccafbb16610c6b93503fb1d8f02a14bf84449c62432e4128c5d262"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/mod.rs",
+      "git_sha256": "ebca601d0e5b2e088a38227bf46a4c16baed7979ecdbd2105341060f9d5079e5"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/native_tests.rs",
+      "git_sha256": "ad5a25d73cc357d308ad08a28b038da484e6334e32725c90d63ec37f93b51237"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/parent_bridge.rs",
+      "git_sha256": "3aaff186b9154d00254531ad6704f0c61700df6c56989a4f07a1a983dbf320f5"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/protocol.rs",
+      "git_sha256": "1809568f1d23dd33015b5b57990fed72cd31b692005bb634bf98cd245194b46a"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/provider_tests.rs",
+      "git_sha256": "8322c75667d726fbc015b8da785731b7896a4a73790931371b88d4be0884bcef"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/read_decode.rs",
+      "git_sha256": "04e128902bdab524ac4465563a80d294e56446803e29cad2bfa99af7e82fecc6"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/reads.rs",
+      "git_sha256": "f17a748d8f537418f0233135a2a0af3e3b074d324630bcb0419753b52e4fc4ed"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/renderer_progress.rs",
+      "git_sha256": "7e4c75716dc18587b48833a316871d5e1c20e9f65ca0891f1ae22c5be4757373"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/replica.rs",
+      "git_sha256": "17aeb862af0a8f1f0f39f8bf6e72df0f5c2695e76afd0c08ce5a7cf51a7245ec"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/selected_preview_tests.rs",
+      "git_sha256": "cb39d024ed7f47b4d40b83786f059b8bc27747949d4b4f47c14cd40ba72dc293"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/selected_provider.rs",
+      "git_sha256": "d9f52a59cb538ab0cc035ee94d8d40a86194bb34d1bc8aa6564a7322b0400585"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/tests.rs",
+      "git_sha256": "f13e5e15bfe9e2ef1a65276737325989740f7b2ad941089f877e4bd207d27ca1"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/transport.rs",
+      "git_sha256": "0aeffa17c64c6611edb65cc639d727487fbfca7b90e43d18c10d3936c29c301c"
+    },
+    {
+      "path": "apps/lab-workbench/src/readonly_cache.rs",
+      "git_sha256": "44ad8781717ac564c65269b638c2dab3121cf0349d25a2843dcef4bb9dbde910"
+    },
+    {
+      "path": "apps/lab-workbench/src/readonly_limits.rs",
+      "git_sha256": "0b9e5294fe1c2e92d63993a459335481acb27a4ec59ef7991f0a52fa4d068b21"
+    },
+    {
+      "path": "apps/lab-workbench/src/readonly_values.rs",
+      "git_sha256": "b91a68f583425d600b423a925796f4546c9768360efb0124077cd104d3407e7f"
+    },
+    {
+      "path": "apps/lab-workbench/src/recovery/journal.rs",
+      "git_sha256": "e2616e819c7109cb9b6b9aa144e0b7202926d9a3b63c6f15cff89311091b504d"
+    },
+    {
+      "path": "apps/lab-workbench/src/recovery/mod.rs",
+      "git_sha256": "d9b03d5ab43a218938af00c67f337ba0bbefddbb4425afc92dd0715ff1439477"
+    },
+    {
+      "path": "apps/lab-workbench/src/recovery/tests.rs",
+      "git_sha256": "b69b1b7918ee174025998434bc3b3855d29f4aebfb713c7d04a54f9ca32bca39"
+    },
+    {
+      "path": "apps/lab-workbench/src/storage.rs",
+      "git_sha256": "5958953fcb2727683a4852ec2665bfb1081c04107af12d6f49f03a8876b571f6"
+    },
+    {
+      "path": "apps/lab-workbench/src/supervisor/mod.rs",
+      "git_sha256": "0b3f64f629bad05acfc2e2a9bdf9f390dd2c9bccc55a39d7203d955fd6a83d1f"
+    },
+    {
+      "path": "apps/lab-workbench/src/supervisor/native_tests.rs",
+      "git_sha256": "5d78a12f46ad4f43a18514377e3313f54a779ab8db7442eac9c99cbaf8545dd6"
+    },
+    {
+      "path": "apps/lab-workbench/src/supervisor/tests.rs",
+      "git_sha256": "697fb06cb6d7d283467c952bcb98e22182d9f22379667b5bcd04fbac066c79a4"
+    },
+    {
+      "path": "apps/lab-workbench/src/supervisor/windows.rs",
+      "git_sha256": "e13baa2286c51809aca0c34f6a39ded2bd7862ef41deea2233b3e9c97d93baa1"
+    },
+    {
+      "path": "crates/lab-core/Cargo.toml",
+      "git_sha256": "6601d11d531b5da0adc8e272930ad9172dbdbbcdda9f918a4cff51d35fd37d46"
+    },
+    {
+      "path": "crates/lab-core/src/control.rs",
+      "git_sha256": "fbb0874a83a3640ef48d2c35ae89d6dcb061b97ee6e8b6ec2c75d0888a062316"
+    },
+    {
+      "path": "crates/lab-core/src/instrument.rs",
+      "git_sha256": "35eb5a98a42ca7687b1ccd37c31580c170d0812c9252ba836c46f7727e84af12"
+    },
+    {
+      "path": "crates/lab-core/src/lib.rs",
+      "git_sha256": "4110147366ddc97f22d6aba1411698ecf0093f277b7269afc8175374fc91b40e"
+    },
+    {
+      "path": "crates/lab-core/src/managed.rs",
+      "git_sha256": "48eba5d97f869c529115d45c2a0d79a5b659c51ab65089b9cbdef127f36e9873"
+    },
+    {
+      "path": "crates/lab-core/src/metakon.rs",
+      "git_sha256": "eb7474c64cfd7b0f0ec3d76d4f4dc21024142669a5cd290cc4a7f6bd22a13258"
+    },
+    {
+      "path": "crates/lab-core/src/model.rs",
+      "git_sha256": "c12e59c50808182e72a08304c3ba3851398c71a00a40a9e6501a90016620a3c3"
+    },
+    {
+      "path": "crates/lab-core/src/output.rs",
+      "git_sha256": "6eae34490bc013f2b1290c3f922d3d361173c89ad415b4713ec64bc0ded8a302"
+    },
+    {
+      "path": "crates/lab-core/src/output/authority.rs",
+      "git_sha256": "efe14fb3b8045d816b3d06632b083b12e3328238c7fa532bf4aa3c3c969f0375"
+    },
+    {
+      "path": "crates/lab-core/src/plant.rs",
+      "git_sha256": "1abbc673431fb8a8704f288382ae62cda1b833a7083ed91bd7d9c0f1ce810c61"
+    },
+    {
+      "path": "crates/lab-core/src/processing.rs",
+      "git_sha256": "50b5214b4588cdbabde4dfd20bf93d75cd470593a043b4f0e5baf4d219f2b330"
+    },
+    {
+      "path": "crates/lab-core/src/recording.rs",
+      "git_sha256": "97b74cf3fbda79d3ed2168745b7fdbe5f8f1841f99760e6273f6dbed68e57873"
+    },
+    {
+      "path": "crates/lab-core/src/reference.rs",
+      "git_sha256": "6a17992ee7dc129b5f52ddc6928210f2bb3383025f8520d0c6c3e96a770c1e1f"
+    },
+    {
+      "path": "crates/lab-core/src/runtime.rs",
+      "git_sha256": "ccb7f89af10c50b6e3afb845c51f4b9afa4bbbc5c6d2d257091f4cb7f49bf2f6"
+    },
+    {
+      "path": "crates/lab-core/src/runtime/controllers.rs",
+      "git_sha256": "3c87f7b019395aac96ddddc53e9cd79b7e136dd87a7ed3204ec253d2571ed019"
+    },
+    {
+      "path": "crates/lab-core/src/runtime/dispatch.rs",
+      "git_sha256": "2c61137f708bbb3b3deafa8d762f8df8b8acfefd4c6ed6e465e216db0bf5d0a9"
+    },
+    {
+      "path": "crates/lab-core/src/runtime/managed_components.rs",
+      "git_sha256": "93d359fe296ae0b0f437f15e2e4238b84372d9e82987843596f8f476e9d2e2d3"
+    },
+    {
+      "path": "crates/lab-core/src/runtime/physical_io.rs",
+      "git_sha256": "568b3822e978d62bfab0c2d9c494c98dc112d0e07c56268207422cf0fc026e42"
+    },
+    {
+      "path": "crates/lab-core/src/signal.rs",
+      "git_sha256": "0ac5a0a0c2dadd0232a110ae9242f38e25bb851c7e2b6eb9052ae715fa11f9f0"
+    },
+    {
+      "path": "crates/lab-core/src/simple_device.rs",
+      "git_sha256": "a2bf2d52b11570ca85ba40b5cd71245ba73485f2b122481f441dbf39a235afbd"
+    },
+    {
+      "path": "crates/lab-core/src/transport.rs",
+      "git_sha256": "34fb808920008a60d7cb083ad299ac0a67c5dfde3d30616325067c56cf330b44"
+    },
+    {
+      "path": "crates/lab-core/src/virtual_instrument.rs",
+      "git_sha256": "25c63f22020c70f6e18a8b6c5f25b9e66ef2e429a989d8a4d2f8a600e4d827af"
+    },
+    {
+      "path": "crates/lab-core/tests/controller_configuration.rs",
+      "git_sha256": "73c57d9a2b7e78413e221c041f819212c126d9b1737b42a990cbc80c1fb4b795"
+    },
+    {
+      "path": "crates/lab-core/tests/managed_quiesce.rs",
+      "git_sha256": "bd46a39ed3cab495cda9b32b7a6cde5761783bccf39ea00a7f1fd4057e64fb3c"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone1.rs",
+      "git_sha256": "74c6389650d8b4481936c896c5e53e9d2917e0390f1a2da9fde92b0a45ba0751"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone2.rs",
+      "git_sha256": "7450210c0ee8409d0f1b0c98f88813ef42c0ca2173086de30fe61af6df3af809"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone3_codec_units.rs",
+      "git_sha256": "639031d84039d8d1e33298dddbfa3d116235671b1005a8b5e00aa4f0b5948111"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone3_instruments.rs",
+      "git_sha256": "d24708913e77102ebd300d559bef23c823477c289a1e7d41b35c4ad6de329145"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone3_metakon_runtime.rs",
+      "git_sha256": "7dfb03d8ac4a78a503025802dd69f71b824a62ed9be9a802048c130e0dbf6c38"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone3_output_transport.rs",
+      "git_sha256": "a171eeadb2325831b5973decb09c1883473498b47e146bd41b25b73f53ff2e6e"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone3_transport.rs",
+      "git_sha256": "668a5657e687be3e577bf04e1ab8f3570ebd80e0c15ec560b6c0c03393704cfe"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone4_algorithms.rs",
+      "git_sha256": "c1f08f4f0b8e82f784e84619277d2f19c1a659bfd12bc929dceed777cc547f8e"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone4_runtime.rs",
+      "git_sha256": "4d7b8741e900bd03441106527f778536a8968c0c0c62540d45929be65f248270"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone5_managed.rs",
+      "git_sha256": "10d0f2087546f3d19f3b29b9f6989fef646eb5cded913d2df23b7de1e8ddd357"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone9a_neutral.rs",
+      "git_sha256": "1b5f3bd571557761edfae632a3ff8ddc81623dfb9f8b968661030788a060ccc5"
+    },
+    {
+      "path": "crates/lab-core/tests/milestone9d_physical_output.rs",
+      "git_sha256": "ded5dd0c13b824cfc02a2942917e0ad8c79f2f860c9b4719ee22501a500b76d7"
+    },
+    {
+      "path": "crates/lab-core/tests/model_restart.rs",
+      "git_sha256": "bfe32491681788e96663d42fe314d92a2ee7d482dc6643738e43e20e0374d79b"
+    },
+    {
+      "path": "crates/lab-core/tests/recorder_evidence.rs",
+      "git_sha256": "da55527ba06fd0ae4752c0ceb5eb95ae83934e49db8ac871c79eeb1e87180eae"
+    },
+    {
+      "path": "crates/lab-core/tests/recorder_facts.rs",
+      "git_sha256": "e4653d0873f9f11f10d13c1c8fc710d72841ef6cdd0a72e7e0f387af14d63fa0"
+    },
+    {
+      "path": "crates/lab-core/tests/reference_operations.rs",
+      "git_sha256": "1fcaca848794b6bc509492b96fa9c385bd0cbd14beb14647d1c5bcf41fab011c"
+    },
+    {
+      "path": "crates/lab-core/tests/values.rs",
+      "git_sha256": "96fda6df134a5dd4b401a359513eab3bc59579b65aed60a53d3181e5e3bf6d16"
+    },
+    {
+      "path": "crates/lab-windows-job/Cargo.toml",
+      "git_sha256": "c4cd0e7b1693b0456be544c7f9318a91ad05dd34944f2ff3d9ce580d66de4ce9"
+    },
+    {
+      "path": "crates/lab-windows-job/src/lib.rs",
+      "git_sha256": "1f6aa06125fc1291c59166e4005e080b87b3d29c039f1a0efce97753b6aba89f"
+    },
+    {
+      "path": "crates/lab-windows-job/src/pipe.rs",
+      "git_sha256": "8a3e49621937b7ceac69e9a82a0bc0c5d57ad2ba00991047421943282bcacc01"
+    },
+    {
+      "path": "crates/lab-windows-job/src/windows.rs",
+      "git_sha256": "e643c82dacc3f552bdefe7b95f5b769f34585fe03e7623764557b053f8261512"
+    },
+    {
+      "path": "examples/runtime.minimal.toml",
+      "git_sha256": "a4a3490bee31c4f060c516544b785c1227463d6586d492a029ceea889dfda65b"
+    },
+    {
+      "path": "examples/runtime.virtual.toml",
+      "git_sha256": "1885ee56bc0b2499f1f48636ac5a695fa47c5243bb5d2aaae3a67b5aa0843dc5"
+    },
+    {
+      "path": "examples/simple-device/read-only.json",
+      "git_sha256": "961ea2594160a65f1fa2318a5e3c094e161bbb7e9877ac00c7e6853b7e832ff0"
+    },
+    {
+      "path": "examples/simple-device/runtime.read-only.toml",
+      "git_sha256": "92b58d1cf823f27e8270064adcaf47250362d5fbb0b1a73e463dbcba405367bd"
+    },
+    {
+      "path": "examples/simple-device/runtime.writable.toml",
+      "git_sha256": "90ecd2cb89fc4ccf4e3cb1f8366e8a26c2e4eab8bd44222adee116cc241d91dc"
+    },
+    {
+      "path": "examples/simple-device/writable.json",
+      "git_sha256": "2657aaaf9895fc3a185a472b2159694e915d7c468ab26cc12cea71e7b00201cc"
+    },
+    {
+      "path": "scripts/package-developer-preview.ps1",
+      "git_sha256": "59aae29e1714022b3a3c344f017204f6397eda596b3617b7bdd24d11b70f76d3"
+    },
+    {
+      "path": "scripts/package-linux-runtime.py",
+      "git_sha256": "82b0147dfea281f2e66b871730387297ea4da31949f8b03abac5fdf3443e981e"
+    },
+    {
+      "path": "scripts/package_user_documentation.py",
+      "git_sha256": "c1e5877822e112b67179cfb3d880e2f06e2e2725bf9f71258efdcde0ab5878c2"
+    },
+    {
+      "path": "scripts/release-license-evidence.ps1",
+      "git_sha256": "7a24d470bd1118d2075d0d050ca99a1e0c573eecb7275ad0f19cf3d2420aabd4"
+    },
+    {
+      "path": "scripts/release_license_evidence.py",
+      "git_sha256": "d3b43a960c554e98f2163961a441373266e954c4fe8cdfe659faa97a6c283933"
+    },
+    {
+      "path": "scripts/resolve-native-allocations.ps1",
+      "git_sha256": "53ab3c30a74386842714c57da72a0d234f1c13b337d852fbdbc743bf6519bcae"
+    },
+    {
+      "path": "scripts/support/allocation-meter.rs",
+      "git_sha256": "5e6e6cd08ab87a1856baa2fee1a35de34e35a9b65d80ec4a0b6bac17bfe00666"
+    },
+    {
+      "path": "scripts/support/bounded-renderer-probe.rs",
+      "git_sha256": "fcc006049cf14875b813f1719bd64a325780272f329d087d639dc0ba6f861bf8"
+    },
+    {
+      "path": "scripts/support/frame-owner-probe.rs",
+      "git_sha256": "7c9cb042c8069c76791bf5504a01a3defa0053c7f08177dd39edb52da0c55a25"
+    },
+    {
+      "path": "scripts/support/glow-seam-check.rs",
+      "git_sha256": "1a6585de49705e63811ce73e5d34f56515941bd440f61656fd28be6e72c6810c"
+    },
+    {
+      "path": "scripts/support/native-allocation-meter.rs",
+      "git_sha256": "6f527868f675873150ce795b338a990469dd627bcc1c28fa2057f08c9c65f2ca"
+    },
+    {
+      "path": "scripts/support/native-glow-backend.rs",
+      "git_sha256": "dc5f8d4e48bfb8758b7ac0ef7e1afe6edd36ee593ff3d04d60594cde88b71944"
+    },
+    {
+      "path": "scripts/support/native-glow-device.rs",
+      "git_sha256": "5cb8d2495a2b1a53a20cc1d397dc9629deb5e5644e69af0875606eb003b42a9f"
+    },
+    {
+      "path": "scripts/support/native-glow-smoke.rs",
+      "git_sha256": "009351fc9b76f6f5db9e9bd1d1c2952464be7ca8c1996e274af92f385f64ae42"
+    },
+    {
+      "path": "scripts/support/native-host-job-probe.rs",
+      "git_sha256": "2522acfbd4b640cee72c05dbc9606a2edd8ca8f4ea3fc8d97c898c826bf04f3e"
+    },
+    {
+      "path": "scripts/support/plot-geometry-probe.rs",
+      "git_sha256": "0b424ddb452e9b60f28cb12f100329a5853a226d535315b28394d2bf9d3bd6ae"
+    },
+    {
+      "path": "scripts/support/plot-memory-probe.rs",
+      "git_sha256": "65fb4d4f0b1df78b877fd3bce1825b4c1c6152029d1dd68c811d72ef49277cfc"
+    },
+    {
+      "path": "scripts/support/plot-projection-probe.rs",
+      "git_sha256": "14760cb2001bc3cc660191de24e2d18d36839e6bd9b837cac38cfbf110e5c49d"
+    },
+    {
+      "path": "scripts/support/plot-widget-probe.rs",
+      "git_sha256": "fc4389c99eec902be86bb24740cc99a825fe683ed637d2514a6d846f8c899f91"
+    },
+    {
+      "path": "scripts/support/retirement-probe.rs",
+      "git_sha256": "cf7a19cb0ef15dcdf895f858d9316c8632a43f5ef55c0e0131516fbab183c792"
+    },
+    {
+      "path": "scripts/support/v1-parent-pump-smoke.py",
+      "git_sha256": "6decb96de26951c22ca2d55464a5236de307b26c3cbd76524c33606d7aac7d3c"
+    },
+    {
+      "path": "scripts/support/v1-renderer-probe.rs",
+      "git_sha256": "1b9facd41295628507731c7642247c1871e492ad1702239f9371661d77e362f8"
+    },
+    {
+      "path": "scripts/support/v2-allocation-probe.rs",
+      "git_sha256": "eafbdd29ed6f9c0cb2be287aa94aec560844ec4fb6fd1e2a2208876b8558afd1"
+    },
+    {
+      "path": "scripts/support/v2-renderer-allocation-probe.rs",
+      "git_sha256": "d8699379b40e1abe5b3b32e45326cba131cb7a97ef783e91d8833590f630c8d4"
+    },
+    {
+      "path": "scripts/support/windows-supervisor-fixture.rs",
+      "git_sha256": "cef9aaba34f81b1dfb73ac886b0e0d2db6eca380aac7418f9967cf6f47e9c478"
+    },
+    {
+      "path": "scripts/test-isolated-renderer.ps1",
+      "git_sha256": "f68aae0839f7b4961640b3bca46335c17170466db2d86f3d57355ab36059e82f"
+    },
+    {
+      "path": "scripts/test-native-child-capsule.ps1",
+      "git_sha256": "c610f15add9630767a1b2e16dd0cf2d90b7dda597671603d10da291a18706e3c"
+    },
+    {
+      "path": "scripts/test-native-glow.ps1",
+      "git_sha256": "39e8e35eeb873d5f1abeb4b9187533cb758ea8612f957ed6feaf75aa0577ed53"
+    },
+    {
+      "path": "scripts/test-native-host-job.ps1",
+      "git_sha256": "e2791def4fc008c2e25bde0da1b74d9c56d991b104069897f397fbe24a792a34"
+    },
+    {
+      "path": "scripts/test-package-documentation.ps1",
+      "git_sha256": "21859f6b0504b8cfab7531ec2aaaff7c11f45b567a3e753e77d59f1281d2435a"
+    },
+    {
+      "path": "scripts/test-private-ipc.ps1",
+      "git_sha256": "145102c131ab90d32cb19f4489058c71d8a417c501b317ecb9eb6cd6a5b6715b"
+    },
+    {
+      "path": "scripts/test-release-license-evidence.ps1",
+      "git_sha256": "ede07eafa50749536723321336b41d1b438a197c5b5c896126c00c1ddc84ea4a"
+    },
+    {
+      "path": "scripts/test-v2-allocation.ps1",
+      "git_sha256": "7b156d65d40c23bda78d18b18f3f62555437cac8052a2fc50590a83ca1a6167a"
+    },
+    {
+      "path": "scripts/test-v2-renderer-allocation.ps1",
+      "git_sha256": "c7527fae48da2ff48d3fed9db8786ca0dd0a075f30dedc5953660cf8bfa37ec8"
+    },
+    {
+      "path": "scripts/test-windows-supervisor.ps1",
+      "git_sha256": "f2e29f841f4bc73bee6fe4da287015e550e1a758642bc86e3ba5c009d6ee7976"
+    },
+    {
+      "path": "scripts/test_release_license_evidence.py",
+      "git_sha256": "12fd9392522c059d7e126d83f27972d13fe00d7ce8c484a1e8bb374a2648972f"
+    },
+    {
+      "path": "scripts/test_renderer_child_compatibility.py",
+      "git_sha256": "e4058602b8c34a3af50501a26652bfdb4dcf0e5d8c2650c5e84ebfbeaaae6f34"
+    },
+    {
+      "path": "scripts/user-package-files.json",
+      "git_sha256": "137e5fec27d7cd7bcc010ffd8aa4a30638545bbe6bcf7a6b4921de6e45bc13a3"
+    },
+    {
+      "path": "test-data/fixtures/metakon/definitions/metakon-513-output.json",
+      "git_sha256": "08cc2b1c3b7a945167297c4eccc5ed5c3cd7eab22edb8e48d54159d3667e2492"
+    },
+    {
+      "path": "test-data/fixtures/metakon/definitions/metakon-513-thermocouple.json",
+      "git_sha256": "b631a78a13b9126c430c50732ac1fb3f0739c3e7da7664ef1591e4ce178c65eb"
+    },
+    {
+      "path": "test-data/fixtures/metakon/definitions/metakon-temperature-tenths-fixture.json",
+      "git_sha256": "c4bb74ac28dcfd8dc7825b0d7e78a6acca60166232f3eabf09e855fef8671610"
+    },
+    {
+      "path": "test-data/fixtures/metakon/runtime.metakon-513-com5-output.toml",
+      "git_sha256": "82aaea40998965fc021dd08c9aea254e9c514bcb41f1b73ace31037b924061d8"
+    },
+    {
+      "path": "test-data/fixtures/metakon/runtime.metakon-513-com5.toml",
+      "git_sha256": "39715f3d70391154935f3ab6b25a1e78162f2b711f038238496f8853dc729c09"
+    },
+    {
+      "path": "test-data/fixtures/metakon/runtime.metakon-513-m9d-read-preflight.toml",
+      "git_sha256": "50d1d26d515aa021e7522499e404c6729f2456a159983bdd77dc3a03d7464a7f"
+    },
+    {
+      "path": "test-data/fixtures/metakon/runtime.metakon-read-only.toml",
+      "git_sha256": "502b4f7bfa5d2671abe4a015cacd16891b3b09be43fcb03e1a4dc6eda734b0e6"
+    },
+    {
+      "path": "test-data/m16_unknown_reconnect_application.json",
+      "git_sha256": "e4880e70620da39f0dbc6ecd49f256792a0043edf4d1ee633b9b99d9efba3759"
+    },
+    {
+      "path": "scripts/support/native-glow-capabilities.rs",
+      "git_sha256": "99e27d411015847430a79096ccd40fe5486a21e425d5b16a0811ba1ac5472550"
+    },
+    {
+      "path": "scripts/test-port-1-gl.ps1",
+      "git_sha256": "7ed65028b7098a69389df95fbc31fdca1d99ebbdd3b5c6cbb41aa6ada44ef149"
+    }
+  ],
+  "historical_gate_evidence": "../port-1-evidence/gates.json",
+  "historical_gate_evidence_sha256": "74ca4b751eec1c56a110e4251fc3cdce22d2d23000157a9fdd59bbb2a70f7647",
+  "note": "Original PORT-1 evidence reused for identical source inputs, not relabelled as fresh RENDER-1 execution."
+}
