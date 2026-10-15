@@ -1,0 +1,36 @@
+{
+  "utc": "2026-10-15T21:12:08.3078174Z",
+  "rustc": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cpu": [
+    {
+      "Name": "AMD Ryzen 5 9600X 6-Core Processor             "
+    }
+  ],
+  "os": [
+    {
+      "Caption": "\u041c\u0430\u0439\u043a\u0440\u043e\u0441\u043e\u0444\u0442 Windows 10 Pro",
+      "Version": "10.0.19045",
+      "BuildNumber": "19045"
+    }
+  ],
+  "gpus": [
+    {
+      "Name": "NVIDIA GeForce RTX 3060 Ti",
+      "DriverVersion": "32.0.16.1692"
+    },
+    {
+      "Name": "AMD Radeon(TM) Graphics",
+      "DriverVersion": "32.0.21042.62"
+    }
+  ],
+  "memory_policy": "test-only process/job 1073741824 bytes; selected before graphics; no automatic increase",
+  "activation_qualified": false
+}

@@ -1,0 +1,633 @@
+[
+  {
+    "name": "dev-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-native-child",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:10:25.538072+00:00",
+    "elapsed_seconds": 11.037,
+    "exit_code": 0,
+    "log_sha256": "12453ec9cc42567893b77bc4d701d575f5311a8974438721eb1481efd69782a2",
+    "binaries": [],
+    "experiment_directories": [],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-glow-faults",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_isolated_gpu_fault_matrix"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:13:20.573880+00:00",
+    "elapsed_seconds": 58.475,
+    "exit_code": 0,
+    "log_sha256": "ac83fbeeeb4a7fcadfe5ba7c2045df678af55dedb9da1f3e1f923d1957172e28",
+    "binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70073856,
+        "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T2113208240385"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 55.92s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-glow-frames",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_first_isolated_renderer_frames_from_parent_approved_snapshots"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:13:09.576188+00:00",
+    "elapsed_seconds": 3.467,
+    "exit_code": 0,
+    "log_sha256": "7f52fd9f9535659e12f0e78c3e04e12b7a9520809805567d4739006fa49de341",
+    "binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70073856,
+        "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T2113098261160"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 1.18s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-glow-pending",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_renderer_pending_completion_handoff_stop_retains_original_root"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:13:13.043955+00:00",
+    "elapsed_seconds": 7.529,
+    "exit_code": 0,
+    "log_sha256": "feaa0a79b0208f000d58029079b9ef3bf1554f517ef34b3fc08b15cc2c08b903",
+    "binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70073856,
+        "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T2113132942754"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 5.30s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-ipc",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:10:50.703189+00:00",
+    "elapsed_seconds": 67.699,
+    "exit_code": 0,
+    "log_sha256": "86fbc79e6bf62bb03eef36427897bd31255dd5f6486148c20469f90a65bef5a5",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\private-ipc\\dev\\private-ipc-fixture.exe",
+        "bytes": 2747392,
+        "sha256": "662f11d648e4b8f43a69599b3e0033873c8f0a9ce6b722b28158307d9b92ce9f"
+      },
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70073856,
+        "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\private-ipc\\dev",
+      "D:\\rust\\lab-runtime\\target\\private-ipc\\dev"
+    ],
+    "test_results": [
+      "test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 573 filtered out; finished in 32.62s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-job",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-host-job.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:11:58.402562+00:00",
+    "elapsed_seconds": 0.965,
+    "exit_code": 0,
+    "log_sha256": "9ed780cf2885d0ddd462b3352c8346edc4ab9a65d8f0738ce5944f6a1e9a714f",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\native-host-job\\dev\\c64af2079fe143d8bbdce4525d6a40ed\\native-host-job.exe",
+        "bytes": 287232,
+        "sha256": "75c27f2e6f2c4616acb6c56c147c580bc884be860a701fc21478b4b060c56538"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\native-host-job\\dev\\c64af2079fe143d8bbdce4525d6a40ed"
+    ],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-preview-corrected",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:12:46.777706+00:00",
+    "elapsed_seconds": 571.4,
+    "exit_code": 0,
+    "log_sha256": "ce80c84bd91db8f4f343c62df727cfe575bbe4661449735c12799202f3437f68",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev\\v2-renderer-allocation-probe.exe",
+        "bytes": 32791040,
+        "sha256": "db2aa3077a33a1ccb8e660c1779c2bfe1926757c77ebfcd70e7cb887e523e021"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev"
+    ],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-preview",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:11:59.368405+00:00",
+    "elapsed_seconds": 7.214,
+    "exit_code": 1,
+    "log_sha256": "6f943317b32cbdc90846305e4ae6cc1d416765d4ac5d661021e46cb9eb6d4a40",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev\\v2-renderer-allocation-probe.exe",
+        "bytes": 32785920,
+        "sha256": "949d078de9a144d2d8c37c4ee504b9119848ef5beb6e7531bc130837dc81c1e5"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev"
+    ],
+    "test_results": [],
+    "verdict": "FAIL"
+  },
+  {
+    "name": "dev-supervisor",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:10:36.575680+00:00",
+    "elapsed_seconds": 14.127,
+    "exit_code": 0,
+    "log_sha256": "59658acd002102a9111f75639ac145d215ba289bacd19368c3ba3f4594fcf003",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\windows-supervisor\\dev\\608ec32f29704d3c947634234e81d1ce\\supervisor-fixture.exe",
+        "bytes": 450560,
+        "sha256": "1644fb3dab5abc1a4828a22de20e3d27d8f07a5e2d77c9a21d1766f72cc1bd95"
+      },
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70073856,
+        "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\windows-supervisor\\dev\\608ec32f29704d3c947634234e81d1ce"
+    ],
+    "test_results": [
+      "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 588 filtered out; finished in 12.87s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-workbench",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--test-threads=1"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:06:14.248557+00:00",
+    "elapsed_seconds": 251.288,
+    "exit_code": 0,
+    "log_sha256": "02766207174adcd13153cb9be9650f9044d535b52e69b741dbd1a9dda1b6a89a",
+    "binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70073856,
+        "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+      }
+    ],
+    "experiment_directories": [],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 537 passed; 0 failed; 58 ignored; 0 measured; 0 filtered out; finished in 250.55s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "source_head": "4da9da508b1c20d8b09c2895ff8b56924c1be3b2",
+    "started_utc": "2026-10-15T21:06:11.874006+00:00",
+    "elapsed_seconds": 2.308,
+    "exit_code": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "binaries": [],
+    "experiment_directories": [],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-native-child",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:22:41.336923+00:00",
+    "elapsed_seconds": 8.97,
+    "exit_code": 0,
+    "log_sha256": "bb200d4f7af44b6ad0fe7a519adfbbeb21d6aa0b035605ac566e74174a5a22c1",
+    "binaries": [],
+    "experiment_directories": [],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-glow-faults",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_isolated_gpu_fault_matrix"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:15:02.673835+00:00",
+    "elapsed_seconds": 53.496,
+    "exit_code": 0,
+    "log_sha256": "6e205aeb86c643de2d8a43603d33680311d554b45fa64e703682ee488a29c0a0",
+    "binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30538752,
+        "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T2115029188725"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 51.02s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-glow-frames",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_first_isolated_renderer_frames_from_parent_approved_snapshots"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:14:19.049570+00:00",
+    "elapsed_seconds": 36.257,
+    "exit_code": 0,
+    "log_sha256": "d052772e5ed71991bf2775a489554eb058398e92b3cc022eaeebc63d8da7286a",
+    "binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30538752,
+        "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T2114192953822"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.84s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-glow-pending",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_renderer_pending_completion_handoff_stop_retains_original_root"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:14:55.307374+00:00",
+    "elapsed_seconds": 7.366,
+    "exit_code": 0,
+    "log_sha256": "3db15e16c16aa472624ebf1c81f2f7ad6f4d58d2cb9d9919e338e8bdd090ba71",
+    "binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30538752,
+        "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T2114555662546"
+    ],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 5.18s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-ipc",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:23:04.621391+00:00",
+    "elapsed_seconds": 56.386,
+    "exit_code": 0,
+    "log_sha256": "244d98eafb94ad86a5286c5822bebc32165043ef91239c9fb6b448ca7ec0bf1d",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\private-ipc\\release\\private-ipc-fixture.exe",
+        "bytes": 1006592,
+        "sha256": "ad635c5dad8a31f3247210be4bbaf1c2e11abfeddc6c320853b6f5de35fd8ae5"
+      },
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30538752,
+        "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\private-ipc\\release",
+      "D:\\rust\\lab-runtime\\target\\private-ipc\\release"
+    ],
+    "test_results": [
+      "test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 573 filtered out; finished in 29.98s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-job",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-host-job.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:24:01.008597+00:00",
+    "elapsed_seconds": 1.118,
+    "exit_code": 0,
+    "log_sha256": "d99a37702850c6bcacf4d17ec6cc336c918f334ffd1a8ef6c72e831e412662d7",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\native-host-job\\release\\b67b24e0c50548af8abb0121b4a0f026\\native-host-job.exe",
+        "bytes": 193024,
+        "sha256": "5834523894b8a0a76bb1d5e452bfa29a523743498e13891e7acc6fc26f1ab1f5"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\native-host-job\\release\\b67b24e0c50548af8abb0121b4a0f026"
+    ],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-preview",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:24:02.127275+00:00",
+    "elapsed_seconds": 80.439,
+    "exit_code": 0,
+    "log_sha256": "ca59afc6c9c2bcdbc9410c0f70c792265674b2ebc45ac1709bcfaae355a3966e",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\release\\v2-renderer-allocation-probe.exe",
+        "bytes": 8047104,
+        "sha256": "afec9e5b6c5b58a331a158bd04ac61d32fd565067b43121975d41ef4ba7f3812"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\release"
+    ],
+    "test_results": [],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-supervisor",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:22:50.307828+00:00",
+    "elapsed_seconds": 14.313,
+    "exit_code": 0,
+    "log_sha256": "9df4855f29ff78a8a85c25a28212ac168ed7942cbe3344cae4cf443d26d3ec8c",
+    "binaries": [
+      {
+        "path": "D:\\rust\\lab-runtime\\target\\windows-supervisor\\release\\ce54d637effa44e9ac373424664a941a\\supervisor-fixture.exe",
+        "bytes": 303616,
+        "sha256": "9648b98bc506b2831090bf3d6c9239143607a8b3b9340c6fbf04e92fe58f867f"
+      },
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30538752,
+        "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+      }
+    ],
+    "experiment_directories": [
+      "D:\\rust\\lab-runtime\\target\\windows-supervisor\\release\\ce54d637effa44e9ac373424664a941a"
+    ],
+    "test_results": [
+      "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 588 filtered out; finished in 12.90s"
+    ],
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-workbench",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--test-threads=1"
+    ],
+    "source_head": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+    "started_utc": "2026-10-15T21:22:18.178701+00:00",
+    "elapsed_seconds": 23.157,
+    "exit_code": 0,
+    "log_sha256": "7a1a8570b5a2a9138defc462cc3cb9272ed2e75391d078b2fa38261911570974",
+    "binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30538752,
+        "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+      }
+    ],
+    "experiment_directories": [],
+    "test_results": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+      "test result: ok. 537 passed; 0 failed; 58 ignored; 0 measured; 0 filtered out; finished in 22.78s"
+    ],
+    "verdict": "PASS"
+  }
+]

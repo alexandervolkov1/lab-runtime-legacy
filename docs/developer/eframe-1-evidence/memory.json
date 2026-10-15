@@ -1,0 +1,30 @@
+[
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "process_peak": 623493120,
+    "job_peak": 630067200,
+    "cap": 1073741824
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "process_peak": 183386112,
+    "job_peak": 189960192,
+    "cap": 1073741824
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "process_peak": 606613504,
+    "job_peak": 613187584,
+    "cap": 1073741824
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "process_peak": 184438784,
+    "job_peak": 191016960,
+    "cap": 1073741824
+  }
+]

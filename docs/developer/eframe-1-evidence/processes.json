@@ -1,0 +1,254 @@
+[
+  {
+    "profile": "dev",
+    "mode": "normal",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 0,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": true,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 630067200,
+    "peak_process_commit": 623493120,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "wgpu"
+  },
+  {
+    "profile": "dev",
+    "mode": "crash",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 3221226505,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 622727168,
+    "peak_process_commit": 616177664,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "wgpu"
+  },
+  {
+    "profile": "dev",
+    "mode": "stall",
+    "cap": 1073741824,
+    "contained": true,
+    "exit": 92,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 624033792,
+    "peak_process_commit": 617492480,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "wgpu"
+  },
+  {
+    "profile": "dev",
+    "mode": "normal",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 0,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": true,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 189960192,
+    "peak_process_commit": 183386112,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "glow"
+  },
+  {
+    "profile": "dev",
+    "mode": "crash",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 3221226505,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 165933056,
+    "peak_process_commit": 159367168,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "glow"
+  },
+  {
+    "profile": "dev",
+    "mode": "stall",
+    "cap": 1073741824,
+    "contained": true,
+    "exit": 92,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 165560320,
+    "peak_process_commit": 159010816,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "glow"
+  },
+  {
+    "profile": "release",
+    "mode": "normal",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 0,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": true,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 613187584,
+    "peak_process_commit": 606613504,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "wgpu"
+  },
+  {
+    "profile": "release",
+    "mode": "crash",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 3221226505,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 608485376,
+    "peak_process_commit": 601919488,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "wgpu"
+  },
+  {
+    "profile": "release",
+    "mode": "stall",
+    "cap": 1073741824,
+    "contained": true,
+    "exit": 92,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 607109120,
+    "peak_process_commit": 600535040,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "wgpu"
+  },
+  {
+    "profile": "release",
+    "mode": "normal",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 0,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": true,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 191016960,
+    "peak_process_commit": 184438784,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "glow"
+  },
+  {
+    "profile": "release",
+    "mode": "crash",
+    "cap": 1073741824,
+    "contained": false,
+    "exit": 3221226505,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 166490112,
+    "peak_process_commit": 159911936,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "glow"
+  },
+  {
+    "profile": "release",
+    "mode": "stall",
+    "cap": 1073741824,
+    "contained": true,
+    "exit": 92,
+    "ipc_obligations": "none; test receipt files only",
+    "native_gpu_cleanup_claimed": false,
+    "normal": false,
+    "original_exit_confirmed": true,
+    "original_handles_retired": true,
+    "passed": true,
+    "peak_job_commit": 163893248,
+    "peak_process_commit": 157310976,
+    "remaining_owned_job_process_thread_handles": [
+      0,
+      0,
+      0
+    ],
+    "renderer": "glow"
+  }
+]

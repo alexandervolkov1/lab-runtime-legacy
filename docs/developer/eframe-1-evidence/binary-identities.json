@@ -1,0 +1,220 @@
+{
+  "host": [
+    {
+      "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+      "profile": "dev",
+      "binary": "D:\\rust\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe",
+      "sha256": "ddde4ac9fda522395c8165250126d4265212cab724e8b902fef2965164b6dbfb"
+    },
+    {
+      "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+      "profile": "release",
+      "binary": "D:\\rust\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe",
+      "sha256": "2e9922258565b8cc260fb37903097124872f2361f7f97a2d8cbf9568ca105982"
+    }
+  ],
+  "regression": [
+    {
+      "name": "dev-clippy",
+      "binaries": []
+    },
+    {
+      "name": "dev-glow-faults",
+      "binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70073856,
+          "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+        }
+      ]
+    },
+    {
+      "name": "dev-glow-frames",
+      "binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70073856,
+          "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+        }
+      ]
+    },
+    {
+      "name": "dev-glow-pending",
+      "binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70073856,
+          "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+        }
+      ]
+    },
+    {
+      "name": "dev-ipc",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\private-ipc\\dev\\private-ipc-fixture.exe",
+          "bytes": 2747392,
+          "sha256": "662f11d648e4b8f43a69599b3e0033873c8f0a9ce6b722b28158307d9b92ce9f"
+        },
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70073856,
+          "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+        }
+      ]
+    },
+    {
+      "name": "dev-job",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\native-host-job\\dev\\c64af2079fe143d8bbdce4525d6a40ed\\native-host-job.exe",
+          "bytes": 287232,
+          "sha256": "75c27f2e6f2c4616acb6c56c147c580bc884be860a701fc21478b4b060c56538"
+        }
+      ]
+    },
+    {
+      "name": "dev-preview-corrected",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev\\v2-renderer-allocation-probe.exe",
+          "bytes": 32791040,
+          "sha256": "db2aa3077a33a1ccb8e660c1779c2bfe1926757c77ebfcd70e7cb887e523e021"
+        }
+      ]
+    },
+    {
+      "name": "dev-preview",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev\\v2-renderer-allocation-probe.exe",
+          "bytes": 32785920,
+          "sha256": "949d078de9a144d2d8c37c4ee504b9119848ef5beb6e7531bc130837dc81c1e5"
+        }
+      ]
+    },
+    {
+      "name": "dev-supervisor",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\windows-supervisor\\dev\\608ec32f29704d3c947634234e81d1ce\\supervisor-fixture.exe",
+          "bytes": 450560,
+          "sha256": "1644fb3dab5abc1a4828a22de20e3d27d8f07a5e2d77c9a21d1766f72cc1bd95"
+        },
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70073856,
+          "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+        }
+      ]
+    },
+    {
+      "name": "dev-workbench",
+      "binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70073856,
+          "sha256": "3788ce13f3d5a6d3ce58723136db91a5a0cc94e3c0c67b8077cd1da591935c00"
+        }
+      ]
+    },
+    {
+      "name": "fmt",
+      "binaries": []
+    },
+    {
+      "name": "release-clippy",
+      "binaries": []
+    },
+    {
+      "name": "release-glow-faults",
+      "binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30538752,
+          "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+        }
+      ]
+    },
+    {
+      "name": "release-glow-frames",
+      "binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30538752,
+          "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+        }
+      ]
+    },
+    {
+      "name": "release-glow-pending",
+      "binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30538752,
+          "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+        }
+      ]
+    },
+    {
+      "name": "release-ipc",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\private-ipc\\release\\private-ipc-fixture.exe",
+          "bytes": 1006592,
+          "sha256": "ad635c5dad8a31f3247210be4bbaf1c2e11abfeddc6c320853b6f5de35fd8ae5"
+        },
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30538752,
+          "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+        }
+      ]
+    },
+    {
+      "name": "release-job",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\native-host-job\\release\\b67b24e0c50548af8abb0121b4a0f026\\native-host-job.exe",
+          "bytes": 193024,
+          "sha256": "5834523894b8a0a76bb1d5e452bfa29a523743498e13891e7acc6fc26f1ab1f5"
+        }
+      ]
+    },
+    {
+      "name": "release-preview",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\v2-renderer-allocation-probe\\release\\v2-renderer-allocation-probe.exe",
+          "bytes": 8047104,
+          "sha256": "afec9e5b6c5b58a331a158bd04ac61d32fd565067b43121975d41ef4ba7f3812"
+        }
+      ]
+    },
+    {
+      "name": "release-supervisor",
+      "binaries": [
+        {
+          "path": "D:\\rust\\lab-runtime\\target\\windows-supervisor\\release\\ce54d637effa44e9ac373424664a941a\\supervisor-fixture.exe",
+          "bytes": 303616,
+          "sha256": "9648b98bc506b2831090bf3d6c9239143607a8b3b9340c6fbf04e92fe58f867f"
+        },
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30538752,
+          "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+        }
+      ]
+    },
+    {
+      "name": "release-workbench",
+      "binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30538752,
+          "sha256": "5a77728e9b569c5a70b0c9111d491d2a9c8dec1268df6a580962c3c2469c5fae"
+        }
+      ]
+    }
+  ]
+}

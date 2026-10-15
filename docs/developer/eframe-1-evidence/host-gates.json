@@ -1,0 +1,118 @@
+[
+  {
+    "profile": "dev",
+    "name": "fmt",
+    "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+    "command": [
+      "cargo",
+      "fmt",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.10051880000173696,
+    "utc": "2026-10-15T21:11:27.284626+00:00",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "profile": "dev",
+    "name": "clippy",
+    "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+    "command": [
+      "cargo",
+      "clippy",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.30361419999826467,
+    "utc": "2026-10-15T21:11:27.588782+00:00",
+    "log_sha256": "5604fc8f0c276397a55db4bd7008236712075c0ad37d3b3a0f1fe362b1b85a36"
+  },
+  {
+    "profile": "dev",
+    "name": "build",
+    "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.28177290000166977,
+    "utc": "2026-10-15T21:11:27.871677+00:00",
+    "log_sha256": "f591e097f22f91dd5c31fbbf7e587d80c0a4e0ed594f9c9012a544f38c52d926"
+  },
+  {
+    "profile": "release",
+    "name": "fmt",
+    "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+    "command": [
+      "cargo",
+      "fmt",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.06342489999951795,
+    "utc": "2026-10-15T21:11:58.328096+00:00",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "profile": "release",
+    "name": "clippy",
+    "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+    "command": [
+      "cargo",
+      "clippy",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.36918669999795384,
+    "utc": "2026-10-15T21:11:58.697930+00:00",
+    "log_sha256": "0de31bb8485638adca3b21dd27a3da83f5bdd092455b92448f3a6f4e707f716b"
+  },
+  {
+    "profile": "release",
+    "name": "build",
+    "source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.3062869999994291,
+    "utc": "2026-10-15T21:11:59.009121+00:00",
+    "log_sha256": "403998d7813def59ff54ef8942a37a928b6a42f3aea6f4660bbd1cdb0d4ebac8"
+  }
+]
