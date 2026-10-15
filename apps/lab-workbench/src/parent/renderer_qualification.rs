@@ -481,7 +481,13 @@ fn native_hundred_fixed_cap_cycles() {
             );
             wait(|| h.pump.supervisor().unwrap().stop(Stop::Graceful).is_ok());
         }
-        let terminal = h.terminal();
+        // Restart admission is asynchronous: an older terminal status can still
+        // be published while the new request is queued. It is never exit proof
+        // for this cycle's original process incarnation.
+        let terminal = h.pump.supervisor().unwrap().wait_status(|s| {
+            s.incarnation == cycle
+                && matches!(s.phase, Phase::ExitedHealthy | Phase::ExitedContained)
+        });
         assert_eq!(terminal.incarnation, cycle);
         assert_eq!(terminal.alive, Some(false));
         assert_eq!(
