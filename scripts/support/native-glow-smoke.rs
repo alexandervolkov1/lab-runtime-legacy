@@ -70,7 +70,7 @@ impl ApplicationHandler for App {
                     .request_redraw();
             }
             Err(error) => {
-                self.result = Some(Err(error));
+                self.result = Some(Err(error.to_string()));
                 events.exit();
             }
         }

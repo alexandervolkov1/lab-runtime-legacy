@@ -1,0 +1,14 @@
+{
+  "historical_qualified_source": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+  "current_source": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+  "changed_original_inputs": {
+    "apps/lab-native-child/src/entry.rs": "Native child only; not imported by CPU probe wrapper.",
+    "apps/lab-workbench/src/main.rs": "The CPU rustc wrapper supplies its own main; it does not import this entry point.",
+    "scripts/support/native-glow-device.rs": "GPU Device only; no native GL module imported by CPU probes.",
+    "scripts/support/native-glow-smoke.rs": "Standalone GPU probe only; not a CPU probe input."
+  },
+  "all_other_original_inputs_canonical_byte_exact": true,
+  "new_inputs": "Capabilities test/native module and PORT-1 runner are not imported by the unchanged CPU allocation wrapper.",
+  "fresh_scope": "Full Workbench and FramesOnly/borrowing controls run at PORT-1 source. Full CPU geometry/memory/retirement gates retain original B3B4C provenance; they were not rerun or relabelled.",
+  "original_receipt": "docs/developer/isolated-renderer-lifecycle-memory-evidence/cpu-source-equivalence.json"
+}

@@ -32,6 +32,16 @@ identifies the historical published source, not a moving latest-release pointer.
 
 ## Implemented boundaries
 
+The isolated native renderer has a separate, test-only
+[PORT-1 capability contract](gl-capability-contract.md) and
+[current-machine qualification report](port-1-gl-capability-admission.md).
+CPU/GPU/driver fingerprints are diagnostic, not launch allowlists. The existing
+Glow implementation still requires desktop GL 3.3 Core, 1280x960 and scale 1;
+normal Workbench startup remains GUI v1 and `ACTIVATION_QUALIFIED=false`.
+Resolution/DPI expansion, backend alternatives and other-platform process hosts
+require their later stages and review. Historical B3B4C and the unmerged #43
+BLOCKED record retain their original provenance.
+
 - Runtime owns experiment state, acquisition, controllers, central output
   authority, configuration and durable Recorder history. Workbench owns
   presentation. Neither Workbench nor script lifetime owns the experiment.

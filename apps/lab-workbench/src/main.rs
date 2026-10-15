@@ -18,6 +18,9 @@ mod readonly_values;
 #[path = "gui/rebuild.rs"]
 mod rebuild;
 mod recovery;
+#[cfg(test)]
+#[path = "../../../scripts/support/native-glow-capabilities.rs"]
+mod renderer_capabilities;
 mod storage;
 #[cfg(windows)]
 mod supervisor;

@@ -1,0 +1,100 @@
+[
+  {
+    "picture": "dev-no-data.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-02.rgba",
+    "rgba_sha256": "f809e38f6d7ef0241447e73f05648bd78baa9cad1fd6e09c59aabbed099edb32",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "dev-scalar.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-03.rgba",
+    "rgba_sha256": "047ed8e892f9809231e041a49f02acf24061eff79ad8cd33ee6d47e96c9823a3",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-03.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "dev-plot.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-04.rgba",
+    "rgba_sha256": "80807b506f28c3e023d24077d70f7083a371479cc3ef2f58cfb420a5c1730520",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-04.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "dev-live-plot.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-06.rgba",
+    "rgba_sha256": "6e09100bfa69220d70e0470b59215665d804e89c73143c25cc22659867ff17c5",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-06.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "dev-document-replacement.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-09.rgba",
+    "rgba_sha256": "c07df98b321a09076bea6db373dc7b5ec4c6fdb20344d72cfce38a7b8ec75e61",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4bd866d095d-1/frame-09.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "dev-maximum-repeated.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4ce60d685e3-1/frame-02.rgba",
+    "rgba_sha256": "5dd062b5944c70aec448985197a51aa0af15655a327df09c2134a86fb861aade",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4ce60d685e3-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "dev-maximum-distinct.png",
+    "rgba": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4d039fc0118-1/frame-02.rgba",
+    "rgba_sha256": "6b2c8fd4c26b0fca502406f0ee082fd4011fb9a054ca829e8995383bf9932495",
+    "metadata": "target/debug/target/isolated-native-renderer/13516-00000000000034cc18dec4d039fc0118-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-no-data.png",
+    "rgba": "target/release/target/isolated-native-renderer/9572-000000000000256418dec51cbbe212d1-1/frame-02.rgba",
+    "rgba_sha256": "f809e38f6d7ef0241447e73f05648bd78baa9cad1fd6e09c59aabbed099edb32",
+    "metadata": "target/release/target/isolated-native-renderer/9572-000000000000256418dec51cbbe212d1-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-scalar.png",
+    "rgba": "target/release/target/isolated-native-renderer/10440-00000000000028c818dec531a7f554e9-1/frame-01.rgba",
+    "rgba_sha256": "1fd94c1dc3006e3459626079252c94efe8197bbcb6aedd6ae3a93cd5706b277a",
+    "metadata": "target/release/target/isolated-native-renderer/10440-00000000000028c818dec531a7f554e9-1/frame-01.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-plot.png",
+    "rgba": "target/release/target/isolated-native-renderer/10440-00000000000028c818dec531a7f554e9-1/frame-02.rgba",
+    "rgba_sha256": "80807b506f28c3e023d24077d70f7083a371479cc3ef2f58cfb420a5c1730520",
+    "metadata": "target/release/target/isolated-native-renderer/10440-00000000000028c818dec531a7f554e9-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-live-plot.png",
+    "rgba": "target/release/target/isolated-native-renderer/9572-000000000000256418dec51cbbe212d1-1/frame-06.rgba",
+    "rgba_sha256": "6e09100bfa69220d70e0470b59215665d804e89c73143c25cc22659867ff17c5",
+    "metadata": "target/release/target/isolated-native-renderer/9572-000000000000256418dec51cbbe212d1-1/frame-06.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-document-replacement.png",
+    "rgba": "target/release/target/isolated-native-renderer/9572-000000000000256418dec51cbbe212d1-1/frame-09.rgba",
+    "rgba_sha256": "c07df98b321a09076bea6db373dc7b5ec4c6fdb20344d72cfce38a7b8ec75e61",
+    "metadata": "target/release/target/isolated-native-renderer/9572-000000000000256418dec51cbbe212d1-1/frame-09.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-maximum-repeated.png",
+    "rgba": "target/release/target/isolated-native-renderer/9572-000000000000256418dec52bda93e8ff-1/frame-02.rgba",
+    "rgba_sha256": "5dd062b5944c70aec448985197a51aa0af15655a327df09c2134a86fb861aade",
+    "metadata": "target/release/target/isolated-native-renderer/9572-000000000000256418dec52bda93e8ff-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  },
+  {
+    "picture": "release-maximum-distinct.png",
+    "rgba": "target/release/target/isolated-native-renderer/9572-000000000000256418dec52cc83b3194-1/frame-02.rgba",
+    "rgba_sha256": "6b2c8fd4c26b0fca502406f0ee082fd4011fb9a054ca829e8995383bf9932495",
+    "metadata": "target/release/target/isolated-native-renderer/9572-000000000000256418dec52cc83b3194-1/frame-02.json",
+    "conversion": "Lossless RGBA8 PNG, reverse GL row order only"
+  }
+]
