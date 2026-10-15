@@ -30,6 +30,10 @@ from the [User manual](../README.md); ordinary users need no source checkout.
 - [Isolated renderer compatibility seams](isolated-native-renderer-child.md):
   DGUI-4C7B3B4A explicit admission handoff, selected borrowed provider and inert
   Cargo native capsule; full B3B4 renderer integration remains BLOCKED.
+- [First isolated renderer frame gate](first-isolated-renderer-frame.md):
+  DGUI-4C7B3B4B shared read-only consumer and first real isolated GL frame,
+  native fault/restart evidence and preliminary memory measurements; full B3B4
+  qualification and activation remain blocked.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.

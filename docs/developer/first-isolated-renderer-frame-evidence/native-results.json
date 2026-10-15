@@ -1,0 +1,712 @@
+[
+  {
+    "profile": "dev",
+    "directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1",
+    "result": {
+      "deployment_C": null,
+      "final_phase": "ExitedHealthy",
+      "first_isolated_real_gl_frame": "PASS",
+      "original_ipc_retired": true,
+      "own_objects": 0,
+      "peak_job_commit": 119242752,
+      "peak_process_commit": 112672768,
+      "presentation_revision": "3",
+      "runtime_extra_query_mutation_status_retry": 0,
+      "test_only_job_commit_cap": 1073741824,
+      "workbench_id": "000000000000589818deaeaac1c6b059"
+    },
+    "admitted": [
+      {
+        "document_id": "isolated-parent-document",
+        "epoch_revision": 2,
+        "max_live_parsed": 1,
+        "parsed_accounted": 1056640,
+        "snapshot": 3
+      },
+      {
+        "document_id": "isolated-parent-document",
+        "epoch_revision": 3,
+        "max_live_parsed": 1,
+        "parsed_accounted": 1056640,
+        "snapshot": 76
+      }
+    ],
+    "frames": [
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-01.json",
+        "metadata_sha256": "27a29de09bf0c70127a846d09dac6adbfca4f6a9a9a19aab748ed5186db8b539",
+        "rgba_sha256": "9ef51c3f3dc7610b6782d3ad5c79e2eae0be432e538cc98477969074b8676ef4",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-02.json",
+        "metadata_sha256": "c70ab83cff75f01fd7f1354e8b50d0e9d4c5184fe40f22d183fc6938cb6e56c2",
+        "rgba_sha256": "75b909d592a7e69e77a43e39b4359f50a62762a5f259f0d07e7dfe9144390538",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-03.json",
+        "metadata_sha256": "98c6cd321b1ee24953246f43564a9f97360903f66ebec9a2e0c6e2b3b344fc0e",
+        "rgba_sha256": "6536d56aad9f20b9ef0352850456e764e37aa7b414ff286c0301d7848478ca1d",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-04.json",
+        "metadata_sha256": "9001034bf164ff634864c5ecaccf74eb69ad9c51179944f4af509797bab7882f",
+        "rgba_sha256": "b0f705d6f29f8238abf2c4bae9e3943dc7c0c476f34d6060a88a0ddad6e9b893",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-05.json",
+        "metadata_sha256": "7c8de3ab3e3dcc10bc5c0017afc6b1c7d0bb5d0b7f66c16e893f30c2e94775a0",
+        "rgba_sha256": "9b0e7d94d0a5a004cb8f6ef84eb97a4084f66cf3b50c4ce835c0ad6c0c26b8e7",
+        "points": 64,
+        "samples": 1,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-06.json",
+        "metadata_sha256": "ab057b878722ab0f351f1c8e78e687cd2ce638829d9719420c36b8e019cecf50",
+        "rgba_sha256": "798bb26ce238cf1bf227e95a1cee75ebfa5a9be9a56eaef5536089e37b27109f",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-07.json",
+        "metadata_sha256": "cfd24b2f057980e514edc1db7ebc96b0adf20da6a5c41fbb81da03b1ce908ea9",
+        "rgba_sha256": "ca9d08d29b15fe26a46c605375cd14af28e1871ee299e2c6cc1324194992ebb5",
+        "points": 65,
+        "samples": 1,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-08.json",
+        "metadata_sha256": "8026a7a842e9203c93bc3e3dcd58e5eb2f27a6256706c48e474fc63882993791",
+        "rgba_sha256": "7c23ac778f0639cfb8b7282ccd8dd25121dd061555361eff75a7fcdee8b93971",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 3,
+        "current": false
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-09.json",
+        "metadata_sha256": "a21129b590b99b145e54d00d6ecd7e6f867465f88286044393d287b2a1f92090",
+        "rgba_sha256": "2166c9b5fa2b2cdadb81929a17a2043359d897a3d156a09b83d0fabc820a6d39",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 3,
+        "current": false
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-10.json",
+        "metadata_sha256": "7a102e8da445f6d60a813341eeb1ff09f1a46e14a983dc369b1205573fbc92c8",
+        "rgba_sha256": "c3b9b6297b6b0d07a47ebc0e43d5d379343e2583cee71035cdbb109cff16eed6",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 3,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-11.json",
+        "metadata_sha256": "2957c5bca8c889094a8bf2e83fcc06cb8a2b71319916a781bdebb88764c6ce13",
+        "rgba_sha256": "e26317b2dfea1f34158fd480500b2d4b4c99232babc960e098aa334d2d4e4fb7",
+        "points": 65,
+        "samples": 1,
+        "epoch_revision": 3,
+        "current": true
+      }
+    ],
+    "memory_milestones": {
+      "kind": "sampled_cumulative_OS_Job_peaks_not_additive_phase_allocations",
+      "samples": [
+        {
+          "credits": [
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 7163904,
+          "cumulative_peak_process_commit": 6569984,
+          "ipc_connected": false,
+          "ipc_io_bytes": 139264,
+          "milestone": "child_startup_before_ready",
+          "owner_diagnostic": "None"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 116973568,
+          "cumulative_peak_process_commit": 110403584,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "native_window_context_ready",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 8, render_owner: 0, submitted: 0, completed: 0, own_objects: 0, released_generations: 0, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 116973568,
+          "cumulative_peak_process_commit": 110403584,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "first_preview_no_data_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 8, render_owner: 0, submitted: 0, completed: 0, own_objects: 0, released_generations: 0, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 116973568,
+          "cumulative_peak_process_commit": 110403584,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "selected_scalar_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 52, render_owner: 2, submitted: 2, completed: 2, own_objects: 7, released_generations: 1, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 116973568,
+          "cumulative_peak_process_commit": 110403584,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "selected_plot_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 101, render_owner: 5, submitted: 5, completed: 5, own_objects: 0, released_generations: 4, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 117084160,
+          "cumulative_peak_process_commit": 110514176,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "live_snapshot_replacement_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 129, render_owner: 7, submitted: 7, completed: 7, own_objects: 7, released_generations: 4, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 119242752,
+          "cumulative_peak_process_commit": 112672768,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "document_replacement_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 162, render_owner: 10, submitted: 10, completed: 10, own_objects: 7, released_generations: 6, pending: false })"
+        },
+        {
+          "cumulative_peak_job_commit": 119242752,
+          "cumulative_peak_process_commit": 112672768,
+          "milestone": "normal_shutdown_original_process_exit"
+        }
+      ]
+    },
+    "faults": [
+      {
+        "mode": "crash-exit-before-ipc-retirement",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeab36beb0ce-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeab36beb0ce-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "old_exit_code": 73,
+            "old_own_object_cleanup": "UNQUALIFIED/crash",
+            "old_peak_job_commit": 116858880,
+            "old_peak_process_commit": 110317568,
+            "restart_rejected_before_original_ipc_receipts": true
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 118116352,
+          "restart_peak_process_commit": 111546368,
+          "scenario": "crash-exit-before-ipc-retirement",
+          "workbench_id": "000000000000589818deaeab36beb0ce"
+        }
+      },
+      {
+        "mode": "native-render-owner-stall",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeab87afd09f-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeab87afd09f-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "old_exit_code": 77,
+            "old_own_object_cleanup": "UNQUALIFIED/OS containment",
+            "old_peak_job_commit": 116654080,
+            "old_peak_process_commit": 110080000,
+            "reason": "Some(HeartbeatDeadline)"
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 118173696,
+          "restart_peak_process_commit": 111632384,
+          "scenario": "native-render-owner-stall",
+          "workbench_id": "000000000000589818deaeab87afd09f"
+        }
+      },
+      {
+        "mode": "pending-gpu-document-handoff-stop",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaccff93ed8-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaccff93ed8-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "bounded_complete_assembly_survived_transfer_deadline": true,
+            "max_live_parsed": 1,
+            "old_applied_unchanged": 3,
+            "old_gpu_cleanup": "BLOCKED/pending until OS containment",
+            "old_peak_job_commit": 116686848,
+            "old_peak_process_commit": 110125056,
+            "pending": {
+              "assembly_retained": true,
+              "candidate": "Some(Header { kind: Document, bytes: 2206, total: 2110, identity: Identity { workbench: [0, 0, 0, 0, 0, 0, 88, 152, 24, 222, 174, 172, 207, 249, 62, 216], incarnation: 1 }, sequence: 5, epoch: Epoch { owner: [0, 0, 0, 0, 0, 0, 88, 152, 24, 222, 174, 172, 207, 249, 62, 216], revision: 3 }, snapshot: 74, offset: 0, source: 0 })",
+              "cleanup": "Pending(RetirementStatus { generation: ContextGeneration(2), reason: FrameFailed, frame: Some(Failed(Completion)), initial_wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 34.8\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 11.9\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, deletion: None })",
+              "ledger": "[Some(ObjectIdentity { generation: ContextGeneration(2), kind: Texture, name: 1, texture: Some(TextureKey { generation: ContextGeneration(2), id: Managed(0) }) }), None, None, None, None, None, None, None, Some(ObjectIdentity { generation: ContextGeneration(2), kind: VertexArray, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Program, name: 3, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Fence, name: 1, texture: None })]",
+              "max_live_parsed": 1,
+              "old_document_snapshot": 3
+            }
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 116142080,
+          "restart_peak_process_commit": 109600768,
+          "scenario": "pending-gpu-document-handoff-stop",
+          "workbench_id": "000000000000589818deaeaccff93ed8"
+        }
+      },
+      {
+        "mode": "snapshot-stall-with-parent-source-fence",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeae1d3970b9-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeae1d3970b9-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "old_own_objects_after_close": 0,
+            "old_peak_job_commit": 116989952,
+            "old_peak_process_commit": 110448640,
+            "old_read_non_current_despite_owner_heartbeat": true,
+            "original_fresh_snapshot": 74
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 117002240,
+          "restart_peak_process_commit": 110473216,
+          "scenario": "snapshot-stall-with-parent-source-fence",
+          "workbench_id": "000000000000589818deaeae1d3970b9"
+        }
+      }
+    ]
+  },
+  {
+    "profile": "release",
+    "directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1",
+    "result": {
+      "deployment_C": null,
+      "final_phase": "ExitedHealthy",
+      "first_isolated_real_gl_frame": "PASS",
+      "original_ipc_retired": true,
+      "own_objects": 0,
+      "peak_job_commit": 136548352,
+      "peak_process_commit": 129990656,
+      "presentation_revision": "3",
+      "runtime_extra_query_mutation_status_retry": 0,
+      "test_only_job_commit_cap": 1073741824,
+      "workbench_id": "000000000000189018deaf55a3f20ef1"
+    },
+    "admitted": [
+      {
+        "document_id": "isolated-parent-document",
+        "epoch_revision": 2,
+        "max_live_parsed": 1,
+        "parsed_accounted": 1056640,
+        "snapshot": 3
+      },
+      {
+        "document_id": "isolated-parent-document",
+        "epoch_revision": 3,
+        "max_live_parsed": 1,
+        "parsed_accounted": 1056640,
+        "snapshot": 76
+      }
+    ],
+    "frames": [
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-01.json",
+        "metadata_sha256": "e8f4e6bb21c54681d1b0c3d3dc29d2c420cb448d8bda0f6dbb0fc645cda17858",
+        "rgba_sha256": "9ef51c3f3dc7610b6782d3ad5c79e2eae0be432e538cc98477969074b8676ef4",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-02.json",
+        "metadata_sha256": "1e1132f01db11eee20b9746233c5c94b22fb07bf4ab6c614db59081fbb0a6193",
+        "rgba_sha256": "75b909d592a7e69e77a43e39b4359f50a62762a5f259f0d07e7dfe9144390538",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-03.json",
+        "metadata_sha256": "6d904d355ce72264d833cb7a93a0db63eb8613e19b86ec09f1dddcf1aa51a0cf",
+        "rgba_sha256": "b0f705d6f29f8238abf2c4bae9e3943dc7c0c476f34d6060a88a0ddad6e9b893",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-04.json",
+        "metadata_sha256": "e7be60131bd5ed5745480a9df0a890b2f2e74fbcae6ff93654c2b954f6798b47",
+        "rgba_sha256": "9b0e7d94d0a5a004cb8f6ef84eb97a4084f66cf3b50c4ce835c0ad6c0c26b8e7",
+        "points": 64,
+        "samples": 1,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-05.json",
+        "metadata_sha256": "496c9481600186724ca89d5c47e6e01037305a86dd73fbf47939dc6d50fd498f",
+        "rgba_sha256": "798bb26ce238cf1bf227e95a1cee75ebfa5a9be9a56eaef5536089e37b27109f",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-06.json",
+        "metadata_sha256": "f8e820be7b7992363320ad0d558d8648dc3bebde155f76f8d8ed9c958b12cd64",
+        "rgba_sha256": "ca9d08d29b15fe26a46c605375cd14af28e1871ee299e2c6cc1324194992ebb5",
+        "points": 65,
+        "samples": 1,
+        "epoch_revision": 2,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-07.json",
+        "metadata_sha256": "96c124c1ad35ac535fdd0a9e62b1c8d35d546f7f10ce35e130ae9e2c089053b5",
+        "rgba_sha256": "7c23ac778f0639cfb8b7282ccd8dd25121dd061555361eff75a7fcdee8b93971",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 3,
+        "current": false
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-08.json",
+        "metadata_sha256": "d09abe07ed8520871660485b268c66a31f3961ca22e1956fa3b84f43b071f953",
+        "rgba_sha256": "c3b9b6297b6b0d07a47ebc0e43d5d379343e2583cee71035cdbb109cff16eed6",
+        "points": 0,
+        "samples": 0,
+        "epoch_revision": 3,
+        "current": true
+      },
+      {
+        "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-09.json",
+        "metadata_sha256": "e0ebe21bf61a99e1f423729251fee70d76ee0a921e09828c39faf3ad4e61b7dd",
+        "rgba_sha256": "e26317b2dfea1f34158fd480500b2d4b4c99232babc960e098aa334d2d4e4fb7",
+        "points": 65,
+        "samples": 1,
+        "epoch_revision": 3,
+        "current": true
+      }
+    ],
+    "memory_milestones": {
+      "kind": "sampled_cumulative_OS_Job_peaks_not_additive_phase_allocations",
+      "samples": [
+        {
+          "credits": [
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 8024064,
+          "cumulative_peak_process_commit": 6557696,
+          "ipc_connected": false,
+          "ipc_io_bytes": 139264,
+          "milestone": "child_startup_before_ready",
+          "owner_diagnostic": "None"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "native_window_context_ready",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 14, render_owner: 0, submitted: 0, completed: 0, own_objects: 0, released_generations: 0, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "first_preview_no_data_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 14, render_owner: 0, submitted: 0, completed: 0, own_objects: 0, released_generations: 0, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "selected_scalar_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 56, render_owner: 2, submitted: 2, completed: 2, own_objects: 7, released_generations: 1, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "selected_plot_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 56, render_owner: 2, submitted: 2, completed: 2, own_objects: 7, released_generations: 1, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "live_snapshot_replacement_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 56, render_owner: 2, submitted: 2, completed: 2, own_objects: 7, released_generations: 1, pending: false })"
+        },
+        {
+          "credits": [
+            2,
+            0,
+            2,
+            0,
+            0
+          ],
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "ipc_connected": true,
+          "ipc_io_bytes": 139264,
+          "milestone": "document_replacement_readback",
+          "owner_diagnostic": "Some(RendererProgress { event_loop: 247, render_owner: 8, submitted: 8, completed: 8, own_objects: 0, released_generations: 7, pending: false })"
+        },
+        {
+          "cumulative_peak_job_commit": 136548352,
+          "cumulative_peak_process_commit": 129990656,
+          "milestone": "normal_shutdown_original_process_exit"
+        }
+      ]
+    },
+    "faults": [
+      {
+        "mode": "crash-exit-before-ipc-retirement",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55f25270fa-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55f25270fa-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "old_exit_code": 73,
+            "old_own_object_cleanup": "UNQUALIFIED/crash",
+            "old_peak_job_commit": 117432320,
+            "old_peak_process_commit": 110866432,
+            "restart_rejected_before_original_ipc_receipts": true
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 117948416,
+          "restart_peak_process_commit": 111407104,
+          "scenario": "crash-exit-before-ipc-retirement",
+          "workbench_id": "000000000000189018deaf55f25270fa"
+        }
+      },
+      {
+        "mode": "native-render-owner-stall",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf562effaf87-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf562effaf87-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "old_exit_code": 77,
+            "old_own_object_cleanup": "UNQUALIFIED/OS containment",
+            "old_peak_job_commit": 120819712,
+            "old_peak_process_commit": 114253824,
+            "reason": "Some(HeartbeatDeadline)"
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 118616064,
+          "restart_peak_process_commit": 112087040,
+          "scenario": "native-render-owner-stall",
+          "workbench_id": "000000000000189018deaf562effaf87"
+        }
+      },
+      {
+        "mode": "pending-gpu-document-handoff-stop",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf5757b44f3c-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf5757b44f3c-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "bounded_complete_assembly_survived_transfer_deadline": true,
+            "max_live_parsed": 1,
+            "old_applied_unchanged": 3,
+            "old_gpu_cleanup": "BLOCKED/pending until OS containment",
+            "old_peak_job_commit": 116084736,
+            "old_peak_process_commit": 109551616,
+            "pending": {
+              "assembly_retained": true,
+              "candidate": "Some(Header { kind: Document, bytes: 2206, total: 2110, identity: Identity { workbench: [0, 0, 0, 0, 0, 0, 24, 144, 24, 222, 175, 87, 87, 180, 79, 60], incarnation: 1 }, sequence: 4, epoch: Epoch { owner: [0, 0, 0, 0, 0, 0, 24, 144, 24, 222, 175, 87, 87, 180, 79, 60], revision: 3 }, snapshot: 75, offset: 0, source: 0 })",
+              "cleanup": "Pending(RetirementStatus { generation: ContextGeneration(2), reason: FrameFailed, frame: Some(Failed(Completion)), initial_wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 8.6\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, wait: WaitObservation { completion: Timeout, attempts: 20, elapsed: 6.9\u00b5s, requested_wait: 100ms, deadline_reached: false, attempt_limit_reached: true }, deletion: None })",
+              "ledger": "[Some(ObjectIdentity { generation: ContextGeneration(2), kind: Texture, name: 1, texture: Some(TextureKey { generation: ContextGeneration(2), id: Managed(0) }) }), None, None, None, None, None, None, None, Some(ObjectIdentity { generation: ContextGeneration(2), kind: VertexArray, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Buffer, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Program, name: 3, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 1, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Shader, name: 2, texture: None }), Some(ObjectIdentity { generation: ContextGeneration(2), kind: Fence, name: 1, texture: None })]",
+              "max_live_parsed": 1,
+              "old_document_snapshot": 3
+            }
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 117579776,
+          "restart_peak_process_commit": 111009792,
+          "scenario": "pending-gpu-document-handoff-stop",
+          "workbench_id": "000000000000189018deaf5757b44f3c"
+        }
+      },
+      {
+        "mode": "snapshot-stall-with-parent-source-fence",
+        "directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf588d351959-1",
+        "restart_directory": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf588d351959-2",
+        "result": {
+          "deployment_C": null,
+          "details": {
+            "old_own_objects_after_close": 0,
+            "old_peak_job_commit": 119586816,
+            "old_peak_process_commit": 113020928,
+            "old_read_non_current_despite_owner_heartbeat": true,
+            "original_fresh_snapshot": 74
+          },
+          "explicit_restart_latest_snapshots": true,
+          "extra_runtime_query_mutation_status_retry": 0,
+          "final_incarnation": 2,
+          "final_phase": "ExitedHealthy",
+          "original_process_exit_and_ipc_retirement": true,
+          "os_containment_is_not_gpu_cleanup": true,
+          "presentation_revision": "3",
+          "restart_peak_job_commit": 116654080,
+          "restart_peak_process_commit": 110120960,
+          "scenario": "snapshot-stall-with-parent-source-fence",
+          "workbench_id": "000000000000189018deaf588d351959"
+        }
+      }
+    ]
+  }
+]
