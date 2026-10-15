@@ -1,0 +1,16 @@
+{
+  "original_execution_source_head": "0fd2ace12e704b3ee90e8a67aa67f211df471245",
+  "qualified_source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+  "changed_paths": [
+    "apps/lab-native-child/src/entry.rs",
+    "apps/lab-workbench/src/parent/renderer_qualification.rs"
+  ],
+  "excluded_inputs": {
+    "apps/lab-native-child/src/entry.rs": "not a Workbench/probe dependency; probe wrapper and package include no lab-native-child target",
+    "apps/lab-workbench/src/parent/renderer_qualification.rs": "reachable only through parent::tests behind cfg(test); all probe/borrowing rustc invocations lack --test or --cfg test"
+  },
+  "all_other_tracked_compiler_inputs_byte_exact": true,
+  "script_sha256": "c7527fae48da2ff48d3fed9db8786ca0dd0a075f30dedc5953660cf8bfa37ec8",
+  "scope": "CPU Preview allocation / borrowing controls only; full Workbench and native qualification are re-executed on the final source HEAD. Original execution receipts and logs are retained unchanged.",
+  "no_result_relabeling": "A derived unchanged-input qualification record points to the original source/log; it does not claim the command was started at the later Git HEAD."
+}

@@ -1,0 +1,281 @@
+{
+  "baseline": "1890fafb15a53c4517a3dc7295d74d1a1756b5ea",
+  "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+  "byte_exact_files": [
+    {
+      "path": "scripts/support/native-glow-device.rs",
+      "sha256": "386e873526326ca5c560ef01234daf89b2672d9b79f19abebae281c22469543c",
+      "baseline_exact": true
+    },
+    {
+      "path": "scripts/support/native-glow-backend.rs",
+      "sha256": "dc5f8d4e48bfb8758b7ac0ef7e1afe6edd36ee593ff3d04d60594cde88b71944",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/host_session.rs",
+      "sha256": "981a6fc6c678e5f716364ad8af9974c51b099183b6ae62d2d6993bace1d82bd6",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/texture_owner.rs",
+      "sha256": "58824887efbe60aee26738dee48f99700dbfd64aac2f242f1e508df3b0ad14af",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/completion.rs",
+      "sha256": "1bd8b2c49e9c7c9a5c049c72c77976efc5ac4250ce8afb4600f1f69ad4f0cd02",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/deletion.rs",
+      "sha256": "34547143536c973ece2fd2aec5a7aa9d380c6dd5975a713327db7b2dd2b7db44",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/native_types.rs",
+      "sha256": "4bf88b46a8e3cfb0cf533fc7ac09d2bb0dad2657816d2721cb92ffe3d65e5272",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/finite_trace.rs",
+      "sha256": "8b194ffb5c0e3b494afbdfaadae409f133f16c57b311ee86a762ad401f9e2e09",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/plot_bounds.rs",
+      "sha256": "8583d37e2a666c4666417b3eff95fb80c6f2d8e1ee8fc77d0c58f5a7b187e82a",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/protocol.rs",
+      "sha256": "1809568f1d23dd33015b5b57990fed72cd31b692005bb634bf98cd245194b46a",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/replica.rs",
+      "sha256": "17aeb862af0a8f1f0f39f8bf6e72df0f5c2695e76afd0c08ce5a7cf51a7245ec",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/document_owner.rs",
+      "sha256": "1458ffb19bf39f980370b12660142eadbb5bfe3d94297760248a074cc61cb994",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/transport.rs",
+      "sha256": "0aeffa17c64c6611edb65cc639d727487fbfca7b90e43d18c10d3936c29c301c",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/backend.rs",
+      "sha256": "da1d8d6bb8d0e8bcfeddc1397ab690eb0e7107a4187b3c761b923513c4353455",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/parent_bridge.rs",
+      "sha256": "3aaff186b9154d00254531ad6704f0c61700df6c56989a4f07a1a983dbf320f5",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/supervisor/mod.rs",
+      "sha256": "0b3f64f629bad05acfc2e2a9bdf9f390dd2c9bccc55a39d7203d955fd6a83d1f",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/supervisor/windows.rs",
+      "sha256": "e13baa2286c51809aca0c34f6a39ded2bd7862ef41deea2233b3e9c97d93baa1",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/parent.rs",
+      "sha256": "ede751fbf349cac13494d49a2f279e0667dda4fe3d6777aa08b11ae0d0ce37d9",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/dispatcher.rs",
+      "sha256": "e724d46e103f707abc6ffe8157283dcf46a0a86f039b1bb10de857cd01cc7c64",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/readonly_limits.rs",
+      "sha256": "0b9e5294fe1c2e92d63993a459335481acb27a4ec59ef7991f0a52fa4d068b21",
+      "baseline_exact": true
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "b376009e9246ca9149244783cb40bba5865ed7614056fb2222d39ca52f86dcba",
+      "baseline_exact": true
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "ef14437aa6c05ef6c1ee283aa0b1af4a9b7670a5b64f978d89ce9269b99d621e",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/Cargo.toml",
+      "sha256": "a227b8c050ee8883a88ac9c02899b97e46535e24fa94f198cc7b92e7ce945f19",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-native-child/Cargo.toml",
+      "sha256": "0f70fc1a8386f2fe766a1312326d2bdf971ae376066cb4f96924af8bbe470b71",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/README.md",
+      "sha256": "2b126e5282558ce13c773471d1049d3a32cfb564d5b2938c56cfc9a7ce0c77db",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/admission.rs",
+      "sha256": "de0415a84427a799b68f5c2f9f9f4acb123156a6be8fad2e5200d2e6416b4fb3",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/admission_fixtures.rs",
+      "sha256": "0af0ae876e701210116956725dc92e51c62b3e739fa7564e865152bb80ec2180",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/admission_tests.rs",
+      "sha256": "281ae01edea104995481c704185116470a12a9930cfa1c5b61bbf79075a6b774",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/allocation.rs",
+      "sha256": "b59ff97ce0e4f63728d7f68c922ddf1b2a81064fd7df9c9e71035b793cddcf15",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/bounded.rs",
+      "sha256": "602a1f4e1df280543f642a2df64b2a707b2b558af6e1afbc1ea642f59b73de8e",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/canonical.rs",
+      "sha256": "c19de00f7b6a1e07505005cdd1ca080a36d125f89e19e8224e6d3ab4467acf15",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/canonical_tests.rs",
+      "sha256": "77bd95c38ce1674e786c44066466612d13c2c07ffb07a145e3ae02fd58127125",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/consumer.rs",
+      "sha256": "4ba1f1516ca7918e6e328ea50464130cb42196b51283414c585bd9694afffd23",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion.rs",
+      "sha256": "6c7a2b6c9554ab33c1f2f50a73a824dc51e38c02b78dd28a46d553d67e986bea",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion_fixtures.rs",
+      "sha256": "98008d95811816bd25a76a74820f7751171c80351124a7c39f2c4e0e9cf69753",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion_model_tests.rs",
+      "sha256": "e5edb76ff0df204a7e84fbf29bcce5623dfd463ceaec9aa6d5864b25bcdefbb2",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/conversion_tests.rs",
+      "sha256": "c6bc2d82db314d1ce302cc55449776d9527271eee4ba8faa31b036b9685780a5",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/dto.rs",
+      "sha256": "72fc256c79dc63f3cb7c662325522781b462cef9ef1ca40481814b03c4e1de0b",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/encoding.rs",
+      "sha256": "85bb86cd31ce1130895836ee258a87c0017c40edc45e707ce924581e7afa429d",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/export.rs",
+      "sha256": "e28ae93aa2c5544bd43dffb0527c7997e1b7dd6274f42c9b29c71bdc6de37f5a",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/export_fixtures.rs",
+      "sha256": "1a3b4d482b5cf4a20d39345bbc4723fadea3fab62161e2947211046d4b1bcba5",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/export_tests.rs",
+      "sha256": "890f251bc68cc46f9f846c52cf3bd6d65a3e509498f4d5a59d7fb8edbb412a43",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/graph.rs",
+      "sha256": "d2db6ec8b42aa11d531fa685e164308e38478cf47c2ed9087b3ba8d045dc4a35",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/limits.rs",
+      "sha256": "d8a5783602e891b0c7bfe4d611cd97ba2853268081039b5d06a03c58a404434e",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/mod.rs",
+      "sha256": "e435444687d549ed2f7e0fd42268f58bea1be693e85649a88e21558606371b4e",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/source_v1.rs",
+      "sha256": "55c1155129fa3252b0abba21186ee62c66c997700dce06ff56b4a164d1469a17",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/structure.rs",
+      "sha256": "05d3057272ba7184b84e893492efbb839ef9d2383e19b7e6d10b0e76c0f13e71",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/structure_tests.rs",
+      "sha256": "fe4bdb65929143ac76aae16637cb45839d6fe1d53e616763822534de964817b2",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/tests.rs",
+      "sha256": "5fb5d9d7c6c8c0bf4a9ad658aa564ba98e17fee469e08826b94eec536b23807e",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/validation.rs",
+      "sha256": "5b8ccd74e9efd71083e6fab3ba2644f9d2514fca45a1a140e80e9f9ae51c106d",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/visual_budget.rs",
+      "sha256": "734de8594174e548e19fd90b3dd86d643ed8644dae40eaff3e377fe34319dfc5",
+      "baseline_exact": true
+    },
+    {
+      "path": "apps/lab-workbench/src/presentation/v2/wire.rs",
+      "sha256": "930693171a2d5c54d7cc629b37970c54f1a86ec6d6f15be6f2bd8ce14ef2efce",
+      "baseline_exact": true
+    }
+  ],
+  "unchanged_trees": [
+    "apps/lab-runtime",
+    "crates/lab-core",
+    "crates/lab-windows-job",
+    "clients",
+    "apps/lab-workbench/src/client",
+    "apps/lab-workbench/src/model",
+    "apps/lab-workbench/src/recovery",
+    "apps/lab-workbench/src/gui/app.rs",
+    "apps/lab-workbench/src/gui/presentation.rs",
+    "apps/lab-workbench/src/gui/controls.rs"
+  ],
+  "activation_qualified": false,
+  "no_new_dependencies": true,
+  "production_changes": "native child owner scheduling, diagnostics and failure retention; two read-only RenderReport point-visit assignments only in shared safe renderer"
+}

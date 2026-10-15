@@ -1,0 +1,118 @@
+{
+  "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+  "gate_count": 48,
+  "pass": 48,
+  "blocked": 0,
+  "profiles": [
+    {
+      "profile": "dev",
+      "tests": {
+        "full": {
+          "passed": 530,
+          "ignored": 58
+        },
+        "handoff-provider": {
+          "passed": 23,
+          "ignored": 0
+        },
+        "parent-supervisor": {
+          "passed": 44,
+          "ignored": 14
+        },
+        "virtual": {
+          "passed": 13,
+          "ignored": 0
+        },
+        "native-supervisor": {
+          "passed": 7,
+          "ignored": 0
+        },
+        "native-ipc": {
+          "passed": 22,
+          "ignored": 0
+        },
+        "os-capsule": {
+          "passed": 1,
+          "ignored": 0
+        },
+        "drawable-owner-controls": {
+          "passed": 2,
+          "ignored": 0
+        },
+        "native-child-cargo": {
+          "compile_only": true,
+          "executed_tests": 0,
+          "reason": "Cargo bin test=false"
+        }
+      },
+      "borrowing": 10,
+      "v1_result": "D:\\rust_projects\\lab-runtime\\target\\b3b1-followup-native-dev-1792072077483261300\\result.json",
+      "v1_connections": 2,
+      "v1_explicit_mutations": 1,
+      "v1_status_repeat": 0
+    },
+    {
+      "profile": "release",
+      "tests": {
+        "full": {
+          "passed": 530,
+          "ignored": 58
+        },
+        "handoff-provider": {
+          "passed": 23,
+          "ignored": 0
+        },
+        "parent-supervisor": {
+          "passed": 44,
+          "ignored": 14
+        },
+        "virtual": {
+          "passed": 13,
+          "ignored": 0
+        },
+        "native-supervisor": {
+          "passed": 7,
+          "ignored": 0
+        },
+        "native-ipc": {
+          "passed": 22,
+          "ignored": 0
+        },
+        "os-capsule": {
+          "passed": 1,
+          "ignored": 0
+        },
+        "drawable-owner-controls": {
+          "passed": 2,
+          "ignored": 0
+        },
+        "native-child-cargo": {
+          "compile_only": true,
+          "executed_tests": 0,
+          "reason": "Cargo bin test=false"
+        }
+      },
+      "borrowing": 10,
+      "v1_result": "D:\\rust_projects\\lab-runtime\\target\\b3b1-followup-native-release-1792072789941887500\\result.json",
+      "v1_connections": 2,
+      "v1_explicit_mutations": 1,
+      "v1_status_repeat": 0
+    }
+  ],
+  "source_inputs": 359,
+  "child_compiler_inputs": 51,
+  "max_live_admitted": 1,
+  "no_gpu_persistent_admitted": 0,
+  "encoded_slots": 4,
+  "selected_view_fixture_bytes": 9390,
+  "first_isolated_frame": "PASS/native fixed profile",
+  "full_b3b4": "fixed-profile B3B4C; product selection not started",
+  "terminal_gpu_general": "BLOCKED",
+  "whole_host_rust_budget": "BLOCKED",
+  "cycles_100_plus": "PASS/101 per profile; 51 healthy + 50 crash; 100 explicit restarts",
+  "historical_hello_only": "UNQUALIFIED",
+  "m17_4_overlap": "BLOCKED",
+  "deployment_C": null,
+  "candidate_C": 234881024,
+  "activation_qualified": false
+}

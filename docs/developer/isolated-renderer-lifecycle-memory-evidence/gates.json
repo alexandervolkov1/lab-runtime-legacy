@@ -1,0 +1,899 @@
+[
+  {
+    "name": "dev-101-cycles",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-isolated-renderer.ps1",
+      "-BuildProfile",
+      "dev",
+      "-QualificationCommitCap",
+      "234881024",
+      "-TestFilter",
+      "native_hundred_fixed_cap_cycles"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 91.147,
+    "log_sha256": "9eca0cb286b1b44937da1136f782c41941ce8423af7fd1102a3a84ed71848790",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 7.882,
+    "log_sha256": "71b18dd15bf45788227607fd0becdf975fa9867f66ba6cf1ec15f8d59cf67e37",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 11.397,
+    "log_sha256": "186ddf833aae84a9b2b600207489e02214162d9fc687197f45fbd90d73b0b974",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-cpu-preview",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 1481.525,
+    "log_sha256": "c44a36f0cc002bddb809188d7d8fea9e4976592140a3173baa172983c508bb5b",
+    "verdict": "PASS",
+    "original_execution_source_head": "0fd2ace12e704b3ee90e8a67aa67f211df471245",
+    "qualification": "reused identical compiled inputs; command/log retain original execution provenance",
+    "source_equivalence_proof_sha256": "d1173655befd63318df1dd6de594faa12cad73917dc53f4ab566af98dad1b94b"
+  },
+  {
+    "name": "dev-drawable-owner-controls",
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "--test",
+      "D:\\rust_projects\\lab-runtime\\target\\b3b4c-qualification\\final-attempt-6\\dev-drawable-owner-controls.rs",
+      "-o",
+      "D:\\rust_projects\\lab-runtime\\target\\b3b4c-qualification\\final-attempt-6\\dev-drawable-owner-controls.exe",
+      "-C",
+      "debug-assertions=yes",
+      "-C",
+      "overflow-checks=yes"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.45,
+    "log_sha256": "25e4a38c362556ed611fdf18ad28cfe50eb0ee915ca3b5df6e5be233d7613f53",
+    "verdict": "PASS",
+    "binary_sha256": "9daf3bf863c1694dbfd9e9ac8556f0a1954f0f5470d75fdc55ba0181f382d128",
+    "note": "Exact production module imported by path; no copied implementation. Cargo bin test=false; cargo test native-child is compilation only."
+  },
+  {
+    "name": "dev-full",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 595.767,
+    "log_sha256": "a6504175ba3af36fd5f31da7acf06a636e8a6b2c537f421dbb999d2407e618ec",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-handoff-provider",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "gui::readonly_v2::tests::individual_stale",
+      "private_ipc::handoff_tests",
+      "private_ipc::provider_tests",
+      "private_ipc::selected_preview_tests",
+      "private_ipc::renderer_progress",
+      "private_ipc::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 3.984,
+    "log_sha256": "f9acfa6be203f0dceb9d240d1a80d2f5a0a3b510d94b01c4e98d965237f598ea",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-inventory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--list"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 23.284,
+    "log_sha256": "c1c5fdb318edc32aadaa6c492aedbbda199692c7025411dce05071c798a1a09e",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-isolated-fixed-cap",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-isolated-renderer.ps1",
+      "-BuildProfile",
+      "dev",
+      "-QualificationCommitCap",
+      "234881024"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 206.893,
+    "log_sha256": "32d40321844267134702a725750c373119d35f4c3684b253552b5281c7428479",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-native-capsule",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-child-capsule.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 20.611,
+    "log_sha256": "3e5b3c38e2a93fd43407ee0c6b65e20667fab04ad76597956b89cbd92f87d00f",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-native-child-unit",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.476,
+    "log_sha256": "bcb74884a78099501f6bfc31de29d15aae4eb48dcd18d5c99bdde44d75b90089",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-native-ipc",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 55.352,
+    "log_sha256": "7a343edc6b89c1ce9e934967f2cca9d60d7a6a7790bcc390e35d5d5e40be1b57",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-native-supervisor",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 16.385,
+    "log_sha256": "1ac694ada8b73b0271bd0522f0e13bdf57651fd6d308038acce2caa6d334b5c7",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-os-capsule",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.546,
+    "log_sha256": "e614fe7d32158aa8286db965af40f8f6a14dd785cd17f23f98e9c8794b10581a",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-parent-supervisor",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "parent::",
+      "supervisor::tests",
+      "architecture",
+      "ordinary_gui",
+      "gui::app::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 3.545,
+    "log_sha256": "aca26bb02358b6af46e24673fe4f2687cc04715aa168637798f8810a57550ffb",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-standalone-compile",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev",
+      "-CompileOnly"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 26.757,
+    "log_sha256": "0bbe3b0160cce0b849a4466f9425966d88c16ec5e70c0a6d65cb778dda424372",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-standalone-faults",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev",
+      "-Faults"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 44.698,
+    "log_sha256": "4f7389a732c133206629bebcfe7e7bc53244cc3b65d61280e4be5663757be78c",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-standalone-native",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 39.107,
+    "log_sha256": "17819dca7da6d2be3218d115585fe6941bbe3baa7b04d6e996dfcc5c793b00e4",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-standalone-pending",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev",
+      "-Pending"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 27.958,
+    "log_sha256": "f8ed6fb7c01ff7ca2b35c3031546bd1f13e532d891d2678115ad2339fef75c1f",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-v1-smoke",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 3.458,
+    "log_sha256": "b778b0f2ad1cba1f519d681087155d8eb5273b951813c4b67c74ad28d205e7bb",
+    "verdict": "PASS"
+  },
+  {
+    "name": "dev-virtual",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 9.216,
+    "log_sha256": "93b927cc7deeb85965021d6f578b3c8d7f270f04c80f7b76eff21674c8812076",
+    "verdict": "PASS"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.052,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verdict": "PASS"
+  },
+  {
+    "name": "document-allocation",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-allocation.ps1"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 12.068,
+    "log_sha256": "844d2c4d8a8c6b2fdfc58a1e6868c58e2aefb4e0720228326e60f073ac751540",
+    "verdict": "PASS"
+  },
+  {
+    "name": "environment",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-Command",
+      "rustc -vV; cargo -V; python --version; Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,OSArchitecture; git rev-parse HEAD; git status --short"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 1.114,
+    "log_sha256": "363346a01b4e263de05281ce8c1fefdbcb2c2c2378786d91766544556d444252",
+    "verdict": "PASS"
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 4.609,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verdict": "PASS"
+  },
+  {
+    "name": "observer-reset",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--self-test-reset"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.278,
+    "log_sha256": "67ed6caff9398d24f7cd23d02cceb885f8997956448bb1b4743d8017c0170885",
+    "verdict": "PASS"
+  },
+  {
+    "name": "powershell-ast",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-Command",
+      "$items=@('scripts/test-native-child-capsule.ps1','scripts/test-native-glow.ps1','scripts/test-v2-renderer-allocation.ps1','scripts/test-private-ipc.ps1','scripts/test-v2-allocation.ps1','scripts/test-isolated-renderer.ps1'); foreach ($item in $items) { $tokens=$null; $errors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $item),[ref]$tokens,[ref]$errors) | Out-Null; if ($errors.Count) { throw ($errors | Out-String) } }; Write-Output 'PowerShell AST PASS'"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.59,
+    "log_sha256": "aa51c91675cbe627d0c8873ec842bd8f45759021c3c3124b1238ae6424e22147",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-101-cycles",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-isolated-renderer.ps1",
+      "-BuildProfile",
+      "release",
+      "-QualificationCommitCap",
+      "234881024",
+      "-TestFilter",
+      "native_hundred_fixed_cap_cycles"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 73.369,
+    "log_sha256": "225d24e86a20d18be7c6711885b4b3b7f0469b16f8238c258e601b19ee818f86",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 33.163,
+    "log_sha256": "0ee85c8165862dd8f58bbf89ae715280967602af0a58484262d0a020d6c5c864",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 24.238,
+    "log_sha256": "548935de57df7527909a3e5e3ff47f2ba9edd4585441f1bf3c4c93db0cdca2c3",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-cpu-preview",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 222.402,
+    "log_sha256": "8567b72a9bd203f142cd11272f6ed7c760ee467fd5085fa889e5c5477cb46c1e",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-drawable-owner-controls",
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "--test",
+      "D:\\rust_projects\\lab-runtime\\target\\b3b4c-qualification\\final-attempt-6\\release-drawable-owner-controls.rs",
+      "-o",
+      "D:\\rust_projects\\lab-runtime\\target\\b3b4c-qualification\\final-attempt-6\\release-drawable-owner-controls.exe",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "debug-assertions=no",
+      "-C",
+      "overflow-checks=no"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.456,
+    "log_sha256": "25e4a38c362556ed611fdf18ad28cfe50eb0ee915ca3b5df6e5be233d7613f53",
+    "verdict": "PASS",
+    "binary_sha256": "3129d0f6dd4cdc5ee5e65ab71bedda3c9c501c02489396298ce545c9acb40b49",
+    "note": "Exact production module imported by path; no copied implementation. Cargo bin test=false; cargo test native-child is compilation only."
+  },
+  {
+    "name": "release-full",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 49.472,
+    "log_sha256": "6909e58ce86163155022467688fe4feecbc173a08943acb9f3939b68aa8fd31a",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-handoff-provider",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "gui::readonly_v2::tests::individual_stale",
+      "private_ipc::handoff_tests",
+      "private_ipc::provider_tests",
+      "private_ipc::selected_preview_tests",
+      "private_ipc::renderer_progress",
+      "private_ipc::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 1.369,
+    "log_sha256": "291f43909b9eb1f8a887369787c753fb07c4af5f66a722d4438071748e600cdc",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-inventory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--list"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 96.182,
+    "log_sha256": "e1cbcebaf43b7b491aab9da048498d84bd4a16aba3cc735e27267f9d41b77dcc",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-isolated-fixed-cap",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-isolated-renderer.ps1",
+      "-BuildProfile",
+      "release",
+      "-QualificationCommitCap",
+      "234881024"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 103.249,
+    "log_sha256": "2c3483c2b380c923b7b0b88cc6c0547312acfce00405e27c642d6dd1e1cd1892",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-native-capsule",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-child-capsule.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 37.558,
+    "log_sha256": "4691b2142bc0fe2d96a63a0297b4ae16aa7a0a1ee1f048a5f835364f83c5581b",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-native-child-unit",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.508,
+    "log_sha256": "a40c1884a95654da1e9ce0b9042cc3b906a7c879f74bfc6527def185ef03cdb2",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-native-ipc",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 86.7,
+    "log_sha256": "cdf9d638ff7cf12fcb7039463ee0768b9fbd6ac5c8b6558f5affc538002e27fd",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-native-supervisor",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 16.985,
+    "log_sha256": "0d77de7ced1158b620060488b251a37a81a904f89a43d87ebd9e2215726f9244",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-os-capsule",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 0.735,
+    "log_sha256": "6056849c042acaf1efbb8e62a8145ad71d5abaee2bba153c1b2522684eed46f9",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-parent-supervisor",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "parent::",
+      "supervisor::tests",
+      "architecture",
+      "ordinary_gui",
+      "gui::app::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 1.528,
+    "log_sha256": "7ef2ddf8a8e52091d78f598029c26103752519f7bf9c42faee6e73467f8811f0",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-standalone-compile",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release",
+      "-CompileOnly"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 39.557,
+    "log_sha256": "13faeedb5f9f7440086ee15c97e411fa6754c1b528d623454d642961cbdf268e",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-standalone-faults",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release",
+      "-Faults"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 50.297,
+    "log_sha256": "c903e20a798a816872da01662aa2c188822f834aec622dd2b7a19c7ce1fe8b66",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-standalone-native",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 43.656,
+    "log_sha256": "79a8a8426bef4284425271a06032549163f7b66016f95a5915a2efb5ec1a4c36",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-standalone-pending",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release",
+      "-Pending"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 40.094,
+    "log_sha256": "07f465aa3274e7c21fe006f87ede2188384173cd1cbe5ed0b888b8f5710bb9d7",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-v1-smoke",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 2.426,
+    "log_sha256": "0c439458b71b3e8c2cfc14c235fe1fb0ccd683e6587e977d7076f05f240db043",
+    "verdict": "PASS"
+  },
+  {
+    "name": "release-virtual",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "exit_code": 0,
+    "elapsed_seconds": 8.066,
+    "log_sha256": "8388a734821f1f554371fefc4cb4ad87ce982027dafff30e7afc8fc7f1e5931c",
+    "verdict": "PASS"
+  }
+]

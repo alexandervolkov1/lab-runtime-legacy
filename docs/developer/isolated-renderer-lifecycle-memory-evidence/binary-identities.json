@@ -1,0 +1,198 @@
+[
+  {
+    "profile": "dev",
+    "role": "standalone-native",
+    "receipt": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\identity-20261015T1346060294000.json",
+    "binary": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\native-glow.exe",
+    "faults": false,
+    "pending": false,
+    "sha256": "9B1D037675681CECD73432753321754971FE4B0A7F2FC252FC82DE44311CBFF7",
+    "integration": false,
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67"
+  },
+  {
+    "profile": "dev",
+    "role": "standalone-pending",
+    "receipt": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\identity-20261015T1346434052294.json",
+    "integration": false,
+    "sha256": "7EB81093034FA0BE2BA42777FC4344AA611C57AF16B2687FCDBF669264D7AAD7",
+    "binary": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\native-glow.exe",
+    "pending": true,
+    "faults": false,
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67"
+  },
+  {
+    "profile": "dev",
+    "role": "standalone-faults",
+    "receipt": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\identity-20261015T1347117373631.json",
+    "sha256": "64C58428B8F6D5C6BFF82BC28BB12FE671386065001B445CC42432F39A5E6678",
+    "binary": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\native-glow.exe",
+    "pending": false,
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "faults": true,
+    "integration": false
+  },
+  {
+    "profile": "dev",
+    "role": "native-child",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\debug\\lab-native-child.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 32309760,
+    "sha256": "1b2e05f3b8d62aa82f323a50e6ea99bc0b1b7dd31d729c74cef0c7cf30fa5cdc"
+  },
+  {
+    "profile": "dev",
+    "role": "workbench",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\debug\\lab-workbench.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 45956096,
+    "sha256": "3d6d49d4c50e404aaf8a76bb3929d0bb87951aae6e1f2c17534d8e0b6af38832"
+  },
+  {
+    "profile": "dev",
+    "role": "workbench-tests",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 70014976,
+    "sha256": "27be6ee4e153f71de25972911160760c9c47039538905b9710ebdfb384ce26c5"
+  },
+  {
+    "profile": "dev",
+    "role": "runtime",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\debug\\lab-runtime.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 16015872,
+    "sha256": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b"
+  },
+  {
+    "profile": "dev",
+    "role": "cpu-preview",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\v2-renderer-allocation-probe\\dev\\v2-renderer-allocation-probe.exe",
+    "source_head": "0fd2ace12e704b3ee90e8a67aa67f211df471245",
+    "bytes": 32786432,
+    "sha256": "84a54cee49a5a8deb8937a3b2cbda49e8cff713b331ed11766653ca709f83e0c",
+    "qualified_source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "qualification": "byte-identical actual compiler inputs; original execution source retained"
+  },
+  {
+    "profile": "dev",
+    "role": "standalone-compile-only",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\dev\\native-glow.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 32445440,
+    "sha256": "0d409f4180bd8efe278fa0f84d5117e76a1068dbe6e391783277a1c59bc41de0"
+  },
+  {
+    "profile": "dev",
+    "role": "private-ipc-fixture",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\private-ipc\\dev\\private-ipc-fixture.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 2748416,
+    "sha256": "7655b31e85e30b80a45389631bef81f1f218282d56f0ce57817d063a71f1e044"
+  },
+  {
+    "profile": "dev",
+    "role": "supervisor-fixture",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\windows-supervisor\\dev\\f7afefb262a54192899378d9f92cf746\\supervisor-fixture.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 450560,
+    "sha256": "7c9668f7bf280929613f6370e6c019587b0e51f3ce134b3ec10d66be581f690b"
+  },
+  {
+    "profile": "release",
+    "role": "standalone-native",
+    "receipt": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\identity-20261015T1357349901781.json",
+    "sha256": "59D29187E0ABD2DDD51FAEBD848A42B354DE1A5E0FD4127AF4C46C0646EEEE36",
+    "binary": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\native-glow.exe",
+    "faults": false,
+    "integration": false,
+    "pending": false,
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67"
+  },
+  {
+    "profile": "release",
+    "role": "standalone-pending",
+    "receipt": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\identity-20261015T1358178620946.json",
+    "sha256": "1285A1D70CBB94AF9BD115DCA4BCE939FF6F899693B1C4D9D989B0985885CB0D",
+    "binary": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\native-glow.exe",
+    "faults": false,
+    "integration": false,
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "pending": true
+  },
+  {
+    "profile": "release",
+    "role": "standalone-faults",
+    "receipt": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\identity-20261015T1358582114217.json",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "faults": true,
+    "binary": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\native-glow.exe",
+    "sha256": "A9ED7FEDF66DDCBCA0BC155ED7046FF1B7D7F6351613AE5F2F61BA040D3CD8B3",
+    "integration": false,
+    "pending": false
+  },
+  {
+    "profile": "release",
+    "role": "native-child",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\release\\lab-native-child.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 7232512,
+    "sha256": "f3b5343d8b7af902a1b0dc173d91fa80d3a09ac072968943917d59d643f6b7e7"
+  },
+  {
+    "profile": "release",
+    "role": "workbench",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\release\\lab-workbench.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 13452800,
+    "sha256": "f1e740209f26ba26ea657373dd7ff41dbdb07863bfcfd957254af16915df0ff5"
+  },
+  {
+    "profile": "release",
+    "role": "workbench-tests",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 30385152,
+    "sha256": "7db7ce4eada6392060e0a7ef8ba2ae1772cb3c7d64ea90ae38b237da18cfedab"
+  },
+  {
+    "profile": "release",
+    "role": "runtime",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\release\\lab-runtime.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 7692800,
+    "sha256": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79"
+  },
+  {
+    "profile": "release",
+    "role": "cpu-preview",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\v2-renderer-allocation-probe\\release\\v2-renderer-allocation-probe.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 8057344,
+    "sha256": "faad0a1f7e381b16fdf31d23c47b0db59995531de821c58ffe2e77c4fbbc283e"
+  },
+  {
+    "profile": "release",
+    "role": "standalone-compile-only",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\native-glow\\release\\native-glow.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 7312896,
+    "sha256": "bb03a492914aaf3c29a1bfaf43f556deb1f553cc6d5dace83b13e403eda70b22"
+  },
+  {
+    "profile": "release",
+    "role": "private-ipc-fixture",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\private-ipc\\release\\private-ipc-fixture.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 1007104,
+    "sha256": "76ea5da8bdcf39e2c6500a736c75117995ef2e608dbd2c1bf4b8f382535a1ab8"
+  },
+  {
+    "profile": "release",
+    "role": "supervisor-fixture",
+    "path": "D:\\rust_projects\\lab-runtime\\target\\windows-supervisor\\release\\94bddd80d3a948d0afa50ba8a7f24130\\supervisor-fixture.exe",
+    "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+    "bytes": 304128,
+    "sha256": "d399e001026e88b3c558b8b8ae8937bd886862460be67e699afe96e17545e148"
+  }
+]
