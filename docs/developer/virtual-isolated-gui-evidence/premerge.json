@@ -1,0 +1,9 @@
+{
+  "baseRefName": "main",
+  "baseRefOid": "1890fafb15a53c4517a3dc7295d74d1a1756b5ea",
+  "headRefName": "feature/dgui-4c7b3b4c-renderer-lifecycle-memory-admission",
+  "headRefOid": "2dd4af1edc7f6ec0bb09ca9a4d28fc3c56670a1c",
+  "isDraft": true,
+  "state": "OPEN",
+  "url": "https://github.com/alexandervolkov1/lab-runtime/pull/42"
+}

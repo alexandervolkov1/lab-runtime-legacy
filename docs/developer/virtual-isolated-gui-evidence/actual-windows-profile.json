@@ -1,0 +1,47 @@
+{
+  "captured_at_utc": "2026-10-15T16:35:54.3593920Z",
+  "os": {
+    "Caption": "Майкрософт Windows 10 Pro",
+    "Version": "10.0.19045",
+    "BuildNumber": "19045",
+    "OSArchitecture": "64-разрядная"
+  },
+  "cpu": [
+    {
+      "Name": "AMD Ryzen 5 9600X 6-Core Processor             ",
+      "NumberOfCores": 6,
+      "NumberOfLogicalProcessors": 12
+    }
+  ],
+  "gpu": [
+    {
+      "Name": "NVIDIA GeForce RTX 3060 Ti",
+      "DriverVersion": "32.0.16.1692",
+      "DriverDate": "2026-09-04T03:00:00+03:00",
+      "PNPDeviceID": "PCI\\VEN_10DE&DEV_2489&SUBSYS_248910DE&REV_A1\\4&D0BDF66&0&0009",
+      "AdapterRAM": 4293918720,
+      "VideoModeDescription": "Цвета: 1920 x 1080 x 4294967296"
+    },
+    {
+      "Name": "AMD Radeon(TM) Graphics",
+      "DriverVersion": "32.0.21042.62",
+      "DriverDate": "2026-04-17T03:00:00+03:00",
+      "PNPDeviceID": "PCI\\VEN_1002&DEV_13C0&SUBSYS_D0001458&REV_C6\\4&16012499&0&0041",
+      "AdapterRAM": 536870912,
+      "VideoModeDescription": null
+    }
+  ],
+  "toolchain": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "source_head": "d96111f488d8535c294879e767832d537219108a",
+  "current_branch": "feature/dgui-4c7b3b5-virtual-isolated-host",
+  "gui_processes_at_preflight": []
+}

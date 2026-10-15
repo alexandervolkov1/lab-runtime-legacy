@@ -1,0 +1,14 @@
+# SHA256 of canonical Git blobs; binary archive uses identical raw bytes.
+# B3B5 environment preflight: BLOCKED; no new executable qualification.
+# This inventory excludes itself to avoid self-reference.
+81d2c6b5f12a15e096b452f30223d8fe738e669344150f2d8df09d0d0b166691  docs/developer/virtual-isolated-gui-evidence/actual-windows-profile.json
+b29032aab52793638cab4b20bda12e9d6d9e51397d736497de2ec4387ec5551c  docs/developer/virtual-isolated-gui-evidence/binary-identities.json
+1c3eaa138a4c72f2e63b76a66648821ae3793629f0a8022a240c82873b2687b2  docs/developer/virtual-isolated-gui-evidence/merge-api.json
+46cc2d7f10c67ad549ec0b9ebcde0d5a82a21c4b3cb74f15de01d84d772bbf6b  docs/developer/virtual-isolated-gui-evidence/merge-verified.json
+995ff65059e9a1bacc117547f64332f6dd2d03d93ce70a595103fdbbefae61c4  docs/developer/virtual-isolated-gui-evidence/preflight.json
+ee657a97870ca5a6219dc4541e808b4977c54b4fd33b237ad14b9ad96186a711  docs/developer/virtual-isolated-gui-evidence/premerge.json
+64c53a12f77eba91c6ecf102b4c5e2753ba5e0454a9e2e202000054697e44357  docs/developer/virtual-isolated-gui-evidence/raw-evidence.zip
+f986e57ed4ed872fa77a2b6731aaa2af88a70e0dfffeb3bd2d3bc78e0c8c52bb  docs/developer/virtual-isolated-gui-evidence/raw-manifest.json
+4b7540435760b005917a2a7e932fd1a2ef52ca2ceb0b9b731b9997caa40f7195  docs/developer/virtual-isolated-gui-evidence/source-equivalence.json
+7ac2885b0f9116a34ccf2352e825195c54100a7b83b5fd6a791a2920c6b688e7  docs/developer/virtual-isolated-gui-evidence/verification.json
+61070101b4d8a46ba58d7ff48d8cb6d94ed0e0b94f15605154a61991c88d9ff5  docs/developer/virtual-isolated-gui-integration.md
