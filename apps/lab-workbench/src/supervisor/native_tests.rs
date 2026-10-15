@@ -408,7 +408,12 @@ fn suppressed_exit_proof_retains_same_job_and_blocks_replacement() {
     }
     assert_eq!(wait_witness(witness.lock().unwrap().as_ref().unwrap()), 77);
     // OS exit is REAL and externally confirmed: only supervisor proof is withheld.
-    assert_eq!(root.status().unwrap().termination_requests, 1);
+    // Status is intentionally a nonblocking try_lock sample: worker publication
+    // can return Busy. Observe the same retained episode with the bounded helper
+    // before checking its count; Busy is not an OS/containment failure.
+    let observed = root.wait_status(|s| s.phase == Phase::ExitUnconfirmed);
+    assert_eq!(observed.incarnation, 1);
+    assert_eq!(observed.termination_requests, 1);
     hide_exit.store(false, Ordering::Release);
     root.signal.changed.notify_all();
     let ended = root.wait_status(|s| s.phase == Phase::ExitedContained);
