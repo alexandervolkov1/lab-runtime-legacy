@@ -305,7 +305,7 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
         }
     }
 
-    pub(crate) fn select_plot(&mut self, index: usize) -> bool {
+    fn select_plot(&mut self, index: usize) -> bool {
         if index / PAGE_SIZE != self.location.page || !self.location.valid(self.document) {
             return false;
         }

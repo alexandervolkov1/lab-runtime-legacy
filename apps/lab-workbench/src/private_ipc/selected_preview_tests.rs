@@ -168,7 +168,7 @@ fn selected_preview_cpu_gate_canonical_scalar_trace_origin_and_geometry() {
             .any(|s| s.contains("raw entity presentation is not supplied"))
     );
     frame.finish_cpu().unwrap();
-    assert!(preview.select_plot(1));
+    assert!(preview.open_plot(1));
     let mut frame = preview.run(&provider, Default::default()).unwrap();
     assert_eq!(frame.report().plot_points, 3);
     assert_eq!(frame.report().geometry_failures, 0);

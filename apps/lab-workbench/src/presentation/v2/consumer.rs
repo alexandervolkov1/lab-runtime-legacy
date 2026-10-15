@@ -31,6 +31,10 @@ mod wire;
 #[cfg(test)]
 pub(crate) use admission::document_lifetimes;
 pub(crate) use admission::{AdmittedV2Document, admit};
+#[allow(
+    unused_imports,
+    reason = "canonical offline decimal interfaces also used by parent conversion/export"
+)]
 pub(crate) use bounded::{I64Decimal, U64Decimal};
 pub(crate) use canonical::CanonicalWireCandidate;
 pub(crate) use dto::*;

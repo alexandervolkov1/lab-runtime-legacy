@@ -390,6 +390,14 @@ fn query(rx: &Receiver<Sent>, op: &str) -> u64 {
     id
 }
 fn bootstrap(tx: &SyncSender<ClientUpdate>, rx: &Receiver<Sent>, signal: &PumpSignal) {
+    bootstrap_records(tx, rx, signal, json!([]));
+}
+fn bootstrap_records(
+    tx: &SyncSender<ClientUpdate>,
+    rx: &Receiver<Sent>,
+    signal: &PumpSignal,
+    records: Value,
+) {
     send_update(tx, signal, hello());
     let id = query(rx, "discover");
     send_update(
@@ -398,7 +406,7 @@ fn bootstrap(tx: &SyncSender<ClientUpdate>, rx: &Receiver<Sent>, signal: &PumpSi
         reply(
             id,
             "discover",
-            json!({"projection":"d","revision":{"boot_id":"boot","event_seq":"2"},"records":[],"next_index":null,"complete":true}),
+            json!({"projection":"d","revision":{"boot_id":"boot","event_seq":"2"},"records":records.clone(),"next_index":null,"complete":true}),
         ),
     );
     let id = query(rx, "measurements_current");
@@ -408,7 +416,7 @@ fn bootstrap(tx: &SyncSender<ClientUpdate>, rx: &Receiver<Sent>, signal: &PumpSi
         reply(
             id,
             "measurements_current",
-            json!({"projection":"m","revision":{"boot_id":"boot","event_seq":"3"},"records":[],"next_index":null,"complete":true}),
+            json!({"projection":"m","revision":{"boot_id":"boot","event_seq":"3"},"records":records.clone(),"next_index":null,"complete":true}),
         ),
     );
     let id = query(rx, "discover");
@@ -418,7 +426,7 @@ fn bootstrap(tx: &SyncSender<ClientUpdate>, rx: &Receiver<Sent>, signal: &PumpSi
         reply(
             id,
             "discover",
-            json!({"projection":"f","revision":{"boot_id":"boot","event_seq":"5"},"records":[],"next_index":null,"complete":true}),
+            json!({"projection":"f","revision":{"boot_id":"boot","event_seq":"5"},"records":records.clone(),"next_index":null,"complete":true}),
         ),
     );
     let Sent::Subscribe(id) = sent(rx) else {
@@ -1372,3 +1380,7 @@ fn partial_input_and_detach_keep_accepted_work_and_unknown_status_exact() {
     assert!(rx.try_recv().is_err());
     assert_eq!(stops.load(Ordering::SeqCst), 1);
 }
+
+#[cfg(windows)]
+#[path = "renderer_tests.rs"]
+mod renderer;
