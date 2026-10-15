@@ -503,6 +503,11 @@ fn native_hundred_fixed_cap_cycles() {
             terminal.reading.peak_process_commit <= cap && terminal.reading.peak_job_commit <= cap
         );
         h.retired();
+        let ipc = h.bridge.status().unwrap();
+        // The live parent retains exactly its latest approved document/read.
+        // Retirement returns the other two slots; no Current/Writing/Assembly
+        // credit may remain borrowed by an old incarnation.
+        assert_eq!(ipc.credits, [2, 2, 0, 0, 0]);
         h.continuity("2");
         let own = if healthy {
             let own: Value =
@@ -519,7 +524,7 @@ fn native_hundred_fixed_cap_cycles() {
         let startup: Value =
             serde_json::from_slice(&fs::read(directory.join("startup.json")).unwrap()).unwrap();
         assert_eq!(startup["incarnation"], cycle);
-        receipts.push(json!({"original_child_pid":startup["pid"],"cycle":cycle,"incarnation":terminal.incarnation,"healthy":healthy,"original_exit":terminal.exit_code,"phase":format!("{:?}",terminal.phase),"objects":format!("{:?}",terminal.objects),"ipc_handles":0,"pending_io":0,"encoded_credits":4,"peak_process_commit":terminal.reading.peak_process_commit,"peak_job_commit":terminal.reading.peak_job_commit,"extra_submissions":0,"own":own,"directory":directory}));
+        receipts.push(json!({"original_child_pid":startup["pid"],"cycle":cycle,"incarnation":terminal.incarnation,"healthy":healthy,"original_exit":terminal.exit_code,"phase":format!("{:?}",terminal.phase),"objects":format!("{:?}",terminal.objects),"ipc_handles":ipc.handles,"pending_io":ipc.pending_io,"encoded_credits":ipc.credits.iter().sum::<usize>(),"credit_classes_free_latest_current_writing_assembly":ipc.credits,"peak_process_commit":terminal.reading.peak_process_commit,"peak_job_commit":terminal.reading.peak_job_commit,"extra_submissions":0,"own":own,"directory":directory}));
         fs::write(&output,serde_json::to_vec_pretty(&json!({"candidate_C":cap,"required_cycles":100,"completed_cycles":receipts.len(),"cycles":receipts,"deployment_selected":false,"activation_qualified":false})).unwrap()).unwrap();
         println!(
             "LIFECYCLE_CYCLE {cycle}/101 cap={cap} job_peak={} evidence={}",
