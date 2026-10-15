@@ -120,6 +120,12 @@ impl Channels {
                 _ => return Err("renderer control direction/order".into()),
             }
         }
+        // A silent partial transfer must expire even when no next chunk arrives.
+        // Control/Close remains first; a complete handoff candidate is exempt by
+        // Replica's existing rule and retains its original Assembly credit.
+        if !self.closing {
+            replica.expire(now).map_err(str::to_owned)?;
+        }
         if self.hello_ack
             && !self.closing
             && !stall
