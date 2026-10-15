@@ -290,9 +290,12 @@ struct State {
 }
 impl State {
     fn note(&self, name: &str, value: serde_json::Value) -> Result<()> {
-        let file =
-            File::create(self.directory.join(format!("{name}.json"))).map_err(|e| e.to_string())?;
-        serde_json::to_writer(file, &value).map_err(|e| e.to_string())
+        // Observers must never confuse file creation with a complete diagnostic.
+        // This only publishes test evidence; it is not a durability/GL receipt.
+        let pending = self.directory.join(format!("{name}.pending"));
+        let file = File::create(&pending).map_err(|e| e.to_string())?;
+        serde_json::to_writer(file, &value).map_err(|e| e.to_string())?;
+        fs::rename(pending, self.directory.join(format!("{name}.json"))).map_err(|e| e.to_string())
     }
     fn fail(&mut self, error: String) {
         if self.fatal.is_none() {
