@@ -249,7 +249,10 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         v["plot"] == true && v["current"] == true && v["plot_points"] == 64
     });
     let plot_pixels = pixels(&plot_path, &plot);
-    assert_ne!(empty_pixels, plot_pixels);
+    assert!(
+        empty_pixels != plot_pixels,
+        "selected trace did not change actual GL pixels"
+    );
     assert!(plot["cyan_pixels"].as_u64().unwrap() > 100);
     assert!(!plot["curve_samples"].as_array().unwrap().is_empty());
     sample(&tx, &signal, 64, 8.);
@@ -258,12 +261,17 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         v["plot"] == true && v["current"] == true && v["plot_points"] == 65
     });
     let live_pixels = pixels(&live_path, &live);
-    assert_ne!(plot_pixels, live_pixels);
+    assert!(
+        plot_pixels != live_pixels,
+        "new observations did not change actual GL pixels"
+    );
+    let mut replacement_document = document("Replacement after checked retirement");
+    replacement_document.plots[0].axes.y_max = Some(20.0);
     request(
         &mut stream,
         "replace",
         "ui_replace_document",
-        json!({"expected":{"workbench_id":identity,"revision":"2"},"document":document("Replacement after checked retirement")}),
+        json!({"expected":{"workbench_id":identity,"revision":"2"},"document":replacement_document}),
     );
     assert_eq!(
         response(&mut stream, "replace")["result"]["presentation_revision"],
@@ -273,7 +281,10 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         v["plot"] == true && v["epoch_revision"] == 3 && v["plot_points"] == 65
     });
     let replacement_pixels = pixels(&replacement_path, &replacement);
-    assert_ne!(live_pixels, replacement_pixels);
+    assert!(
+        live_pixels != replacement_pixels,
+        "new document axes did not change actual GL pixels"
+    );
     request(
         &mut stream,
         "recovery",
