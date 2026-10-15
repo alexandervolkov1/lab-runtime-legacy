@@ -98,16 +98,21 @@ impl Host {
     }
 
     fn receipt(&self, ctx: &egui::Context) -> serde_json::Value {
-        ctx.input(|input| json!({"stage":self.stage,"captures":self.captures,
-            "pixels_per_point":ctx.pixels_per_point(),"zoom_factor":ctx.zoom_factor(),
+        // Context accessors acquire the context lock: never nest them in input().
+        let pixels_per_point = ctx.pixels_per_point();
+        let zoom_factor = ctx.zoom_factor();
+        ctx.input(|input| {
+            json!({"stage":self.stage,"captures":self.captures,
+            "pixels_per_point":pixels_per_point,"zoom_factor":zoom_factor,
             "native_pixels_per_point":input.viewport().native_pixels_per_point,
             "inner_rect":format!("{:?}",input.viewport().inner_rect),
             "pointer_moves":self.pointer_moves,"pointer_buttons":self.pointer_buttons,
             "keys":self.keys,"texts":self.texts,"focus_events":self.focus_events,
             "clicked":self.clicked,"local_text":self.local_text,
-            "button_pixels":[self.button.x * ctx.pixels_per_point(),self.button.y * ctx.pixels_per_point()],
-            "editor_pixels":[self.editor.x * ctx.pixels_per_point(),self.editor.y * ctx.pixels_per_point()],
-            "close_requested":self.close_requested}))
+            "button_pixels":[self.button.x * pixels_per_point,self.button.y * pixels_per_point],
+            "editor_pixels":[self.editor.x * pixels_per_point,self.editor.y * pixels_per_point],
+            "close_requested":self.close_requested})
+        })
     }
 
     fn capture(&mut self, ctx: &egui::Context, stage: u8, image: &egui::ColorImage) {
