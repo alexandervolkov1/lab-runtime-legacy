@@ -154,9 +154,32 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
             identity.as_str().unwrap()
         ));
     wait(|| pump.supervisor().unwrap().restart(launch("normal")).is_ok());
-    pump.supervisor()
-        .unwrap()
-        .wait_status(|s| s.phase == Phase::Ready);
+    let mut startup = None;
+    wait(|| {
+        if let Ok(status) = pump.supervisor().unwrap().status()
+            && matches!(
+                status.phase,
+                Phase::Ready | Phase::ExitedContained | Phase::ExitedHealthy
+            )
+        {
+            startup = Some(status);
+            return true;
+        }
+        false
+    });
+    let startup = startup.unwrap();
+    if startup.phase != Phase::Ready {
+        let error = fs::read_to_string(directory.join("startup-error.json")).unwrap_or_default();
+        let profile = fs::read_to_string(directory.join("native-profile.json")).unwrap_or_default();
+        println!(
+            "NATIVE_STARTUP_BLOCKED evidence={} error={error} profile={profile} status={startup:?}",
+            directory.display()
+        );
+        // Do not panic while holding the supervisor's status mutex. Preserve its
+        // original process/IPC retirement and observe the parent worker join.
+        pump.shutdown().unwrap();
+        panic!("native startup did not reach Ready: {error}");
+    }
     let (empty_path, empty) = find_frame(&directory, |v| {
         v["plot"] == true && v["observation_snapshot"] != 0 && v["plot_points"] == 0
     });

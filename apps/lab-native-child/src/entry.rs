@@ -198,10 +198,15 @@ impl Channels {
 struct Bootstrap {
     device: Option<Device>,
     error: Option<String>,
+    profile: Option<serde_json::Value>,
 }
 impl ApplicationHandler for Bootstrap {
     fn resumed(&mut self, events: &ActiveEventLoop) {
         if self.device.is_none() && self.error.is_none() {
+            self.profile = Some(json!({
+                "primary_scale":events.primary_monitor().map(|m|m.scale_factor()),
+                "monitors":events.available_monitors().take(8).map(|monitor|json!({"name":monitor.name().map(|s|s.chars().take(128).collect::<String>()),"scale":monitor.scale_factor(),"size":[monitor.size().width,monitor.size().height],"position":[monitor.position().x,monitor.position().y]})).collect::<Vec<_>>()
+            }));
             match Device::new(events) {
                 Ok(device) => self.device = Some(device),
                 Err(e) => self.error = Some(e),
@@ -680,6 +685,12 @@ pub(super) fn run() -> Result<()> {
     let mut boot = Bootstrap::default();
     while boot.device.is_none() && boot.error.is_none() {
         events.pump_app_events(Some(Duration::from_millis(1)), &mut boot);
+    }
+    if let Some(profile) = boot.profile {
+        let _ = fs::write(
+            directory.join("native-profile.json"),
+            serde_json::to_vec_pretty(&profile).unwrap(),
+        );
     }
     if let Some(error) = boot.error {
         let _ = fs::write(
