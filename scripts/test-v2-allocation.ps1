@@ -18,11 +18,8 @@ try {
         $externs += '--extern'
         $externs += "$name=$($files[0])"
     }
-    # Pull constants verbatim from their owners; do not maintain a copied profile.
-    $external = Get-Content 'apps/lab-workbench/src/external.rs' | Where-Object {
-        $_ -match '^pub\(crate\) const (JSON_BODY_BYTES|FRAME_BYTES|JSON_DEPTH|JSON_VALUES|JSON_STRING_BYTES|NAME_BYTES):'
-    }
-    if ($external.Count -ne 6) { throw 'Unexpected wire constant declarations' }
+    # Include the same canonical safe limit declarations; no copied quota profile.
+    $limits = (Join-Path $repo 'apps/lab-workbench/src/readonly_limits.rs').Replace('\', '/')
     $probeDir = Join-Path $repo 'target/v2-allocation-probe'
     New-Item -ItemType Directory -Force -Path $probeDir | Out-Null
     $module = (Join-Path $repo 'apps/lab-workbench/src/presentation/v2/mod.rs').Replace('\', '/')
@@ -35,9 +32,7 @@ try {
     $wrapper = @"
 #![deny(unsafe_code)]
 #![allow(dead_code, unused_imports)]
-mod external {
-$($external -join "`n")
-}
+#[path = "$limits"] mod readonly_limits;
 mod presentation {
 #[path = "$document"] mod document;
 #[path = "$reference"] mod reference;

@@ -127,9 +127,9 @@ fn main() { probe::run(); }
     # Compile the same real modules with deliberately invalid ownership examples.
     # This verifies borrowing enforcement without adding a test-only dependency.
     $borrowCases = @(
-        @('next-frame', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); let _ = p.run(&Default::default(), Default::default()); f.discard(); }'),
-        @('retire-context', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); p.retire_context(); f.discard(); }'),
-        @('drop-preview', 'E0505', 'fn denied(mut p: readonly_v2::Preview<''_>) { let f = p.run(&Default::default(), Default::default()).unwrap(); drop(p); f.discard(); }'),
+        @('next-frame', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&model::RuntimeObservations::default(), Default::default()).unwrap(); let _ = p.run(&model::RuntimeObservations::default(), Default::default()); f.discard(); }'),
+        @('retire-context', 'E0499', 'fn denied(p: &mut readonly_v2::Preview<''_>) { let f = p.run(&model::RuntimeObservations::default(), Default::default()).unwrap(); p.retire_context(); f.discard(); }'),
+        @('drop-preview', 'E0505', 'fn denied(mut p: readonly_v2::Preview<''_>) { let f = p.run(&model::RuntimeObservations::default(), Default::default()).unwrap(); drop(p); f.discard(); }'),
         @('second-host-preview', 'E0499', 'fn denied(d: &presentation::v2::AdmittedV2Document, s: &mut readonly_v2::host_session::HostSession<readonly_v2::texture_owner::CpuOnly>) { let mut a = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, s); let _b = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, s); a.retire_context(); }'),
         @('drop-host-session', 'E0505', 'fn denied(d: &presentation::v2::AdmittedV2Document, mut s: readonly_v2::host_session::HostSession<readonly_v2::texture_owner::CpuOnly>) { let mut p = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, &mut s); drop(s); p.retire_context(); }')
     )
