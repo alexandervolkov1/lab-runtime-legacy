@@ -1,0 +1,92 @@
+[
+  {
+    "path": "audit/test_renderer_child_compatibility.py",
+    "bytes": 8310,
+    "sha256": "e4058602b8c34a3af50501a26652bfdb4dcf0e5d8c2650c5e84ebfbeaaae6f34"
+  },
+  {
+    "path": "dev-3/b2b2-control.jsonl",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "dev-3/b2b2-control.rs",
+    "bytes": 1364,
+    "sha256": "bb12406294884a091da2482ef4415393fc1c3fb82eadc4496e6a917e2a2588d4"
+  },
+  {
+    "path": "dev-3/cargo-stderr.txt",
+    "bytes": 247,
+    "sha256": "829e735e547c0f9e6a0e40212b7dc43f5c68dfce6d8a88055e9a9c26e965e213"
+  },
+  {
+    "path": "dev-3/cargo.jsonl",
+    "bytes": 223606,
+    "sha256": "d84a5a2f50af1ac33eaf559a197288f23a4e22d791a4b0aa978b95645a3bbc81"
+  },
+  {
+    "path": "dev-3/result.json",
+    "bytes": 105000,
+    "sha256": "765f61d94c46cad9058541790db4347122e130c2d9c2474e11ce60d91a37d007"
+  },
+  {
+    "path": "dev-3/rustc.txt",
+    "bytes": 201,
+    "sha256": "abdc1bc489c2aeee378732c66ad4b8944a35a36ec49db3aaba933c5143547a6e"
+  },
+  {
+    "path": "dev-3/workbench-forbid.jsonl",
+    "bytes": 82729,
+    "sha256": "0e806cffb5065d158e9695b230c7d73b4d90d476f3cfae734c1404f1a81311d3"
+  },
+  {
+    "path": "dev-3/workbench-forbid.rs",
+    "bytes": 1366,
+    "sha256": "58952555c945c363fbddc673b323f294d5c9b09b5d1137bab3c77eb119e2ecbf"
+  },
+  {
+    "path": "release-1/b2b2-control.jsonl",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "release-1/b2b2-control.rs",
+    "bytes": 1364,
+    "sha256": "bb12406294884a091da2482ef4415393fc1c3fb82eadc4496e6a917e2a2588d4"
+  },
+  {
+    "path": "release-1/cargo-stderr.txt",
+    "bytes": 237,
+    "sha256": "bbd6c978684765c96c0d7f1e324c5ce2c6a8d648c9eff69680e1bf5a4bcd022d"
+  },
+  {
+    "path": "release-1/cargo.jsonl",
+    "bytes": 225211,
+    "sha256": "1d9fe84861c6fe26a93c3f5963809be2df7f1784b372205aabf69b002f357f7c"
+  },
+  {
+    "path": "release-1/result.json",
+    "bytes": 105174,
+    "sha256": "465ab7345d8c27fdbf754367e4be6cac945b49b830aa2c1b2776e3a43fba7417"
+  },
+  {
+    "path": "release-1/rustc.txt",
+    "bytes": 201,
+    "sha256": "abdc1bc489c2aeee378732c66ad4b8944a35a36ec49db3aaba933c5143547a6e"
+  },
+  {
+    "path": "release-1/workbench-forbid.jsonl",
+    "bytes": 82753,
+    "sha256": "eada3f1af96f17a1260565973797f0a1b7be8cab1f98d5a4c21340dd552f1b79"
+  },
+  {
+    "path": "release-1/workbench-forbid.rs",
+    "bytes": 1366,
+    "sha256": "58952555c945c363fbddc673b323f294d5c9b09b5d1137bab3c77eb119e2ecbf"
+  },
+  {
+    "path": "audit/development-attempts.txt",
+    "bytes": 613,
+    "sha256": "73392153d37bb2aea5fdb3a56f9cf47ece3654bad1a8fcd788199cc3377503b2"
+  }
+]
