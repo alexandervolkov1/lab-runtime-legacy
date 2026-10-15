@@ -1,0 +1,216 @@
+0lab-native-child v0.1.0 (D:\rust_projects\lab-runtime\apps\lab-native-child)
+1eframe v0.36.2
+2ahash v0.8.12
+3cfg-if v1.0.4
+3once_cell v1.21.4
+3zerocopy v0.8.59
+2document-features v0.2.12 (proc-macro)
+3litrs v1.0.0
+2egui v0.36.2
+3accesskit v0.24.1
+4uuid v1.26.1
+3ahash v0.8.12 (*)
+3bitflags v2.13.2
+3emath v0.36.2
+4bytemuck v1.25.2
+5bytemuck_derive v1.12.1 (proc-macro)
+6proc-macro2 v1.0.107
+7unicode-ident v1.0.24
+6quote v1.0.47
+7proc-macro2 v1.0.107 (*)
+6syn v3.0.5
+7proc-macro2 v1.0.107 (*)
+7quote v1.0.47 (*)
+7unicode-ident v1.0.24
+3epaint v0.36.2
+4ahash v0.8.12 (*)
+4bytemuck v1.25.2 (*)
+4ecolor v0.36.2
+5bytemuck v1.25.2 (*)
+5emath v0.36.2 (*)
+4emath v0.36.2 (*)
+4epaint_default_fonts v0.36.2
+4font-types v0.12.5
+5bytemuck v1.25.2 (*)
+4harfrust v0.12.0
+5bitflags v2.13.2
+5bytemuck v1.25.2 (*)
+5read-fonts v0.41.0
+6bytemuck v1.25.2 (*)
+6font-types v0.12.5 (*)
+6once_cell v1.21.4
+5smallvec v1.16.1
+4log v0.4.34
+4nohash-hasher v0.2.0
+4parking_lot v0.12.5
+5lock_api v0.4.14
+6scopeguard v1.2.0
+5parking_lot_core v0.9.12
+6cfg-if v1.0.4
+6smallvec v1.16.1
+6windows-link v0.2.1
+4profiling v1.0.18
+4self_cell v1.3.0
+4skrifa v0.44.0
+5bytemuck v1.25.2 (*)
+5read-fonts v0.41.0 (*)
+4smallvec v1.16.1
+4unicode-general-category v1.1.0
+4unicode-segmentation v1.13.3
+4vello_cpu v0.1.0
+5bytemuck v1.25.2 (*)
+5hashbrown v0.17.1
+6foldhash v0.2.0
+5vello_common v0.1.0
+6bytemuck v1.25.2 (*)
+6fearless_simd v0.4.1
+6guillotiere v0.7.0
+7euclid v0.22.14
+8num-traits v0.2.19
+6log v0.4.34
+6peniko v0.6.1
+7bytemuck v1.25.2 (*)
+7color v0.3.3
+8bytemuck v1.25.2 (*)
+7kurbo v0.13.1
+8arrayvec v0.7.8
+8polycool v0.4.0
+9arrayvec v0.7.8
+8smallvec v1.16.1
+7linebender_resource_handle v0.1.1
+7smallvec v1.16.1
+6smallvec v1.16.1
+6thiserror v2.0.20
+7thiserror-impl v2.0.20 (proc-macro)
+8proc-macro2 v1.0.107 (*)
+8quote v1.0.47 (*)
+8syn v3.0.5 (*)
+3itertools v0.15.0
+4either v1.18.0
+3log v0.4.34
+3nohash-hasher v0.2.0
+3profiling v1.0.18
+3smallvec v1.16.1
+3unicode-segmentation v1.13.3
+2egui-winit v0.36.2
+3accesskit_winit v0.32.2
+4accesskit v0.24.1 (*)
+4accesskit_windows v0.32.1
+5accesskit v0.24.1 (*)
+5accesskit_consumer v0.35.0
+6accesskit v0.24.1 (*)
+6hashbrown v0.16.1
+7foldhash v0.2.0
+5hashbrown v0.16.1 (*)
+5static_assertions v1.1.0
+5windows v0.62.2
+6windows-collections v0.3.2
+7windows-core v0.62.2
+8windows-implement v0.60.2 (proc-macro)
+9proc-macro2 v1.0.107 (*)
+9quote v1.0.47 (*)
+9syn v2.0.119
+10proc-macro2 v1.0.107 (*)
+10quote v1.0.47 (*)
+10unicode-ident v1.0.24
+8windows-interface v0.59.3 (proc-macro)
+9proc-macro2 v1.0.107 (*)
+9quote v1.0.47 (*)
+9syn v2.0.119 (*)
+8windows-link v0.2.1
+8windows-result v0.4.1
+9windows-link v0.2.1
+8windows-strings v0.5.1
+9windows-link v0.2.1
+6windows-core v0.62.2 (*)
+6windows-future v0.3.2
+7windows-core v0.62.2 (*)
+7windows-link v0.2.1
+7windows-threading v0.2.1
+8windows-link v0.2.1
+6windows-numerics v0.3.1
+7windows-core v0.62.2 (*)
+7windows-link v0.2.1
+5windows-core v0.62.2 (*)
+4raw-window-handle v0.6.2
+4winit v0.30.13
+5bitflags v2.13.2
+5cursor-icon v1.2.0
+5dpi v0.1.2
+5raw-window-handle v0.6.2
+5smol_str v0.2.2
+5tracing v0.1.44
+6pin-project-lite v0.2.17
+6tracing-core v0.1.36
+5unicode-segmentation v1.13.3
+5windows-sys v0.52.0
+6windows-targets v0.52.6
+7windows_x86_64_msvc v0.52.6
+3arboard v3.6.1
+4clipboard-win v5.4.1
+5error-code v3.4.0
+4image v0.25.10
+5bytemuck v1.25.2 (*)
+5byteorder-lite v0.1.0
+5moxcms v0.8.1
+6num-traits v0.2.19
+6pxfm v0.1.30
+5num-traits v0.2.19
+5png v0.18.1
+6bitflags v2.13.2
+6crc32fast v1.5.2
+7cfg-if v1.0.4
+6fdeflate v0.3.7
+7simd-adler32 v0.3.10
+6flate2 v1.1.10
+7crc32fast v1.5.2 (*)
+7miniz_oxide v0.9.1
+8adler2 v2.0.1
+8simd-adler32 v0.3.10
+6miniz_oxide v0.8.9
+7adler2 v2.0.1
+7simd-adler32 v0.3.10
+4log v0.4.34
+4windows-sys v0.52.0 (*)
+3bytemuck v1.25.2 (*)
+3egui v0.36.2 (*)
+3log v0.4.34
+3profiling v1.0.18
+3raw-window-handle v0.6.2
+3web-time v1.1.0
+3winit v0.30.13 (*)
+2egui_glow v0.36.2
+3bytemuck v1.25.2 (*)
+3egui v0.36.2 (*)
+3glow v0.17.0
+3log v0.4.34
+3profiling v1.0.18
+2glow v0.17.0
+2glutin v0.32.3
+3bitflags v2.13.2
+3glutin_egl_sys v0.7.1
+4windows-sys v0.52.0 (*)
+3glutin_wgl_sys v0.6.1
+3libloading v0.8.9
+4windows-link v0.2.1
+3once_cell v1.21.4
+3raw-window-handle v0.6.2
+3windows-sys v0.52.0 (*)
+2glutin-winit v0.5.0
+3glutin v0.32.3 (*)
+3raw-window-handle v0.6.2
+3winit v0.30.13 (*)
+2image v0.25.10 (*)
+2log v0.4.34
+2parking_lot v0.12.5 (*)
+2profiling v1.0.18
+2raw-window-handle v0.6.2
+2static_assertions v1.1.0
+2web-time v1.1.0
+2windows-sys v0.61.2
+3windows-link v0.2.1
+2winit v0.30.13 (*)
+1glutin v0.32.3 (*)
+1glutin-winit v0.5.0 (*)
+1raw-window-handle v0.6.2
+1winit v0.30.13 (*)

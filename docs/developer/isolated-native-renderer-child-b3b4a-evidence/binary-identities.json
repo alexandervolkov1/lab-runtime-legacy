@@ -1,0 +1,86 @@
+[
+  {
+    "profile": "dev",
+    "role": "runtime_virtual",
+    "path": "target/debug/lab-runtime.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b"
+  },
+  {
+    "profile": "dev",
+    "role": "legacy_v1_workbench",
+    "path": "target/debug/lab-workbench.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "ac24eb6f2ef22da05fdd2a8b63d87065583752f8d9a3db7e8ebbd430f268a2f1"
+  },
+  {
+    "profile": "dev",
+    "role": "inert_native_capsule",
+    "path": "target/debug/lab-native-child.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "63fdd1841785510cdb755f478aee7a0bca0a968d30887c7ae8a0ee1fa5fef0c0"
+  },
+  {
+    "profile": "dev",
+    "role": "no_gpu_ipc_fixture",
+    "path": "target/private-ipc/dev/private-ipc-fixture.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "867bc734c5130e99e54204401e7feec339cc45c8517fd823832efadd6c51108d"
+  },
+  {
+    "profile": "dev",
+    "role": "cpu_preview_probe",
+    "path": "target/v2-renderer-allocation-probe/dev/v2-renderer-allocation-probe.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "f075e3d9a18252c5f0022ede685cecfb5a2abf437ccce8aaca0bd15b1269b508"
+  },
+  {
+    "profile": "dev",
+    "role": "b2b2_compile_only",
+    "path": "target/native-glow/dev/native-glow.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "ee2f88b8feff66bb69daec76c681e68363bf5fe308c278e45110ee107fe06926"
+  },
+  {
+    "profile": "release",
+    "role": "runtime_virtual",
+    "path": "target/release/lab-runtime.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79"
+  },
+  {
+    "profile": "release",
+    "role": "legacy_v1_workbench",
+    "path": "target/release/lab-workbench.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "b6a5dd0483488598ebe361270f9717f68b36e9df9184dfc88eb002acb9002a38"
+  },
+  {
+    "profile": "release",
+    "role": "inert_native_capsule",
+    "path": "target/release/lab-native-child.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "344fb4db00f110f30ada5aefc4cca15e1d78fdbe33abbbd4bf577b0d33289987"
+  },
+  {
+    "profile": "release",
+    "role": "no_gpu_ipc_fixture",
+    "path": "target/private-ipc/release/private-ipc-fixture.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "6f5436e38fb84237a494bb12c32ba028ac7c08fdb229aec1f22eea7108196d83"
+  },
+  {
+    "profile": "release",
+    "role": "cpu_preview_probe",
+    "path": "target/v2-renderer-allocation-probe/release/v2-renderer-allocation-probe.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "f2560c4f00b8da0e649d74ae4a736a22ac77d67356fc10ef3716fedbb6c7efda"
+  },
+  {
+    "profile": "release",
+    "role": "b2b2_compile_only",
+    "path": "target/native-glow/release/native-glow.exe",
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "sha256": "61f61f9c433bf834990ed243b6613c484975c28d66785991ef6641d94256fffe"
+  }
+]

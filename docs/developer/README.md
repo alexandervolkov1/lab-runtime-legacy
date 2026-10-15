@@ -27,9 +27,9 @@ from the [User manual](../README.md); ordinary users need no source checkout.
 - [Private read-only IPC](private-readonly-ipc.md): DGUI-4C7B3B3 owner-only
   overlapped pipes, closed snapshot codec, shared credits and original I/O
   retirement receipts; qualified no-GPU fixtures, GUI v2 remains inactive.
-- [Isolated renderer compatibility stop](isolated-native-renderer-child.md):
-  DGUI-4C7B3B4 BLOCKED before integration, with document lifetime/admission and
-  native boundary findings; no renderer-child qualification or activation.
+- [Isolated renderer compatibility seams](isolated-native-renderer-child.md):
+  DGUI-4C7B3B4A explicit admission handoff, selected borrowed provider and inert
+  Cargo native capsule; full B3B4 renderer integration remains BLOCKED.
 - [Configuration and CLI reference](../reference/configuration.md): full field
   tables, argument grammar, limits, path resolution and live configuration.
 - [Transport reference](../reference/transports.md): TCP, WS and verified WSS.
