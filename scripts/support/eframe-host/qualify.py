@@ -69,6 +69,16 @@ user.GetClientRect.restype = w.BOOL
 user.GetDpiForWindow.argtypes = [w.HWND]
 user.GetDpiForWindow.restype = w.UINT
 user.GetForegroundWindow.restype = w.HWND
+user.SetFocus.argtypes = [w.HWND]
+user.SetFocus.restype = w.HWND
+user.AttachThreadInput.argtypes = [w.DWORD, w.DWORD, w.BOOL]
+user.AttachThreadInput.restype = w.BOOL
+user.ClientToScreen.argtypes = [w.HWND, c.POINTER(w.POINT)]
+user.ClientToScreen.restype = w.BOOL
+user.SetCursorPos.argtypes = [c.c_int, c.c_int]
+user.SetCursorPos.restype = w.BOOL
+kernel = c.WinDLL("kernel32", use_last_error=True)
+kernel.GetCurrentThreadId.restype = w.DWORD
 
 
 class Keyboard(c.Structure):
@@ -76,8 +86,13 @@ class Keyboard(c.Structure):
                 ("time", w.DWORD), ("extra", c.c_size_t)]
 
 
+class Mouse(c.Structure):
+    _fields_ = [("x", w.LONG), ("y", w.LONG), ("data", w.DWORD),
+                ("flags", w.DWORD), ("time", w.DWORD), ("extra", c.c_size_t)]
+
+
 class InputPayload(c.Union):
-    _fields_ = [("keyboard", Keyboard), ("reserved_mouse_size", c.c_byte * 32)]
+    _fields_ = [("keyboard", Keyboard), ("mouse", Mouse)]
 
 
 class Input(c.Structure):
@@ -125,12 +140,21 @@ for renderer in ("wgpu", "glow"):
                     actions.append(dict(message=message, wparam=first, lparam=second))
 
                 def click(point):
-                    x, y = map(round, point)
-                    location = (y << 16) | x
-                    post(0x0200, 0, location)  # WM_MOUSEMOVE
-                    post(0x0201, 1, location)  # WM_LBUTTONDOWN
+                    owner()
+                    assert user.GetForegroundWindow() == hwnd
+                    location = w.POINT(*map(round, point))
+                    assert user.ClientToScreen(hwnd, c.byref(location))
+                    assert user.SetCursorPos(location.x, location.y)
                     time.sleep(.08)
-                    post(0x0202, 0, location)  # WM_LBUTTONUP
+                    for flags in (2, 4):
+                        owner()
+                        assert user.GetForegroundWindow() == hwnd
+                        event = Input()
+                        event.kind = 0
+                        event.payload.mouse.flags = flags
+                        assert user.SendInput(1, c.byref(event), c.sizeof(Input)) == 1
+                        time.sleep(.08)
+                    actions.append(dict(mouse_click_client_pixels=point, original_foreground_verified=True))
                     time.sleep(.12)
 
                 frame = wait_json(folder / "frame-0.json", process)
@@ -141,7 +165,26 @@ for renderer in ("wgpu", "glow"):
                         (folder / "contain").write_text("explicit test containment after observed owner stall")
                 else:
                     owner()
-                    focused = bool(user.SetForegroundWindow(hwnd))
+                    # Temporarily join input queues to request real OS focus;
+                    # detach in finally. Never fake egui/WM_SETFOCUS events.
+                    user.GetQueueStatus(w.UINT(0x4FF))
+                    current = kernel.GetCurrentThreadId()
+                    foreground = user.GetForegroundWindow()
+                    threads = {user.GetWindowThreadProcessId(hwnd, None)}
+                    if foreground:
+                        threads.add(user.GetWindowThreadProcessId(foreground, None))
+                    attached = []
+                    try:
+                        for thread in threads - {0, current}:
+                            assert user.AttachThreadInput(current, thread, True), c.get_last_error()
+                            attached.append(thread)
+                        focused = bool(user.SetForegroundWindow(hwnd))
+                        user.SetFocus(hwnd)
+                    finally:
+                        for thread in reversed(attached):
+                            assert user.AttachThreadInput(current, thread, False), c.get_last_error()
+                    time.sleep(.2)
+                    assert user.GetForegroundWindow() == hwnd
                     actions.append(dict(foreground_requested=True, accepted=focused,
                                         actual_window_dpi=user.GetDpiForWindow(hwnd)))
                     click(frame["button_pixels"])
