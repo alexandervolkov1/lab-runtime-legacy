@@ -33,6 +33,10 @@ use std::{
 };
 use winit::{event_loop::ActiveEventLoop, window::Window};
 
+#[path = "native-glow-capabilities.rs"]
+mod capabilities;
+use capabilities::{Capabilities, FailureKind, InitializationError, Report, UnsupportedCapability};
+
 pub(super) const WIDTH: usize = 1280;
 pub(super) const HEIGHT: usize = 960;
 const BUFFER_BYTES: usize = 2 * 1024 * 1024;
@@ -120,9 +124,39 @@ pub(super) struct Device {
     staging_len: usize,
     readback: Box<[u8]>,
     pub counters: Counters,
+    initialization: Report,
 }
 impl Device {
-    pub fn new(events: &ActiveEventLoop) -> Result<Self> {
+    pub fn new(events: &ActiveEventLoop) -> std::result::Result<Self, InitializationError> {
+        let mut report = Report::default();
+        let result = Self::initialize(events, &mut report);
+        report.admitted = result.is_ok();
+        if let Err(error) = &result {
+            report.error = Some(error.clone());
+            report
+                .error_kind
+                .get_or_insert(FailureKind::InitializationFailure);
+        }
+        // One bounded retained record, including the original failed stage. A
+        // successful capability check never stands in for later GPU receipts.
+        println!(
+            "GL_INITIALIZATION={}",
+            serde_json::to_string(&report).unwrap()
+        );
+        match result {
+            Ok(mut device) => {
+                device.initialization = report;
+                Ok(device)
+            }
+            Err(_) => Err(InitializationError {
+                report: Box::new(report),
+            }),
+        }
+    }
+    pub fn initialization(&self) -> &Report {
+        &self.initialization
+    }
+    fn initialize(events: &ActiveEventLoop, report: &mut Report) -> Result<Self> {
         let attrs = Window::default_attributes()
             .with_title("Isolated v2 GL qualification")
             .with_inner_size(winit::dpi::PhysicalSize::new(WIDTH as u32, HEIGHT as u32))
@@ -143,6 +177,22 @@ impl Device {
             )
             .map_err(|e| e.to_string())?;
         let window = window.ok_or("missing native window")?;
+        report.diagnostics.platform_api = match config.display() {
+            glutin::display::Display::Wgl(_) => "WGL",
+            glutin::display::Display::Egl(_) => "EGL",
+        };
+        report.diagnostics.framebuffer_config = format!(
+            "color={:?} alpha={} depth={} stencil={} samples={}",
+            config.color_buffer_type(),
+            config.alpha_size(),
+            config.depth_size(),
+            config.stencil_size(),
+            config.num_samples()
+        )
+        .chars()
+        .take(512)
+        .collect();
+        report.scale = Some(window.scale_factor());
         println!(
             "native framebuffer config color={:?} alpha={} depth={} stencil={} samples={}",
             config.color_buffer_type(),
@@ -152,8 +202,10 @@ impl Device {
             config.num_samples()
         );
         if window.inner_size() != winit::dpi::PhysicalSize::new(WIDTH as u32, HEIGHT as u32) {
-            return Err("physical viewport must be 1280x960".into());
+            report.error_kind = Some(FailureKind::UnsupportedCapability);
+            return Err(UnsupportedCapability("fixed physical viewport 1280x960").to_string());
         }
+        report.stage = "context_surface";
         let raw = window.window_handle().map_err(|e| e.to_string())?.as_raw();
         let attrs = ContextAttributesBuilder::new()
             .with_profile(GlProfile::Core)
@@ -169,7 +221,12 @@ impl Device {
                 config
                     .display()
                     .create_context(&config, &attrs)
-                    .map_err(|e| e.to_string())?,
+                    .map_err(|e| {
+                        if e.not_supported() {
+                            report.error_kind = Some(FailureKind::UnsupportedCapability);
+                        }
+                        e.to_string()
+                    })?,
                 config
                     .display()
                     .create_window_surface(&config, &surface_attrs)
@@ -177,14 +234,43 @@ impl Device {
             )
         };
         let context = context.make_current(&surface).map_err(|e| e.to_string())?;
+        report.stage = "entry_points";
+        if !context.is_current() {
+            return Err("creating context is not current".into());
+        }
+        capabilities::require_symbols(|name| {
+            let pointer = config
+                .display()
+                .get_proc_address(&CString::new(name).unwrap()) as usize;
+            // WGL also defines small integer/-1 failure sentinels. Do not pass
+            // any such value to Glow or transmute it into an entry point.
+            pointer > 3 && pointer != usize::MAX
+        })
+        .map_err(|error| {
+            report.error_kind = Some(FailureKind::UnsupportedCapability);
+            error.to_string()
+        })?;
+        report.required_entry_points = capabilities::REQUIRED_SYMBOLS.len();
+        report.stage = "glow_loader";
         // SAFETY: function pointers come from this live current desktop GL display.
-        let gl = unsafe {
+        let gl = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| unsafe {
             glow::Context::from_loader_function(|name| {
                 config
                     .display()
                     .get_proc_address(&CString::new(name).expect("GL symbol contains no NUL"))
             })
-        };
+        }))
+        .map_err(|payload| {
+            let message = payload
+                .downcast_ref::<String>()
+                .map(String::as_str)
+                .or_else(|| payload.downcast_ref::<&str>().copied())
+                .unwrap_or("unknown Glow loader panic");
+            format!(
+                "Glow loader: {}",
+                message.chars().take(512).collect::<String>()
+            )
+        })?;
         let is_vao = config
             .display()
             .get_proc_address(&CString::new("glIsVertexArray").unwrap());
@@ -223,32 +309,98 @@ impl Device {
             staging_len: 0,
             readback: Box::default(),
             counters: Counters::default(),
+            initialization: Report::default(),
         };
         device.check("context creation")?;
-        let v = device.gl.version();
-        if v.is_embedded || (v.major, v.minor) < (3, 3) {
-            return Err("desktop GL 3.3 required (sync, VAO, RGBA8)".into());
-        }
-        // SAFETY: currentness checked above; these are bounded identity queries.
+        report.stage = "desktop_api";
+        let v = device.gl.version().clone();
+        // SAFETY: exact creating context is current, and the required queries
+        // were resolved before constructing Glow. Retained identity is bounded.
         unsafe {
-            println!(
-                "GL vendor={:?} renderer={:?} version={:?} OS_scale={} pixels_per_point=1 viewport=1280x960",
-                device.gl.get_parameter_string(glow::VENDOR),
-                device.gl.get_parameter_string(glow::RENDERER),
-                device.gl.get_parameter_string(glow::VERSION),
-                device.window.scale_factor()
-            );
+            report.diagnostics.vendor = device
+                .gl
+                .get_parameter_string(glow::VENDOR)
+                .chars()
+                .take(512)
+                .collect();
+            report.diagnostics.renderer = device
+                .gl
+                .get_parameter_string(glow::RENDERER)
+                .chars()
+                .take(512)
+                .collect();
+            report.diagnostics.version = device
+                .gl
+                .get_parameter_string(glow::VERSION)
+                .chars()
+                .take(512)
+                .collect();
+            report.diagnostics.shading_language_version = device
+                .gl
+                .get_parameter_string(glow::SHADING_LANGUAGE_VERSION)
+                .chars()
+                .take(512)
+                .collect();
+        }
+        device.check("graphics identity")?;
+        if v.is_embedded || (v.major, v.minor) < (3, 3) {
+            report.error_kind = Some(FailureKind::UnsupportedCapability);
+            return Err(UnsupportedCapability("desktop OpenGL 3.3 or newer").to_string());
+        }
+        report.stage = "framebuffer_capabilities";
+        // SAFETY: current desktop GL >=3.3 supports these queries. No own GPU
+        // object or rendering obligation has been created. Framebuffer zero is
+        // the original glutin double-buffered drawable, never a foreign painter.
+        unsafe {
+            device.gl.bind_framebuffer(glow::FRAMEBUFFER, None);
+            let mut viewport = [0; 2];
+            device
+                .gl
+                .get_parameter_i32_slice(glow::MAX_VIEWPORT_DIMS, &mut viewport);
+            let color_bits = [
+                glow::FRAMEBUFFER_ATTACHMENT_RED_SIZE,
+                glow::FRAMEBUFFER_ATTACHMENT_GREEN_SIZE,
+                glow::FRAMEBUFFER_ATTACHMENT_BLUE_SIZE,
+                glow::FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE,
+            ]
+            .map(|parameter| {
+                device.gl.get_framebuffer_attachment_parameter_i32(
+                    glow::FRAMEBUFFER,
+                    glow::BACK_LEFT,
+                    parameter,
+                )
+            });
+            report.diagnostics.context_flags = device.gl.get_parameter_i32(glow::CONTEXT_FLAGS);
+            report.capabilities = Some(Capabilities {
+                version: [v.major, v.minor],
+                embedded: v.is_embedded,
+                profile_mask: device.gl.get_parameter_i32(glow::CONTEXT_PROFILE_MASK),
+                max_texture_size: device.gl.get_parameter_i32(glow::MAX_TEXTURE_SIZE),
+                max_viewport: viewport,
+                color_bits,
+                double_buffered: device.gl.get_parameter_i32(glow::DOUBLEBUFFER) != 0,
+                default_framebuffer_complete: device.gl.check_framebuffer_status(glow::FRAMEBUFFER)
+                    == glow::FRAMEBUFFER_COMPLETE,
+            });
         }
         device.check("capabilities")?;
+        report
+            .capabilities
+            .as_ref()
+            .unwrap()
+            .admit()
+            .map_err(|error| {
+                report.error_kind = Some(FailureKind::UnsupportedCapability);
+                error.to_string()
+            })?;
+        report.stage = "fixed_drawable_scale";
         if device.window.scale_factor() != 1.0 {
-            return Err("native qualification scale must be one".into());
+            report.error_kind = Some(FailureKind::UnsupportedCapability);
+            return Err(
+                UnsupportedCapability("fixed native scale one; PORT-2 pending").to_string(),
+            );
         }
-        // SAFETY: current desktop GL 3.3 context supports these queries.
-        let max_texture = unsafe { device.gl.get_parameter_i32(glow::MAX_TEXTURE_SIZE) };
-        device.check("texture capability")?;
-        if max_texture < 2048 {
-            return Err("font texture capability too small".into());
-        }
+        report.stage = "ready";
         Ok(device)
     }
     fn current(&self) -> Result<()> {
@@ -337,6 +489,17 @@ impl Device {
             return Err("generation/fence conflict".into());
         }
         let size = delta.image.size();
+        let max_texture = self
+            .initialization
+            .capabilities
+            .as_ref()
+            .unwrap()
+            .max_texture_size as usize;
+        if size.iter().any(|dimension| *dimension > max_texture) {
+            return Err(
+                UnsupportedCapability("texture dimensions exceed GL_MAX_TEXTURE_SIZE").to_string(),
+            );
+        }
         let bytes = size[0]
             .checked_mul(size[1])
             .and_then(|n| n.checked_mul(4))

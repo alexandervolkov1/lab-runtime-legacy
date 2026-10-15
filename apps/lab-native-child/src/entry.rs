@@ -252,8 +252,14 @@ impl ApplicationHandler for Bootstrap {
                 "monitors":events.available_monitors().take(8).map(|monitor|json!({"name":monitor.name().map(|s|s.chars().take(128).collect::<String>()),"scale":monitor.scale_factor(),"size":[monitor.size().width,monitor.size().height],"position":[monitor.position().x,monitor.position().y]})).collect::<Vec<_>>()
             }));
             match Device::new(events) {
-                Ok(device) => self.device = Some(device),
-                Err(e) => self.error = Some(e),
+                Ok(device) => {
+                    self.profile.as_mut().unwrap()["graphics"] = json!(device.initialization());
+                    self.device = Some(device);
+                }
+                Err(error) => {
+                    self.profile.as_mut().unwrap()["graphics"] = json!(error.report);
+                    self.error = Some(error.to_string());
+                }
             }
         }
     }
