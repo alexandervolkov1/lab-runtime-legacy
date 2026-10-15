@@ -141,8 +141,12 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         response(&mut stream, "document")["result"]["presentation_revision"],
         "2"
     );
-    let directory = std::env::current_dir()
+    // The accepted Job launcher fixes the child cwd to its executable directory.
+    let directory = launch("normal")
+        .executable
+        .parent()
         .unwrap()
+        .to_path_buf()
         .join("target/isolated-native-renderer")
         .join(format!(
             "{}-{}-1",

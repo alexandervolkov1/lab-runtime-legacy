@@ -669,12 +669,23 @@ pub(super) fn run() -> Result<()> {
         b"{\"stage\":\"startup\",\"deployment_C\":null}",
     )
     .map_err(|e| e.to_string())?;
-    let mut events = EventLoop::new().map_err(|e| e.to_string())?;
+    let mut events = EventLoop::new().map_err(|e| {
+        let error = e.to_string();
+        let _ = fs::write(
+            directory.join("startup-error.json"),
+            serde_json::to_vec(&json!({"stage":"event_loop","error":error})).unwrap(),
+        );
+        error
+    })?;
     let mut boot = Bootstrap::default();
     while boot.device.is_none() && boot.error.is_none() {
         events.pump_app_events(Some(Duration::from_millis(1)), &mut boot);
     }
     if let Some(error) = boot.error {
+        let _ = fs::write(
+            directory.join("startup-error.json"),
+            serde_json::to_vec(&json!({"stage":"native_device","error":error})).unwrap(),
+        );
         return Err(error);
     }
     let device = Rc::new(RefCell::new(boot.device.take().unwrap()));
