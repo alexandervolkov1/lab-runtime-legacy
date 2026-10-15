@@ -280,14 +280,27 @@ fn native_isolated_gpu_fault_matrix() {
                     })
                     .is_file()
             });
-            let before = h.pump.supervisor().unwrap().status().unwrap().owner_counter;
-            wait(|| {
-                h.pump
-                    .supervisor()
-                    .unwrap()
-                    .status()
-                    .is_ok_and(|s| s.owner_counter > before)
-            });
+            if mode == "gpu-native-teardown" {
+                // Closing preserves the original Close challenge until healthy
+                // retirement. Its interim native progress is not a Status pong.
+                let receipt = directory.join("native-close-retained.json");
+                wait(|| receipt.is_file());
+                let receipt: Value = serde_json::from_slice(&fs::read(receipt).unwrap()).unwrap();
+                assert!(
+                    receipt["event_loop"].as_u64().unwrap()
+                        > receipt["original_event_loop"].as_u64().unwrap()
+                );
+                assert_eq!(receipt["release_retry"], false);
+            } else {
+                let before = h.pump.supervisor().unwrap().status().unwrap().owner_counter;
+                wait(|| {
+                    h.pump
+                        .supervisor()
+                        .unwrap()
+                        .status()
+                        .is_ok_and(|s| s.owner_counter > before)
+                });
+            }
             h.continuity(if mode == "gpu-native-teardown" {
                 "2"
             } else {

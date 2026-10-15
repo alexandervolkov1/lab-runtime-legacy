@@ -343,7 +343,7 @@ impl Display<'_, '_> {
                     .device
                     .borrow()
                     .window
-                    .request_inner_size(winit::dpi::PhysicalSize::new(640, 480));
+                    .request_inner_size(winit::dpi::PhysicalSize::new(1296, 976));
                 Some(1)
             }
             1 if state.suspension.unsupported_size => Some(2),
@@ -1086,6 +1086,8 @@ pub(super) fn run() -> Result<()> {
                         "retry":false,"final_wgl_destruction":"LIMITED/no new receipt"}),
                     );
                     state.pending = true;
+                    let retained_owner = state.owner_progress;
+                    let mut retained_pumps = 0;
                     // A failed native release is not retried and cannot become
                     // Closed/ExitedHealthy. Keep these original lexical roots
                     // alive while the owner services IPC/native events, until
@@ -1100,6 +1102,14 @@ pub(super) fn run() -> Result<()> {
                                 state: &mut state,
                             },
                         );
+                        retained_pumps += 1;
+                        if retained_pumps == 100 {
+                            let _ = state.note("native-close-retained", json!({
+                                "original_event_loop":retained_owner,"event_loop":state.owner_progress,
+                                "owner_pumps":retained_pumps,"native_root_retained":true,
+                                "ledger":format!("{:?}",state.device.borrow().ledger()),
+                                "healthy_close":false,"release_retry":false}));
+                        }
                     }
                 }
                 let _=state.note("own-retired",json!({"own_objects":state.device.borrow().counters.objects,"ledger":format!("{:?}",state.device.borrow().ledger()),"counters":format!("{:?}",state.device.borrow().counters),"final_wgl_destruction":"LIMITED/no new receipt","healthy_own_objects":true}));
