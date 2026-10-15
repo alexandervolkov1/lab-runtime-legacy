@@ -107,6 +107,7 @@ pub(crate) struct RenderReport {
     pub(crate) widgets: usize,
     pub(crate) guarded: bool,
     pub(crate) plot_points: usize,
+    pub(crate) plot_point_visits: usize,
     pub(crate) plot_traces: usize,
     pub(crate) geometry_segments: usize,
     pub(crate) geometry_unavailable: usize,

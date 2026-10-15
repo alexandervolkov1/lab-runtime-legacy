@@ -77,6 +77,7 @@ struct Channels {
     closed_sent: bool,
     diagnostic: Option<crate::private_ipc::renderer_progress::RendererProgress>,
     reported_frame_completion: bool,
+    assembling: bool,
 }
 impl Channels {
     fn service(
@@ -127,15 +128,17 @@ impl Channels {
                 .snapshot
                 .receive_bounded(self.identity, now, OWNER_BYTES - bytes)
                 .map_err(|e| format!("{e:?}"))?
-            && replica.chunk(header, payload, now).map_err(str::to_owned)?
-            && header.kind == Kind::Observations
         {
-            self.pending[1] = Some((
-                header,
-                replica
-                    .accepted(1)
-                    .is_some_and(|accepted| accepted.snapshot == header.snapshot),
-            ));
+            let complete = replica.chunk(header, payload, now).map_err(str::to_owned)?;
+            self.assembling = header.offset + payload.len() < header.total;
+            if complete && header.kind == Kind::Observations {
+                self.pending[1] = Some((
+                    header,
+                    replica
+                        .accepted(1)
+                        .is_some_and(|accepted| accepted.snapshot == header.snapshot),
+                ));
+            }
         }
         if !self.control.idle() {
             return Ok(());
@@ -245,9 +248,13 @@ struct State {
     render_owner_progress: u64,
     completed: u64,
     fatal: Option<String>,
-    paused: bool,
+    suspension: crate::drawable::Suspension,
     pending: bool,
     snapshot_stalled: bool,
+    fault_armed: bool,
+    pending_since: Option<Instant>,
+    window_probe: (u8, Instant, u64, u64),
+    expected_frame_since: Option<Instant>,
     pointer: egui::Pos2,
     modifiers: egui::Modifiers,
     input: Vec<egui::Event>,
@@ -312,9 +319,75 @@ struct Display<'p, 'd> {
     state: &'p mut State,
 }
 impl Display<'_, '_> {
+    fn suspension_receipt(&self, event: &str) {
+        let state = &self.state;
+        let causes = state.suspension;
+        let _ = state.note(
+            "drawable-state",
+            json!({"event":event,
+                "occluded":causes.occluded,"minimized":causes.minimized,"unsupported_size":causes.unsupported_size,
+            "unsupported_scale":causes.unsupported_scale,"paused":causes.paused(),
+            "event_loop":state.owner_progress,"render_owner":state.render_owner_progress,
+            "completed":state.completed,"new_profile_qualified":false}),
+        );
+    }
+    fn probe_window(&mut self) {
+        if self.state.mode != "window-profile" {
+            return;
+        }
+        let state = &mut self.state;
+        let (stage, since, frames, owner) = state.window_probe;
+        let next = match stage {
+            0 if state.completed >= 2 => {
+                let _ = state
+                    .device
+                    .borrow()
+                    .window
+                    .request_inner_size(winit::dpi::PhysicalSize::new(640, 480));
+                Some(1)
+            }
+            1 if state.suspension.unsupported_size => Some(2),
+            2 | 5 if since.elapsed() >= Duration::from_millis(250) => {
+                if state.completed != frames || state.owner_progress <= owner {
+                    state.fail(
+                        "native suspension failed to stop frames/preserve owner progress".into(),
+                    );
+                    return;
+                }
+                if stage == 2 {
+                    let _ = state
+                        .device
+                        .borrow()
+                        .window
+                        .request_inner_size(winit::dpi::PhysicalSize::new(1280, 960));
+                } else {
+                    state.device.borrow().window.set_minimized(false);
+                }
+                Some(stage + 1)
+            }
+            3 if !state.suspension.unsupported_size && state.completed > frames => {
+                state.device.borrow().window.set_minimized(true);
+                Some(4)
+            }
+            4 if state.suspension.minimized => Some(5),
+            6 if !state.suspension.minimized && state.completed > frames => Some(7),
+            _ => None,
+        };
+        if let Some(next) = next {
+            let _=state.note(&format!("window-probe-{next}"),json!({"stage":next,"completed":state.completed,
+                "owner_progress":state.owner_progress,"previous_frames":frames,"previous_owner":owner,
+                "suspension":format!("{:?}",state.suspension),"actual_winit_window_calls":true,
+                "unsupported_dpi_native_event":"UNQUALIFIED/not injected as a real event"}));
+            state.window_probe = (next, Instant::now(), state.completed, state.owner_progress);
+        }
+    }
     fn draw(&mut self) -> Result<()> {
         let state = &mut self.state;
-        if state.paused
+        if state.suspension.paused()
+            // Do not spend a maximum Plot frame's CPU/GL time between chunks
+            // of the same bounded transfer. Keep the old Preview/document and
+            // service native/control events; no deadline, credit or buffer grows.
+            || state.io.assembling
             || state.pending
             || state.fatal.is_some()
             || state.io.closing
@@ -339,6 +412,15 @@ impl Display<'_, '_> {
         if state.mode == "pending" && state.completed != 0 {
             state.device.borrow_mut().wait_fault =
                 Some(crate::readonly_v2::completion::Completion::Timeout);
+        }
+        if !state.fault_armed
+            && state.completed != 0
+            && crate::fault::MODES.contains(&state.mode.as_str())
+        {
+            crate::fault::arm(&mut state.device.borrow_mut(), &state.mode);
+            state.fault_armed = true;
+            state.note("fault-armed", json!({"mode":state.mode,"artificial":true,
+                "completed_before_fault":state.completed,"ledger":format!("{:?}",state.device.borrow().ledger())}))?;
         }
         let header = self
             .replica
@@ -397,7 +479,12 @@ impl Display<'_, '_> {
             current,
             state.plot,
         );
-        let capture = state.capture_key != Some(key);
+        let capture = state.capture_key != Some(key)
+            && match state.mode.as_str() {
+                "maximum-repeated" => state.captures == 0 || report.plot_point_visits == 262_144,
+                "maximum-distinct" => state.captures == 0 || report.plot_point_visits == 32_768,
+                _ => true,
+            };
         let mut labels = String::new();
         let mut points = [[0f32; 2]; 32];
         let mut samples = 0;
@@ -446,12 +533,14 @@ impl Display<'_, '_> {
             Ok(FrameOutcome::HostCompleted { degraded: false }) => {}
             Err(FrameError::Completion) => {
                 state.pending = true;
+                state.pending_since.get_or_insert_with(Instant::now);
                 state.note("pending",json!({"cleanup":format!("{:?}",preview.cleanup_outcome()),"ledger":format!("{:?}",state.device.borrow().ledger()),"completed":state.completed,"document_snapshot":state.document.snapshot,"assembly_ready":self.replica.document_candidate().is_some()}))?;
                 return Ok(());
             }
             other => return Err(format!("frame completion: {other:?}")),
         }
         state.completed = state.completed.saturating_add(1);
+        state.expected_frame_since = None;
         if state.mode == "snapshot-stall"
             && state.plot
             && report.plot_points >= 64
@@ -491,7 +580,7 @@ impl Display<'_, '_> {
                 .map_err(|e| e.to_string())?;
             state.note(&name,json!({"document_snapshot":state.document.snapshot,"epoch_revision":state.document.epoch.revision,"observation_snapshot":header.map_or(0,|h|h.snapshot),"source":header.map_or(0,|h|h.source),"current":current,"plot":state.plot,
                 "width":WIDTH,"height":HEIGHT,"scale":1,"generation":format!("{generation:?}"),"labels":labels,
-                "plot_points":report.plot_points,"geometry_segments":report.geometry_segments,"geometry_failures":report.geometry_failures,
+                "plot_points":report.plot_points,"plot_traces":report.plot_traces,"plot_point_visits":report.plot_point_visits,"geometry_segments":report.geometry_segments,"geometry_failures":report.geometry_failures,
                 "curve_samples":&points[..samples],"matched_samples":matched,"cyan_pixels":colored,
                 "owner_progress":state.owner_progress,"render_owner_progress":state.render_owner_progress,"completed":state.completed,
                 "native_counters":format!("{counters:?}"),"own_objects":counters.objects,
@@ -519,7 +608,13 @@ impl Display<'_, '_> {
         if state.mode == "crash" {
             std::process::exit(73);
         }
-        if state.mode == "owner-stall" && state.io.reported_frame_completion {
+        // The parent fixture publishes these selected points only after its
+        // original supervisor confirms Ready. A pre-admission Status is not
+        // evidence that the parent accepted owner progress.
+        if state.mode == "owner-stall"
+            && state.io.reported_frame_completion
+            && report.plot_points >= 64
+        {
             loop {
                 std::thread::park();
             }
@@ -533,7 +628,36 @@ impl ApplicationHandler for Display<'_, '_> {
     }
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
         self.state.owner_progress = self.state.owner_progress.saturating_add(1);
-        if self.state.last_draw.elapsed() >= Duration::from_millis(40) {
+        self.state.suspension.minimized = self
+            .state
+            .device
+            .borrow()
+            .window
+            .is_minimized()
+            .unwrap_or(false);
+        self.probe_window();
+        let expected = self.preview.is_some()
+            && !self.state.suspension.paused()
+            && !self.state.pending
+            && !self.state.io.assembling
+            && !self.state.io.closing
+            && self.state.fatal.is_none()
+            && self.replica.document_candidate().is_none();
+        if expected {
+            let since = self
+                .state
+                .expected_frame_since
+                .get_or_insert_with(Instant::now);
+            if since.elapsed() >= Duration::from_secs(2) {
+                self.state
+                    .fail("renderer frame progress deadline while drawable admitted".into());
+            }
+        } else {
+            self.state.expected_frame_since = None;
+        }
+        if self.state.last_draw.elapsed() >= Duration::from_millis(40)
+            && !(self.state.mode == "redraw-stall" && self.state.completed != 0)
+        {
             self.state.device.borrow().window.request_redraw();
             self.state.last_draw = Instant::now();
         }
@@ -545,7 +669,9 @@ impl ApplicationHandler for Display<'_, '_> {
         self.state.owner_progress = self.state.owner_progress.saturating_add(1);
         let input = match event {
             WindowEvent::RedrawRequested => {
-                if let Err(error) = self.draw() {
+                if !(self.state.mode == "redraw-stall" && self.state.completed != 0)
+                    && let Err(error) = self.draw()
+                {
                     self.state.fail(error);
                 }
                 None
@@ -556,15 +682,18 @@ impl ApplicationHandler for Display<'_, '_> {
                 None
             }
             WindowEvent::Resized(size) => {
-                self.state.paused = size.width != WIDTH as u32 || size.height != HEIGHT as u32;
+                self.state.suspension.resize(size.width, size.height);
+                self.suspension_receipt("resize");
                 None
             }
             WindowEvent::ScaleFactorChanged { scale_factor, .. } => {
-                self.state.paused = scale_factor != 1.;
+                self.state.suspension.scale(scale_factor);
+                self.suspension_receipt("scale");
                 None
             }
             WindowEvent::Occluded(hidden) => {
-                self.state.paused = hidden;
+                self.state.suspension.occluded = hidden;
+                self.suspension_receipt("occluded");
                 None
             }
             WindowEvent::Focused(focus) => Some(egui::Event::WindowFocused(focus)),
@@ -678,8 +807,13 @@ pub(super) fn run() -> Result<()> {
         "pending",
         "snapshot-stall",
         "owner-stall",
+        "maximum-repeated",
+        "maximum-distinct",
+        "window-profile",
+        "redraw-stall",
     ]
     .contains(&mode.as_str())
+        && !crate::fault::MODES.contains(&mode.as_str())
     {
         return Err("child qualification mode".into());
     }
@@ -712,7 +846,10 @@ pub(super) fn run() -> Result<()> {
     fs::create_dir(&directory).map_err(|e| e.to_string())?;
     fs::write(
         directory.join("startup.json"),
-        b"{\"stage\":\"startup\",\"deployment_C\":null}",
+        serde_json::to_vec(&json!({"stage":"startup","pid":std::process::id(),
+            "original_parent_pid":parent,"workbench_id":args[2],"incarnation":identity.incarnation,
+            "deployment_C":null}))
+        .map_err(|e| e.to_string())?,
     )
     .map_err(|e| e.to_string())?;
     // Exact existing B2B2 qualification profile: the compositor may scale the
@@ -748,12 +885,16 @@ pub(super) fn run() -> Result<()> {
         return Err(error);
     }
     let device = Rc::new(RefCell::new(boot.device.take().unwrap()));
+    if mode == "gpu-original-error" {
+        crate::fault::arm(&mut device.borrow_mut(), &mode);
+    }
     let mut session = HostSession::new(Backend {
         device: device.clone(),
         inject_unresolved: false,
-        fail_submission: false,
+        fail_submission: mode == "gpu-original-error",
     });
     let (mut replica, mut owner) = Replica::renderer(&mut session);
+    let original_error = mode == "gpu-original-error";
     let mut state = State {
         io: Channels {
             identity,
@@ -768,6 +909,7 @@ pub(super) fn run() -> Result<()> {
             closed_sent: false,
             diagnostic: None,
             reported_frame_completion: false,
+            assembling: false,
         },
         device,
         directory,
@@ -776,9 +918,13 @@ pub(super) fn run() -> Result<()> {
         render_owner_progress: 0,
         completed: 0,
         fatal: None,
-        paused: false,
+        suspension: crate::drawable::Suspension::default(),
         pending: false,
         snapshot_stalled: false,
+        fault_armed: original_error,
+        pending_since: None,
+        window_probe: (0, Instant::now(), 0, 0),
+        expected_frame_since: None,
         pointer: egui::Pos2::ZERO,
         modifiers: egui::Modifiers::NONE,
         input: Vec::new(),
@@ -821,7 +967,7 @@ pub(super) fn run() -> Result<()> {
             if state.admissions > 8 {
                 std::process::exit(97);
             }
-            if state.note(&format!("admitted-{}",state.admissions),json!({"epoch_revision":header.epoch.revision,"snapshot":header.snapshot,"document_id":document.dto().document_id.as_str(),"parsed_accounted":allocation.accounted_bytes,"max_live_parsed":1})).is_err(){std::process::exit(94);}
+            if state.note(&format!("admitted-{}",state.admissions),json!({"epoch_revision":header.epoch.revision,"snapshot":header.snapshot,"document_id":document.dto().document_id.as_str(),"canonical_bytes":document.canonical_bytes().len(),"parsed_accounted":allocation.accounted_bytes,"max_live_parsed":1})).is_err(){std::process::exit(94);}
             state.device.borrow().window.set_visible(true);
             let mut preview = Preview::with_session(
                 document,
@@ -839,6 +985,8 @@ pub(super) fn run() -> Result<()> {
                 };
                 let mut retiring = false;
                 let mut handoff_noted = false;
+                let mut retained = None;
+                let mut retained_polls = 0;
                 loop {
                     display.state.service(display.replica, false);
                     if matches!(
@@ -857,19 +1005,56 @@ pub(super) fn run() -> Result<()> {
                         retiring = true;
                     }
                     if display.state.pending || retiring {
+                        if display.state.mode == "gpu-timeout-proof"
+                            && display
+                                .state
+                                .pending_since
+                                .is_some_and(|since| since.elapsed() >= Duration::from_millis(120))
+                        {
+                            display.state.device.borrow_mut().wait_fault = None;
+                        }
                         let outcome = display
                             .preview
                             .as_mut()
                             .unwrap()
                             .poll_retirement(WaitPolicy::default());
                         if matches!(outcome, CleanupOutcome::Idle | CleanupOutcome::Retired(_)) {
+                            if display.state.pending && display.state.mode == "gpu-timeout-proof" {
+                                let _ = display.state.note("timeout-proof", json!({"cleanup":format!("{outcome:?}"),
+                                    "ledger":format!("{:?}",display.state.device.borrow().ledger()),
+                                    "counters":format!("{:?}",display.state.device.borrow().counters),
+                                    "actual_fence_proof_after_artificial_timeout":true,"replayed_submission":false}));
+                            }
                             display.state.pending = false;
                             if retiring {
                                 break;
                             }
-                        } else if display.replica.document_candidate().is_some() && !handoff_noted {
+                        } else if !handoff_noted {
                             let _=display.state.note("handoff-pending",json!({"old_document_snapshot":header.snapshot,"candidate":format!("{:?}",display.replica.document_candidate()),"cleanup":format!("{outcome:?}"),"ledger":format!("{:?}",display.state.device.borrow().ledger()),"max_live_parsed":1,"assembly_retained":true}));
                             handoff_noted = true;
+                        }
+                        if !matches!(outcome, CleanupOutcome::Idle | CleanupOutcome::Retired(_))
+                            && display.state.fault_armed
+                            && display.state.mode != "gpu-timeout-proof"
+                        {
+                            let device = display.state.device.borrow();
+                            let witness = (device.ledger(), device.delete_calls);
+                            if let Some(original) = retained {
+                                if witness != original {
+                                    std::process::exit(98);
+                                }
+                            } else {
+                                retained = Some(witness);
+                            }
+                            retained_polls += 1;
+                            if retained_polls == 100 {
+                                let _ = display.state.note("fault-retained", json!({
+                                    "mode":display.state.mode,"artificial":true,"polls":retained_polls,
+                                    "original_ledger":format!("{:?}",witness.0),"delete_calls":witness.1,
+                                    "cleanup":format!("{outcome:?}"),"execution_error":display.state.fatal,
+                                    "device_error":device.fault,"old_preview_document_retained":true,
+                                    "max_live_parsed":1,"new_generation":false,"blind_retry":false}));
+                            }
                         }
                     }
                     display.state.expired();
@@ -890,14 +1075,37 @@ pub(super) fn run() -> Result<()> {
                 if owner.release_retired().is_err() {
                     std::process::exit(95);
                 }
-                if let Err(error) = state.device.borrow_mut().healthy_close() {
-                    let _ = state.note("native-close-error", json!({"error":error}));
-                    std::process::exit(96);
+                let native_release = state.device.borrow_mut().healthy_close();
+                if let Err(error) = native_release {
+                    let _ = state.note(
+                        "native-close-error",
+                        json!({"error":error,
+                        "own_objects":state.device.borrow().counters.objects,
+                        "ledger":format!("{:?}",state.device.borrow().ledger()),
+                        "session_released":true,"native_root_retained":true,
+                        "retry":false,"final_wgl_destruction":"LIMITED/no new receipt"}),
+                    );
+                    state.pending = true;
+                    // A failed native release is not retried and cannot become
+                    // Closed/ExitedHealthy. Keep these original lexical roots
+                    // alive while the owner services IPC/native events, until
+                    // original-process OS containment or the qualification limit.
+                    loop {
+                        state.service(&mut replica, false);
+                        events.pump_app_events(
+                            Some(Duration::from_millis(1)),
+                            &mut Display {
+                                preview: None,
+                                replica: &mut replica,
+                                state: &mut state,
+                            },
+                        );
+                    }
                 }
                 let _=state.note("own-retired",json!({"own_objects":state.device.borrow().counters.objects,"ledger":format!("{:?}",state.device.borrow().ledger()),"counters":format!("{:?}",state.device.borrow().counters),"final_wgl_destruction":"LIMITED/no new receipt","healthy_own_objects":true}));
                 loop {
                     state.service(&mut replica, state.fatal.is_none());
-                    if state.io.closed_sent && state.io.control.idle() {
+                    if state.fatal.is_some() || (state.io.closed_sent && state.io.control.idle()) {
                         break;
                     }
                     events.pump_app_events(
@@ -919,6 +1127,9 @@ pub(super) fn run() -> Result<()> {
                     std::thread::yield_now();
                 }
                 let _=state.note("ipc-retired",json!({"original_control_receipts":true,"original_snapshot_receipts":true,"own_objects":0}));
+                if let Some(error) = state.fatal.take() {
+                    return Err(error);
+                }
                 return Ok(());
             }
         }

@@ -1,6 +1,8 @@
 //! Actual child pixels from the single parent presentation/model owner. Runtime
 //! input is an explicitly virtual, bounded Application-worker fixture; the child
 //! receives no Runtime events, discovery, client or mutation API.
+#[path = "renderer_qualification.rs"]
+mod qualification;
 use super::*;
 use crate::{
     private_ipc::parent_bridge::ParentBridge,
@@ -32,7 +34,19 @@ fn document(title: &str) -> PresentationDocument {
             {"id":"trace","source":target(),"display_label":"Original LRD1 samples","visible":true,"style":{"color":"cyan","width":3.},"display_unit":null}
         ]}]})).unwrap()
 }
+fn qualification_cap() -> usize {
+    let qualification_cap = std::env::var("LAB_RENDERER_QUALIFICATION_COMMIT_CAP")
+        .map(|value| {
+            value
+                .parse::<usize>()
+                .expect("explicit qualification commit cap")
+        })
+        .unwrap_or(TEST_ONLY_COMMIT_CAP);
+    assert!((16 * 1024 * 1024..=TEST_ONLY_COMMIT_CAP).contains(&qualification_cap));
+    qualification_cap
+}
 fn launch(mode: &str) -> Launch {
+    let qualification_cap = qualification_cap();
     Launch {
         executable: PathBuf::from(
             std::env::var_os("LAB_ISOLATED_RENDERER_CHILD")
@@ -40,8 +54,8 @@ fn launch(mode: &str) -> Launch {
         ),
         arguments: vec![mode.into()],
         limits: lab_windows_job::Limits {
-            process_commit: TEST_ONLY_COMMIT_CAP,
-            job_commit: TEST_ONLY_COMMIT_CAP,
+            process_commit: qualification_cap,
+            job_commit: qualification_cap,
         },
         fixture_directory: std::env::current_dir().unwrap(),
     }
@@ -211,7 +225,7 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
             "parent_api_available":true,"workbench_id":identity,"presentation_revision":"2","extra_runtime_submissions":0,
             "original_process_exit_confirmed":startup.alive==Some(false),"exit_code":startup.exit_code,
             "original_ipc_retired":retired.retired,"ipc_handles":retired.handles,"pending_io":retired.pending_io,"encoded_slots":4,
-            "test_only_job_commit_cap":TEST_ONLY_COMMIT_CAP,"deployment_C":null,
+            "test_only_job_commit_cap":qualification_cap(),"deployment_C":null,
             "startup_peak_process_commit":startup.reading.peak_process_commit,"startup_peak_job_commit":startup.reading.peak_job_commit,
             "renderer_healthy_lifecycle":"UNQUALIFIED/not reached"
         })).unwrap()).unwrap();
@@ -347,7 +361,7 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
     assert_eq!(ipc.credits.iter().sum::<usize>(), 4);
     memory.push(json!({"milestone":"normal_shutdown_original_process_exit","cumulative_peak_process_commit":terminal.reading.peak_process_commit,"cumulative_peak_job_commit":terminal.reading.peak_job_commit}));
     fs::write(directory.join("memory-milestones.json"),serde_json::to_vec_pretty(&json!({"kind":"sampled_cumulative_OS_Job_peaks_not_additive_phase_allocations","samples":memory})).unwrap()).unwrap();
-    fs::write(directory.join("parent-result.json"),serde_json::to_vec_pretty(&json!({"first_isolated_real_gl_frame":"PASS","test_only_job_commit_cap":TEST_ONLY_COMMIT_CAP,"deployment_C":null,
+    fs::write(directory.join("parent-result.json"),serde_json::to_vec_pretty(&json!({"first_isolated_real_gl_frame":"PASS","test_only_job_commit_cap":qualification_cap(),"deployment_C":null,
         "peak_process_commit":terminal.reading.peak_process_commit,"peak_job_commit":terminal.reading.peak_job_commit,"workbench_id":identity,"presentation_revision":"3",
         "runtime_extra_query_mutation_status_retry":0,"final_phase":format!("{:?}",terminal.phase),"own_objects":0,"original_ipc_retired":true})).unwrap()).unwrap();
     println!(
@@ -374,9 +388,22 @@ struct FaultHarness {
 }
 impl FaultHarness {
     fn new(mode: &str, retirement_gate: Option<Arc<std::sync::atomic::AtomicBool>>) -> Self {
+        Self::profile(
+            mode,
+            retirement_gate,
+            document("Isolated fault fixture μ Ω"),
+            vec![target()],
+        )
+    }
+    fn profile(
+        mode: &str,
+        retirement_gate: Option<Arc<std::sync::atomic::AtomicBool>>,
+        document: PresentationDocument,
+        references: Vec<RuntimeRef>,
+    ) -> Self {
         let (mut owner, tx, rx, stops) = fixture();
         let signal = PumpSignal::default();
-        let mut adapter = ParentBridge::new(&owner.dispatcher, vec![target()]).unwrap();
+        let mut adapter = ParentBridge::new(&owner.dispatcher, references).unwrap();
         adapter.turn(&owner.dispatcher);
         let bridge = adapter.bridge.clone();
         owner.private_bridge = Some(adapter);
@@ -402,13 +429,15 @@ impl FaultHarness {
             &mut stream,
             "document",
             "ui_replace_document",
-            json!({"expected":{"workbench_id":identity,"revision":"1"},"document":document("Isolated fault fixture μ Ω")}),
+            json!({"expected":{"workbench_id":identity,"revision":"1"},"document":document}),
         );
         assert_eq!(
             response(&mut stream, "document")["result"]["presentation_revision"],
             "2"
         );
-        wait(|| pump.supervisor().unwrap().restart(launch(mode)).is_ok());
+        if !mode.is_empty() {
+            wait(|| pump.supervisor().unwrap().restart(launch(mode)).is_ok());
+        }
         Self {
             pump,
             bridge,
@@ -478,10 +507,17 @@ impl FaultHarness {
         assert_eq!(view["result"]["workbench_id"], self.identity);
         assert_eq!(view["result"]["presentation_revision"], revision);
         request(&mut self.stream, "status", "client_status", json!({}));
+        let status = response(&mut self.stream, "status");
+        assert_eq!(status["result"]["runtime_client"]["freshness"], "fresh");
         assert_eq!(
-            response(&mut self.stream, "status")["result"]["runtime_client"]["freshness"],
-            "fresh"
+            status["result"]["runtime_client"]["hello"]["boot_id"],
+            "boot"
         );
+        assert_eq!(
+            status["result"]["runtime_client"]["hello"]["scope"],
+            "scope"
+        );
+        assert_eq!(status["result"]["runtime_client"]["hello"]["next_seq"], "9");
         request(
             &mut self.stream,
             "recovery",
@@ -600,6 +636,10 @@ fn native_renderer_owner_stall_does_not_mask_parent_or_restart() {
         v["completed"].as_u64().is_some_and(|c| c > 0)
     });
     pixels(&path, &frame);
+    h.pump
+        .supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::Ready);
     h.seed();
     h.replace();
     h.continuity("3");
