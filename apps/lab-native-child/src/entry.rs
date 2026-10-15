@@ -391,14 +391,50 @@ impl Display<'_, '_> {
                 Some(4)
             }
             4 if state.suspension.minimized => Some(5),
-            6 if !state.suspension.minimized && state.completed > frames => Some(7),
+            6 if !state.suspension.minimized && state.completed > frames => {
+                // Artificial unsupported-scale policy input on the actual
+                // native owner. It does not change the OS DPI or qualify a new
+                // drawable. Exercise the same transition used by the event.
+                state.suspension.scale(1.25);
+                state.suspension.occluded = true;
+                let _ = state
+                    .device
+                    .borrow()
+                    .window
+                    .request_inner_size(winit::dpi::PhysicalSize::new(1296, 976));
+                Some(7)
+            }
+            7..=9 if since.elapsed() >= Duration::from_millis(250) => {
+                if state.completed != frames || state.owner_progress <= owner {
+                    state.fail("independent scale/size/occlusion suspension failed".into());
+                    return;
+                }
+                match stage {
+                    7 => {
+                        state.suspension.occluded = false;
+                        let _ = state
+                            .device
+                            .borrow()
+                            .window
+                            .request_inner_size(winit::dpi::PhysicalSize::new(1280, 960));
+                    }
+                    8 => {
+                        state.suspension.scale(1.);
+                        state.suspension.occluded = true;
+                    }
+                    _ => state.suspension.occluded = false,
+                }
+                Some(stage + 1)
+            }
+            10 if !state.suspension.paused() && state.completed > frames => Some(11),
             _ => None,
         };
         if let Some(next) = next {
             let _=state.note(&format!("window-probe-{next}"),json!({"stage":next,"completed":state.completed,
                 "owner_progress":state.owner_progress,"previous_frames":frames,"previous_owner":owner,
                 "suspension":format!("{:?}",state.suspension),"actual_winit_window_calls":true,
-                "unsupported_dpi_native_event":"UNQUALIFIED/not injected as a real event"}));
+                    "unsupported_dpi_policy_input_artificial":next>=7,
+                    "new_dpi_profile_qualified":false,"actual_scale_factor_changed_event":"UNQUALIFIED/not fabricated"}));
             state.window_probe = (next, Instant::now(), state.completed, state.owner_progress);
         }
     }

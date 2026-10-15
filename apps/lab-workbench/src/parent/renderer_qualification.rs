@@ -335,8 +335,8 @@ fn native_window_suspension_preserves_event_loop_and_gpu_identity() {
     let mut h = FaultHarness::new("window-profile", None);
     h.seed();
     let directory = h.directory(1);
-    wait(|| directory.join("window-probe-7.json").is_file());
-    for stage in [3, 6] {
+    wait(|| directory.join("window-probe-11.json").is_file());
+    for stage in [3, 6, 8, 9, 10] {
         let receipt: Value = serde_json::from_slice(
             &fs::read(directory.join(format!("window-probe-{stage}.json"))).unwrap(),
         )
@@ -357,7 +357,7 @@ fn native_window_suspension_preserves_event_loop_and_gpu_identity() {
     assert_eq!(terminal.phase, Phase::ExitedHealthy, "{terminal:?}");
     h.retired();
     h.restart(3, 64);
-    h.finish("actual-window-resize-minimize-restore",json!({"unsupported_dpi_native_event":"UNQUALIFIED","old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));
+    h.finish("actual-window-resize-minimize-restore",json!({"unsupported_dpi_policy_input":"PASS/artificial on original native owner; frames paused","actual_non_one_dpi_native_event":"UNQUALIFIED/no new supported profile","old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));
 }
 
 #[test]
