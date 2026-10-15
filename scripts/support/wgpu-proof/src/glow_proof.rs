@@ -50,7 +50,7 @@ fn exercise(device: &mut Device, dir: &Path) -> Result<()> {
         let mut fixture = Fixture::new();
         let mut bounds = Bounds::default();
         for index in 0..fixtures::FRAMES {
-            let frame = fixture.frame(index);
+            let mut frame = fixture.frame(index);
             bounds.validate(&frame)?;
             for (id, delta) in fixtures::sorted_updates(&frame.output) {
                 device.upload(TextureKey { generation, id }, delta)?;
@@ -89,6 +89,7 @@ fn exercise(device: &mut Device, dir: &Path) -> Result<()> {
                     .map_err(|e| format!("{e:?}"))?;
             }
             bounds.freed(&frame);
+            frame.output.textures_delta.clear();
         }
         for id in bounds.textures.keys() {
             device

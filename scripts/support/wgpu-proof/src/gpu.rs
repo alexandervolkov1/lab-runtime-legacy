@@ -346,10 +346,18 @@ impl Root {
                 let mut fixture = Fixture::new();
                 let mut bounds = Bounds::default();
                 for index in 0..fixtures::FRAMES {
-                    let frame = fixture.frame(index);
+                    let mut frame = fixture.frame(index);
                     bounds.validate(&frame)?;
-                    self.frame(dir, generation, &frame)?;
+                    if let Err(error) = self.frame(dir, generation, &frame) {
+                        write(
+                            &dir.join("memory-before-failure.json"),
+                            &json!(self.snapshots),
+                        );
+                        contained_failure(dir, error);
+                    }
                     bounds.freed(&frame);
+                    // egui 0.36 requires consuming the applied delta before Drop.
+                    frame.output.textures_delta.clear();
                 }
                 // Numeric IDs are reused only after the previous Context's last
                 // submission and mapping completed and all its textures freed.

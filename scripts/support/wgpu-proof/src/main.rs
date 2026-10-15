@@ -59,6 +59,13 @@ fn main() {
         }
         [_, mode, case, dir] if mode == "--child" => {
             let dir = std::path::Path::new(dir);
+            let panic_path = dir.join("panic.json");
+            std::panic::set_hook(Box::new(move |info| {
+                // Job launch intentionally does not inherit arbitrary std handles.
+                // Retain the original panic text before abort closes the process.
+                let diagnostic = info.to_string();
+                let _ = std::fs::write(&panic_path, serde_json::to_vec_pretty(&serde_json::json!({"panic":diagnostic.chars().take(8192).collect::<String>(),"policy":"abort; no GPU-root unwind"})).unwrap());
+            }));
             write(
                 &dir.join("entered.json"),
                 &serde_json::json!({"case": case, "pid": std::process::id()}),
