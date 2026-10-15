@@ -1,0 +1,32 @@
+[
+  {
+    "profile": "dev",
+    "historical_tests": 588,
+    "current_tests": 595,
+    "removed": [],
+    "added": [
+      "renderer_capabilities::tests::diagnostic_identity_never_affects_admission",
+      "renderer_capabilities::tests::documented_wgl_api_errors_do_not_hide_resource_failures",
+      "renderer_capabilities::tests::empty_config_and_loader_unwinds_retain_their_original_stage",
+      "renderer_capabilities::tests::every_required_symbol_is_checked_before_loader_use",
+      "renderer_capabilities::tests::exact_minima_and_newer_desktop_core_are_admitted",
+      "renderer_capabilities::tests::missing_api_profile_and_numerical_capabilities_are_typed_rejections",
+      "renderer_capabilities::tests::startup_errors_preserve_category_stage_and_available_identity"
+    ]
+  },
+  {
+    "profile": "release",
+    "historical_tests": 588,
+    "current_tests": 595,
+    "removed": [],
+    "added": [
+      "renderer_capabilities::tests::diagnostic_identity_never_affects_admission",
+      "renderer_capabilities::tests::documented_wgl_api_errors_do_not_hide_resource_failures",
+      "renderer_capabilities::tests::empty_config_and_loader_unwinds_retain_their_original_stage",
+      "renderer_capabilities::tests::every_required_symbol_is_checked_before_loader_use",
+      "renderer_capabilities::tests::exact_minima_and_newer_desktop_core_are_admitted",
+      "renderer_capabilities::tests::missing_api_profile_and_numerical_capabilities_are_typed_rejections",
+      "renderer_capabilities::tests::startup_errors_preserve_category_stage_and_available_identity"
+    ]
+  }
+]

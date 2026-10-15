@@ -1,0 +1,62 @@
+[
+  {
+    "directory": "target/port-1/dev-20261015T1714313103996",
+    "source_head": "fe4539156cea139197b6152aa46fb4c302405312",
+    "test_filter": "native_first_isolated_renderer_frames_from_parent_approved_snapshots",
+    "test_only_commit_cap": 536870912,
+    "incarnation_directories": 1,
+    "native_files": 29,
+    "failure": null,
+    "verdict": "PASS",
+    "deployment_C": null,
+    "activation_qualified": false
+  },
+  {
+    "directory": "target/port-1/dev-20261015T1720178680210",
+    "source_head": "fe4539156cea139197b6152aa46fb4c302405312",
+    "test_filter": "parent::tests::renderer",
+    "test_only_commit_cap": 536870912,
+    "incarnation_directories": 53,
+    "native_files": 641,
+    "failure": null,
+    "verdict": "PASS",
+    "deployment_C": null,
+    "activation_qualified": false
+  },
+  {
+    "directory": "target/port-1/dev-20261015T1722285045190",
+    "source_head": "fe4539156cea139197b6152aa46fb4c302405312",
+    "test_filter": "native_hundred_fixed_cap_cycles",
+    "test_only_commit_cap": 536870912,
+    "incarnation_directories": 101,
+    "native_files": 810,
+    "failure": null,
+    "verdict": "PASS",
+    "deployment_C": null,
+    "activation_qualified": false
+  },
+  {
+    "directory": "target/port-1/release-20261015T1730438646808",
+    "source_head": "fe4539156cea139197b6152aa46fb4c302405312",
+    "test_filter": "parent::tests::renderer",
+    "test_only_commit_cap": 536870912,
+    "incarnation_directories": 53,
+    "native_files": 633,
+    "failure": null,
+    "verdict": "PASS",
+    "deployment_C": null,
+    "activation_qualified": false
+  },
+  {
+    "directory": "target/port-1/release-20261015T1732579602502",
+    "source_head": "fe4539156cea139197b6152aa46fb4c302405312",
+    "test_filter": "native_hundred_fixed_cap_cycles",
+    "test_only_commit_cap": 536870912,
+    "incarnation_directories": 101,
+    "native_files": 810,
+    "failure": null,
+    "verdict": "PASS",
+    "deployment_C": null,
+    "activation_qualified": false
+  }
+]

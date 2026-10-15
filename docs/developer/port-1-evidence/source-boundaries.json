@@ -1,0 +1,27 @@
+{
+  "base": "d96111f488d8535c294879e767832d537219108a",
+  "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+  "byte_exact_roots": [
+    "apps/lab-workbench/src/parent.rs",
+    "apps/lab-workbench/src/parent",
+    "apps/lab-workbench/src/private_ipc",
+    "apps/lab-workbench/src/supervisor",
+    "apps/lab-workbench/src/gui/readonly_v2",
+    "apps/lab-workbench/src/dispatcher.rs",
+    "apps/lab-workbench/src/client",
+    "apps/lab-workbench/src/model",
+    "apps/lab-workbench/src/recovery",
+    "apps/lab-runtime",
+    "crates/lab-core",
+    "crates/lab-windows-job",
+    "Cargo.lock",
+    "Cargo.toml"
+  ],
+  "changed_original_inputs": [
+    "apps/lab-native-child/src/entry.rs",
+    "apps/lab-workbench/src/main.rs",
+    "scripts/support/native-glow-device.rs",
+    "scripts/support/native-glow-smoke.rs"
+  ],
+  "scope": "Device initialization/texture-extent admission and diagnostics; original owner/qualification implementations preserved."
+}

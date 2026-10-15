@@ -49,8 +49,11 @@ own GPU objects exist. A glutin context error explicitly marked NotSupported is
 classified UnsupportedCapability, as are documented WGL invalid-version/profile
 codes and an absent matching framebuffer configuration. The constructor captures
 Rust initialization unwinds before any own GPU payload exists; runtime GPU work
-and retirement never cross that catch boundary. Unknown/resource initialization failures are not
-relabelled as unsupported hardware. There is no UnqualifiedHardware category.
+and retirement never cross that catch boundary. Unknown/resource initialization
+failures are not relabelled as unsupported hardware. There is no
+UnqualifiedHardware category.
+The WGL code meanings follow
+[WGL_ARB_create_context/profile](https://registry.khronos.org/OpenGL/extensions/ARB/WGL_ARB_create_context.txt).
 
 ## Diagnostics and ownership
 

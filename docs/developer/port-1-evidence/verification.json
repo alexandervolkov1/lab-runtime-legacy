@@ -1,0 +1,46 @@
+{
+  "verdict": "READY FOR INDEPENDENT REVIEW \u2014 PORT-1",
+  "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+  "final_gates": 37,
+  "final_gate_failures": 0,
+  "full_workbench": {
+    "dev": {
+      "passed": 537,
+      "ignored": 58
+    },
+    "release": {
+      "passed": 537,
+      "ignored": 58
+    }
+  },
+  "native_matrix": {
+    "dev": 13,
+    "release": 13
+  },
+  "cycles_per_profile": 101,
+  "final_rgba_frames_verified": 552,
+  "raw_archive_members_verified": 6187,
+  "format_check": "PASS",
+  "powershell_ast": "PASS",
+  "diff_check": "PASS",
+  "source_unchanged_after_qualification": true,
+  "final_child_binary_hashes_match_preexecution_identities": true,
+  "activation_qualified": false,
+  "deployment_C": null,
+  "test_only_commit_cap": 536870912,
+  "qualification_scope": "Windows/MSVC, actual selected NVIDIA GL 3.3 Core, fixed 1280x960 scale 1; no hardware-fingerprint admission whitelist",
+  "limits": {
+    "historical_hello_only": "UNQUALIFIED",
+    "m17_4_overlap": "BLOCKED",
+    "general_terminal_gpu_lifecycle": "BLOCKED",
+    "whole_host_rust_budget": "BLOCKED",
+    "final_wgl_destruction": "LIMITED",
+    "other_gl_implementations": "UNTESTED; capability admission independent of their names",
+    "port_2": "NOT STARTED",
+    "port_3": "NOT STARTED",
+    "b3b5": "DEFERRED"
+  },
+  "canonical_inventory_entries": 398,
+  "documentation_links": "PASS",
+  "qualified_to_review_documentation_only": true
+}

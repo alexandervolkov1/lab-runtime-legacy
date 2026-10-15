@@ -1,0 +1,164 @@
+[
+  {
+    "profile": "dev",
+    "role": "lab-native-child",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/debug/lab-native-child.exe",
+    "bytes": 32388096,
+    "sha256": "3cf04500303f20a24b38f87ada3db7fad19dd2b29351f521b46d74f3b59162b6"
+  },
+  {
+    "profile": "dev",
+    "role": "lab-workbench",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/debug/lab-workbench.exe",
+    "bytes": 45954560,
+    "sha256": "79ff08b5a9c0aa856ff5b6904beedc639e3d63fce32f64c12380d403d83cd973"
+  },
+  {
+    "profile": "dev",
+    "role": "lab-runtime",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/debug/lab-runtime.exe",
+    "bytes": 16014848,
+    "sha256": "e88128f918e7931e1c59ef85fc1041ff0016057db5f1638bf44b830d5541da0f"
+  },
+  {
+    "profile": "dev",
+    "role": "workbench-tests",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/debug/deps/lab_workbench-f3432b4847ea6d74.exe",
+    "bytes": 70069248,
+    "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+  },
+  {
+    "profile": "dev",
+    "role": "native-glow/native-glow.exe",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/native-glow/dev/native-glow.exe",
+    "bytes": 32501248,
+    "sha256": "73ef9d7e56d68509292b932d77d693772a04540f06590cd4ea890e2f3b40a850",
+    "scope": "Final artifact; native-glow pre-execution identities archived separately"
+  },
+  {
+    "profile": "dev",
+    "role": "v2-renderer-allocation-probe/v2-renderer-allocation-probe.exe",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/v2-renderer-allocation-probe/dev/v2-renderer-allocation-probe.exe",
+    "bytes": 32785920,
+    "sha256": "949d078de9a144d2d8c37c4ee504b9119848ef5beb6e7531bc130837dc81c1e5",
+    "scope": "Final artifact; native-glow pre-execution identities archived separately"
+  },
+  {
+    "profile": "dev",
+    "role": "private-ipc/private-ipc-fixture.exe",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/private-ipc/dev/private-ipc-fixture.exe",
+    "bytes": 2747392,
+    "sha256": "b52f6eefb90644d5c1cf43b0212576a6a42797278ce7d0255cae8c9ad07441b4",
+    "scope": "Final artifact; native-glow pre-execution identities archived separately"
+  },
+  {
+    "profile": "release",
+    "role": "lab-native-child",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/release/lab-native-child.exe",
+    "bytes": 7273984,
+    "sha256": "5989c73319cb3bb505c6956a7e72caeb1d3936da2a5e921c924759fbef0752c2"
+  },
+  {
+    "profile": "release",
+    "role": "lab-workbench",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/release/lab-workbench.exe",
+    "bytes": 13451264,
+    "sha256": "4495ec9e17e9d100a094d0c309dcbe83e7dcf11108579b022f612bcb65d51d88"
+  },
+  {
+    "profile": "release",
+    "role": "lab-runtime",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/release/lab-runtime.exe",
+    "bytes": 7697408,
+    "sha256": "e9b1a2da0fd779767d23b4cfca8eec4a5f3212df01b20b5883b61208c23ccded"
+  },
+  {
+    "profile": "release",
+    "role": "workbench-tests",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/release/deps/lab_workbench-99f44df52bbcdbc8.exe",
+    "bytes": 30511616,
+    "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+  },
+  {
+    "profile": "release",
+    "role": "native-glow/native-glow.exe",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/native-glow/release/native-glow.exe",
+    "bytes": 7349760,
+    "sha256": "fc5c21c60e9ee1d938ceece4a178f87b7d383718bb089a3e9f481ace980d0d73",
+    "scope": "Final artifact; native-glow pre-execution identities archived separately"
+  },
+  {
+    "profile": "release",
+    "role": "v2-renderer-allocation-probe/v2-renderer-allocation-probe.exe",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/v2-renderer-allocation-probe/release/v2-renderer-allocation-probe.exe",
+    "bytes": 8056832,
+    "sha256": "d15997d37fe0747a2e3738776b8f3cfe33944f1dad2bf47b96d304ad75fd0585",
+    "scope": "Final artifact; native-glow pre-execution identities archived separately"
+  },
+  {
+    "profile": "release",
+    "role": "private-ipc/private-ipc-fixture.exe",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/private-ipc/release/private-ipc-fixture.exe",
+    "bytes": 1006592,
+    "sha256": "77e53a7a8a862097873084c2756b34d002fb44e60c00aa0e1ddefcf16541753e",
+    "scope": "Final artifact; native-glow pre-execution identities archived separately"
+  },
+  {
+    "profile": "dev",
+    "role": "document-allocation",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/v2-allocation-probe/v2-allocation-probe.exe",
+    "bytes": 3435008,
+    "sha256": "6fd6712240f1df7b6e03908cec2e7bf8f330c531959e357c4968f151b5f89ea5"
+  },
+  {
+    "profile": "dev",
+    "role": "native-supervisor-fixture",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/windows-supervisor/dev/7a9e3fbf09d44a508f6e86e8ae384121/supervisor-fixture.exe",
+    "bytes": 450560,
+    "sha256": "21a179acba9a27961ec8d8e47b0874cecc8b4f6c00fa9272e92ec73fbf5e2d04"
+  },
+  {
+    "profile": "release",
+    "role": "native-supervisor-fixture",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "path": "target/windows-supervisor/release/683559e970894938b5bcce117980a5cb/supervisor-fixture.exe",
+    "bytes": 303616,
+    "sha256": "695b6718a67a0911059d0a788bd296351911e566df09d485aa344ea2f50191a5"
+  },
+  {
+    "profile": "dev",
+    "role": "native-supervisor-fixture",
+    "source_head": "fe4539156cea139197b6152aa46fb4c302405312",
+    "path": "target/windows-supervisor/dev/2ab6ce37966d479f8d510d4009089736/supervisor-fixture.exe",
+    "bytes": 450560,
+    "sha256": "27888725caeb665b5213ee9e17fb1a66fccb7b5d761c3b26893e07bc587b34fa"
+  },
+  {
+    "role": "dev-drawable.exe",
+    "path": "target/port-1/gates/dev-drawable.exe",
+    "sha256": "50646c27c181d8c0075a380feae159bc4af976380563a16d1f4fbf95d6c2b258",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702"
+  },
+  {
+    "role": "release-drawable.exe",
+    "path": "target/port-1/gates/release-drawable.exe",
+    "sha256": "ea74d3b0bd05d998c0e773324cc0ecdbadd91029afb1d7314b2a30a04c499de8",
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702"
+  }
+]

@@ -1,0 +1,918 @@
+[
+  {
+    "name": "final-dev-101-cycles",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_hundred_fixed_cap_cycles"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:42:31.647300+00:00",
+    "elapsed_seconds": 54.635,
+    "exit_code": 0,
+    "log_sha256": "d8d802ebe698c48ff705ca2172298851244901b1fd8f336c99ea5b9c02eb48af",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-build",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:36:09.000862+00:00",
+    "elapsed_seconds": 3.837,
+    "exit_code": 0,
+    "log_sha256": "95a1b75cb5f7724e174e5fb0695d389a5cfa0794f1110cefcdd20fcd996cb7bc",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-clippy",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:40:10.400642+00:00",
+    "elapsed_seconds": 4.355,
+    "exit_code": 0,
+    "log_sha256": "f7f17982ee028dc2d397a3766d9bf6e7c248ece171ef0f6d743b167d49e5261f",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-cpu-frame-controls",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev",
+      "-FramesOnly"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:09.653761+00:00",
+    "elapsed_seconds": 33.736,
+    "exit_code": 0,
+    "log_sha256": "4d4bb2c50ef83fd162f24ca37d73720da160a5c632a50194d1ed0245caf31662",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-document-allocation",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:43.395527+00:00",
+    "elapsed_seconds": 4.542,
+    "exit_code": 0,
+    "log_sha256": "c8d2a9af2ccb4b53ebdb906aa6da0a60e0246c2ed43854ee3776981e4a1bf857",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-drawable-compile",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "--test",
+      "D:\\rust\\lab-runtime\\target\\port-1\\gates\\dev-drawable.rs",
+      "-o",
+      "target/port-1/gates/dev-drawable.exe",
+      "-C",
+      "debug-assertions=yes",
+      "-C",
+      "overflow-checks=yes"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:58.193714+00:00",
+    "elapsed_seconds": 0.197,
+    "exit_code": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-drawable-tests",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\gates\\dev-drawable.exe"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:58.391587+00:00",
+    "elapsed_seconds": 0.05,
+    "exit_code": 0,
+    "log_sha256": "25e4a38c362556ed611fdf18ad28cfe50eb0ee915ca3b5df6e5be233d7613f53",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-full-workbench",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:36:12.843150+00:00",
+    "elapsed_seconds": 237.509,
+    "exit_code": 0,
+    "log_sha256": "c2e43292cbcb007bc9a7de2fd9cdc5eefba2e3620885c156404b994e2e2a59f8",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-inventory",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--list"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:57.842921+00:00",
+    "elapsed_seconds": 0.303,
+    "exit_code": 0,
+    "log_sha256": "58f84a161ff5f761d9897f36fc93502488c7b4285168e72a31001091a4a11168",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-isolated",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "dev",
+      "-TestCommitCap",
+      "536870912"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:40:14.822933+00:00",
+    "elapsed_seconds": 136.767,
+    "exit_code": 0,
+    "log_sha256": "89ba3f42f7829899c5a711c4bb9e2e02cb294480a1662430821d354ceeb171af",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-native-capsule",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-child-capsule.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:44:23.927496+00:00",
+    "elapsed_seconds": 4.127,
+    "exit_code": 0,
+    "log_sha256": "e4c0ae8f9bd86e2feecf09dc7cdb4a3f3106dc5f42a8e3bcaa49494c866dea79",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-native-ipc",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:43:40.511976+00:00",
+    "elapsed_seconds": 43.368,
+    "exit_code": 0,
+    "log_sha256": "f483f263202e39ff16c52db5ddc58fcbfcab547f5149531fd1b01acd6de82bbf",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-native-supervisor",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:43:26.397157+00:00",
+    "elapsed_seconds": 14.058,
+    "exit_code": 0,
+    "log_sha256": "3025bdb3464abfde9909554e463dc7c39fd9907482ad7936f542017c8929927a",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-os-capsule",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:48.002332+00:00",
+    "elapsed_seconds": 0.151,
+    "exit_code": 0,
+    "log_sha256": "924efecd638c305b1f1840252ffa7bed14522f4b11feea08660ab10b0d1055c8",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_windows_job-e05cd5987406513d.exe",
+        "bytes": 817152,
+        "sha256": "6f04d985c723b8011d1943b1d16827157ef0ec8159f92526efd311bc8cd5e32e"
+      }
+    ]
+  },
+  {
+    "name": "final-dev-standalone-faults",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev",
+      "-Faults"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:44:50.978574+00:00",
+    "elapsed_seconds": 18.667,
+    "exit_code": 0,
+    "log_sha256": "cb1c78bd60822aa48461874ea7ad3d011fd43aa59fc51858fec737e7d5f77fd4",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-standalone-gl",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:44:28.059638+00:00",
+    "elapsed_seconds": 13.569,
+    "exit_code": 0,
+    "log_sha256": "1eff69a6008adc5be9b7325645591eced6b0d53a4f55efbc3d10e34cc9839b30",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-standalone-pending",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev",
+      "-Pending"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:44:41.635880+00:00",
+    "elapsed_seconds": 9.337,
+    "exit_code": 0,
+    "log_sha256": "e5f00c0091410a851dd9702c57a8d09fc158649774033d1e54e90b3085500cd3",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-strict-v1",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "python",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:54.978386+00:00",
+    "elapsed_seconds": 2.86,
+    "exit_code": 0,
+    "log_sha256": "8924fb1447fdecc11ca9267ed929520a28b9f77f02d40600167d4f0accfc2e9a",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-dev-virtual-process",
+    "phase": "final",
+    "profile": "dev",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:48.159422+00:00",
+    "elapsed_seconds": 6.771,
+    "exit_code": 0,
+    "log_sha256": "99566c2520c73da67e79354b19b48cdca857e2ec7f16abebdf5e077082cac151",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+        "bytes": 70069248,
+        "sha256": "2c1460901e0ac0c00ecff208775cee51fe666848cbdbb9bac053022ddc22eb05"
+      }
+    ]
+  },
+  {
+    "name": "final-release-101-cycles",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912",
+      "-TestFilter",
+      "native_hundred_fixed_cap_cycles"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:48:36.681594+00:00",
+    "elapsed_seconds": 49.078,
+    "exit_code": 0,
+    "log_sha256": "19ec5221df355c5451991c805e5a9a3b2039f0ef28a18b174fa21a667b8eca56",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  },
+  {
+    "name": "final-release-build",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:58.501822+00:00",
+    "elapsed_seconds": 0.287,
+    "exit_code": 0,
+    "log_sha256": "d1235ea4563620b53ef5bdd2da5f595fec9d54f9efb48376378c20547dd95e57",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-clippy",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:46:52.427967+00:00",
+    "elapsed_seconds": 7.444,
+    "exit_code": 0,
+    "log_sha256": "0c5ac6c73c5ebdbee643ca0d64b4f15a060c4352ef7ea961375aa0c89795626a",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-cpu-frame-controls",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "release",
+      "-FramesOnly"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:51:45.592314+00:00",
+    "elapsed_seconds": 35.932,
+    "exit_code": 0,
+    "log_sha256": "0c10938e333693664f774e17124a6f18599a67dbbd038643713fd1464691fc14",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-drawable-compile",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "--test",
+      "D:\\rust\\lab-runtime\\target\\port-1\\gates\\release-drawable.rs",
+      "-o",
+      "target/port-1/gates/release-drawable.exe",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "debug-assertions=no",
+      "-C",
+      "overflow-checks=no"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:52:31.783167+00:00",
+    "elapsed_seconds": 0.204,
+    "exit_code": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-drawable-tests",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "D:\\rust\\lab-runtime\\target\\port-1\\gates\\release-drawable.exe"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:52:31.987881+00:00",
+    "elapsed_seconds": 0.048,
+    "exit_code": 0,
+    "log_sha256": "25e4a38c362556ed611fdf18ad28cfe50eb0ee915ca3b5df6e5be233d7613f53",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-full-workbench",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:45:58.794936+00:00",
+    "elapsed_seconds": 53.608,
+    "exit_code": 0,
+    "log_sha256": "321397ca4f453037b887a13ce47d6837798a01515d4819783a5a6a5f5b345b7d",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  },
+  {
+    "name": "final-release-inventory",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--list"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:52:31.448399+00:00",
+    "elapsed_seconds": 0.311,
+    "exit_code": 0,
+    "log_sha256": "85f4bfdaaf015d0cc252f5774d67e86abb3588042a23293a5c769dbcae4dee29",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  },
+  {
+    "name": "final-release-isolated",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-port-1-gl.ps1",
+      "-BuildProfile",
+      "release",
+      "-TestCommitCap",
+      "536870912"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:46:59.936092+00:00",
+    "elapsed_seconds": 96.721,
+    "exit_code": 0,
+    "log_sha256": "3e2329a761d3c5dfadf39fd7fb7a3186b0c2bd3cb5bb2ac60dc7a93c553e7f0e",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  },
+  {
+    "name": "final-release-native-capsule",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-child-capsule.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:50:34.917728+00:00",
+    "elapsed_seconds": 13.708,
+    "exit_code": 0,
+    "log_sha256": "91b5f112988a91d7bdd62b2b3086476c4d8faaa702dd80148298cfd9957f5088",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-native-ipc",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:49:40.061576+00:00",
+    "elapsed_seconds": 54.832,
+    "exit_code": 0,
+    "log_sha256": "be6292998b3afe5844b9c1d3958a44ed7c8e933dca8a63ea8606d2028f4bcceb",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  },
+  {
+    "name": "final-release-native-supervisor",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:49:25.843338+00:00",
+    "elapsed_seconds": 14.19,
+    "exit_code": 0,
+    "log_sha256": "d08e0ecf12337204c807d0b18498e8cc07ea68c0ed6b8e104b4fee688da85e21",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  },
+  {
+    "name": "final-release-os-capsule",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:52:21.590088+00:00",
+    "elapsed_seconds": 0.774,
+    "exit_code": 0,
+    "log_sha256": "c812f156ce847a30462715674d1859ec4155fcd7694c6e48eca68a389b793dbe",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_windows_job-00ef7b527548c1ee.exe",
+        "bytes": 715776,
+        "sha256": "21c419e41d04b72b4c4e4befc4548347b2616562ee891c5feb1398c72beee66f"
+      }
+    ]
+  },
+  {
+    "name": "final-release-standalone-faults",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release",
+      "-Faults"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:51:26.191599+00:00",
+    "elapsed_seconds": 19.394,
+    "exit_code": 0,
+    "log_sha256": "92cd6bf2dddbc6b6a891334bd0e14d8831c37c942a40613ac1469acd845cb8ae",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-standalone-gl",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:50:48.632430+00:00",
+    "elapsed_seconds": 24.259,
+    "exit_code": 0,
+    "log_sha256": "c0e825879d84fdee5a3d7a50b2d2776f790fd145f41992af122e931f4e485483",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-standalone-pending",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release",
+      "-Pending"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:51:12.897361+00:00",
+    "elapsed_seconds": 13.287,
+    "exit_code": 0,
+    "log_sha256": "0f525b99a6ce18716d64f8110b9e84585ec28916020483c44759063d31a99014",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-strict-v1",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "python",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:52:29.169097+00:00",
+    "elapsed_seconds": 2.274,
+    "exit_code": 0,
+    "log_sha256": "ba09e563b1eee1d504cd7c374c6e058925ea5d493c9635f7573366158b557991",
+    "verdict": "PASS",
+    "executed_test_binaries": []
+  },
+  {
+    "name": "final-release-virtual-process",
+    "phase": "final",
+    "profile": "release",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+    "started_utc": "2026-10-15T17:52:22.370720+00:00",
+    "elapsed_seconds": 6.775,
+    "exit_code": 0,
+    "log_sha256": "8d472b9ebd2700e62c26bd738ee1b877b32b0163e069aa8d0df172a9fd0c6aff",
+    "verdict": "PASS",
+    "executed_test_binaries": [
+      {
+        "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+        "bytes": 30511616,
+        "sha256": "be7643bb655d0bcea5ef83a327955d1d7f92246979bd7c73ed5be6a7f818ad9c"
+      }
+    ]
+  }
+]

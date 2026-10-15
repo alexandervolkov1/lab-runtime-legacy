@@ -1,0 +1,33 @@
+{
+  "final_source": "18c1aeb77899e0c7736831fcc0e49b8161f54702",
+  "preliminary_source": "fe4539156cea139197b6152aa46fb4c302405312",
+  "records": [
+    {
+      "stage": "pre-commit compilation",
+      "event": "An immutable Glow version borrow overlapped a mutable error check (E0502). It was corrected before the preliminary source commit.",
+      "exact_uncommitted_input_inventory": null,
+      "binary_executed": false,
+      "evidence_limit": "Console compiler diagnostic exists in the task transcript; no raw standalone build receipt or exact transient-source snapshot was sealed."
+    },
+    {
+      "stage": "source refinement",
+      "event": "After 25 preliminary passing receipts, explicit WGL invalid-version/profile and empty-config classification were added. All 37 final gates executed at the final source; preliminary results are not relabelled."
+    },
+    {
+      "stage": "preliminary executable provenance",
+      "event": "The preliminary Workbench test executable was rebuilt before its hash was captured. No missing preliminary binary hash is reconstructed. Final Cargo test executable hashes and final/preliminary child pre-execution identities are retained."
+    },
+    {
+      "stage": "document allocation control",
+      "event": "The existing script is dev-only and has no BuildProfile parameter. The already-running dev orchestration passed an ignored BuildProfile=dev argument; its actual command compiled dev artifacts. The release invocation was removed before execution. No release document-allocation qualification is claimed."
+    },
+    {
+      "stage": "historical CPU evidence",
+      "event": "Full CPU geometry/memory measurements keep their original source/profile provenance and were not rerun. The input equivalence receipt excludes changed files not imported by that wrapper; fresh frame/no-upload/retirement and borrowing controls ran in both profiles."
+    },
+    {
+      "stage": "hardware/cache scope",
+      "event": "Only the actual selected NVIDIA context was executed. Driver/system cache state was not reset; lower later peaks are not attributed to a memory optimization or treated as a portable deployment bound."
+    }
+  ]
+}
