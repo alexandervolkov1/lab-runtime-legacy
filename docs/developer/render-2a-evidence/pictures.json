@@ -1,0 +1,198 @@
+[
+  {
+    "path": "dev-wgpu-f00.png",
+    "sha256": "e5cc6e2d7436560af9b3df7212b3df57eac5d1b721b57896e4cbf90203aeda31",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f00.rgba",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-wgpu-f02.png",
+    "sha256": "7c0eb56dda14849bc85f43e6b3b7f8f1dce77a036cc56591e9e660cf142908f6",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f02.rgba",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-wgpu-f04.png",
+    "sha256": "448cd90ec40f6a5ef348083ca6a23cad182d7316d91ae67c9f39276ab94098b6",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f04.rgba",
+    "rgba_sha256": "2214085e63dc8262da1e126bc624e95e7bc5c57999e2e27fd6ff44f8e5d9a39c",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-wgpu-f05.png",
+    "sha256": "f40612fee3fe3f1db64dfcbaaae1b0f0ca1b0c0963110b671d04cbd6b9106a0f",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f05.rgba",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-wgpu-f07.png",
+    "sha256": "135cb8f355ec176d0ec97d743be9f533e7e5cc18db5e93115b0833e28c78e355",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f07.rgba",
+    "rgba_sha256": "98701488eaa622f0945b78af30ce7bb3d773a59185daae38e052a92627a50f73",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-wgpu-f08.png",
+    "sha256": "b00fddd78f683f3cbc5349c1bb66bdb12ca2350928a90fb10862542aa52f6f4a",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f08.rgba",
+    "rgba_sha256": "184b29ab3a909126e9d31ffca5e0573f49a3101e84aee289a09e0c377cb2426d",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-wgpu-f11.png",
+    "sha256": "fb10ecd70df517d3a7311f79b93485e72cf4d0eec5fb3d3e325cf1828c2844c2",
+    "original": "target/render-2a/dev-final/gpu/frames/g0-f11.rgba",
+    "rgba_sha256": "55b03054e07f7e32a13fbfd9aace7bd1cc4422f01bce5214562f2190cad96c57",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f00.png",
+    "sha256": "e5cc6e2d7436560af9b3df7212b3df57eac5d1b721b57896e4cbf90203aeda31",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f00.rgba",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f02.png",
+    "sha256": "7c0eb56dda14849bc85f43e6b3b7f8f1dce77a036cc56591e9e660cf142908f6",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f02.rgba",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f04.png",
+    "sha256": "dd713e2e3c0bbff4bfc8b5356f81aaee60ca81775e5d82932e80419f85bf37d1",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f04.rgba",
+    "rgba_sha256": "a714c36d59dfcb08fb4379402d9222204f33d513b72a8be06079e30c6e097691",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f05.png",
+    "sha256": "a42620f7cfd0b258453943f1f256918ffca816f7c9e76d6dc48bcc37719a4c02",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f05.rgba",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f07.png",
+    "sha256": "8754746e6f8661418d7ab5406497db70e7d1c152509a932c4cd24964e0f366b8",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f07.rgba",
+    "rgba_sha256": "a063bff82acabaa7a8e445c99ed35a214af24407f94002ede8cad447f66ac955",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f08.png",
+    "sha256": "415a13d4c29b19b1de5a6c07138a14b38f8b037199e080466bcda7ec702c94ef",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f08.rgba",
+    "rgba_sha256": "5635bce8a27c2cd8b9cef8d395fc604ed1a9549cb97703be4e88f01aeaeac38e",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "dev-glow-f11.png",
+    "sha256": "b23d739428c9d848b7532a2da7feb7c8c6e9fde786241c29cb17bd4fe95ceb97",
+    "original": "target/render-2a/dev-final/gpu/glow/g0-f11.rgba",
+    "rgba_sha256": "e886e64f16cce1fea7fd9a949b7ea76905e22f5d422636d324a48588ec781b24",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f00.png",
+    "sha256": "e5cc6e2d7436560af9b3df7212b3df57eac5d1b721b57896e4cbf90203aeda31",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f00.rgba",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f02.png",
+    "sha256": "7c0eb56dda14849bc85f43e6b3b7f8f1dce77a036cc56591e9e660cf142908f6",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f02.rgba",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f04.png",
+    "sha256": "448cd90ec40f6a5ef348083ca6a23cad182d7316d91ae67c9f39276ab94098b6",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f04.rgba",
+    "rgba_sha256": "2214085e63dc8262da1e126bc624e95e7bc5c57999e2e27fd6ff44f8e5d9a39c",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f05.png",
+    "sha256": "f40612fee3fe3f1db64dfcbaaae1b0f0ca1b0c0963110b671d04cbd6b9106a0f",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f05.rgba",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f07.png",
+    "sha256": "135cb8f355ec176d0ec97d743be9f533e7e5cc18db5e93115b0833e28c78e355",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f07.rgba",
+    "rgba_sha256": "98701488eaa622f0945b78af30ce7bb3d773a59185daae38e052a92627a50f73",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f08.png",
+    "sha256": "b00fddd78f683f3cbc5349c1bb66bdb12ca2350928a90fb10862542aa52f6f4a",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f08.rgba",
+    "rgba_sha256": "184b29ab3a909126e9d31ffca5e0573f49a3101e84aee289a09e0c377cb2426d",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-wgpu-f11.png",
+    "sha256": "fb10ecd70df517d3a7311f79b93485e72cf4d0eec5fb3d3e325cf1828c2844c2",
+    "original": "target/render-2a/release-final/gpu/frames/g0-f11.rgba",
+    "rgba_sha256": "55b03054e07f7e32a13fbfd9aace7bd1cc4422f01bce5214562f2190cad96c57",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f00.png",
+    "sha256": "e5cc6e2d7436560af9b3df7212b3df57eac5d1b721b57896e4cbf90203aeda31",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f00.rgba",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f02.png",
+    "sha256": "7c0eb56dda14849bc85f43e6b3b7f8f1dce77a036cc56591e9e660cf142908f6",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f02.rgba",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f04.png",
+    "sha256": "dd713e2e3c0bbff4bfc8b5356f81aaee60ca81775e5d82932e80419f85bf37d1",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f04.rgba",
+    "rgba_sha256": "a714c36d59dfcb08fb4379402d9222204f33d513b72a8be06079e30c6e097691",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f05.png",
+    "sha256": "a42620f7cfd0b258453943f1f256918ffca816f7c9e76d6dc48bcc37719a4c02",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f05.rgba",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f07.png",
+    "sha256": "8754746e6f8661418d7ab5406497db70e7d1c152509a932c4cd24964e0f366b8",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f07.rgba",
+    "rgba_sha256": "a063bff82acabaa7a8e445c99ed35a214af24407f94002ede8cad447f66ac955",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f08.png",
+    "sha256": "415a13d4c29b19b1de5a6c07138a14b38f8b037199e080466bcda7ec702c94ef",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f08.rgba",
+    "rgba_sha256": "5635bce8a27c2cd8b9cef8d395fc604ed1a9549cb97703be4e88f01aeaeac38e",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  },
+  {
+    "path": "release-glow-f11.png",
+    "sha256": "b23d739428c9d848b7532a2da7feb7c8c6e9fde786241c29cb17bd4fe95ceb97",
+    "original": "target/render-2a/release-final/gpu/glow/g0-f11.rgba",
+    "rgba_sha256": "e886e64f16cce1fea7fd9a949b7ea76905e22f5d422636d324a48588ec781b24",
+    "transform": "Lossless RGBA PNG encoding of canonical top-left readback; no resampling"
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "checked_utc": "2026-10-15T19:55:50.536918+00:00",
+  "qualified_source": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+  "merge": "072bd36b32bdb6d5f9f9c13ff7880094d8073719",
+  "product_executable_delta": false,
+  "proof_executable_delta": true,
+  "unchanged_original_inputs": 361,
+  "new_test_inputs": 12,
+  "local_links_verified": 45,
+  "raw_members_verified": 1493,
+  "proof_gates_passed": 8,
+  "original_regression_gates_passed": 12,
+  "original_regression_gates_failed": 1,
+  "failed_release_suite_retained": true,
+  "release_focused_and_full_recheck_pass": true,
+  "low_cap_job_peak_anomaly_retained": true,
+  "activation_qualified": false,
+  "json_parse": "PASS",
+  "diff_check": "PASS"
+}

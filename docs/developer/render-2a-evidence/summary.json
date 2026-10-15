@@ -1,0 +1,13 @@
+{
+  "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+  "proof_command_receipts": 8,
+  "proof_frames": 96,
+  "existing_regression_receipts": 13,
+  "existing_regression_failures": 1,
+  "existing_glow_frames": 153,
+  "existing_glow_contexts": 74,
+  "normal_cap": 805306368,
+  "low_cap": 16777216,
+  "low_cap_job_peak_ceiling": "UNQUALIFIED: observed above configured limit",
+  "activation_qualified": false
+}

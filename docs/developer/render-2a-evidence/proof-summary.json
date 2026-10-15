@@ -1,0 +1,120 @@
+{
+  "dev": {
+    "cases": 12,
+    "all_expected": true,
+    "wgpu_frame_process": 338776064,
+    "wgpu_frame_job": 345321472,
+    "glow_frame_process": 162856960,
+    "glow_frame_job": 169435136,
+    "max_process": 338776064,
+    "max_job": 345321472,
+    "low_cap": {
+      "admitted": true,
+      "case": "low-cap",
+      "contained": true,
+      "elapsed_ms": 30018,
+      "exit": 92,
+      "expected_outcome": true,
+      "ipc_obligations": "none: bounded receipt files only",
+      "job_cap": 16777216,
+      "launch_error": null,
+      "original_process_retired": true,
+      "peak_job_commit": 21614592,
+      "peak_process_commit": 15032320,
+      "process_cap": 16777216
+    },
+    "hal_max": {
+      "buffer_memory": 10944512,
+      "texture_memory": 6553600,
+      "buffers": 12,
+      "textures": 3,
+      "samplers": 2
+    },
+    "allocator_max": {
+      "allocated": 16515072,
+      "reserved": 34275328
+    },
+    "named_allocation_sizes": {
+      "egui_vertex_buffer": [
+        65536,
+        1376256
+      ],
+      "egui_index_buffer": [
+        65536,
+        1245184
+      ],
+      "proof-readback": [
+        4915200
+      ],
+      "proof-offscreen": [
+        5242880
+      ],
+      "(wgpu internal) Staging": [
+        65536,
+        262144,
+        1048576,
+        1245184,
+        1376256
+      ]
+    }
+  },
+  "release": {
+    "cases": 12,
+    "all_expected": true,
+    "wgpu_frame_process": 340881408,
+    "wgpu_frame_job": 347451392,
+    "glow_frame_process": 164474880,
+    "glow_frame_job": 171040768,
+    "max_process": 340881408,
+    "max_job": 347451392,
+    "low_cap": {
+      "admitted": true,
+      "case": "low-cap",
+      "contained": true,
+      "elapsed_ms": 30012,
+      "exit": 92,
+      "expected_outcome": true,
+      "ipc_obligations": "none: bounded receipt files only",
+      "job_cap": 16777216,
+      "launch_error": null,
+      "original_process_retired": true,
+      "peak_job_commit": 21524480,
+      "peak_process_commit": 14954496,
+      "process_cap": 16777216
+    },
+    "hal_max": {
+      "buffer_memory": 10944512,
+      "texture_memory": 6553600,
+      "buffers": 12,
+      "textures": 3,
+      "samplers": 2
+    },
+    "allocator_max": {
+      "allocated": 16515072,
+      "reserved": 34275328
+    },
+    "named_allocation_sizes": {
+      "egui_vertex_buffer": [
+        65536,
+        1376256
+      ],
+      "egui_index_buffer": [
+        65536,
+        1245184
+      ],
+      "proof-readback": [
+        4915200
+      ],
+      "proof-offscreen": [
+        5242880
+      ],
+      "(wgpu internal) Staging": [
+        65536,
+        262144,
+        1048576,
+        1245184,
+        1376256
+      ]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-15T19:21:09.762974+00:00",
+  "head": "cf5f4a0b93950d0cccb69ae0f6e53d581ea554ab",
+  "base": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+  "executable_delta": false,
+  "paths": [
+    "docs/developer/project-status.md",
+    "docs/developer/render-1-backend-separation.md",
+    "docs/developer/render-1-evidence/binary-identities.json",
+    "docs/developer/render-1-evidence/dev-glow-replacement.png",
+    "docs/developer/render-1-evidence/experiments.json",
+    "docs/developer/render-1-evidence/framebuffers.json",
+    "docs/developer/render-1-evidence/gates.json",
+    "docs/developer/render-1-evidence/graphics-contexts.json",
+    "docs/developer/render-1-evidence/merge.json",
+    "docs/developer/render-1-evidence/parent-receipts.json",
+    "docs/developer/render-1-evidence/pictures.json",
+    "docs/developer/render-1-evidence/pre-merge.json",
+    "docs/developer/render-1-evidence/raw-evidence.zip",
+    "docs/developer/render-1-evidence/raw-manifest.json",
+    "docs/developer/render-1-evidence/release-glow-replacement.png",
+    "docs/developer/render-1-evidence/summary.json",
+    "docs/developer/render-1-evidence/unchanged-inputs.json",
+    "docs/developer/render-1-evidence/upstream-sources.json",
+    "docs/developer/render-1-evidence/verification.json",
+    "docs/developer/render-1-sha256.txt",
+    "docs/developer/render-1-validation.md"
+  ],
+  "canonical_hashes_verified": 381,
+  "worktree_clean": true
+}
