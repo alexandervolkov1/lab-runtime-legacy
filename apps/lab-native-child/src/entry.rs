@@ -415,6 +415,7 @@ impl Display<'_, '_> {
             }
         }
         state.render_owner_progress = state.render_owner_progress.saturating_add(1);
+        let frame_started = Instant::now();
         if state.mode == "pending" && state.completed != 0 {
             state.device.borrow_mut().wait_fault =
                 Some(crate::readonly_v2::completion::Completion::Timeout);
@@ -589,6 +590,7 @@ impl Display<'_, '_> {
                 "plot_points":report.plot_points,"plot_traces":report.plot_traces,"plot_point_visits":report.plot_point_visits,"geometry_segments":report.geometry_segments,"geometry_failures":report.geometry_failures,
                 "curve_samples":&points[..samples],"matched_samples":matched,"cyan_pixels":colored,
                 "owner_progress":state.owner_progress,"render_owner_progress":state.render_owner_progress,"completed":state.completed,
+                "owner_frame_elapsed_ns":frame_started.elapsed().as_nanos().min(u64::MAX as u128) as u64,
                 "native_counters":format!("{counters:?}"),"own_objects":counters.objects,
                 "cpu_preview_allowance":PREVIEW_RESERVATION,"selected_view_accounted":view_bytes,"encoded_slots":SLOTS,
                 "encoded_storage_bound":ENCODED_STORAGE,"readback_bytes":crate::device::READBACK_BYTES}))?;
@@ -600,6 +602,10 @@ impl Display<'_, '_> {
         } else {
             state.device.borrow_mut().present()?;
         }
+        // A costly frame must not make another redraw immediately due. The
+        // bounded native/IPC owner gets its ordinary turns after real completion
+        // and evidence/present work, even when that frame exceeded 40 ms.
+        state.last_draw = Instant::now();
         if !state.plot {
             state.plot = preview.open_plot(1); // local test-profile navigation only
             if !state.plot
