@@ -281,6 +281,7 @@ impl<'a> PlotState<'a> {
             RenderReport {
                 occurrences: 1,
                 plot_points: view.prepared_points(),
+                plot_point_visits: view.point_visits,
                 plot_traces: view.traces.len(),
                 allocation_faults,
                 geometry_segments: status.iter().map(|s| s.get().segments).sum(),

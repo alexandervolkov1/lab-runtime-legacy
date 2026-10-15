@@ -1,0 +1,82 @@
+[
+  {
+    "profile": "dev",
+    "suite": "geometry",
+    "rows": 119,
+    "max_accounted": 4610337,
+    "allowance": 8388608,
+    "raw_sha256": "6ed4d389b60d8ce4966c49f06b0801312a194188ebf8ed63751b07c3d5c87024"
+  },
+  {
+    "profile": "dev",
+    "suite": "memory",
+    "rows": 125,
+    "max_accounted": 4458653,
+    "allowance": 8388608,
+    "raw_sha256": "19611821aea5bf02e5a4e8eb99aae328e00cb025b038e311e4bc702ec5dc3fe6"
+  },
+  {
+    "profile": "dev",
+    "suite": "frames",
+    "rows": 12,
+    "max_accounted": 4355499,
+    "allowance": 8388608,
+    "raw_sha256": "792f362fe4d5d08ebdba04259b8a858e6d5c0af31706739d8b0ee445b7e6225c"
+  },
+  {
+    "profile": "dev",
+    "suite": "host-no-upload",
+    "rows": 4,
+    "max_accounted": 4367945,
+    "allowance": 8388608,
+    "raw_sha256": "f01a36250ff4e2ed094540af72c01e12550afb6aec5f26fdd5f6d117f3c31541"
+  },
+  {
+    "profile": "dev",
+    "suite": "retirement",
+    "rows": 9,
+    "max_accounted": 4367945,
+    "allowance": 8388608,
+    "raw_sha256": "711479f5d487c5a9798681fccdbf98836571e0a63864e2b0a2767a204988fd27"
+  },
+  {
+    "profile": "release",
+    "suite": "geometry",
+    "rows": 119,
+    "max_accounted": 4610337,
+    "allowance": 8388608,
+    "raw_sha256": "6ed4d389b60d8ce4966c49f06b0801312a194188ebf8ed63751b07c3d5c87024"
+  },
+  {
+    "profile": "release",
+    "suite": "memory",
+    "rows": 125,
+    "max_accounted": 4458653,
+    "allowance": 8388608,
+    "raw_sha256": "19611821aea5bf02e5a4e8eb99aae328e00cb025b038e311e4bc702ec5dc3fe6"
+  },
+  {
+    "profile": "release",
+    "suite": "frames",
+    "rows": 12,
+    "max_accounted": 4355499,
+    "allowance": 8388608,
+    "raw_sha256": "792f362fe4d5d08ebdba04259b8a858e6d5c0af31706739d8b0ee445b7e6225c"
+  },
+  {
+    "profile": "release",
+    "suite": "host-no-upload",
+    "rows": 4,
+    "max_accounted": 4367945,
+    "allowance": 8388608,
+    "raw_sha256": "f01a36250ff4e2ed094540af72c01e12550afb6aec5f26fdd5f6d117f3c31541"
+  },
+  {
+    "profile": "release",
+    "suite": "retirement",
+    "rows": 9,
+    "max_accounted": 4367945,
+    "allowance": 8388608,
+    "raw_sha256": "711479f5d487c5a9798681fccdbf98836571e0a63864e2b0a2767a204988fd27"
+  }
+]

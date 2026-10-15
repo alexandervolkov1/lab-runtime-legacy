@@ -1,0 +1,91 @@
+{
+  "scope": "B3B4C experimental fixed Windows profile only. Activation false. General terminal GPU lifecycle, whole-host Rust budget and M17.4 overlap remain BLOCKED. Original failed logs/readbacks and source identities are preserved separately from final qualification.",
+  "early_uncommitted_limits": [
+    "Initial Rust imports used the wrong private reexport names; compiler rejected them before native execution. These were uncommitted experiments, not qualified source.",
+    "The first 16-plot maximum fixture failed existing conversion admission; a 13-plot fixture could not fill the canonical byte ceiling. The final 14-plot fixture adjusts existing bounded fields to exactly 1048576 canonical bytes without changing quotas.",
+    "Some earliest uncommitted fixture contents and intermediate compiler binary hashes were not archived before replacement. Available raw logs, source-file hashes and the initial fixture binary identity are retained. Missing provenance is not reconstructed or attributed to a clean Git source."
+  ],
+  "native_experiments": [
+    {
+      "attempt": "dev-maximum-attempt-1",
+      "source": "1890faf plus uncommitted recorded input hashes",
+      "result": "32-source / 16384 selected point profile passed. Repeated-source max frame reached 16384 projected points, 262144 visits and32/32 actual GL samples, but document replacement hit incomplete snapshot deadline. Original buffers and cleanup records retained."
+    },
+    {
+      "attempt": "dev-max-replacement-fix",
+      "result": "Pausing frames during existing Assembly made the max canonical document and three replacements pass. No transfer deadline, buffer or credit cap was raised."
+    },
+    {
+      "attempt": "dev-new-fault-window-attempt-1",
+      "result": "Harness failed compilation because Launch intentionally has no Clone. Corrected the fixture, not the supervisor interface."
+    },
+    {
+      "attempt": "dev-gpu-fault-attempt-2",
+      "result": "17 isolated original-Device artificial fault cases passed, with later actual timeout proof or exact retained ledger."
+    },
+    {
+      "attempt": "dev-preliminary-all",
+      "result": "11/13 native tests passed. Owner-stall fixture armed before parent Ready; an unavailable fixture incorrectly combined good quality with unavailable status. The renderer correctly displayed IncompatibleMetadata."
+    },
+    {
+      "attempt": "dev-targeted-fixes",
+      "result": "Unavailable rendering was correct; the oracle expected the wrong Rebuilding text prefix. Raw labels prove the original Rebuilding value was preserved."
+    },
+    {
+      "attempt": "dev-final-candidate-native",
+      "result": "12/13 passed. Sending owner Status alone was insufficient to infer parent Ready. Final stall fixture waits for parent-confirmed Ready and then triggers only after rendering parent-selected64 points."
+    },
+    {
+      "attempt": "release-qualification-fence",
+      "source": "2fe51c96de2a26f4694314a447cac1d4c0d5b982",
+      "result": "12/13 passed. Native context-release failure correctly retained the root; oracle incorrectly expected an interim Status after Close. Close intentionally preserves its challenge. A bounded original-owner pump receipt replaced that oracle."
+    },
+    {
+      "attempt": "dev-fixed-cap-native",
+      "source": "c6037020717720ac097ddf64ce6ba3efb90f384e",
+      "candidate_C": 234881024,
+      "result": "12/13 passed. Repeated-source max canonical replacement failed to reach a later expected epoch. C was not raised; the failed run and original GL buffers remain."
+    },
+    {
+      "attempt": "dev-fixed-cap-max-owner-gap",
+      "source": "109b1ea193b4467886379aaae0719d68f31ad8b6",
+      "candidate_C": 234881024,
+      "result": "Initial maximum Plot not observed before early close. Native file timestamps show close1.425s after startup.json; the original parent reason was not captured, so exact cause is not claimed from that run alone."
+    },
+    {
+      "attempt": "dev-fixed-cap-initial-owner-status",
+      "source": "7608e3eb4308f75d7c775c8510dee51c8fb810e7",
+      "candidate_C": 234881024,
+      "result": "Maximum canonical/repeated-source profile and all three replacements passed after ordering post-admission owner Status before the first costly GL frame. Measured owner frame duration exceeded the40ms redraw interval. The after-completion interval also leaves IPC owner turns between costly frames."
+    },
+    {
+      "attempt": "final-attempt-3/release-isolated-fixed-cap",
+      "source": "4917d681c0fc23453dfe244ce023a5471b196427",
+      "result": "13/13 native tests passed under the same fixed C."
+    },
+    {
+      "attempt": "final-attempt-3/release-101-cycles",
+      "source": "4917d681c0fc23453dfe244ce023a5471b196427",
+      "completed_cycles": 3,
+      "result": "Stopped on the fourth requested incarnation: observer saw the previous terminal status before asynchronous restart publication. Assertion rejected that old status; it was not counted as exit proof."
+    },
+    {
+      "attempt": "release-101-cycles-incarnation-fence",
+      "source": "8d0f8fe1b262facaf7833e0456542929f2709190",
+      "completed_cycles": 101,
+      "result": "51 healthy closes,50 intentional crashes,100 explicit restarts passed. Final source additionally measures the exact free/latest/current/writing/assembly credit classes in every receipt."
+    },
+    {
+      "attempt": "final-attempt-5/dev-isolated-fixed-cap",
+      "source": "0fd2ace12e704b3ee90e8a67aa67f211df471245",
+      "result": "12/13 passed. Context-failure oracle parsed a diagnostic file prefix after existence became visible: EOF at column17. Final observer waits for a complete JSON receipt, and child diagnostics now publish by atomic rename. Neither is a new GL cleanup receipt."
+    }
+  ],
+  "qualification_runs": [
+    "Earlier full Workbench/CPU results remain historical to their exact input snapshots. A source guard stopped continuation when source changed; partial logs are retained.",
+    "CPU attempt4 was deliberately stopped before further qualification after changing cold-cycle receipts; the verified owned CPU-only process tree is archived. No Runtime/native renderer process was in that tree.",
+    "Final dev CPU Preview completed on0fd2ace. The only later paths are native child entry and a cfg(test) native oracle, neither compiled by that probe. cpu-source-equivalence.json records this bounded reuse; it does not relabel the execution HEAD.",
+    "Candidate C was sealed at224MiB before fixed-cap testing from real process/Job measurements. It was never automatically increased after failures. The1GiB qualification fence and16MiB denial control are separate.",
+    "Final f444da9 dev/release native groups:13/13 each. Final cold cycles:101/101 each (51 healthy,50 intentional crash,100 explicit restarts), all under unchanged224MiB. Cargo native-child test=false was detected during evidence audit; two actual suspension tests were executed independently from the original module in each profile; cargo test is labeled compilation-only."
+  ]
+}

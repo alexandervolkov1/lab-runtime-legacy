@@ -1,0 +1,37 @@
+{
+  "captured_utc": "2026-10-15T12:46:39.291361+00:00",
+  "current_head": "4917d681c0fc23453dfe244ce023a5471b196427",
+  "note": "Read-only checkpoint of present binaries; source association must be established from their individual build/execution logs, not inferred from current HEAD.",
+  "binaries": [
+    {
+      "path": "target/debug/deps/lab_workbench-f3432b4847ea6d74.exe",
+      "bytes": 70010368,
+      "sha256": "2a41989426f3aded72add4a35bccdee00f28646757946d161cad0b76ba86b0bf",
+      "mtime_ns": 1792067843640342200
+    },
+    {
+      "path": "target/release/deps/lab_workbench-99f44df52bbcdbc8.exe",
+      "bytes": 30380544,
+      "sha256": "31833172d93e52f14a863158bbb2c488cc5c83ec356a3d096ce7c5d59a45bd98",
+      "mtime_ns": 1792068382188972100
+    },
+    {
+      "path": "target/debug/lab-native-child.exe",
+      "bytes": 32306688,
+      "sha256": "cfc1abe1c75e623ac170c7748a11c34e650c1f5c39048e0f94ad8622d4962d0b",
+      "mtime_ns": 1792067824225981000
+    },
+    {
+      "path": "target/release/lab-native-child.exe",
+      "bytes": 7228416,
+      "sha256": "c09b883eddcf6913978b3bd1fe329dfcae43e9c8c4b73c72e210b6b918fd3998",
+      "mtime_ns": 1792066456263684100
+    },
+    {
+      "path": "target/v2-renderer-allocation-probe/dev/v2-renderer-allocation-probe.exe",
+      "bytes": 32786432,
+      "sha256": "b72fa652a330a43404d58689514814bcb7da708c489ba48dc9d7e43bc3884ce6",
+      "mtime_ns": 1792066831375308300
+    }
+  ]
+}

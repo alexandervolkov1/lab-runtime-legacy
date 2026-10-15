@@ -1,0 +1,562 @@
+[
+  {
+    "profile": "debug",
+    "process": 133648384,
+    "job": 140214272,
+    "scenario": "parent-result",
+    "stage": "top",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26abb4291d5-1\\parent-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130650112,
+    "job": 137220096,
+    "scenario": "crash-exit-before-ipc-retirement",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26b2daf14a6-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130875392,
+    "job": 137449472,
+    "scenario": "crash-exit-before-ipc-retirement",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26b2daf14a6-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129970176,
+    "job": 136536064,
+    "scenario": "pending-gpu-document-handoff-stop",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26c76e618c0-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129847296,
+    "job": 136380416,
+    "scenario": "pending-gpu-document-handoff-stop",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26c76e618c0-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129409024,
+    "job": 135970816,
+    "scenario": "snapshot-stall-with-parent-source-fence",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26dcba53409-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129552384,
+    "job": 136118272,
+    "scenario": "snapshot-stall-with-parent-source-fence",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26dcba53409-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 132075520,
+    "job": 138645504,
+    "scenario": "gpu-timeout-proof",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26e49fb17e6-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129175552,
+    "job": 135749632,
+    "scenario": "gpu-timeout-proof",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26e49fb17e6-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130478080,
+    "job": 137052160,
+    "scenario": "gpu-wait-failed",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26ed22eba53-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129593344,
+    "job": 136159232,
+    "scenario": "gpu-wait-failed",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26ed22eba53-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130945024,
+    "job": 137506816,
+    "scenario": "gpu-device-loss",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26fb3462548-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130260992,
+    "job": 136798208,
+    "scenario": "gpu-device-loss",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb26fb3462548-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129728512,
+    "job": 136298496,
+    "scenario": "gpu-native-teardown",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2708ad08de1-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 131870720,
+    "job": 138428416,
+    "scenario": "gpu-native-teardown",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2708ad08de1-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 122470400,
+    "job": 129036288,
+    "scenario": "gpu-original-error",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27156cb9bae-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 131694592,
+    "job": 138235904,
+    "scenario": "gpu-original-error",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27156cb9bae-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130174976,
+    "job": 136716288,
+    "scenario": "gpu-texture-before",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27236b255c3-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130940928,
+    "job": 137510912,
+    "scenario": "gpu-texture-before",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27236b255c3-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129196032,
+    "job": 135766016,
+    "scenario": "gpu-texture-after",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2730d6a5e98-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130830336,
+    "job": 137371648,
+    "scenario": "gpu-texture-after",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2730d6a5e98-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130641920,
+    "job": 137207808,
+    "scenario": "gpu-buffer-before",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb273ee4b28b1-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130404352,
+    "job": 136962048,
+    "scenario": "gpu-buffer-before",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb273ee4b28b1-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 132100096,
+    "job": 138661888,
+    "scenario": "gpu-buffer-after",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb274c8998eba-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129830912,
+    "job": 136404992,
+    "scenario": "gpu-buffer-after",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb274c8998eba-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130662400,
+    "job": 137224192,
+    "scenario": "gpu-shader-before",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb275a96b4ce7-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129445888,
+    "job": 135987200,
+    "scenario": "gpu-shader-before",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb275a96b4ce7-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129794048,
+    "job": 136364032,
+    "scenario": "gpu-shader-after",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27689d96b88-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130412544,
+    "job": 136966144,
+    "scenario": "gpu-shader-after",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27689d96b88-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129822720,
+    "job": 136392704,
+    "scenario": "gpu-program-before",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2775eb79391-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 131534848,
+    "job": 138092544,
+    "scenario": "gpu-program-before",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2775eb79391-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129400832,
+    "job": 135929856,
+    "scenario": "gpu-program-after",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2784037fef6-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130564096,
+    "job": 137117696,
+    "scenario": "gpu-program-after",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2784037fef6-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130617344,
+    "job": 137175040,
+    "scenario": "gpu-vao-before",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27915241207-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130830336,
+    "job": 137408512,
+    "scenario": "gpu-vao-before",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27915241207-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130588672,
+    "job": 137154560,
+    "scenario": "gpu-vao-after",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb279efed8a58-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130162688,
+    "job": 136732672,
+    "scenario": "gpu-vao-after",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb279efed8a58-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130555904,
+    "job": 137117696,
+    "scenario": "gpu-fence-before",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27ac4e6e3f9-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 128901120,
+    "job": 135471104,
+    "scenario": "gpu-fence-before",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27ac4e6e3f9-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129875968,
+    "job": 136441856,
+    "scenario": "gpu-fence-after",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27b9ad03412-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 131649536,
+    "job": 138190848,
+    "scenario": "gpu-fence-after",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27b9ad03412-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 137551872,
+    "job": 144109568,
+    "scenario": "maximum-repeated",
+    "stage": "top",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb27ced86ae1b-1\\maximum-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 141983744,
+    "job": 148529152,
+    "scenario": "maximum-distinct",
+    "stage": "top",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb28102e79954-1\\maximum-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129568768,
+    "job": 136105984,
+    "scenario": "expected-redraw-artificially-suppressed",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb29704372d6d-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 131698688,
+    "job": 138272768,
+    "scenario": "deliberate-16MiB-admission-denial",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb29861fc651f-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 129716224,
+    "job": 136278016,
+    "scenario": "absence-result",
+    "stage": "top",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb2989d9f74e0-1\\absence-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 133156864,
+    "job": 139722752,
+    "scenario": "actual-window-resize-minimize-restore",
+    "stage": "old",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb298fd8b0585-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "debug",
+    "process": 130899968,
+    "job": 137474048,
+    "scenario": "actual-window-resize-minimize-restore",
+    "stage": "restart",
+    "receipt": "target\\debug\\target\\isolated-native-renderer\\11648-0000000000002d8018deb298fd8b0585-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 113774592,
+    "job": 120348672,
+    "scenario": "parent-result",
+    "stage": "top",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2cd82871871-1\\parent-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110751744,
+    "job": 117313536,
+    "scenario": "crash-exit-before-ipc-retirement",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2cdcceab54a-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 111190016,
+    "job": 117755904,
+    "scenario": "crash-exit-before-ipc-retirement",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2cdcceab54a-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 111882240,
+    "job": 118419456,
+    "scenario": "native-render-owner-stall",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2ce0a5c1023-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110161920,
+    "job": 116695040,
+    "scenario": "native-render-owner-stall",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2ce0a5c1023-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 111124480,
+    "job": 117686272,
+    "scenario": "pending-gpu-document-handoff-stop",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2cf39ec4c88-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110964736,
+    "job": 117538816,
+    "scenario": "pending-gpu-document-handoff-stop",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2cf39ec4c88-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110764032,
+    "job": 117293056,
+    "scenario": "snapshot-stall-with-parent-source-fence",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d0746c4d31-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110981120,
+    "job": 117518336,
+    "scenario": "snapshot-stall-with-parent-source-fence",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d0746c4d31-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 112947200,
+    "job": 119517184,
+    "scenario": "gpu-timeout-proof",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d0d36c55be-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110280704,
+    "job": 116842496,
+    "scenario": "gpu-timeout-proof",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d0d36c55be-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110153728,
+    "job": 116715520,
+    "scenario": "gpu-wait-failed",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d12674e957-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 111411200,
+    "job": 117981184,
+    "scenario": "gpu-wait-failed",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d12674e957-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110997504,
+    "job": 117534720,
+    "scenario": "gpu-device-loss",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d1e26a0d90-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110555136,
+    "job": 117129216,
+    "scenario": "gpu-device-loss",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d1e26a0d90-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 122368000,
+    "job": 128905216,
+    "scenario": "maximum-repeated",
+    "stage": "top",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d591e3849a-1\\maximum-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 122220544,
+    "job": 128786432,
+    "scenario": "maximum-distinct",
+    "stage": "top",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d707aa672f-1\\maximum-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 110624768,
+    "job": 117207040,
+    "scenario": "expected-redraw-artificially-suppressed",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2d9ef0d56e0-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 129425408,
+    "job": 135987200,
+    "scenario": "deliberate-16MiB-admission-denial",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2db35923802-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 129355776,
+    "job": 135933952,
+    "scenario": "absence-result",
+    "stage": "top",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2db6bd160ff-1\\absence-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 130863104,
+    "job": 137396224,
+    "scenario": "actual-window-resize-minimize-restore",
+    "stage": "old",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2db9ac3331c-1\\parent-fault-result.json"
+  },
+  {
+    "profile": "release",
+    "process": 130064384,
+    "job": 136638464,
+    "scenario": "actual-window-resize-minimize-restore",
+    "stage": "restart",
+    "receipt": "target\\release\\target\\isolated-native-renderer\\19104-0000000000004aa018deb2db9ac3331c-1\\parent-fault-result.json"
+  }
+]

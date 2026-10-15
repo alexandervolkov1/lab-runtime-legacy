@@ -1,0 +1,38 @@
+{
+  "os": {
+    "Caption": "Майкрософт Windows 10 Pro",
+    "Version": "10.0.19045",
+    "BuildNumber": "19045",
+    "OSArchitecture": "64-разрядная"
+  },
+  "cpu": {
+    "Name": "AMD Ryzen 5 6600H with Radeon Graphics         ",
+    "NumberOfCores": 6,
+    "NumberOfLogicalProcessors": 12
+  },
+  "gpu": {
+    "Name": "AMD Radeon(TM) Graphics",
+    "DriverVersion": "32.0.21030.2001",
+    "DriverDate": "2025-09-25T03:00:00+03:00",
+    "AdapterRAM": 536870912,
+    "VideoModeDescription": "Цвета: 1920 x 1080 x 4294967296"
+  },
+  "toolchain": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "source_head": "f444da9322e9db75d9bcb7e6ae908833a6a17b67",
+  "supported_drawable": [
+    1280,
+    960
+  ],
+  "supported_scale": 1,
+  "process_local_dpi_aware": false,
+  "activation_qualified": false
+}

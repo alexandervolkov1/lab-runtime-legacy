@@ -13,7 +13,11 @@ mod consumer;
 #[path = "../../../scripts/support/native-glow-device.rs"]
 mod device;
 #[cfg(windows)]
+mod drawable;
+#[cfg(windows)]
 mod entry;
+#[cfg(windows)]
+mod fault;
 #[cfg(windows)]
 pub(crate) use consumer::{
     presentation, private_ipc, readonly_limits, readonly_v2, readonly_values,

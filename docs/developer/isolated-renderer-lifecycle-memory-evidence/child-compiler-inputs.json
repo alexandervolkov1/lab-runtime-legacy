@@ -1,0 +1,206 @@
+[
+  {
+    "path": "apps/lab-native-child/src/consumer.rs",
+    "sha256": "9e432e4294f76ca6f95159c224e409ca12e4e5090cfe697339d1e76a5e4f34d5"
+  },
+  {
+    "path": "apps/lab-native-child/src/drawable.rs",
+    "sha256": "8ccbe80b125cbeecac4b82cac8821aaa84c9690bb8bb07f8ca732bea01c9e1b0"
+  },
+  {
+    "path": "apps/lab-native-child/src/entry.rs",
+    "sha256": "10cdd966d3a6c8645ca905a2a24a234fafce4ff1f1ea6acab32c6d528b944dc7"
+  },
+  {
+    "path": "apps/lab-native-child/src/fault.rs",
+    "sha256": "171827a15c99c8524c0344f6da27b9de1de8f7a181dc946a5aeabc1a0c307801"
+  },
+  {
+    "path": "apps/lab-native-child/src/main.rs",
+    "sha256": "add7d0fa3a658185d954a9a291dbdc120a323d93cd357b16ab4be166e6b8abb0"
+  },
+  {
+    "path": "apps/lab-native-child/src/presentation.rs",
+    "sha256": "266681e1437e34333a70dcd677931060281c1e80ee602986bb1305138a16a796"
+  },
+  {
+    "path": "apps/lab-native-child/src/private_ipc.rs",
+    "sha256": "b3798a9dac7aa61db4a5c0eb8ddc3c9764bca36e997d58e846e65cee9c724808"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/completion.rs",
+    "sha256": "1e68a9ec34d0f24d4242fcf595657fe35d16db93435d90bd61c2507f9f9c1372"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/deletion.rs",
+    "sha256": "902ea6a1a5cbd9206ba09a9c25e8d100256b4bfa754e26f1c04b1d4509c0046e"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/finite_trace.rs",
+    "sha256": "612b2b0d83dea4b118f3c0c4a6999a6b6f24b03359d00b402dec1cc47d7c6085"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/frame.rs",
+    "sha256": "b208bc14ee194c1918b7abe3f3e0cac8a984d6878e35e7d0b808bc1ed791b986"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/host_session.rs",
+    "sha256": "8a4e198b132f378a9a8733b2fee102ef74686e62bbdd1c55f6febbdce0b1bdf4"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/mod.rs",
+    "sha256": "3f113c6af463a2a140e015237b0c32d933ff6def6a78bd94b12f569f04571420"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/native_types.rs",
+    "sha256": "523998fc830aa411eb4c1f228d29e3c40ef9cc34c4131cc3a3c8496f815498c7"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/navigation.rs",
+    "sha256": "0d16729486f9dece5ad7840fce6e2278594c8ad997b0db30f7b9d6e909d5ea82"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/observation_source.rs",
+    "sha256": "31c5f14d62b49e40243c01c0564a5da00ecce5e73ec8a1e86af38f317ffae04f"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/page.rs",
+    "sha256": "58f3d157d93e6e3b9a5d2c840cf0a1b6fac431e68fc9231dc6d7f687c1d44ca6"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_bounds.rs",
+    "sha256": "768ac0342553886477816ec1d03f3761a8ce3615e68d728850b9a4d8905777e0"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_projection.rs",
+    "sha256": "21e02602d136a43b5055ed52a8df9f49e12f9868464d4ebf0a9cc1a211ec517f"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_text.rs",
+    "sha256": "cdaeb22bea4ace5c0da3bddedd8947ba3e427c7dd1a16506541e83313281fd73"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_widget.rs",
+    "sha256": "536aa9c9ef3e0829ed8e0d8eb23fafba0f2207108bbea134fe3f5ef30b6ae9ca"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/read.rs",
+    "sha256": "ba5bd825e5c08bcfa8cc88f0b631a68449848a09b0ed74994fbd3518c867c43c"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/texture_owner.rs",
+    "sha256": "71a41c65788457907ceec30c9302307fe254321a281a59472ef9af966c96b9f5"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/reference.rs",
+    "sha256": "167abec50f47611dcd0229498135fcc4906beee41a02e0e5a2c7c89f7b595d23"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/admission.rs",
+    "sha256": "b10c27b5e3e9bb828dbb64367a297b9c4b35c297f4f5cfe89d3cc8b220bc4b05"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/allocation.rs",
+    "sha256": "0522a5651a508104d39c14fcc6b34762b913d0db29d1a0b8a47884045a904f5f"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/bounded.rs",
+    "sha256": "be47c8057e75f171f479bfe2fea3e86d04d807d4e703cabc8fbbc5f7676d57b3"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/canonical.rs",
+    "sha256": "b09fae2dd5ff58ad9f2d836ac8b8c0c71e623bff9042f2c7793b9c63612d94a5"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/consumer.rs",
+    "sha256": "f389a0ac05f5f4d10dca5f1110fd9b64de9715c0bdb386c28381555af59121f2"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/dto.rs",
+    "sha256": "5b157722cff260f770625b9c0ce8cf6c7ed009ff0d27acc9a368e55a88365c93"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/encoding.rs",
+    "sha256": "6ad3d34f4faec69267c6d259645a78230fbb897d7771db586751d02aec7580e0"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/graph.rs",
+    "sha256": "a53ce7eb285cafdd8390cbac178559e24a98cf9e4adee9beac4b1996af39398a"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/limits.rs",
+    "sha256": "c09726d3d3dcaf4f7476fddf4fb279c7081e38c84e9f0654f40dfb99425c8478"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/structure.rs",
+    "sha256": "cd0815898a5ab00f49abe5d629fbc16e5ee77c8ef51a3533c474a89c7ddb34dc"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/validation.rs",
+    "sha256": "a78fb4afc39f2a62859509bd5c70360baa65bc4e781c12f85d5a540afaf408b5"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/visual_budget.rs",
+    "sha256": "5cacd95f510f244dd01deef1cd4b046a8254b6816437ff552d615d0e6892c60d"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/wire.rs",
+    "sha256": "442c57b286e475a6c22db8e93043db21d68a6a68c63347f9e99fcef3b57b0eab"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/document_owner.rs",
+    "sha256": "183d3dbe14bf2dc55789c81f6dbb04a3edbdf1cedf009258f0e8ad79cf98c5d3"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/protocol.rs",
+    "sha256": "28deefcfb980552f43ae1e37528d60c9e6b5e04ff0eb4650d2ca77bb9c66c2dc"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/read_decode.rs",
+    "sha256": "70fa7be959d3206e1d7f8623a8b78d0811a83813fa0d96b8456ae850cd174e7c"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/renderer_progress.rs",
+    "sha256": "bde6a57253ef626057f5a4c84efd1db7d80c39b4ec42a379b3045956379885c2"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/replica.rs",
+    "sha256": "4a42a93615d7b8f5d157af12741e628c8bc73747cf9e8eb82b6cdf389aed72fc"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/selected_provider.rs",
+    "sha256": "aa73ecb4e78291c84d1a86469de8789195b5d18c7bb25d548d425da869ef4268"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/transport.rs",
+    "sha256": "ec82283a8842febe91c746d2098fa542c25f0425340781ab1d7ba89b06e63a74"
+  },
+  {
+    "path": "apps/lab-workbench/src/readonly_limits.rs",
+    "sha256": "07e146b889cf066e15daf874b34cfe230cf6f7fd413d3818f32a2eb2d8eb1167"
+  },
+  {
+    "path": "apps/lab-workbench/src/readonly_values.rs",
+    "sha256": "6b611d4266b89cf9746102c513aa45871a573edc07013b440ef0a2c16c97ab06"
+  },
+  {
+    "path": "crates/lab-windows-job/src/lib.rs",
+    "sha256": "76e97d3bf75a3939e668360f95a3ce0f67d8397bc1361f79c9703c2639f744e9"
+  },
+  {
+    "path": "crates/lab-windows-job/src/pipe.rs",
+    "sha256": "0fe1f500bd74b5d553d596e5f1b123ade4594b991534847a8759054b0f3dbee5"
+  },
+  {
+    "path": "crates/lab-windows-job/src/windows.rs",
+    "sha256": "f8f5b44f89f149ff6e3f52a802a32ea47bc83c068ba23f1220d750e3d4334737"
+  },
+  {
+    "path": "scripts/support/native-glow-backend.rs",
+    "sha256": "201cfd3ce7cecb8b735235e84fd7b03c755cdc4998bc1e0204f43abde4e20a2d"
+  },
+  {
+    "path": "scripts/support/native-glow-device.rs",
+    "sha256": "2266fc6e8ed475b94edd363db35e66c7c3c69f13ad0f5793c325dc7f6bb1ff20"
+  }
+]
