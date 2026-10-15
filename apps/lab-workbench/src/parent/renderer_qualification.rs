@@ -284,8 +284,16 @@ fn native_isolated_gpu_fault_matrix() {
                 // Closing preserves the original Close challenge until healthy
                 // retirement. Its interim native progress is not a Status pong.
                 let receipt = directory.join("native-close-retained.json");
-                wait(|| receipt.is_file());
-                let receipt: Value = serde_json::from_slice(&fs::read(receipt).unwrap()).unwrap();
+                let mut parsed = None;
+                // Creation precedes the diagnostic write. Observe the complete
+                // receipt, as find_frame does, never a concurrently written prefix.
+                wait(|| {
+                    parsed = fs::read(&receipt)
+                        .ok()
+                        .and_then(|bytes| serde_json::from_slice::<Value>(&bytes).ok());
+                    parsed.is_some()
+                });
+                let receipt = parsed.unwrap();
                 assert!(
                     receipt["event_loop"].as_u64().unwrap()
                         > receipt["original_event_loop"].as_u64().unwrap()
