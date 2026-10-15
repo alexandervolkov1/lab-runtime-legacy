@@ -1844,6 +1844,17 @@ name = "lab-core"
 version = "0.1.0"
 
 [[package]]
+name = "lab-native-child"
+version = "0.1.0"
+dependencies = [
+ "eframe",
+ "glutin",
+ "glutin-winit",
+ "raw-window-handle",
+ "winit",
+]
+
+[[package]]
 name = "lab-runtime"
 version = "0.1.0"
 dependencies = [

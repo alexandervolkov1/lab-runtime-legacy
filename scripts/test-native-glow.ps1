@@ -1,5 +1,5 @@
 # Native GL smoke is deliberately separate from the allocation-meter processes.
-param([ValidateSet('dev','release')][string]$BuildProfile = 'dev', [switch]$Pending, [switch]$Faults)
+param([ValidateSet('dev','release')][string]$BuildProfile = 'dev', [switch]$Pending, [switch]$Faults, [switch]$CompileOnly)
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 Push-Location $repo
@@ -62,6 +62,11 @@ fn main() { native_glow::run(); }
     & clippy-driver --edition=2024 -D warnings -W clippy::all -W missing-docs --emit=metadata $source @externs @flags -L "dependency=$(Join-Path $repo "target/$directory/deps")" -o (Join-Path $probeDir 'clippy.rmeta')
     if ($LASTEXITCODE -ne 0) { throw 'Native GL launcher Clippy failed' }
     $artifacts | Where-Object { $_.target.name -in @('eframe','egui','glow','glutin','glutin_winit','winit','raw_window_handle') } | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $probeDir 'artifacts.json')
+    if ($CompileOnly) {
+        if ($Pending -or $Faults) { throw 'CompileOnly cannot qualify a native execution scenario' }
+        Write-Output 'B2B2 standalone compile and Clippy PASS; no GPU execution or child integration claim'
+        return
+    }
     # A retained unresolved root must NOT unwind normally. A separate watchdog
     # observes it and terminates only this child; that is BLOCKED, never cleanup.
     $scenarios = if ($Faults) { @('timeout-proof','wait-failed','missing-fence','invalid-fence','device-loss','partial-texture','original-error','native-teardown') + @('texture','buffer','shader','program','vao','fence' | ForEach-Object { "$($_)-before"; "$($_)-after" }) } elseif ($Pending) { @('pending') } else { @('smoke') }

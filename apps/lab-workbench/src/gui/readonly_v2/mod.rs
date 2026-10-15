@@ -12,13 +12,15 @@ pub(crate) mod frame;
 #[cfg(test)]
 mod frame_tests;
 pub(crate) mod host_session;
+mod native_types;
 mod navigation;
 #[cfg(test)]
 mod navigation_tests;
+pub(crate) mod observation_source;
 mod page;
 mod plot_bounds;
 #[cfg(test)]
-mod plot_fixtures;
+pub(crate) mod plot_fixtures;
 #[cfg(test)]
 mod plot_geometry_fixtures;
 #[cfg(test)]
@@ -76,7 +78,11 @@ pub(crate) const MAX_TEXT_BYTES: usize = 12 * 1024;
 pub(crate) const MAX_WIDGETS: usize = 128;
 /// Four visible cells plus their bounded ancestor walks and the group header.
 pub(crate) const MAX_PATH_NODES: usize = 28;
-pub(crate) const MAX_SHAPES: usize = 192;
+#[allow(
+    unused_imports,
+    reason = "private native backend bound; active host does not call it"
+)]
+pub(crate) use native_types::MAX_SHAPES;
 /// Uniform read-only reservation; includes Context, scratch, output and overlap.
 /// This replaces unmaterialized view credits; it is not added to 20,480 views.
 pub(crate) const PREVIEW_RESERVATION: usize = 8 * 1024 * 1024;

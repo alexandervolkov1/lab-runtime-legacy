@@ -741,6 +741,64 @@ fn native_fault_and_snapshot_restoration_create_zero_runtime_submissions() {
     crate::parent::tests::assert_native_private_ipc_continuity("slow");
 }
 #[test]
+#[ignore = "Windows private IPC no-GPU handoff; scripts/test-private-ipc.ps1"]
+fn native_pending_handoff_keeps_parent_api_recovery_and_zero_replay() {
+    crate::parent::tests::assert_native_private_ipc_continuity("handoff");
+}
+#[test]
+#[ignore = "Windows private IPC no-GPU handoff; scripts/test-private-ipc.ps1"]
+fn native_crash_during_pending_handoff_preserves_parent_and_restarts_current_snapshots() {
+    crate::parent::tests::assert_native_private_ipc_continuity("handoff-crash");
+}
+#[test]
+#[ignore = "Windows private IPC no-GPU handoff; scripts/test-private-ipc.ps1"]
+fn native_complete_handoff_survives_incomplete_deadline_and_retires_original_ipc() {
+    let (bridge, root) = start("handoff");
+    root.wait_status(|s| s.phase == Phase::Ready);
+    until(|| {
+        bridge
+            .document(
+                &document(),
+                Epoch {
+                    owner: [7; 16],
+                    revision: 2,
+                },
+                2,
+            )
+            .is_ok()
+    });
+    until(|| bridge.status().is_ok_and(|s| s.diagnostic_records >= 1));
+    let before = root.wait_status(|s| s.phase == Phase::Ready).owner_counter;
+    let start = Instant::now();
+    until(|| {
+        start.elapsed() > Duration::from_millis(2200)
+            && root
+                .status()
+                .is_ok_and(|s| s.phase == Phase::Ready && s.owner_counter > before + 4)
+    });
+    assert_eq!(sampled_status(&bridge).applied[0], 1);
+    assert_eq!(sampled_status(&bridge).credits.iter().sum::<usize>(), SLOTS);
+    stop(&root, Stop::Graceful);
+    let exit = root.wait_status(|s| {
+        matches!(s.phase, Phase::ExitedHealthy | Phase::ExitedContained) && s.call.is_none()
+    });
+    assert_eq!(exit.alive, Some(false));
+    let retired = sampled_status(&bridge);
+    assert!(retired.retired);
+    assert_eq!(
+        (retired.pending_io, retired.handles, retired.io_bytes),
+        (0, 0, 0)
+    );
+    until(|| root.restart(launch("normal")).is_ok());
+    root.wait_status(|s| s.phase == Phase::Ready && s.incarnation == 2);
+    until(|| bridge.status().is_ok_and(|s| s.applied[0] == 2));
+    println!(
+        "HANDOFF_NATIVE complete_wait_ms={} heartbeat_owner_progress=true applied_before_retirement=1 restart_applied=2 original_ipc_baseline=true",
+        start.elapsed().as_millis()
+    );
+    finish(&bridge, &root);
+}
+#[test]
 #[ignore = "Windows private IPC no-GPU; scripts/test-private-ipc.ps1"]
 fn native_parent_root_shutdown_waits_for_ipc_receipts_and_endpoint_retirement() {
     crate::parent::tests::assert_native_private_ipc_shutdown();

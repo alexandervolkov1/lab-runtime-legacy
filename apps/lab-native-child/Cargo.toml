@@ -1,0 +1,23 @@
+[package]
+name = "lab-native-child"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version = "1.95"
+
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "=0.36.2", default-features = false, features = ["glow", "default_fonts", "accesskit"] }
+glutin = { version = "=0.32.3", default-features = false, features = ["egl", "wgl"] }
+glutin-winit = { version = "=0.5.0", default-features = false, features = ["egl", "wgl"] }
+winit = { version = "=0.30.13", default-features = false, features = ["rwh_06"] }
+raw-window-handle = { version = "=0.6.2", default-features = false, features = ["std"] }
+
+# Only the shared, audited Device source permits unsafe. Protected application
+# packages still inherit workspace unsafe_code=forbid.
+[lints.rust]
+unsafe_code = "deny"
+missing_docs = "warn"
+
+[lints.clippy]
+all = "warn"

@@ -6,6 +6,46 @@ use super::{
     visual_budget::VisualReservation,
 };
 
+// Test-only instrumentation of actual admitted values, not consumer wrappers or
+// estimated credits. No production fields, allocation, or quota are added.
+#[cfg(test)]
+#[derive(Clone, Copy, Debug, Default)]
+pub(crate) struct DocumentLifetimes {
+    pub(crate) live: usize,
+    pub(crate) peak: usize,
+    pub(crate) admission_calls: usize,
+    pub(crate) constructed: usize,
+    pub(crate) dropped: usize,
+}
+#[cfg(test)]
+thread_local! {
+    static LIFETIMES: std::cell::Cell<DocumentLifetimes> = const { std::cell::Cell::new(DocumentLifetimes {
+        live: 0, peak: 0, admission_calls: 0, constructed: 0, dropped: 0,
+    }) };
+}
+#[cfg(test)]
+pub(crate) fn document_lifetimes(reset: bool) -> DocumentLifetimes {
+    LIFETIMES.with(|counts| {
+        let current = counts.get();
+        if reset {
+            assert_eq!(current.live, 0, "previous parsed document remains alive");
+            counts.set(DocumentLifetimes::default());
+        }
+        current
+    })
+}
+#[cfg(test)]
+impl Drop for AdmittedV2Document {
+    fn drop(&mut self) {
+        LIFETIMES.with(|counts| {
+            let mut current = counts.get();
+            current.live -= 1;
+            current.dropped += 1;
+            counts.set(current);
+        });
+    }
+}
+
 /// Immutable, single-owner offline result. No deserializer, unchecked constructor,
 /// mutable DTO accessor, or conversion to the running presentation owner exists.
 /// Visual reservation is conditional on a future capacity-enforcing consumer;
@@ -66,6 +106,14 @@ pub(super) fn finish(source: StructurallyCheckedDocument) -> Result<AdmittedV2Do
     // Charge actual retained capacity, not serialized length or requested reserve.
     allocation.block(canonical.capacity())?;
     allocation.check()?;
+    #[cfg(test)]
+    LIFETIMES.with(|counts| {
+        let mut current = counts.get();
+        current.live += 1;
+        current.peak = current.peak.max(current.live);
+        current.constructed += 1;
+        counts.set(current);
+    });
     Ok(AdmittedV2Document {
         source,
         canonical,
@@ -78,6 +126,12 @@ pub(super) fn finish(source: StructurallyCheckedDocument) -> Result<AdmittedV2Do
 
 /// Runs every stage. Failure yields no partially admitted result.
 pub(crate) fn admit(bytes: &[u8]) -> Result<AdmittedV2Document, String> {
+    #[cfg(test)]
+    LIFETIMES.with(|counts| {
+        let mut current = counts.get();
+        current.admission_calls += 1;
+        counts.set(current);
+    });
     super::parse(bytes)?
         .check_local()?
         .check_structure()?
