@@ -2,36 +2,11 @@
 use super::{frame::ContextGeneration, texture_owner::FrameBackend};
 use std::time::{Duration, Instant};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum WaitFailure {
-    WaitError,
-    MissingFence,
-    InvalidFence,
-}
-
-/// Only Quiesced proves that all uses covered by this generation have ended.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum Completion {
-    Quiesced,
-    Unobserved,
-    Timeout,
-    Failed(WaitFailure),
-    DeviceLost,
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum WaitPurpose {
-    Frame,
-    Retirement,
-}
-
-/// A requested API wait, not a promise about time spent inside a driver call.
-#[derive(Clone, Copy, Debug)]
-pub(crate) struct WaitRequest {
-    pub(crate) generation: ContextGeneration,
-    pub(crate) purpose: WaitPurpose,
-    pub(crate) timeout: Duration,
-}
+#[allow(
+    unused_imports,
+    reason = "preserve the private native backend and probe paths"
+)]
+pub(crate) use super::native_types::{Completion, WaitFailure, WaitPurpose, WaitRequest};
 
 /// Independent caps for calls, each requested timeout and the application clock.
 #[derive(Clone, Copy, Debug)]

@@ -1,8 +1,8 @@
 //! Compiled only into the separately launched qualification fixture. This entry
 //! creates no Runtime client, dispatcher, GUI, Preview, GL context or Job handle.
 use super::{
+    Replica,
     protocol::*,
-    replica::Replica,
     transport::{Framed, failure},
 };
 use lab_windows_job::pipe::Pipe;
@@ -49,6 +49,8 @@ pub(crate) fn run() -> std::result::Result<(), lab_windows_job::Error> {
         "duplicate",
         "order",
         "truncate-snapshot",
+        "handoff",
+        "handoff-crash",
     ]
     .contains(&mode)
     {
@@ -74,6 +76,7 @@ pub(crate) fn run() -> std::result::Result<(), lab_windows_job::Error> {
     let mut closed_sent = false;
     let mut counter = 0u64;
     let mut snapshot_closed = false;
+    let mut handoff_diagnostic = None;
     let deadline = Instant::now() + Duration::from_secs(30);
     loop {
         if Instant::now() >= deadline {
@@ -110,6 +113,7 @@ pub(crate) fn run() -> std::result::Result<(), lab_windows_job::Error> {
             }
         }
         let snapshot_paused = match mode {
+            "handoff" | "handoff-crash" => replica.document_candidate().is_some(),
             "slow" => replica.accepted(0).is_some(),
             "slow-after-read" => replica.accepted(1).is_some(),
             "snapshot-close" => snapshot_closed,
@@ -127,6 +131,22 @@ pub(crate) fn run() -> std::result::Result<(), lab_windows_job::Error> {
                     .map_err(failure)?
                 {
                     let stream = header.kind.stream().unwrap();
+                    if stream == 0 {
+                        if replica.accepted(0).is_some()
+                            && matches!(mode, "handoff" | "handoff-crash")
+                        {
+                            if mode == "handoff-crash" {
+                                std::process::exit(73);
+                            }
+                            // Complete Assembly stays in its original credit. No
+                            // parsed admission or Applied while the consumer waits.
+                            handoff_diagnostic = Some(header.snapshot);
+                            continue;
+                        }
+                        let decision = replica.admit_encoded_document().map_err(failure)?;
+                        pending[0] = Some((decision.header, decision.applied));
+                        continue;
+                    }
                     pending[stream] = Some((
                         header,
                         replica
@@ -234,6 +254,14 @@ pub(crate) fn run() -> std::result::Result<(), lab_windows_job::Error> {
                 header.snapshot = applied.snapshot;
                 header.source = applied.source;
                 control.send(header, &[stream as u8])?;
+            } else if let Some(snapshot) = handoff_diagnostic.take() {
+                let mut header = Header::control(
+                    Kind::Diagnostic,
+                    identity,
+                    sequence.next().map_err(failure)?,
+                );
+                header.bytes += 8;
+                control.send(header, &snapshot.to_le_bytes())?;
             } else if let Some(challenge) = challenge.take() {
                 let mut header =
                     Header::control(Kind::Status, identity, sequence.next().map_err(failure)?);

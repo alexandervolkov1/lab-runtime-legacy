@@ -19,6 +19,8 @@ mod validation;
 mod visual_budget;
 mod wire;
 
+#[cfg(test)]
+pub(crate) use admission::document_lifetimes;
 pub(crate) use admission::{AdmittedV2Document, admit};
 pub(crate) use bounded::{I64Decimal, U64Decimal};
 pub(crate) use canonical::CanonicalWireCandidate;

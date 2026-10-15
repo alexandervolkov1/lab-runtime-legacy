@@ -1,0 +1,7 @@
+# SHA256 of Git-normalized text / raw binary bytes; this inventory excludes itself.
+4d220e61b3ca74a51ccf9ddeed682cb180bfc4408ac04b1caeaa9e7e3ff12593  docs/developer/README.md
+66b15e58aec91243c09c47c304de49481c2ecf86b8cd30155e0695c8b704e5a3  docs/developer/isolated-native-renderer-child.md
+e4058602b8c34a3af50501a26652bfdb4dcf0e5d8c2650c5e84ebfbeaaae6f34  scripts/test_renderer_child_compatibility.py
+ed4d734a5f1122a0e84983484339c74be7caf4f38da7104962e7c92182d39fca  docs/developer/isolated-native-renderer-child-evidence/raw-evidence.zip
+ae419037cbf8394fd6c3d0cf0cfb4169e5a054bcb9a219e41e2a1446c857254b  docs/developer/isolated-native-renderer-child-evidence/raw-manifest.json
+5dd4c7be1d6f5c242b72a09670584512ec3e898105931e1dd9eedd2c48371485  docs/developer/isolated-native-renderer-child-evidence/verification.json

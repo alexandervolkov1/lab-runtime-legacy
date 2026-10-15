@@ -1,0 +1,99 @@
+{
+  "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+  "gate_count": 34,
+  "profiles": [
+    {
+      "profile": "dev",
+      "tests": {
+        "full": {
+          "passed": 522,
+          "ignored": 44
+        },
+        "handoff-provider": {
+          "passed": 16,
+          "ignored": 0
+        },
+        "parent-supervisor": {
+          "passed": 43,
+          "ignored": 0
+        },
+        "virtual": {
+          "passed": 13,
+          "ignored": 0
+        },
+        "native-supervisor": {
+          "passed": 7,
+          "ignored": 0
+        },
+        "native-ipc": {
+          "passed": 22,
+          "ignored": 0
+        },
+        "os-capsule": {
+          "passed": 1,
+          "ignored": 0
+        }
+      },
+      "borrowing_checks": 10,
+      "selected_view_accounted_bytes": 9134,
+      "selected_fixed_bytes": 9080,
+      "max_live_admitted_documents": 1,
+      "encoded_slots": 4,
+      "strict_v1_result": "D:\\rust_projects\\lab-runtime\\target\\b3b1-followup-native-dev-1792047944825347600\\result.json",
+      "strict_v1_connections": 2,
+      "strict_v1_mutations": 1,
+      "strict_v1_status_retry": 0
+    },
+    {
+      "profile": "release",
+      "tests": {
+        "full": {
+          "passed": 522,
+          "ignored": 44
+        },
+        "handoff-provider": {
+          "passed": 16,
+          "ignored": 0
+        },
+        "parent-supervisor": {
+          "passed": 43,
+          "ignored": 0
+        },
+        "virtual": {
+          "passed": 13,
+          "ignored": 0
+        },
+        "native-supervisor": {
+          "passed": 7,
+          "ignored": 0
+        },
+        "native-ipc": {
+          "passed": 22,
+          "ignored": 0
+        },
+        "os-capsule": {
+          "passed": 1,
+          "ignored": 0
+        }
+      },
+      "borrowing_checks": 10,
+      "selected_view_accounted_bytes": 9134,
+      "selected_fixed_bytes": 9080,
+      "max_live_admitted_documents": 1,
+      "encoded_slots": 4,
+      "strict_v1_result": "D:\\rust_projects\\lab-runtime\\target\\b3b1-followup-native-release-1792048511762741200\\result.json",
+      "strict_v1_connections": 2,
+      "strict_v1_mutations": 1,
+      "strict_v1_status_retry": 0
+    }
+  ],
+  "test_inventory_identical": 566,
+  "source_inputs_verified": 343,
+  "cpu_max_accounted": 4610337,
+  "cpu_allowance": 8388608,
+  "new_renderer_framebuffer": "BLOCKED/not run",
+  "new_renderer_process_memory": null,
+  "deployment_C": null,
+  "full_b3b4": "BLOCKED",
+  "activation_qualified": false
+}

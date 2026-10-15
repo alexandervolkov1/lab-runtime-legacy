@@ -196,6 +196,9 @@ fn deliver(
             source: 1,
         };
         let complete = replica.chunk(header, payload, now)?;
+        if complete && kind == Kind::Document {
+            let _decision = replica.admit_encoded_document()?;
+        }
         assert_eq!(complete, offset + payload.len() == bytes.len());
         assert_eq!(
             replica
@@ -252,7 +255,7 @@ fn maximum_canonical_document_fragmentation_atomic_validation_and_epoch_fences()
         &replica.pool().slots[accepted].bytes[..SNAPSHOT],
         doc.canonical_bytes()
     );
-    assert!(replica.expire(now + Duration::from_secs(2)).is_err());
+    assert!(replica.expire(now + Duration::from_secs(2)).is_ok());
     let mut fresh = Replica::new();
     deliver(
         &mut fresh,
@@ -515,6 +518,28 @@ fn selected_scalar_kinds_units_exact_integer_and_nonfinite_wire_rejection() {
         let mut bytes = vec![0; plan.length()];
         plan.fill(&mut bytes);
         reads::validate(&bytes).unwrap();
+        use crate::gui::readonly_v2::observation_source::{ReadOnlyProvider, Scalar};
+        let provider = super::selected_provider::SelectedSnapshot::decode(
+            Header {
+                kind: Kind::Observations,
+                ..document()
+            },
+            &bytes,
+            true,
+        )
+        .unwrap();
+        let view = provider.selected(&target).unwrap();
+        assert_eq!(view.fields.unit.unwrap().symbol, "U");
+        assert_eq!(view.fields.quality, Some(crate::model::ReadQuality::Good));
+        match (kind, view.fields.scalar) {
+            ("boolean", Scalar::Boolean(false))
+            | ("integer", Scalar::Integer(i64::MIN))
+            | ("enum", Scalar::Enum("standby")) => {}
+            ("float", Scalar::Number(value)) => assert_eq!(value.to_bits(), (-0.0f64).to_bits()),
+            ("text", Scalar::Text(value)) => assert_eq!(value, "ж".repeat(256)),
+            _ => panic!("selected provider changed typed scalar"),
+        }
+        drop(provider);
         let meta = reads::inspect(&bytes).unwrap()[0].unwrap();
         assert_eq!(
             (meta.generation, meta.source_at, meta.revision),

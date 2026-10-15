@@ -1,0 +1,596 @@
+[
+  {
+    "name": "environment",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-Command",
+      "rustc -vV; cargo -V; python --version; Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,OSArchitecture; git rev-parse HEAD; git status --short"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 0.833,
+    "log_sha256": "90c780e73061215f780a8eee581fe0c2725907df14accfda2b6bc6d789f8943a"
+  },
+  {
+    "name": "observer-reset",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--self-test-reset"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 0.206,
+    "log_sha256": "67ed6caff9398d24f7cd23d02cceb885f8997956448bb1b4743d8017c0170885"
+  },
+  {
+    "name": "dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 0.534,
+    "log_sha256": "45f75b19e5718ce74d75d27dc949e2b0cc21908a1e53dca4d31c24e03ebe8e09"
+  },
+  {
+    "name": "dev-inventory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--list"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 12.733,
+    "log_sha256": "740043fb14f420a46f05a791f01f2e90d19236790f6ede5687b0c17a5b3165e4"
+  },
+  {
+    "name": "dev-handoff-provider",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "private_ipc::handoff_tests",
+      "private_ipc::provider_tests",
+      "private_ipc::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 1.882,
+    "log_sha256": "536324f1a9ad855776d9c45acdb3e98ae4d8957f31fc187fc0af74dfd57de6b6"
+  },
+  {
+    "name": "dev-full",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 479.326,
+    "log_sha256": "fb6967b08313bf680315ece19948caf71c2bac413febfdb5010672f830e2f88a"
+  },
+  {
+    "name": "dev-parent-supervisor",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "parent::",
+      "supervisor::tests",
+      "architecture",
+      "ordinary_gui",
+      "gui::app::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 14.466,
+    "log_sha256": "46e0566c2f77bb48c5905fe556633d6f751ec9d2ffff155fb68173d792cff215"
+  },
+  {
+    "name": "dev-virtual",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "dev",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 9.484,
+    "log_sha256": "a008b9e88af35b7d785d58ddbd1253862d417c28dfe490b8190d20466da2d7ea"
+  },
+  {
+    "name": "dev-native-supervisor",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 17.882,
+    "log_sha256": "b52182b6a1f9b915ad8d963d4872bc8714f81283ded9c20b4d799674879e99c0"
+  },
+  {
+    "name": "dev-native-ipc",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 56.455,
+    "log_sha256": "4baaca1992ff642ba0cf4c8f97b418f0181d86b7ee408d0577b183f28f3c52c5"
+  },
+  {
+    "name": "dev-native-capsule",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-child-capsule.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 3.958,
+    "log_sha256": "435be60e2f8a6b5e263089987c2445f7f30d3b6d70fefc429ec0f1dacdd9ecc2"
+  },
+  {
+    "name": "dev-cpu-preview",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 1196.882,
+    "log_sha256": "a14f4c4c09743873d20fa26c6a018b29e0b846546a5461c5a4341d19af7fccf9"
+  },
+  {
+    "name": "dev-standalone-compile",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "dev",
+      "-CompileOnly"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 18.224,
+    "log_sha256": "fd2a9f62fd1d989a4de627d019bd18ef5537db1756ac853ad518da22a58ceb17"
+  },
+  {
+    "name": "dev-os-capsule",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 1.215,
+    "log_sha256": "d2130866b9afdbcc723e3af787b32b0fe45ae2bdeba32d7381259c2319f3961f"
+  },
+  {
+    "name": "dev-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "dev",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 10.011,
+    "log_sha256": "1dd33a63deb461375baebb7263a7eae1afa7c90ab07d93a5a4783d65dc6dfc37"
+  },
+  {
+    "name": "dev-v1-smoke",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "dev"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 3.672,
+    "log_sha256": "92eb1970a193c22ee8f80ac2a61e4ffd85ca87c8ee49db35529250f6cfb83832"
+  },
+  {
+    "name": "release-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 32.251,
+    "log_sha256": "fd2e8e294018425104661a7b64cfd8d568cc859ee8698880d1c55432ee74330f"
+  },
+  {
+    "name": "release-inventory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--list"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 68.019,
+    "log_sha256": "852890ae3c3ad5572a0406e6a0c390976882a1bec43a18de912e4db03a186381"
+  },
+  {
+    "name": "release-handoff-provider",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "private_ipc::handoff_tests",
+      "private_ipc::provider_tests",
+      "private_ipc::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 0.683,
+    "log_sha256": "a93ae6281ccbf5ff1d69cc7aa7bd9e0ebdb3b77a9d2a0e57f953c2550b23042e"
+  },
+  {
+    "name": "release-full",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 45.975,
+    "log_sha256": "b24daf120722d5e9cdcf755d193a93996682bfac7c02d90b8755ff4c3609fed4"
+  },
+  {
+    "name": "release-parent-supervisor",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "parent::",
+      "supervisor::tests",
+      "architecture",
+      "ordinary_gui",
+      "gui::app::tests",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 1.055,
+    "log_sha256": "4d8f93ecab95d9234dcfc74fc12ea242d983a01abf08aecf379296adac4e9368"
+  },
+  {
+    "name": "release-virtual",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--locked",
+      "--profile",
+      "release",
+      "--",
+      "runtime_acceptance::",
+      "--ignored",
+      "--skip",
+      "m17_4",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 6.915,
+    "log_sha256": "0e67d71d9fbf123ee3b2b8577e5266576d8fff4041a85c65a6683d38aa20eba0"
+  },
+  {
+    "name": "release-native-supervisor",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 15.719,
+    "log_sha256": "fcce90d5ca9d00abdf6605b0f7b7ceab15fcd74ddee37072db63deff2428b473"
+  },
+  {
+    "name": "release-native-ipc",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 72.666,
+    "log_sha256": "2606ae4a953cbed5fe4846837795e2e33e1a84504a45533e0f94c6ee4842c711"
+  },
+  {
+    "name": "release-native-capsule",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-child-capsule.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 106.635,
+    "log_sha256": "2d8d9bd92a8f449b0f4fb2daca6417aca97764d8f0917a0c63f192a9d15e2d83"
+  },
+  {
+    "name": "release-cpu-preview",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-renderer-allocation.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 160.442,
+    "log_sha256": "fb37ca58fcec0d19ca72edfa45b188cc8f65f1befa94a7aadc9e1f5931b6ad39"
+  },
+  {
+    "name": "release-standalone-compile",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-native-glow.ps1",
+      "-BuildProfile",
+      "release",
+      "-CompileOnly"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 26.879,
+    "log_sha256": "90f93cab8a620180ee240411273e69b984cf45a60b205c3061d22c0a1ccd1597"
+  },
+  {
+    "name": "release-os-capsule",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-windows-job",
+      "--locked",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "--nocapture"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 1.138,
+    "log_sha256": "c8758f86115d2c9d0a7d69553d6367e9bd200f314a4df186d048e50b0662a590"
+  },
+  {
+    "name": "release-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "-p",
+      "lab-windows-job",
+      "-p",
+      "lab-native-child",
+      "--locked",
+      "--all-targets",
+      "--all-features",
+      "--profile",
+      "release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 24.34,
+    "log_sha256": "abe936c4d5c02a8e0ebd7e9536cc00e6ffb76069a6c0903449514f10981b0932"
+  },
+  {
+    "name": "release-v1-smoke",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-B",
+      "scripts/support/v1-parent-pump-smoke.py",
+      "--profile",
+      "release"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 2.149,
+    "log_sha256": "0bb1e61eda82853d093c86a707f57768461772ace153f448e5527798fbffeeb7"
+  },
+  {
+    "name": "document-allocation",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-v2-allocation.ps1"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 9.741,
+    "log_sha256": "badc42a70a30a37ec4ce524b35d58b9fd021d47bb74bcd9b9a8102ea7521f980"
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 2.878,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "powershell-ast",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-Command",
+      "$items=@('scripts/test-native-child-capsule.ps1','scripts/test-native-glow.ps1','scripts/test-v2-renderer-allocation.ps1'); foreach ($item in $items) { $tokens=$null; $errors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $item),[ref]$tokens,[ref]$errors) | Out-Null; if ($errors.Count) { throw ($errors | Out-String) } }; Write-Output 'PowerShell AST PASS'"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 0.463,
+    "log_sha256": "aa51c91675cbe627d0c8873ec842bd8f45759021c3c3124b1238ae6424e22147"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+    "exit_code": 0,
+    "elapsed_seconds": 0.043,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

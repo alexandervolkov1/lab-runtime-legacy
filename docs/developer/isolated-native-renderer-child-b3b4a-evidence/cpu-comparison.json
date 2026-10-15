@@ -1,0 +1,92 @@
+[
+  {
+    "profile": "dev",
+    "suite": "geometry",
+    "rows": 119,
+    "max_accounted": 4610337,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_GEOMETRY_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "0568247ce0b69aa3c3f28fc69757a19485fdd3acfd920ab09917e609668a6ef8"
+  },
+  {
+    "profile": "dev",
+    "suite": "memory",
+    "rows": 125,
+    "max_accounted": 4458653,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_MEMORY_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "5e2eb8a3538b41688eed3f570808357d4cfea5967ca1d0c61281d4da7f97f95e"
+  },
+  {
+    "profile": "dev",
+    "suite": "frames",
+    "rows": 12,
+    "max_accounted": 4355499,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_FRAMES_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "6ed6794777083958ff14eceecd685376fcf524c762bfdb3799cb987ec516c11f"
+  },
+  {
+    "profile": "dev",
+    "suite": "host-no-upload",
+    "rows": 4,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_NO_UPLOAD_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "f01a36250ff4e2ed094540af72c01e12550afb6aec5f26fdd5f6d117f3c31541"
+  },
+  {
+    "profile": "dev",
+    "suite": "retirement",
+    "rows": 9,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/TERMINAL_GPU_PENDING_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "891ec6c210eb93c973fb9845de7766fc0f43125e9cc53083d8974afb8ba3fd83"
+  },
+  {
+    "profile": "release",
+    "suite": "geometry",
+    "rows": 119,
+    "max_accounted": 4610337,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_GEOMETRY_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "0568247ce0b69aa3c3f28fc69757a19485fdd3acfd920ab09917e609668a6ef8"
+  },
+  {
+    "profile": "release",
+    "suite": "memory",
+    "rows": 125,
+    "max_accounted": 4458653,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_MEMORY_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "5e2eb8a3538b41688eed3f570808357d4cfea5967ca1d0c61281d4da7f97f95e"
+  },
+  {
+    "profile": "release",
+    "suite": "frames",
+    "rows": 12,
+    "max_accounted": 4355499,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_FRAMES_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "6ed6794777083958ff14eceecd685376fcf524c762bfdb3799cb987ec516c11f"
+  },
+  {
+    "profile": "release",
+    "suite": "host-no-upload",
+    "rows": 4,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_NO_UPLOAD_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "f01a36250ff4e2ed094540af72c01e12550afb6aec5f26fdd5f6d117f3c31541"
+  },
+  {
+    "profile": "release",
+    "suite": "retirement",
+    "rows": 9,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/TERMINAL_GPU_PENDING_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "raw_sha256": "891ec6c210eb93c973fb9845de7766fc0f43125e9cc53083d8974afb8ba3fd83"
+  }
+]

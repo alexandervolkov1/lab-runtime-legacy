@@ -1,0 +1,88 @@
+{
+  "verdict": "BLOCKED: compatibility assessment only; isolated renderer not implemented",
+  "merge": {
+    "sha": "76c2ae718c7c1f368ccf7b9bb90dbb7540ab19a2",
+    "parents": [
+      "5190760603ddbef4e567dc6b08a52001e046fe78",
+      "0230c89045802ee78ed1872cee3697137eaabdad"
+    ],
+    "pr": 39,
+    "base_and_head_rechecked_before_ready": true,
+    "main_synced_and_clean_before_branch": true
+  },
+  "implementation_source_head": "76c2ae718c7c1f368ccf7b9bb90dbb7540ab19a2",
+  "historical_qualified_source": "82d8ad12e3cf71f7b389a21e94e456b214da9e0d",
+  "unchanged_code_script_example_git_blobs": 332,
+  "historical_raw_worktree_hash_matches": 177,
+  "remaining_155_inputs": "Git bytes exact; worktree differs only by CRLF/LF checkout normalization",
+  "audit_script_sha256": "e4058602b8c34a3af50501a26652bfdb4dcf0e5d8c2650c5e84ebfbeaaae6f34",
+  "profiles": [
+    {
+      "profile": "dev",
+      "controls": [
+        {
+          "name": "b2b2-control",
+          "exit_code": 0,
+          "diagnostic_codes": [],
+          "generated_source_sha256": "bb12406294884a091da2482ef4415393fc1c3fb82eadc4496e6a917e2a2588d4",
+          "diagnostics_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "workbench-forbid",
+          "exit_code": 1,
+          "diagnostic_codes": [
+            "E0453",
+            "unsafe_code"
+          ],
+          "generated_source_sha256": "58952555c945c363fbddc673b323f294d5c9b09b5d1137bab3c77eb119e2ecbf",
+          "diagnostics_sha256": "0e806cffb5065d158e9695b230c7d73b4d90d476f3cfae734c1404f1a81311d3"
+        }
+      ]
+    },
+    {
+      "profile": "release",
+      "controls": [
+        {
+          "name": "b2b2-control",
+          "exit_code": 0,
+          "diagnostic_codes": [],
+          "generated_source_sha256": "bb12406294884a091da2482ef4415393fc1c3fb82eadc4496e6a917e2a2588d4",
+          "diagnostics_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "workbench-forbid",
+          "exit_code": 1,
+          "diagnostic_codes": [
+            "E0453",
+            "unsafe_code"
+          ],
+          "generated_source_sha256": "58952555c945c363fbddc673b323f294d5c9b09b5d1137bab3c77eb119e2ecbf",
+          "diagnostics_sha256": "eada3f1af96f17a1260565973797f0a1b7be8cab1f98d5a4c21340dd552f1b79"
+        }
+      ]
+    }
+  ],
+  "raw_archive": {
+    "path": "raw-evidence.zip",
+    "sha256": "ed4d734a5f1122a0e84983484339c74be7caf4f38da7104962e7c92182d39fca",
+    "members": 18
+  },
+  "checks": {
+    "cargo_fmt": "PASS",
+    "git_diff_check": "PASS, staged assessment and evidence",
+    "python_ast": "PASS",
+    "markdown_local_links_checked": 35,
+    "archive_members_verified": 18
+  },
+  "existing_regressions": "Prior dev/release evidence retained only for exact unchanged inventoried inputs; full integration regression/native/memory gates not run for absent renderer child",
+  "new_child_binary": null,
+  "new_child_commit_peaks": null,
+  "candidate_deployment_cap_C": null,
+  "renderer_gpu_ipc_process_qualification": "BLOCKED/unrun",
+  "hundred_lifecycle_cycles": "BLOCKED/unrun",
+  "historical_hello_only": "UNQUALIFIED",
+  "M17_4_recorder_overlap": "BLOCKED",
+  "terminal_gpu_lifecycle": "BLOCKED",
+  "whole_host_rust_budget": "BLOCKED",
+  "activation_qualified": false
+}

@@ -133,6 +133,13 @@ fn main() { probe::run(); }
         @('second-host-preview', 'E0499', 'fn denied(d: &presentation::v2::AdmittedV2Document, s: &mut readonly_v2::host_session::HostSession<readonly_v2::texture_owner::CpuOnly>) { let mut a = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, s); let _b = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, s); a.retire_context(); }'),
         @('drop-host-session', 'E0505', 'fn denied(d: &presentation::v2::AdmittedV2Document, mut s: readonly_v2::host_session::HostSession<readonly_v2::texture_owner::CpuOnly>) { let mut p = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner: [0;16], revision: 0 }, &mut s); drop(s); p.retire_context(); }')
     )
+    $borrowCases += @(
+        @('handoff-live-document', 'E0499', 'fn denied<B: readonly_v2::texture_owner::FrameBackend>(o: &mut private_ipc::DocumentOwner<''_, B>) { let (d,h,s) = o.parts().unwrap(); let mut p = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner:h.epoch.owner, revision:h.epoch.revision }, s); let _ = o.release_retired(); p.retire_context(); }'),
+        @('handoff-admit-live-preview', 'E0499', 'fn denied<B: readonly_v2::texture_owner::FrameBackend>(r: &mut private_ipc::Replica, o: &mut private_ipc::DocumentOwner<''_, B>) { let (d,h,s) = o.parts().unwrap(); let mut p = readonly_v2::Preview::with_session(d, readonly_v2::PresentationEpoch { owner:h.epoch.owner, revision:h.epoch.revision }, s); let _ = r.admit_renderer_document(o); p.retire_context(); }'),
+        @('handoff-borrowed-assembly', 'E0502', 'fn denied(r: &mut private_ipc::Replica) { let bytes = r.candidate_bytes().unwrap(); r.stop(); std::hint::black_box(bytes); }'),
+        @('handoff-original-session', 'E0505', 'fn denied() { let mut s = readonly_v2::host_session::HostSession::new(readonly_v2::texture_owner::CpuOnly); let (_r,o) = private_ipc::Replica::renderer(&mut s); drop(s); std::hint::black_box(o.document()); }')
+    )
+    $borrowCases += ,@('selected-view-credit', 'E0499', 'fn denied(r: &mut private_ipc::Replica) { use readonly_v2::observation_source::ReadOnlyProvider; let v = r.selected_provider(std::time::Instant::now()).unwrap().unwrap(); r.stop(); std::hint::black_box(v.current()); }')
     foreach ($case in $borrowCases) {
         $deniedSource = Join-Path $probeDir "denied-$($case[0]).rs"
         [IO.File]::WriteAllText($deniedSource, $wrapper + "`n" + $case[2], [Text.UTF8Encoding]::new($false))

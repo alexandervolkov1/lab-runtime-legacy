@@ -1,0 +1,105 @@
+{
+  "source_head": "6b0646befac13d730d2718c9eb69798edf536ca5",
+  "baseline": "4eded4648ce96db3dcc9304fa20bd492e0ab1096",
+  "unchanged_critical_sources": [
+    {
+      "path": "scripts/support/native-glow-device.rs",
+      "git_sha256": "386e873526326ca5c560ef01234daf89b2672d9b79f19abebae281c22469543c"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/deletion.rs",
+      "git_sha256": "34547143536c973ece2fd2aec5a7aa9d380c6dd5975a713327db7b2dd2b7db44"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/readonly_v2/host_session.rs",
+      "git_sha256": "981a6fc6c678e5f716364ad8af9974c51b099183b6ae62d2d6993bace1d82bd6"
+    },
+    {
+      "path": "apps/lab-workbench/src/private_ipc/protocol.rs",
+      "git_sha256": "1809568f1d23dd33015b5b57990fed72cd31b692005bb634bf98cd245194b46a"
+    },
+    {
+      "path": "apps/lab-workbench/src/gui/app.rs",
+      "git_sha256": "f5832e0655731772b1897bdd55ff8ae6dfe81fe2bcdb465fc2fdb4cd774a5ff0"
+    },
+    {
+      "path": "apps/lab-workbench/src/dispatcher.rs",
+      "git_sha256": "e724d46e103f707abc6ffe8157283dcf46a0a86f039b1bb10de857cd01cc7c64"
+    },
+    {
+      "path": "apps/lab-workbench/src/external.rs",
+      "git_sha256": "c57f4a02fb2dc708de47c204adf639b2ed6e6b0ad669c18e5ab020bc8cc28754"
+    },
+    {
+      "path": "apps/lab-workbench/Cargo.toml",
+      "git_sha256": "a227b8c050ee8883a88ac9c02899b97e46535e24fa94f198cc7b92e7ce945f19"
+    }
+  ],
+  "third_party_lock_records_exact": 463,
+  "only_new_lock_package": "lab-native-child",
+  "protected_roots_unchanged": [
+    "apps/lab-runtime/",
+    "crates/",
+    "clients/",
+    "apps/lab-workbench/src/client/",
+    "apps/lab-workbench/src/model/",
+    "apps/lab-workbench/src/recovery/"
+  ],
+  "moved_code": [
+    {
+      "block": "generation_and_frame_errors",
+      "tokens_equal": true,
+      "normalized_token_sha256": "40cb6937ae9196402643c5b1d49ca6dd15abe69090d59c524b405dcd3993099e"
+    },
+    {
+      "block": "texture_key",
+      "tokens_equal": true,
+      "normalized_token_sha256": "f00c06ecfefb286e8570807a0fa34848b5528920d7e958b7699cbcc96592dd3a"
+    },
+    {
+      "block": "completion_values",
+      "tokens_equal": true,
+      "normalized_token_sha256": "937ed852e22a4a00f9e2b4b1c0c63d06adbb5c1be24a3f4fa1cf53e37ab3f426"
+    }
+  ],
+  "max_shapes": 192,
+  "changed_files": [
+    "Cargo.lock",
+    "Cargo.toml",
+    "apps/lab-native-child/Cargo.toml",
+    "apps/lab-native-child/src/main.rs",
+    "apps/lab-native-child/src/readonly_v2.rs",
+    "apps/lab-workbench/src/gui/mod.rs",
+    "apps/lab-workbench/src/gui/readonly_v2/completion.rs",
+    "apps/lab-workbench/src/gui/readonly_v2/frame.rs",
+    "apps/lab-workbench/src/gui/readonly_v2/mod.rs",
+    "apps/lab-workbench/src/gui/readonly_v2/native_types.rs",
+    "apps/lab-workbench/src/gui/readonly_v2/observation_source.rs",
+    "apps/lab-workbench/src/gui/readonly_v2/texture_owner.rs",
+    "apps/lab-workbench/src/parent/tests.rs",
+    "apps/lab-workbench/src/presentation/v2/admission.rs",
+    "apps/lab-workbench/src/presentation/v2/mod.rs",
+    "apps/lab-workbench/src/private_ipc/document_owner.rs",
+    "apps/lab-workbench/src/private_ipc/fixture.rs",
+    "apps/lab-workbench/src/private_ipc/handoff_tests.rs",
+    "apps/lab-workbench/src/private_ipc/mod.rs",
+    "apps/lab-workbench/src/private_ipc/native_tests.rs",
+    "apps/lab-workbench/src/private_ipc/provider_tests.rs",
+    "apps/lab-workbench/src/private_ipc/reads.rs",
+    "apps/lab-workbench/src/private_ipc/replica.rs",
+    "apps/lab-workbench/src/private_ipc/selected_provider.rs",
+    "apps/lab-workbench/src/private_ipc/tests.rs",
+    "apps/lab-workbench/src/supervisor/native_tests.rs",
+    "docs/developer/native-child-capsule-safety.md",
+    "scripts/test-native-child-capsule.ps1",
+    "scripts/test-native-glow.ps1",
+    "scripts/test-v2-renderer-allocation.ps1"
+  ],
+  "scope": "No native execution, GPU lifecycle, child process-memory, C or activation qualification",
+  "native_observer_fix": {
+    "source": "apps/lab-workbench/src/supervisor/native_tests.rs",
+    "failure": "status try_lock returned Busy; test observer unwrapped it",
+    "change": "sample original ExitUnconfirmed episode using the existing bounded wait_status; exact incarnation and single termination assertions retained",
+    "production_supervisor_unchanged": true
+  }
+}

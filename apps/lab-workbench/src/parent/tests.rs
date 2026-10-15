@@ -513,7 +513,7 @@ pub(crate) fn assert_native_private_ipc_continuity(mode: &str) {
         assert!(Instant::now() < deadline);
         thread::yield_now();
     }
-    if mode == "slow" {
+    if mode != "hang" {
         pump.supervisor()
             .unwrap()
             .wait_status(|s| s.phase == Phase::Ready);
@@ -567,6 +567,34 @@ pub(crate) fn assert_native_private_ipc_continuity(mode: &str) {
         response(&mut stream, "ipc-replace")["result"]["presentation_revision"],
         "2"
     );
+    if mode == "handoff" {
+        let deadline = Instant::now() + Duration::from_secs(4);
+        while !bridge.status().is_ok_and(|s| s.diagnostic_records >= 1) {
+            assert!(
+                Instant::now() < deadline,
+                "complete handoff diagnostic missing"
+            );
+            thread::yield_now();
+        }
+        let deadline = Instant::now() + Duration::from_secs(2);
+        loop {
+            if let Ok(status) = bridge.status() {
+                assert_eq!(status.applied[0], 1);
+                break;
+            }
+            assert!(Instant::now() < deadline);
+            thread::yield_now();
+        }
+        pump.supervisor()
+            .unwrap()
+            .wait_status(|s| s.phase == Phase::Ready);
+    } else if mode == "handoff-crash" {
+        let exited = pump
+            .supervisor()
+            .unwrap()
+            .wait_status(|s| s.phase == Phase::ExitedContained);
+        assert_eq!(exited.exit_code, Some(73));
+    }
     request(
         &mut stream,
         "ipc-rec",

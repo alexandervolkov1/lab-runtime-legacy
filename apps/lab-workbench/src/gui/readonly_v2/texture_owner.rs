@@ -7,12 +7,7 @@ use eframe::egui::{self, TextureId, epaint::ImageDelta};
 pub(crate) const MAX_TEXTURES: usize = 8;
 pub(crate) const MAX_UPDATES: usize = 16;
 
-/// A texture name is meaningful only within its creating Context generation.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) struct TextureKey {
-    pub(crate) generation: ContextGeneration,
-    pub(crate) id: TextureId,
-}
+pub(crate) use super::native_types::TextureKey;
 
 /// Trusted serial host. Every operation may start work before reporting failure.
 /// `wait` observes ALL dependent uses, including partial upload/platform failure;

@@ -1,6 +1,9 @@
 //! Closed selected-read codec. Validation borrows encoded bytes; no reconstructed
 //! RuntimeObservations map, JSON history or second experiment owner is created.
 use super::protocol::*;
+use crate::gui::readonly_v2::observation_source::{
+    Fields, Origin as ViewOrigin, Scalar, Trace, Unit,
+};
 use crate::model::{
     Freshness, ReadAbsence, ReadBinding, ReadPayload, ReadQuality, RuntimeObservations, ScalarKind,
     ScalarValue, resolve_read,
@@ -9,7 +12,7 @@ use crate::presentation::RuntimeRef;
 use std::io::Write;
 
 const TEXT: usize = 512;
-const REFERENCE: usize = 4096;
+pub(super) const REFERENCE: usize = 4096;
 const BOOT: usize = 128;
 const PROJECTION: usize = 128;
 
@@ -413,6 +416,12 @@ pub(crate) struct ReadMeta<'a> {
     pub(crate) points: usize,
 }
 pub(crate) fn inspect(bytes: &[u8]) -> Result<[Option<ReadMeta<'_>>; TRACES]> {
+    inspect_with(bytes, |_, _, _| {})
+}
+pub(super) fn inspect_with<'a>(
+    bytes: &'a [u8],
+    mut consume: impl FnMut(usize, RuntimeRef, Fields<'a>),
+) -> Result<[Option<ReadMeta<'a>>; TRACES]> {
     if bytes.len() > SNAPSHOT {
         return Err("selected read byte bound");
     }
@@ -476,51 +485,67 @@ pub(crate) fn inspect(bytes: &[u8]) -> Result<[Option<ReadMeta<'_>>; TRACES]> {
         if payload != 0 && matches!(quality, 2 | 3) {
             return Err("value with unavailable quality");
         }
-        match payload {
+        let scalar = match payload {
             0 => {
                 let absence = reader.byte()?;
                 if absence > 6 || (origin == 0 && (absence != 0 || quality != 0)) {
                     return Err("selected absence");
                 }
+                Scalar::Absent(match absence {
+                    0 => ReadAbsence::MissingObservation,
+                    1 => ReadAbsence::MissingValue,
+                    2 => ReadAbsence::Unavailable,
+                    3 => ReadAbsence::NotObserved,
+                    4 => ReadAbsence::MissingMetadata,
+                    5 => ReadAbsence::IncompatibleMetadata,
+                    _ => ReadAbsence::Unsupported,
+                })
             }
             1 => {
-                if origin == 0 || reader.byte()? > 1 {
+                let value = reader.byte()?;
+                if origin == 0 || value > 1 {
                     return Err("selected Boolean");
                 }
+                Scalar::Boolean(value != 0)
             }
             2 => {
                 if origin == 0 {
                     return Err("unsourced Integer");
                 }
-                reader.integer()?;
+                Scalar::Integer(reader.integer()? as i64)
             }
             3 => {
                 if origin == 0 {
                     return Err("unsourced Number");
                 }
-                reader.number()?;
+                Scalar::Number(reader.number()?)
             }
             4 | 5 => {
                 if origin == 0 {
                     return Err("unsourced scalar");
                 }
-                reader.text(TEXT)?;
+                let text = reader.text(TEXT)?;
+                if payload == 4 {
+                    Scalar::Text(text)
+                } else {
+                    Scalar::Enum(text)
+                }
             }
             _ => return Err("selected scalar variant"),
-        }
-        match reader.byte()? {
-            0 => {}
-            1 => {
-                reader.text(32)?;
-                reader.text(16)?;
-            }
+        };
+        let unit = match reader.byte()? {
+            0 => None,
+            1 => Some(Unit {
+                id: reader.text(32)?,
+                symbol: reader.text(16)?,
+            }),
             _ => return Err("selected unit variant"),
-        }
+        };
         let entity_revision = reader.optional()?;
         let generation = reader.optional()?;
-        reader.optional()?; // Exact observed_at retained, not used as source time.
+        let observed_at = reader.optional()?;
         let source_at = reader.optional()?;
-        reader.optional()?; // Original event cursor, independent of projection revision.
+        let cursor = reader.optional()?;
         let floor = match reader.byte()? {
             0 => None,
             1 => Some(reader.number()?),
@@ -534,12 +559,50 @@ pub(crate) fn inspect(bytes: &[u8]) -> Result<[Option<ReadMeta<'_>>; TRACES]> {
         if count != 0 && (origin == 0 || floor.is_none()) {
             return Err("unsourced live points");
         }
+        let point_start = reader.used;
         for _ in 0..count {
             if reader.number()? < floor.unwrap() {
                 return Err("point before witnessed source epoch");
             }
             reader.number()?;
         }
+        consume(
+            slot,
+            target,
+            Fields {
+                scalar,
+                kind: match kind {
+                    0 => None,
+                    1 => Some(ScalarKind::Boolean),
+                    2 => Some(ScalarKind::Integer),
+                    3 => Some(ScalarKind::Number),
+                    4 => Some(ScalarKind::Text),
+                    _ => Some(ScalarKind::Enum),
+                },
+                quality: match quality {
+                    0 => None,
+                    1 => Some(ReadQuality::Good),
+                    2 => Some(ReadQuality::Unavailable),
+                    _ => Some(ReadQuality::NotObserved),
+                },
+                unit,
+                freshness: decode_freshness(freshness),
+                origin: ViewOrigin {
+                    boot,
+                    projection,
+                    revision,
+                    entity_revision,
+                    generation,
+                    observed_at,
+                    source_at,
+                    cursor,
+                },
+                trace: Trace {
+                    encoded: &bytes[point_start..reader.used],
+                    source_floor: floor,
+                },
+            },
+        );
         references[slot] = Some(ReadMeta {
             reference,
             boot,
@@ -557,6 +620,14 @@ pub(crate) fn inspect(bytes: &[u8]) -> Result<[Option<ReadMeta<'_>>; TRACES]> {
         return Err("trailing selected bytes");
     }
     Ok(references)
+}
+pub(super) fn decode_freshness(tag: u8) -> Freshness {
+    match tag {
+        0 => Freshness::Unknown,
+        1 => Freshness::Rebuilding,
+        2 => Freshness::Fresh,
+        _ => Freshness::Stale,
+    }
 }
 
 /// Receiving a newer transport ordinal never authorizes older source data or a
