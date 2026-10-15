@@ -33,5 +33,6 @@
     "Attempt5 atdca775f proved empty own-object ledger but exact Close challenge was consumed by interimStatus: parent correctly ExitedContained at exit0. Commitc1bf482 preserves the Close challenge until real own-object release; attempt6 passes.",
     "Early native attempts2,4,5,6 and old standalone controls before per-run identity archival have source/raw evidence but some intermediate binary hashes were overwritten and are unavailable. No hash is fabricated. Final runs archive binary identities before execution.",
     "Fault dev attempt1 at823c1a3 passed5 tests but owner stall happened before Ready (StartupDeadline). Final source1d297ad waits for actual frame progress publication before the injected stall and observes HeartbeatDeadline. Both attempts are retained."
-  ]
+  ],
+  "artifact_verification_followup": "Artifact verifier variable shadow was corrected without altering gate results. Outer SHA inventory was changed from local CRLF Markdown bytes to canonical Git-blob bytes so independent downloads verify consistently. Raw archive/RGBA and binary hashes are unchanged."
 }
