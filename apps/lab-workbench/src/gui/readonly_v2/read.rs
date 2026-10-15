@@ -122,8 +122,13 @@ pub(super) fn entity(
         typed(ui, observations, &target, binding, None, None);
     } else {
         if let Some(value) = observations.raw_entity(&target) {
-            label(ui, format!("Value (cached): {}", entity_text(value)));
-            freshness_state(ui, observations.display_freshness());
+            label(ui, format!("Value (cached): {}", entity_text(value.value)));
+            let state = match observations.display_freshness() {
+                Freshness::Unknown | Freshness::Rebuilding => observations.display_freshness(),
+                Freshness::Stale if value.freshness == Freshness::Fresh => Freshness::Stale,
+                _ => value.freshness,
+            };
+            freshness_state(ui, state);
         } else if observations.supports_raw_entities() {
             label(ui, "Value (cached): no Runtime observation");
             freshness(ui, observations, None);

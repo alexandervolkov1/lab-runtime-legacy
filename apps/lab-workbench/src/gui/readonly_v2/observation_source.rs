@@ -145,6 +145,12 @@ impl SelectedRead<'_> {
         }
     }
 }
+/// Optional parent-cache entity view; the value and its own freshness travel
+/// together. A global Fresh cache cannot promote an individually Stale entity.
+pub(crate) struct RawEntity<'a> {
+    pub(crate) value: &'a serde_json::Value,
+    pub(crate) freshness: Freshness,
+}
 pub(crate) trait ReadOnlyProvider {
     /// Parent-cache adapters have no child epoch/incarnation. Absence is explicit.
     fn epoch(&self) -> Option<PresentationEpoch>;
@@ -164,7 +170,7 @@ pub(crate) trait ReadOnlyProvider {
     fn supports_raw_entities(&self) -> bool {
         false
     }
-    fn raw_entity(&self, _target: &RuntimeRef) -> Option<&serde_json::Value> {
+    fn raw_entity(&self, _target: &RuntimeRef) -> Option<RawEntity<'_>> {
         None
     }
     fn display_freshness(&self) -> Freshness {

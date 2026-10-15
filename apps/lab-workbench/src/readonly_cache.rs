@@ -74,7 +74,14 @@ impl ReadOnlyProvider for RuntimeObservations {
                         symbol: &u.symbol,
                     }),
                 quality: reading.as_ref().and_then(|r| r.quality),
-                freshness: reading.as_ref().map_or(self.freshness, |r| r.freshness),
+                freshness: reading.as_ref().map_or_else(
+                    || {
+                        observation.map_or(self.freshness, |(_, entry)| {
+                            cache_freshness(self.freshness, entry.freshness)
+                        })
+                    },
+                    |r| r.freshness,
+                ),
                 origin: Origin {
                     boot: None,
                     projection: None,
@@ -99,7 +106,18 @@ impl ReadOnlyProvider for RuntimeObservations {
     fn supports_raw_entities(&self) -> bool {
         true
     }
-    fn raw_entity(&self, target: &RuntimeRef) -> Option<&serde_json::Value> {
-        self.entities.get(target).map(|entry| &entry.value)
+    fn raw_entity(&self, target: &RuntimeRef) -> Option<RawEntity<'_>> {
+        self.entities.get(target).map(|entry| RawEntity {
+            value: &entry.value,
+            freshness: cache_freshness(self.freshness, entry.freshness),
+        })
+    }
+}
+
+fn cache_freshness(overall: Freshness, entry: Freshness) -> Freshness {
+    if entry == Freshness::Fresh {
+        overall
+    } else {
+        entry
     }
 }
