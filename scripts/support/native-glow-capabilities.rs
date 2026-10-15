@@ -3,7 +3,7 @@
 //! calls and grants no GPU ownership, allocation success or completion evidence.
 
 use serde::Serialize;
-use std::fmt;
+use std::{any::Any, fmt};
 
 /// Entry points used by Device and by the pinned Glow context loader.
 pub const REQUIRED_SYMBOLS: &[&str] = &[
@@ -80,6 +80,17 @@ pub enum FailureKind {
     UnsupportedCapability,
     /// Initialization failed without proving an absent graphics capability.
     InitializationFailure,
+}
+
+/// Classify only documented API rejections; preserve unknown/resource failures.
+/// WGL_ARB_create_context defines 0x2095/0x2096 as invalid version/profile.
+/// These codes have no such meaning on another platform API.
+pub fn context_failure(api: &str, not_supported: bool, raw_code: Option<i64>) -> FailureKind {
+    if not_supported || (api == "WGL" && matches!(raw_code, Some(0x2095 | 0x2096))) {
+        FailureKind::UnsupportedCapability
+    } else {
+        FailureKind::InitializationFailure
+    }
 }
 
 /// Names are deliberately absent from the numerical admission input.
@@ -202,6 +213,24 @@ impl Default for Report {
             error_kind: None,
             error: None,
         }
+    }
+}
+
+/// Preserve a constructor unwind before any own GPU payload can exist.
+/// The config picker cannot return Result through glutin; it uses the typed
+/// capability payload. This helper must never wrap runtime GPU work/retirement.
+pub fn initialization_panic(report: &mut Report, payload: Box<dyn Any + Send>) -> String {
+    if let Some(error) = payload.downcast_ref::<UnsupportedCapability>() {
+        report.error_kind = Some(FailureKind::UnsupportedCapability);
+        error.to_string()
+    } else {
+        report.error_kind = Some(FailureKind::InitializationFailure);
+        let message = payload
+            .downcast_ref::<String>()
+            .map(String::as_str)
+            .or_else(|| payload.downcast_ref::<&str>().copied())
+            .unwrap_or("unknown initialization panic");
+        message.chars().take(512).collect()
     }
 }
 
@@ -347,5 +376,47 @@ mod tests {
             assert_eq!(encoded["error_kind"], format!("{kind:?}"));
             assert!(error.to_string().contains("original reason"));
         }
+    }
+    #[test]
+    fn documented_wgl_api_errors_do_not_hide_resource_failures() {
+        for code in [0x2095, 0x2096] {
+            assert_eq!(
+                context_failure("WGL", false, Some(code)),
+                FailureKind::UnsupportedCapability
+            );
+            assert_eq!(
+                context_failure("EGL", false, Some(code)),
+                FailureKind::InitializationFailure
+            );
+        }
+        assert_eq!(
+            context_failure("EGL", true, None),
+            FailureKind::UnsupportedCapability
+        );
+        for code in [None, Some(8), Some(14), Some(1450)] {
+            assert_eq!(
+                context_failure("WGL", false, code),
+                FailureKind::InitializationFailure
+            );
+        }
+    }
+    #[test]
+    fn empty_config_and_loader_unwinds_retain_their_original_stage() {
+        let mut report = Report::default();
+        let reason = initialization_panic(
+            &mut report,
+            Box::new(UnsupportedCapability("no matching framebuffer config")),
+        );
+        assert_eq!(report.error_kind, Some(FailureKind::UnsupportedCapability));
+        assert_eq!(report.stage, "window_display");
+        assert!(reason.contains("no matching framebuffer config"));
+        report.stage = "glow_loader";
+        assert_eq!(
+            initialization_panic(&mut report, Box::new("original loader diagnostic")),
+            "original loader diagnostic"
+        );
+        assert_eq!(report.error_kind, Some(FailureKind::InitializationFailure));
+        assert_eq!(report.stage, "glow_loader");
+        assert!(!report.admitted);
     }
 }

@@ -46,7 +46,10 @@ reported as **UnsupportedCapability**, with the failed requirement. Other
 initialization failures retain **InitializationFailure** and their original stage
 and diagnostic, including glutin errors and a caught Glow loader panic before
 own GPU objects exist. A glutin context error explicitly marked NotSupported is
-classified UnsupportedCapability. Unknown initialization failures are not
+classified UnsupportedCapability, as are documented WGL invalid-version/profile
+codes and an absent matching framebuffer configuration. The constructor captures
+Rust initialization unwinds before any own GPU payload exists; runtime GPU work
+and retirement never cross that catch boundary. Unknown/resource initialization failures are not
 relabelled as unsupported hardware. There is no UnqualifiedHardware category.
 
 ## Diagnostics and ownership

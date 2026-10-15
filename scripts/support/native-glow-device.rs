@@ -129,7 +129,13 @@ pub(super) struct Device {
 impl Device {
     pub fn new(events: &ActiveEventLoop) -> std::result::Result<Self, InitializationError> {
         let mut report = Report::default();
-        let result = Self::initialize(events, &mut report);
+        // initialize creates no own textures/programs/buffers/VAOs/fences. Only
+        // this pre-payload constructor may unwind into an initialization record;
+        // submitted work and retained GPU roots never cross this catch boundary.
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            Self::initialize(events, &mut report)
+        }))
+        .unwrap_or_else(|payload| Err(capabilities::initialization_panic(&mut report, payload)));
         report.admitted = result.is_ok();
         if let Err(error) = &result {
             report.error = Some(error.clone());
@@ -170,9 +176,11 @@ impl Device {
                     .with_depth_size(0)
                     .with_stencil_size(0),
                 |configs| {
-                    configs
-                        .min_by_key(|c| c.num_samples())
-                        .expect("GL config supplied by glutin")
+                    configs.min_by_key(|c| c.num_samples()).unwrap_or_else(|| {
+                        std::panic::panic_any(UnsupportedCapability(
+                            "no matching default framebuffer configuration",
+                        ))
+                    })
                 },
             )
             .map_err(|e| e.to_string())?;
@@ -222,9 +230,11 @@ impl Device {
                     .display()
                     .create_context(&config, &attrs)
                     .map_err(|e| {
-                        if e.not_supported() {
-                            report.error_kind = Some(FailureKind::UnsupportedCapability);
-                        }
+                        report.error_kind = Some(capabilities::context_failure(
+                            report.diagnostics.platform_api,
+                            e.not_supported(),
+                            e.raw_code(),
+                        ));
                         e.to_string()
                     })?,
                 config
@@ -253,24 +263,13 @@ impl Device {
         report.required_entry_points = capabilities::REQUIRED_SYMBOLS.len();
         report.stage = "glow_loader";
         // SAFETY: function pointers come from this live current desktop GL display.
-        let gl = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| unsafe {
+        let gl = unsafe {
             glow::Context::from_loader_function(|name| {
                 config
                     .display()
                     .get_proc_address(&CString::new(name).expect("GL symbol contains no NUL"))
             })
-        }))
-        .map_err(|payload| {
-            let message = payload
-                .downcast_ref::<String>()
-                .map(String::as_str)
-                .or_else(|| payload.downcast_ref::<&str>().copied())
-                .unwrap_or("unknown Glow loader panic");
-            format!(
-                "Glow loader: {}",
-                message.chars().take(512).collect::<String>()
-            )
-        })?;
+        };
         let is_vao = config
             .display()
             .get_proc_address(&CString::new("glIsVertexArray").unwrap());
