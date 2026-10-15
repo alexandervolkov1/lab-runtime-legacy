@@ -4,10 +4,10 @@ use super::{protocol::*, reads};
 use crate::{
     gui::readonly_v2::{
         PresentationEpoch,
-        observation_source::{Fields, ReadOnlyProvider, SelectedRead},
+        observation_source::{Fields, ReadOnlyProvider, SelectedRead, Trace},
     },
-    model::Freshness,
     presentation::{ConfigurationOwner, RuntimeRef},
+    readonly_values::{Freshness, ReadBinding},
 };
 
 struct Entry<'a> {
@@ -70,14 +70,14 @@ fn target_capacity(target: &RuntimeRef) -> usize {
     }
 }
 impl ReadOnlyProvider for SelectedSnapshot<'_> {
-    fn epoch(&self) -> PresentationEpoch {
-        PresentationEpoch {
+    fn epoch(&self) -> Option<PresentationEpoch> {
+        Some(PresentationEpoch {
             owner: self.header.epoch.owner,
             revision: self.header.epoch.revision,
-        }
+        })
     }
-    fn incarnation(&self) -> u64 {
-        self.header.identity.incarnation
+    fn incarnation(&self) -> Option<u64> {
+        Some(self.header.identity.incarnation)
     }
     fn original_freshness(&self) -> Freshness {
         self.freshness
@@ -85,7 +85,24 @@ impl ReadOnlyProvider for SelectedSnapshot<'_> {
     fn current(&self) -> bool {
         self.current
     }
-    fn selected(&self, target: &RuntimeRef) -> Option<SelectedRead<'_>> {
+    fn with_selected(
+        &self,
+        target: &RuntimeRef,
+        binding: ReadBinding,
+        consume: &mut dyn FnMut(Option<SelectedRead<'_>>),
+    ) {
+        consume(
+            (ReadBinding::for_target(target) == Some(binding))
+                .then(|| self.selected(target))
+                .flatten(),
+        );
+    }
+    fn trace(&self, target: &RuntimeRef) -> Option<Trace<'_>> {
+        self.selected(target).map(|read| read.fields.trace)
+    }
+}
+impl SelectedSnapshot<'_> {
+    pub(crate) fn selected(&self, target: &RuntimeRef) -> Option<SelectedRead<'_>> {
         self.entries
             .iter()
             .flatten()

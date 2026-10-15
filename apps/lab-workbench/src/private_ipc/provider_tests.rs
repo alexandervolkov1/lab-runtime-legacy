@@ -81,41 +81,47 @@ fn header() -> Header {
     }
 }
 fn consume(provider: &impl ReadOnlyProvider, target: &RuntimeRef) {
-    assert_eq!(provider.epoch().revision, 4);
-    assert_eq!(provider.incarnation(), 9);
+    assert_eq!(provider.epoch().unwrap().revision, 4);
+    assert_eq!(provider.incarnation(), Some(9));
     assert_eq!(provider.original_freshness(), Freshness::Fresh);
-    let selected = provider.selected(target).unwrap();
-    assert_eq!(selected.target, target);
-    assert_eq!(selected.fields.scalar, Scalar::Number(-0.0));
-    let Scalar::Number(value) = selected.fields.scalar else {
-        panic!("typed Number missing")
-    };
-    assert_eq!(value.to_bits(), (-0.0f64).to_bits());
-    assert_eq!(selected.fields.kind, Some(ScalarKind::Number));
-    let origin = selected.fields.origin;
-    assert_eq!(origin.boot, Some("original-runtime-boot"));
-    assert_eq!(origin.projection, Some("frozen-projection"));
-    assert_eq!(origin.revision, Some(20));
-    assert_eq!(origin.entity_revision, Some(9));
-    assert_eq!(origin.cursor, Some(20));
-    assert_eq!(origin.generation, None);
-    assert_eq!(selected.fields.unit.unwrap().symbol, "°C");
-    assert_eq!(selected.fields.trace.len(), POINTS / TRACES);
-    assert_eq!(selected.fields.trace.source_floor, Some(0.0));
-    assert_eq!(
-        selected
-            .fields
-            .trace
-            .points()
-            .next()
-            .unwrap()
-            .value
-            .to_bits(),
-        (-0.0f64).to_bits()
-    );
-    assert_eq!(
-        selected.fields.trace.points().last().unwrap().time_seconds,
-        511.0
+    provider.with_selected(
+        target,
+        crate::readonly_values::ReadBinding::for_target(target).unwrap(),
+        &mut |selected| {
+            let selected = selected.unwrap();
+            assert_eq!(selected.target, target);
+            assert_eq!(selected.fields.scalar, Scalar::Number(-0.0));
+            let Scalar::Number(value) = selected.fields.scalar else {
+                panic!("typed Number missing")
+            };
+            assert_eq!(value.to_bits(), (-0.0f64).to_bits());
+            assert_eq!(selected.fields.kind, Some(ScalarKind::Number));
+            let origin = selected.fields.origin;
+            assert_eq!(origin.boot, Some("original-runtime-boot"));
+            assert_eq!(origin.projection, Some("frozen-projection"));
+            assert_eq!(origin.revision, Some(20));
+            assert_eq!(origin.entity_revision, Some(9));
+            assert_eq!(origin.cursor, Some(20));
+            assert_eq!(origin.generation, None);
+            assert_eq!(selected.fields.unit.unwrap().symbol, "°C");
+            assert_eq!(selected.fields.trace.len(), POINTS / TRACES);
+            assert_eq!(selected.fields.trace.source_floor, Some(0.0));
+            assert_eq!(
+                selected
+                    .fields
+                    .trace
+                    .points()
+                    .next()
+                    .unwrap()
+                    .value
+                    .to_bits(),
+                (-0.0f64).to_bits()
+            );
+            assert_eq!(
+                selected.fields.trace.points().last().unwrap().time_seconds,
+                511.0
+            );
+        },
     );
 }
 #[test]
@@ -149,7 +155,8 @@ fn selected_provider_preserves_exact_source_scalars_units_and_borrowed_maximum_t
         .unwrap()
         .fields
         .trace
-        .encoded
+        .encoded_bytes()
+        .unwrap()
         .as_ptr() as usize;
     assert!((source as usize..source as usize + size).contains(&address));
     drop(provider);

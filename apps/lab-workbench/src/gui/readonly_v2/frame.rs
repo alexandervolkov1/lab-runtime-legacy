@@ -197,7 +197,10 @@ mod tests {
         );
         let mut preview = Preview::new(&doc, crate::gui::readonly_v2::plot_widget_tests::EPOCH);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         assert!(matches!(
             frame.tessellate_with(|_, _, _| Err(FrameError::Tessellation)),

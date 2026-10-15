@@ -248,7 +248,10 @@ fn once_only_tessellation_and_no_completion_without_tessellation() {
     let doc = fixtures::admit(&fixtures::syntax(1, false));
     let mut preview = Preview::new(&doc, EPOCH);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     assert!(!frame.tessellate().unwrap().is_empty());
     assert!(matches!(
@@ -258,7 +261,10 @@ fn once_only_tessellation_and_no_completion_without_tessellation() {
     assert_eq!(frame.finish(), Err(FrameError::AlreadyTessellated));
     assert_eq!(
         preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default()
+            )
             .unwrap()
             .finish(),
         Err(FrameError::NotTessellated)
@@ -274,7 +280,10 @@ fn explicit_discard_and_drop_before_and_after_tessellation_retire() {
         for explicit in [false, true] {
             let before = generation(&mut preview, &Default::default());
             let mut frame = preview
-                .run(&Default::default(), Default::default())
+                .run(
+                    &crate::model::RuntimeObservations::default(),
+                    Default::default(),
+                )
                 .unwrap();
             if tessellate {
                 frame.tessellate().unwrap();
@@ -303,11 +312,17 @@ fn forgotten_guard_blocks_next_frame_until_explicit_retirement_or_shutdown() {
     let doc = fixtures::admit(&fixtures::syntax(1, false));
     let mut preview = Preview::new(&doc, EPOCH);
     let frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     std::mem::forget(frame);
     assert!(matches!(
-        preview.run(&Default::default(), Default::default()),
+        preview.run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default()
+        ),
         Err(FrameError::OutstandingFrame)
     ));
     assert!(preview.pending.is_some());
@@ -316,7 +331,10 @@ fn forgotten_guard_blocks_next_frame_until_explicit_retirement_or_shutdown() {
     assert_eq!(preview.last_outcome(), Some(FrameOutcome::Abandoned));
     std::mem::forget(
         preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap(),
     );
     drop(preview); // Payload is owned by Preview, not by the forgotten guard.
@@ -329,7 +347,10 @@ fn preparation_failure_returns_no_ack_and_retires_previous_resources() {
     generation(&mut preview, &Default::default());
     preview.set_allowance(0);
     assert!(matches!(
-        preview.run(&Default::default(), Default::default()),
+        preview.run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default()
+        ),
         Err(FrameError::Preparation(_))
     ));
     assert!(preview.pending.is_none() && preview.context.is_none());
@@ -355,7 +376,10 @@ fn host_faults_drain_partial_work_then_free_without_success_or_retry() {
         let mut session = HostSession::new(Mock(log.clone()));
         let mut preview = Preview::with_session(&doc, EPOCH, &mut session);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         let generation = frame.generation();
         frame.tessellate().unwrap();
@@ -394,7 +418,10 @@ fn warmed_frame_faults_without_uploads_never_acknowledge_or_retry() {
         let mut session = HostSession::new(Mock(log.clone()));
         let mut preview = Preview::with_session(&doc, EPOCH, &mut session);
         let mut warm = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         let generation = warm.generation();
         warm.tessellate().unwrap();
@@ -403,7 +430,10 @@ fn warmed_frame_faults_without_uploads_never_acknowledge_or_retry() {
         log.borrow_mut().fault = Some(error);
 
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         assert_eq!(frame.generation(), generation);
         frame.tessellate().unwrap();
@@ -442,7 +472,10 @@ fn host_shutdown_and_cancel_retire_even_without_final_free_delta() {
     let mut session = HostSession::new(Mock(log.clone()));
     let mut preview = Preview::with_session(&doc, EPOCH, &mut session);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     let first = frame.generation();
     frame.tessellate().unwrap();
@@ -461,7 +494,10 @@ fn host_shutdown_and_cancel_retire_even_without_final_free_delta() {
         matches!(log.borrow().events.last(), Some(Event::Free(key)) if key.generation == first)
     );
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     let second = frame.generation();
     assert_ne!(first, second);
@@ -471,7 +507,10 @@ fn host_shutdown_and_cancel_retire_even_without_final_free_delta() {
     // subsequent frame's guard has been forgotten.
     std::mem::forget(
         preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap(),
     );
     drop(preview);

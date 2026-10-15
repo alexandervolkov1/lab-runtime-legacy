@@ -1,17 +1,13 @@
-//! One frame-local typed read at a time; no metadata refresh or observation copy.
-
-use super::{TextBuffer, label};
+//! One frame-local borrowed typed read at a time; no cache reconstruction.
+use super::{
+    TextBuffer, label,
+    observation_source::{ReadOnlyProvider, Scalar, SelectedRead},
+};
 use crate::{
-    model::{
-        Freshness, ReadBinding, ReadPayload, ReadQuality, RuntimeObservations, ScalarKind,
-        ScalarValue, TypedRead, resolve_read,
-    },
     presentation::{ConfigurationOwner, RuntimeRef, v2},
+    readonly_values::{Freshness, ReadAbsence, ReadBinding, ReadQuality, ScalarKind},
 };
 use std::io;
-
-// Runtime text is not bounded by the presentation document's string validator.
-// Refuse oversized selected scalar strings BEFORE resolve_read clones them.
 const SCALAR_BYTES: usize = 512;
 const ENTITY_BYTES: usize = 1024;
 
@@ -86,7 +82,7 @@ pub(super) fn kind(kind: v2::ScalarKind) -> ScalarKind {
 pub(super) fn data(
     ui: &mut TextBuffer,
     document: &v2::AdmittedV2Document,
-    observations: &RuntimeObservations,
+    observations: &dyn ReadOnlyProvider,
     id: &v2::Id,
     availability: v2::StaticAvailability,
     precision: Option<u8>,
@@ -101,7 +97,9 @@ pub(super) fn data(
     let target = target(&data.target);
     if let v2::StaticAvailability::Disabled(reason) = availability {
         label(ui, format!("Disabled: {reason:?}"));
-        freshness(ui, observations, &target, None);
+        observations.with_selected(&target, binding(data.selector), &mut |read| {
+            freshness(ui, observations, read)
+        });
         return;
     }
     typed(
@@ -116,139 +114,121 @@ pub(super) fn data(
 
 pub(super) fn entity(
     ui: &mut TextBuffer,
-    observations: &RuntimeObservations,
+    observations: &dyn ReadOnlyProvider,
     source: &v2::RuntimeRef,
 ) {
     let target = target(source);
     if let Some(binding) = ReadBinding::for_target(&target) {
         typed(ui, observations, &target, binding, None, None);
     } else {
-        // The existing v1 entity-status meaning: bounded cached projection text
-        // for Instrument/Resource/Component, with no field selector or query.
-        if let Some(observation) = observations.entities.get(&target) {
+        if let Some(value) = observations.raw_entity(&target) {
+            label(ui, format!("Value (cached): {}", entity_text(value)));
+            freshness_state(ui, observations.display_freshness());
+        } else if observations.supports_raw_entities() {
+            label(ui, "Value (cached): no Runtime observation");
+            freshness(ui, observations, None);
+        } else {
             label(
                 ui,
-                format!("Value (cached): {}", entity_text(&observation.value)),
+                "Unavailable: raw entity presentation is not supplied by this read-only provider",
             );
-        } else {
-            label(ui, "Value (cached): no Runtime observation");
+            freshness(ui, observations, None);
         }
-        freshness(ui, observations, &target, None);
     }
 }
 
 fn typed(
     ui: &mut TextBuffer,
-    observations: &RuntimeObservations,
+    observations: &dyn ReadOnlyProvider,
     target: &RuntimeRef,
     binding: ReadBinding,
     expect: Option<ScalarKind>,
     precision: Option<u8>,
 ) {
-    let field = match binding {
-        ReadBinding::SignalSample | ReadBinding::ReferenceValue => "value",
-        ReadBinding::ConfigurationPropertyCurrent => "current",
-        ReadBinding::ControllerState | ReadBinding::RecorderState => "state",
-    };
-    if observations
-        .entities
-        .get(target)
-        .and_then(|o| o.value.get(field))
-        .and_then(serde_json::Value::as_str)
-        .is_some_and(|s| s.len() > SCALAR_BYTES)
-    {
-        label(
-            ui,
-            "Unavailable: Runtime scalar exceeds read-only display limit (512 UTF-8 bytes)",
-        );
-        freshness(ui, observations, target, None);
-        return;
-    }
-    let reading = resolve_read(observations, target, binding);
-    let mismatch = expect
-        .zip(reading.kind)
-        .is_some_and(|(expected, actual)| expected != actual);
-    if mismatch {
-        label(ui, "Unavailable: expect_kind mismatch");
-        if matches!(reading.payload, ReadPayload::Absent(_)) {
-            show_payload(ui, &reading, precision);
+    observations.with_selected(target, binding, &mut |read| {
+        let Some(reading) = read else {
+            label(ui, "Value (cached): no Runtime observation");
+            freshness(ui, observations, None);
+            return;
+        };
+        if matches!(reading.fields.scalar, Scalar::Text(s) | Scalar::Enum(s) if s.len() > SCALAR_BYTES) {
+            label(ui, "Unavailable: Runtime scalar exceeds read-only display limit (512 UTF-8 bytes)");
+            freshness(ui, observations, Some(reading));
+            return;
         }
-    } else {
-        show_payload(ui, &reading, precision);
-    }
-    if let Some(unit) = reading.unit.as_ref().and_then(|u| u.display()) {
-        label(ui, format!("Runtime unit: {unit}"));
-    }
-    if let Some(quality) = reading.quality {
-        label(
-            ui,
-            match quality {
+        let mismatch = expect.zip(reading.fields.kind).is_some_and(|(expected, actual)| expected != actual);
+        if mismatch {
+            label(ui, "Unavailable: expect_kind mismatch");
+            if matches!(reading.fields.scalar, Scalar::Absent(_)) { show_payload(ui, reading.fields.scalar, precision); }
+        } else { show_payload(ui, reading.fields.scalar, precision); }
+        if let Some(unit) = reading.fields.unit {
+            let text = if unit.symbol.is_empty() { unit.id } else { unit.symbol };
+            if !text.is_empty() { label(ui, format!("Runtime unit: {text}")); }
+        }
+        if let Some(quality) = reading.fields.quality {
+            label(ui, match quality {
                 ReadQuality::Good => "Quality: good",
                 ReadQuality::Unavailable => "Quality: unavailable",
                 ReadQuality::NotObserved => "Quality: not_observed",
-            },
-        );
-    }
-    freshness(ui, observations, target, Some(reading.freshness));
-}
-
-fn show_payload(ui: &mut TextBuffer, reading: &TypedRead, precision: Option<u8>) {
-    match &reading.payload {
-        ReadPayload::Absent(reason) => label(ui, format!("Value (cached): {}", reason.label())),
-        ReadPayload::Value(value) => {
-            let exact = match value {
-                ScalarValue::Boolean(v) => v.to_string(),
-                ScalarValue::Integer(v) => v.to_string(),
-                ScalarValue::Number(v) => format!("{v:?}"),
-                ScalarValue::Text(v) if v.is_empty() => "\"\" (empty Text)".into(),
-                ScalarValue::Enum(v) if v.is_empty() => "\"\" (empty Enum)".into(),
-                ScalarValue::Text(v) | ScalarValue::Enum(v) => v.clone(),
-            };
-            label(ui, format!("Value (cached): {exact}"));
-            // Precision only supplies a secondary rounded Number caption. The
-            // primary value stays round-trippable, including negative zero.
-            if let (ScalarValue::Number(value), Some(precision)) = (value, precision) {
-                label(
-                    ui,
-                    format!(
-                        "Rounded: {value:.precision$}",
-                        precision = usize::from(precision)
-                    ),
-                );
-            }
+            });
         }
-    }
+        freshness(ui, observations, Some(reading));
+    });
 }
-
-fn freshness(
-    ui: &mut TextBuffer,
-    observations: &RuntimeObservations,
-    target: &RuntimeRef,
-    resolved: Option<Freshness>,
-) {
-    if !observations.entities.contains_key(target) {
-        label(ui, "Unresolved — no Runtime observation");
-        label(ui, format!("Connection: {:?}", observations.freshness));
+fn show_payload(ui: &mut TextBuffer, scalar: Scalar<'_>, precision: Option<u8>) {
+    if let Scalar::Absent(reason) = scalar {
+        label(ui, format!("Value (cached): {}", reason.label()));
         return;
     }
-    // Display the global rebuild fence independently: even an old Stale entity
-    // remains explicitly Rebuilding while the authoritative barrier is pending.
-    let state = if observations.freshness == Freshness::Rebuilding {
-        Freshness::Rebuilding
-    } else {
-        resolved.unwrap_or_else(|| {
-            observations
-                .entities
-                .get(target)
-                .map_or(observations.freshness, |o| {
-                    if o.freshness == Freshness::Fresh {
-                        observations.freshness
-                    } else {
-                        o.freshness
-                    }
-                })
-        })
+    let exact = match scalar {
+        Scalar::Boolean(v) => v.to_string(),
+        Scalar::Integer(v) => v.to_string(),
+        Scalar::Number(v) => format!("{v:?}"),
+        Scalar::Text("") => "\"\" (empty Text)".into(),
+        Scalar::Enum("") => "\"\" (empty Enum)".into(),
+        Scalar::Text(v) | Scalar::Enum(v) => v.to_owned(),
+        Scalar::Absent(_) => unreachable!(),
     };
+    label(ui, format!("Value (cached): {exact}"));
+    if let (Scalar::Number(value), Some(precision)) = (scalar, precision) {
+        label(
+            ui,
+            format!(
+                "Rounded: {value:.precision$}",
+                precision = usize::from(precision)
+            ),
+        );
+    }
+}
+fn freshness(
+    ui: &mut TextBuffer,
+    observations: &dyn ReadOnlyProvider,
+    resolved: Option<SelectedRead<'_>>,
+) {
+    let missing = resolved.is_none_or(|read| {
+        matches!(
+            read.fields.scalar,
+            Scalar::Absent(ReadAbsence::MissingObservation)
+        )
+    });
+    if missing {
+        label(ui, "Unresolved — no Runtime observation");
+        label(
+            ui,
+            format!("Connection: {:?}", observations.display_freshness()),
+        );
+        return;
+    }
+    let state = match observations.display_freshness() {
+        Freshness::Unknown | Freshness::Rebuilding => observations.display_freshness(),
+        Freshness::Stale if resolved.unwrap().display_freshness() == Freshness::Fresh => {
+            Freshness::Stale
+        }
+        _ => resolved.unwrap().display_freshness(),
+    };
+    freshness_state(ui, state);
+}
+fn freshness_state(ui: &mut TextBuffer, state: Freshness) {
     label(
         ui,
         match state {

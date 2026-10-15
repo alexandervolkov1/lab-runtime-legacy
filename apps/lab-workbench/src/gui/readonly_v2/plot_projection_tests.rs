@@ -88,7 +88,7 @@ fn all_32_sources_share_one_bounded_arena_and_extrema_survive() {
         assert!(points.windows(2).all(|p| p[0].x < p[1].x));
         assert_eq!(trace.decimated_points, 4096 - points.len());
         assert_eq!(trace.window_points, 4096);
-        assert_eq!(trace.buffer_dropped, 0);
+        assert_eq!(trace.buffer_dropped, Some(0));
         assert_eq!(trace.legend.as_str(), format!("{}: Same label", i + 1));
     }
     assert_eq!(obs, before);
@@ -388,7 +388,7 @@ fn buffer_evictions_finite_filtering_and_hover_bounds() {
     assert_eq!(result.points(0).len(), 4096);
     assert_eq!(result.points(0)[0].x, 1.0);
     assert_eq!(result.points(0)[4095].y, f64::MAX);
-    assert_eq!(result.traces[0].buffer_dropped, 1);
+    assert_eq!(result.traces[0].buffer_dropped, Some(1));
     assert!(hover(&result.traces[0], PlotPoint::new(1.0, f64::NAN)).is_none());
     let mut syntax = syntax(32, true);
     for trace in syntax["plots"][0]["traces"].as_array_mut().unwrap() {
@@ -593,7 +593,7 @@ fn over_budget_by_one_and_skewed_overload_redistribute_in_trace_order() {
             assert_eq!(points.last().unwrap().x, (length - 1) as f64);
             assert!(points.windows(2).all(|pair| pair[0].x < pair[1].x));
             assert_eq!(result.traces[index].decimated_points, length - points.len());
-            assert_eq!(result.traces[index].buffer_dropped, 0);
+            assert_eq!(result.traces[index].buffer_dropped, Some(0));
             if length > 234 {
                 assert!(points.contains(&PlotPoint::new(123.0, 1000.0)));
                 assert!(points.contains(&PlotPoint::new(234.0, -1000.0)));

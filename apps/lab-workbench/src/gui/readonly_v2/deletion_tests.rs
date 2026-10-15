@@ -227,7 +227,10 @@ fn fence_deletion_failure_is_not_a_completion_failure_or_render_success() {
         let mut host = HostSession::new(Backend(ledger.clone()));
         let mut preview = Preview::with_session(&doc, plot_widget_tests::EPOCH, &mut host);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         frame.tessellate().unwrap();
         assert_eq!(frame.finish(), Err(FrameError::Deletion));
@@ -261,7 +264,10 @@ fn execution_error_survives_completion_and_subsequent_deletion_failure() {
     let mut host = HostSession::new(Backend(ledger.clone()));
     let mut preview = Preview::with_session(&doc, plot_widget_tests::EPOCH, &mut host);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     frame.tessellate().unwrap();
     assert_eq!(frame.finish(), Err(FrameError::Submission));
@@ -331,7 +337,10 @@ fn timeout_requires_later_proof_and_all_object_receipts_before_released() {
         let mut host = HostSession::new(Backend(ledger.clone()));
         let mut preview = Preview::with_session(&doc, plot_widget_tests::EPOCH, &mut host);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         frame.tessellate().unwrap();
         assert_eq!(frame.finish(), Err(FrameError::Completion));

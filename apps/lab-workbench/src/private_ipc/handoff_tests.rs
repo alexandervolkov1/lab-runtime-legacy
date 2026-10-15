@@ -191,7 +191,10 @@ fn replacement_waits_for_exact_session_and_old_document_drop_before_admission() 
     let (document, identity, host) = owner.parts().unwrap();
     let mut preview = Preview::with_session(document, display(identity.epoch), host);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     frame.tessellate().unwrap();
     let original_generation = frame.generation();
@@ -218,7 +221,10 @@ fn replacement_waits_for_exact_session_and_old_document_drop_before_admission() 
             CleanupOutcome::Pending(_)
         ));
         assert!(matches!(
-            preview.run(&Default::default(), Default::default()),
+            preview.run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default()
+            ),
             Err(FrameError::RetirementPending)
         ));
         assert_eq!(replica.candidate_bytes().unwrap().as_ptr(), pointer);
@@ -251,7 +257,12 @@ fn replacement_waits_for_exact_session_and_old_document_drop_before_admission() 
     assert!(replica.admit_renderer_document(&mut owner).is_err());
     let (document, identity, host) = owner.parts().unwrap();
     let mut next = Preview::with_session(document, display(identity.epoch), host);
-    let mut frame = next.run(&Default::default(), Default::default()).unwrap();
+    let mut frame = next
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
+        .unwrap();
     assert_ne!(frame.generation(), original_generation);
     frame.tessellate().unwrap();
     frame.finish().unwrap();
@@ -314,7 +325,10 @@ fn pending_drop_stop_and_cancellation_keep_original_payload_document_and_assembl
     let (document, identity, host) = owner.parts().unwrap();
     let mut preview = Preview::with_session(document, display(identity.epoch), host);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     frame.tessellate().unwrap();
     assert_eq!(frame.finish(), Err(FrameError::Completion));

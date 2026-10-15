@@ -268,7 +268,7 @@ impl<'a> PlotState<'a> {
                 ui.add(egui::Label::new(format!(
                     "Trace {}: {:?}; {:?}; quality {:?}; {} points; decimated {}; buffer evictions {}{}",
                     index + 1, trace.state, trace.freshness, trace.quality,
-                    view.points(index).len(), trace.decimated_points, trace.buffer_dropped,
+                    view.points(index).len(), trace.decimated_points, super::plot_projection::dropped_label(trace.buffer_dropped).as_str(),
                     if trace.definition.visible { "" } else { "; definition hidden" },
                 )).selectable(false));
                 if let Some(reason) = status[index].get().fault {

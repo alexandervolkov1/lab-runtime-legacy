@@ -43,12 +43,15 @@ mod retirement_tests;
 mod tests;
 pub(crate) mod texture_owner;
 
-use crate::{model::RuntimeObservations, presentation::v2};
+#[cfg(test)]
+use crate::model::RuntimeObservations;
+use crate::presentation::v2;
 use completion::WaitPolicy;
 use eframe::egui;
 use frame::{ContextGeneration, FrameData, FrameError, FrameOutcome, PreviewFrame};
 use host_session::{CleanupOutcome, HostSession, RetirementPayload, RetirementReason, Session};
 pub(crate) use navigation::Location;
+use observation_source::ReadOnlyProvider;
 use page::{Page, TextBuffer, label};
 use texture_owner::{CpuOnly, FrameBackend};
 
@@ -302,7 +305,7 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
         }
     }
 
-    fn select_plot(&mut self, index: usize) -> bool {
+    pub(crate) fn select_plot(&mut self, index: usize) -> bool {
         if index / PAGE_SIZE != self.location.page || !self.location.valid(self.document) {
             return false;
         }
@@ -344,7 +347,7 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
     /// private payload stays in Preview, including if its guard is forgotten.
     pub(crate) fn run(
         &mut self,
-        observations: &RuntimeObservations,
+        observations: &dyn ReadOnlyProvider,
         input: egui::RawInput,
     ) -> Result<PreviewFrame<'_, 'a, B>, FrameError> {
         self.session.admit_work()?;
@@ -371,9 +374,15 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
 
     fn prepare(
         &mut self,
-        observations: &RuntimeObservations,
+        observations: &dyn ReadOnlyProvider,
         mut input: egui::RawInput,
     ) -> Result<(egui::FullOutput, RenderReport), FrameError> {
+        if observations
+            .epoch()
+            .is_some_and(|epoch| epoch != self.epoch)
+        {
+            return Err(FrameError::Preparation("Read-only snapshot epoch mismatch"));
+        }
         if self.allowance < NOTICE_RESERVATION {
             return Err(FrameError::Preparation(
                 "Read-only preview paused: visual reservation unavailable",
@@ -426,7 +435,7 @@ impl<'a, B: FrameBackend> Preview<'a, B> {
 
     fn run_plot(
         &mut self,
-        observations: &RuntimeObservations,
+        observations: &dyn ReadOnlyProvider,
         input: egui::RawInput,
     ) -> Result<(egui::FullOutput, RenderReport), FrameError> {
         // One combined reservation, checked before the first projection buffer.

@@ -518,7 +518,7 @@ fn selected_scalar_kinds_units_exact_integer_and_nonfinite_wire_rejection() {
         let mut bytes = vec![0; plan.length()];
         plan.fill(&mut bytes);
         reads::validate(&bytes).unwrap();
-        use crate::gui::readonly_v2::observation_source::{ReadOnlyProvider, Scalar};
+        use crate::gui::readonly_v2::observation_source::Scalar;
         let provider = super::selected_provider::SelectedSnapshot::decode(
             Header {
                 kind: Kind::Observations,

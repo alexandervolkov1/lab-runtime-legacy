@@ -597,10 +597,7 @@ pub(super) fn inspect_with<'a>(
                     source_at,
                     cursor,
                 },
-                trace: Trace {
-                    encoded: &bytes[point_start..reader.used],
-                    source_floor: floor,
-                },
+                trace: Trace::encoded(&bytes[point_start..reader.used], floor),
             },
         );
         references[slot] = Some(ReadMeta {

@@ -24,3 +24,6 @@ pub(crate) mod native_tests;
 mod provider_tests;
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod selected_preview_tests;
