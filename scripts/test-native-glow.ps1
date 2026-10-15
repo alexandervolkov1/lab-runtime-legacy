@@ -33,7 +33,7 @@ try {
     $sourceRoot = (Join-Path $repo 'apps/lab-workbench/src').Replace('\','/')
     $support = (Join-Path $repo 'scripts/support').Replace('\','/')
     $modules = @()
-    foreach ($name in @('client','dispatcher','external','model','ownership','presentation','recovery','storage')) {
+    foreach ($name in @('client','dispatcher','external','readonly_limits','readonly_values','readonly_cache','model','ownership','presentation','recovery','storage')) {
         $path = "$sourceRoot/$name.rs"
         if (-not (Test-Path -LiteralPath $path)) { $path = "$sourceRoot/$name/mod.rs" }
         $modules += "#[path = `"$path`"] mod $name;"
@@ -67,6 +67,10 @@ fn main() { native_glow::run(); }
         Write-Output 'B2B2 standalone compile and Clippy PASS; no GPU execution or child integration claim'
         return
     }
+    $identity=@{ source_head=(& git rev-parse HEAD).Trim(); binary=$binary; sha256=(Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash; pending=[bool]$Pending; faults=[bool]$Faults; integration=$false }
+    $receipt=Join-Path $probeDir ("identity-"+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffff')+'.json')
+    $identity | ConvertTo-Json | Set-Content -LiteralPath $receipt
+    Write-Output "STANDALONE_IDENTITY=$receipt"
     # A retained unresolved root must NOT unwind normally. A separate watchdog
     # observes it and terminates only this child; that is BLOCKED, never cleanup.
     $scenarios = if ($Faults) { @('timeout-proof','wait-failed','missing-fence','invalid-fence','device-loss','partial-texture','original-error','native-teardown') + @('texture','buffer','shader','program','vao','fence' | ForEach-Object { "$($_)-before"; "$($_)-after" }) } elseif ($Pending) { @('pending') } else { @('smoke') }

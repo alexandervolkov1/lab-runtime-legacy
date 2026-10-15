@@ -1,0 +1,13 @@
+lab-native-child v0.1.0 (D:\rust_projects\lab-runtime\apps\lab-native-child)
+├── eframe v0.36.2
+├── egui_plot v0.37.0
+├── glutin v0.32.3
+│   [build-dependencies]
+├── glutin-winit v0.5.0
+│   [build-dependencies]
+├── lab-windows-job v0.1.0 (D:\rust_projects\lab-runtime\crates\lab-windows-job)
+├── raw-window-handle v0.6.2
+├── serde v1.0.229
+├── serde_json v1.0.151
+└── winit v0.30.13
+    [build-dependencies]

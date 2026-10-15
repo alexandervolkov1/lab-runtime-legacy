@@ -192,6 +192,6 @@ pub(super) fn hover(
         text.write_str(" (no conversion)").ok()?;
     }
     write!(text, "\nSource cache: {:?}; current quality: {:?}; {:?}\nDisplay points omitted: {}; buffer evictions: {}\nLabels and exact unit text: Details {name}",
-        trace.freshness, trace.quality, trace.state, trace.decimated_points, trace.buffer_dropped).ok()?;
+        trace.freshness, trace.quality, trace.state, trace.decimated_points, super::plot_projection::dropped_label(trace.buffer_dropped).as_str()).ok()?;
     Some(text)
 }

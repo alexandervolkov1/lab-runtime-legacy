@@ -52,7 +52,10 @@ fn every_unresolved_completion_retains_payload_after_preview_drop() {
         let mut host = HostSession::new(Mock(log.clone()));
         let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         let generation = frame.generation();
         frame.tessellate().unwrap();
@@ -109,7 +112,10 @@ fn pending_blocks_frames_document_owner_revision_and_new_generation() {
     let mut host = HostSession::new(Mock(log.clone()));
     let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     let generation = frame.generation();
     frame.tessellate().unwrap();
@@ -128,7 +134,10 @@ fn pending_blocks_frames_document_owner_revision_and_new_generation() {
         assert!(!preview.close_plot());
         assert!(!preview.navigate(preview.location()));
         assert!(matches!(
-            preview.run(&Default::default(), Default::default()),
+            preview.run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default()
+            ),
             Err(FrameError::RetirementPending)
         ));
         assert_eq!(preview.retire_context(), CleanupOutcome::Pending(original));
@@ -161,7 +170,10 @@ fn pending_blocks_frames_document_owner_revision_and_new_generation() {
         }
     ));
     let mut next = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     assert_ne!(next.generation(), generation);
     next.tessellate().unwrap();
@@ -200,7 +212,10 @@ fn partial_upload_keeps_original_error_and_every_attempted_key() {
     let mut host = HostSession::new(Mock(log.clone()));
     let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
     let mut frame = preview
-        .run(&Default::default(), Default::default())
+        .run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default(),
+        )
         .unwrap();
     frame.tessellate().unwrap();
     // Full font upload succeeds, the following partial upload starts but fails;
@@ -285,7 +300,10 @@ fn platform_and_submission_failure_preserve_ambiguous_work_without_new_uploads()
         let mut host = HostSession::new(Mock(log.clone()));
         let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
         let mut warm = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         warm.tessellate().unwrap();
         warm.finish().unwrap();
@@ -293,7 +311,10 @@ fn platform_and_submission_failure_preserve_ambiguous_work_without_new_uploads()
         log.borrow_mut().fault = Some(error);
         log.borrow_mut().retirement_wait = Some(Completion::Timeout);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         frame.tessellate().unwrap();
         assert_eq!(frame.finish(), Err(error));
@@ -328,7 +349,10 @@ fn new_preview_cannot_replace_pending_payload_and_shutdown_closes_admission() {
     {
         let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
         let mut frame = preview
-            .run(&Default::default(), Default::default())
+            .run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default(),
+            )
             .unwrap();
         frame.tessellate().unwrap();
         assert_eq!(frame.finish(), Err(FrameError::Completion));
@@ -337,7 +361,10 @@ fn new_preview_cannot_replace_pending_payload_and_shutdown_closes_admission() {
     {
         let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
         assert!(matches!(
-            preview.run(&Default::default(), Default::default()),
+            preview.run(
+                &crate::model::RuntimeObservations::default(),
+                Default::default()
+            ),
             Err(FrameError::RetirementPending)
         ));
     }
@@ -351,7 +378,10 @@ fn new_preview_cannot_replace_pending_payload_and_shutdown_closes_admission() {
     assert_eq!(host.shutdown(one_wait()), ShutdownOutcome::Released);
     let mut preview = Preview::with_session(&doc, EPOCH, &mut host);
     assert!(matches!(
-        preview.run(&Default::default(), Default::default()),
+        preview.run(
+            &crate::model::RuntimeObservations::default(),
+            Default::default()
+        ),
         Err(FrameError::HostClosed)
     ));
 }

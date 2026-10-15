@@ -1848,9 +1848,13 @@ name = "lab-native-child"
 version = "0.1.0"
 dependencies = [
  "eframe",
+ "egui_plot",
  "glutin",
  "glutin-winit",
+ "lab-windows-job",
  "raw-window-handle",
+ "serde",
+ "serde_json",
  "winit",
 ]
 

@@ -1,12 +1,12 @@
 //! One borrowed Plot occurrence, one frame-local point arena, no GUI or cache.
 
+use super::observation_source::{ReadOnlyProvider, Scalar};
 use super::{Location, OccurrenceIdentity, PresentationEpoch, read};
 use crate::{
-    model::{
-        Freshness, LIVE_TRACE_POINTS, LivePoint, ReadAbsence, ReadBinding, ReadPayload,
-        ReadQuality, RuntimeObservations, ScalarKind, ScalarValue, resolve_read,
-    },
     presentation::{RuntimeRef, v2},
+    readonly_values::{
+        Freshness, LIVE_TRACE_POINTS, LivePoint, ReadAbsence, ReadBinding, ReadQuality, ScalarKind,
+    },
 };
 use egui_plot::PlotPoint;
 use std::{
@@ -100,7 +100,7 @@ pub(crate) struct TraceView<'a> {
     pub(crate) window: Option<(f64, f64)>,
     pub(crate) source_points: usize,
     pub(crate) window_points: usize,
-    pub(crate) buffer_dropped: u64,
+    pub(crate) buffer_dropped: Option<u64>,
     pub(crate) decimated_points: usize,
     points: Range<usize>,
 }
@@ -157,7 +157,7 @@ fn signal_target(source: &v2::RuntimeRef) -> Result<Option<RuntimeRef>, Projecti
 /// persistent state. The caller must release this view before projecting again.
 pub(crate) fn project<'a>(
     document: &'a v2::AdmittedV2Document,
-    observations: &RuntimeObservations,
+    observations: &dyn ReadOnlyProvider,
     epoch: PresentationEpoch,
     location: Location,
     index: usize,
@@ -209,6 +209,13 @@ pub(crate) fn project<'a>(
         point_visits: 0,
     };
     let mut buffers = [None; MAX_TRACES];
+    let mut reserved_visits: usize = 0;
+    if observations
+        .epoch()
+        .is_some_and(|snapshot| snapshot != epoch)
+    {
+        return Err(ProjectionError::InvalidOccurrence);
+    }
     for (index, definition) in plot.traces.0.iter().enumerate() {
         let (data_index, binding) = document
             .dto()
@@ -234,7 +241,7 @@ pub(crate) fn project<'a>(
             availability,
             state: CurveState::Ready,
             kind: None,
-            freshness: observations.freshness,
+            freshness: observations.display_freshness(),
             quality: None,
             runtime_unit_id: Text::default(),
             runtime_unit_symbol: Text::default(),
@@ -242,7 +249,7 @@ pub(crate) fn project<'a>(
             window: None,
             source_points: 0,
             window_points: 0,
-            buffer_dropped: 0,
+            buffer_dropped: None,
             decimated_points: 0,
             points: 0..0,
         };
@@ -258,86 +265,78 @@ pub(crate) fn project<'a>(
         } else if binding.selector != v2::Selector::SignalSample {
             trace.state = CurveState::Disabled(v2::StaticBlocker::IncompatibleTarget);
         } else if let Some(target) = signal_target(&binding.target)? {
-            trace.freshness =
-                observations
-                    .entities
-                    .get(&target)
-                    .map_or(observations.freshness, |entry| {
-                        match observations.freshness {
-                            Freshness::Unknown | Freshness::Rebuilding => observations.freshness,
-                            _ if entry.freshness != Freshness::Fresh => entry.freshness,
-                            _ => observations.freshness,
-                        }
-                    });
-            // The typed layer clones Text/Enum values. Refuse large scalar input
-            // before calling it, including a malformed Number encoded as text.
-            let oversized = observations
-                .entities
-                .get(&target)
-                .and_then(|entry| entry.value.get("value"))
-                .and_then(serde_json::Value::as_str)
-                .is_some_and(|text| text.len() > 512);
-            if oversized {
-                trace.state = CurveState::OversizedValue;
-            } else {
-                let typed = resolve_read(observations, &target, ReadBinding::SignalSample);
-                trace.freshness = match observations.freshness {
-                    Freshness::Unknown | Freshness::Rebuilding => observations.freshness,
-                    _ => typed.freshness,
+            observations.with_selected(&target, ReadBinding::SignalSample, &mut |selected| {
+                let Some(selected) = selected else {
+                    trace.state = CurveState::Absent(ReadAbsence::MissingObservation);
+                    return;
                 };
-                trace.kind = typed.kind;
-                trace.quality = typed.quality;
-                if let Some(unit) = typed.unit {
-                    trace
-                        .runtime_unit_id
-                        .write_str(&unit.id)
-                        .map_err(|_| ProjectionError::Budget)?;
-                    trace
-                        .runtime_unit_symbol
-                        .write_str(&unit.symbol)
-                        .map_err(|_| ProjectionError::Budget)?;
-                }
-                trace.state = match typed.payload {
-                    ReadPayload::Absent(reason) => CurveState::Absent(reason),
+                let fields = selected.fields;
+                trace.freshness = match observations.display_freshness() {
+                    Freshness::Unknown | Freshness::Rebuilding => observations.display_freshness(),
+                    Freshness::Stale if selected.display_freshness() == Freshness::Fresh => {
+                        Freshness::Stale
+                    }
+                    _ => selected.display_freshness(),
+                };
+                trace.kind = fields.kind;
+                trace.quality = fields.quality;
+                trace.state = match fields.scalar {
+                    Scalar::Absent(reason) => CurveState::Absent(reason),
+                    Scalar::Text(s) | Scalar::Enum(s) if s.len() > 512 => {
+                        CurveState::OversizedValue
+                    }
                     _ if binding
                         .expect_kind
                         .is_some_and(|expect| Some(read::kind(expect)) != trace.kind) =>
                     {
                         CurveState::ExpectKindMismatch
                     }
-                    ReadPayload::Value(ScalarValue::Number(_)) => CurveState::Ready,
+                    Scalar::Number(_) => CurveState::Ready,
                     _ => CurveState::UnsupportedKind,
                 };
+                // Codec and parent typed decoder already validate unit byte bounds.
+                if let Some(unit) = fields.unit
+                    && (trace.runtime_unit_id.write_str(unit.id).is_err()
+                        || trace.runtime_unit_symbol.write_str(unit.symbol).is_err())
+                {
+                    trace.state = CurveState::OversizedValue;
+                }
                 if trace.state == CurveState::Ready
                     && !matches!(trace.freshness, Freshness::Fresh | Freshness::Stale)
                 {
                     trace.state = CurveState::Unconfirmed;
                 }
-                if trace.state == CurveState::Ready && definition.visible {
-                    if let Some(buffer) = observations.live.get(&target) {
-                        trace.source_points = buffer.points().len();
-                        trace.buffer_dropped = buffer.dropped();
-                        if let Some(last) = buffer.points().back() {
-                            // Saturation only affects the cutoff, never source coordinates.
-                            let cutoff =
-                                (last.time_seconds - plot.time_window_seconds.0).max(-f64::MAX);
-                            trace.window = Some((cutoff, last.time_seconds));
-                            trace.window_points = buffer
-                                .points()
-                                .iter()
-                                .filter(|point| eligible(point, cutoff))
-                                .count();
-                            result.point_visits += buffer.points().len();
-                            if trace.window_points != 0 {
-                                buffers[index] = Some(buffer);
-                            }
+            });
+            if trace.state == CurveState::Ready && definition.visible {
+                if let Some(buffer) = observations.trace(&target) {
+                    trace.source_points = buffer.len();
+                    trace.buffer_dropped = buffer.dropped();
+                    // Reserve BOTH scans, including repeated selections, before
+                    // visiting a source. LRD1 can carry more than a parent ring.
+                    reserved_visits = buffer
+                        .len()
+                        .checked_mul(2)
+                        .and_then(|n| reserved_visits.checked_add(n))
+                        .filter(|n| *n <= MAX_POINT_VISITS)
+                        .ok_or(ProjectionError::Budget)?;
+                    if let Some(last) = buffer.last() {
+                        let cutoff =
+                            (last.time_seconds - plot.time_window_seconds.0).max(-f64::MAX);
+                        trace.window = Some((cutoff, last.time_seconds));
+                        trace.window_points = buffer
+                            .points()
+                            .filter(|point| eligible(point, cutoff))
+                            .count();
+                        result.point_visits += buffer.len();
+                        if trace.window_points != 0 {
+                            buffers[index] = Some(buffer);
                         }
-                        if trace.window_points == 0 {
-                            trace.state = CurveState::EmptyWindow;
-                        }
-                    } else {
-                        trace.state = CurveState::MissingBuffer;
                     }
+                    if trace.window_points == 0 {
+                        trace.state = CurveState::EmptyWindow;
+                    }
+                } else {
+                    trace.state = CurveState::MissingBuffer;
                 }
             }
         } else {
@@ -358,12 +357,9 @@ pub(crate) fn project<'a>(
         trace.points.start = result.points.len();
         if let Some(buffer) = buffer {
             let cutoff = trace.window.expect("counted source window").0;
-            let points = buffer
-                .points()
-                .iter()
-                .filter(|point| eligible(point, cutoff));
+            let points = buffer.points().filter(|point| eligible(point, cutoff));
             decimate(points, trace.window_points, quota, &mut result.points);
-            result.point_visits += buffer.points().len();
+            result.point_visits += buffer.len();
         }
         trace.points.end = result.points.len();
         trace.decimated_points = trace.window_points - trace.points.len();
@@ -373,14 +369,15 @@ pub(crate) fn project<'a>(
 }
 
 /// Integer water filling over 32 fixed slots, with no point scans or allocation.
-/// Needs come only from eligible windows (each <= LIVE_TRACE_POINTS), so all
-/// sums are <= 32 * 4096. At most 13 binary-search passes find the highest common
+/// Both scans have already reserved the fixed MAX_POINT_VISITS, so the sum
+/// of source lengths is <= 32 * 4096 even for repeated LRD1 selections. At most
+/// 15 binary-search passes over a <=16384-point need find the highest common
 /// level whose capped sum fits; fewer than 32 residual slots go in trace order.
 fn point_quotas(needs: [usize; MAX_TRACES]) -> [usize; MAX_TRACES] {
     if needs.iter().sum::<usize>() <= MAX_POINTS {
         return needs;
     }
-    let (mut low, mut high) = (0, LIVE_TRACE_POINTS);
+    let (mut low, mut high) = (0, needs.into_iter().max().unwrap_or(0));
     while low < high {
         let level = low + (high - low).div_ceil(2);
         let used: usize = needs.iter().map(|&need| need.min(level)).sum();
@@ -410,13 +407,14 @@ fn eligible(point: &LivePoint, cutoff: f64) -> bool {
 
 /// Equal-count, contiguous interior buckets. Keep first/last and each bucket's
 /// min/max in original index order (first wins ties). No averaging or new x/y.
-fn decimate<'a>(
-    mut input: impl Iterator<Item = &'a LivePoint>,
+fn decimate(
+    input: impl Iterator<Item = impl std::borrow::Borrow<LivePoint>>,
     count: usize,
     quota: usize,
     output: &mut Vec<PlotPoint>,
 ) {
-    let push = |out: &mut Vec<PlotPoint>, point: &LivePoint| {
+    let mut input = input.map(|point| *point.borrow());
+    let push = |out: &mut Vec<PlotPoint>, point: LivePoint| {
         out.push(PlotPoint::new(point.time_seconds, point.value))
     };
     if count <= quota {
@@ -504,8 +502,19 @@ pub(crate) fn hover(trace: &TraceView<'_>, position: PlotPoint) -> Option<Text<4
     write!(
         text,
         "\nSource cache: {:?}; current quality: {:?}; {:?}\nDisplay points omitted: {}; buffer evictions: {}",
-        trace.freshness, trace.quality, trace.state, trace.decimated_points, trace.buffer_dropped
+        trace.freshness, trace.quality, trace.state, trace.decimated_points, dropped_label(trace.buffer_dropped).as_str()
     )
     .ok()?;
     Some(text)
+}
+
+/// LRD1 carries no dropped-count; unavailable is never represented by zero.
+pub(super) fn dropped_label(count: Option<u64>) -> Text<32> {
+    let mut text = Text::default();
+    match count {
+        Some(count) => write!(text, "{count}"),
+        None => text.write_str("unavailable"),
+    }
+    .expect("bounded dropped label");
+    text
 }

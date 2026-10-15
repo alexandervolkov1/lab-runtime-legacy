@@ -119,6 +119,47 @@ fn has(text: &[String], needle: &str) {
 }
 
 #[test]
+fn individual_stale_oversized_scalar_is_not_promoted_by_a_fresh_parent_cache() {
+    let mut observations = observations();
+    for parameter in ["a", "b"] {
+        observe(&mut observations, parameter, "text", json!("x".repeat(513)));
+        observations
+            .entities
+            .get_mut(&signal(parameter))
+            .unwrap()
+            .freshness = Freshness::Stale;
+    }
+    assert_eq!(observations.freshness, Freshness::Fresh);
+    let text = labels(&syntax(), &observations);
+    has(
+        &text,
+        "Unavailable: Runtime scalar exceeds read-only display limit (512 UTF-8 bytes)",
+    );
+    has(&text, "Stale — cached observation");
+    assert!(!text.iter().any(|s| s == "Fresh"), "{text:?}");
+}
+
+#[test]
+fn individual_stale_raw_entity_is_not_promoted_by_a_fresh_parent_cache() {
+    let mut observations = observations();
+    let target = RuntimeRef::Instrument {
+        instrument: "i".into(),
+    };
+    observations.observe(target.clone(), json!({"status":"cached"}), None);
+    observations.entities.get_mut(&target).unwrap().freshness = Freshness::Stale;
+    let mut syntax = syntax();
+    for (index, id) in [(1, "a"), (2, "b")] {
+        syntax["components"][index] =
+            json!({"id":id,"kind":"status","label":id,"source":{"kind":"entity","target":target}});
+    }
+    assert_eq!(observations.freshness, Freshness::Fresh);
+    let text = labels(&syntax, &observations);
+    has(&text, "Value (cached): {\"status\":\"cached\"}");
+    has(&text, "Stale — cached observation");
+    assert!(!text.iter().any(|s| s == "Fresh"), "{text:?}");
+}
+
+#[test]
 fn two_independent_reads_and_nested_row_column_use_real_layout() {
     let mut doc = syntax();
     doc["components"][2] = json!({"id":"b","kind":"indicator","label":"Second","data_id":"d2"});

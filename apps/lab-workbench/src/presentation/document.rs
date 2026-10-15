@@ -7,7 +7,7 @@ use std::collections::BTreeSet;
 /// Only supported presentation persistence version.
 pub(crate) const PRESENTATION_FORMAT_VERSION: u32 = 1;
 /// Maximum presentation file size in bytes.
-pub(crate) const PRESENTATION_FILE_BYTES: usize = 1024 * 1024;
+pub(crate) use crate::readonly_limits::PRESENTATION_FILE_BYTES;
 /// Maximum windows in one document.
 pub(crate) const MAX_WINDOWS: usize = 64;
 /// Maximum panels across all tabs in one document.

@@ -1,0 +1,198 @@
+[
+  {
+    "path": "apps/lab-native-child/src/consumer.rs",
+    "sha256": "56ff1015e03e9351b2ce38fdd057e602c401a91729728d56c2b149b925b32806"
+  },
+  {
+    "path": "apps/lab-native-child/src/entry.rs",
+    "sha256": "b673756c55ab40eb03a0b5518a186576782492f4f76b546324a16f61630734f1"
+  },
+  {
+    "path": "apps/lab-native-child/src/main.rs",
+    "sha256": "0a59d167e358e2f348b831a2e971d7a1252f7f5c4126a49d039ac4f092963c45"
+  },
+  {
+    "path": "apps/lab-native-child/src/presentation.rs",
+    "sha256": "368d2918cc974ffc089fc00125f0130c7fb9c90b037f8a462a6ee539edd50c11"
+  },
+  {
+    "path": "apps/lab-native-child/src/private_ipc.rs",
+    "sha256": "3f3d8ca7a97d5bd2e3ccfab70e74a0fcda7d34410df368a43da0b4987fabd3a9"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/completion.rs",
+    "sha256": "1e68a9ec34d0f24d4242fcf595657fe35d16db93435d90bd61c2507f9f9c1372"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/deletion.rs",
+    "sha256": "902ea6a1a5cbd9206ba09a9c25e8d100256b4bfa754e26f1c04b1d4509c0046e"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/finite_trace.rs",
+    "sha256": "612b2b0d83dea4b118f3c0c4a6999a6b6f24b03359d00b402dec1cc47d7c6085"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/frame.rs",
+    "sha256": "947f8c1b057d379c16ccded20763f094f4ca8045ffc50ea3e2a6f22d5d921b65"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/host_session.rs",
+    "sha256": "8a4e198b132f378a9a8733b2fee102ef74686e62bbdd1c55f6febbdce0b1bdf4"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/mod.rs",
+    "sha256": "0cb6331d5478bc31293300e14746932c45e73d4676c3a4cba597b7763e8caf8f"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/native_types.rs",
+    "sha256": "523998fc830aa411eb4c1f228d29e3c40ef9cc34c4131cc3a3c8496f815498c7"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/navigation.rs",
+    "sha256": "0d16729486f9dece5ad7840fce6e2278594c8ad997b0db30f7b9d6e909d5ea82"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/observation_source.rs",
+    "sha256": "4b01b0c2cf435def8b5c420297e512ff79ad70c2eb8c16bda5a01c3b0db69e50"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/page.rs",
+    "sha256": "58f3d157d93e6e3b9a5d2c840cf0a1b6fac431e68fc9231dc6d7f687c1d44ca6"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_bounds.rs",
+    "sha256": "768ac0342553886477816ec1d03f3761a8ce3615e68d728850b9a4d8905777e0"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_projection.rs",
+    "sha256": "21e02602d136a43b5055ed52a8df9f49e12f9868464d4ebf0a9cc1a211ec517f"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_text.rs",
+    "sha256": "cdaeb22bea4ace5c0da3bddedd8947ba3e427c7dd1a16506541e83313281fd73"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/plot_widget.rs",
+    "sha256": "7fdea7595505b2fc5dcdaf39568c9d630513182f085935426ab48111285b61b5"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/read.rs",
+    "sha256": "a1934405e308207321ea0ee905f79821e222df74623861d69f923c9647cce7e4"
+  },
+  {
+    "path": "apps/lab-workbench/src/gui/readonly_v2/texture_owner.rs",
+    "sha256": "71a41c65788457907ceec30c9302307fe254321a281a59472ef9af966c96b9f5"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/reference.rs",
+    "sha256": "167abec50f47611dcd0229498135fcc4906beee41a02e0e5a2c7c89f7b595d23"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/admission.rs",
+    "sha256": "b10c27b5e3e9bb828dbb64367a297b9c4b35c297f4f5cfe89d3cc8b220bc4b05"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/allocation.rs",
+    "sha256": "0522a5651a508104d39c14fcc6b34762b913d0db29d1a0b8a47884045a904f5f"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/bounded.rs",
+    "sha256": "be47c8057e75f171f479bfe2fea3e86d04d807d4e703cabc8fbbc5f7676d57b3"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/canonical.rs",
+    "sha256": "b09fae2dd5ff58ad9f2d836ac8b8c0c71e623bff9042f2c7793b9c63612d94a5"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/consumer.rs",
+    "sha256": "4ba1f1516ca7918e6e328ea50464130cb42196b51283414c585bd9694afffd23"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/dto.rs",
+    "sha256": "5b157722cff260f770625b9c0ce8cf6c7ed009ff0d27acc9a368e55a88365c93"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/encoding.rs",
+    "sha256": "6ad3d34f4faec69267c6d259645a78230fbb897d7771db586751d02aec7580e0"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/graph.rs",
+    "sha256": "a53ce7eb285cafdd8390cbac178559e24a98cf9e4adee9beac4b1996af39398a"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/limits.rs",
+    "sha256": "d8a5783602e891b0c7bfe4d611cd97ba2853268081039b5d06a03c58a404434e"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/structure.rs",
+    "sha256": "cd0815898a5ab00f49abe5d629fbc16e5ee77c8ef51a3533c474a89c7ddb34dc"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/validation.rs",
+    "sha256": "a78fb4afc39f2a62859509bd5c70360baa65bc4e781c12f85d5a540afaf408b5"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/visual_budget.rs",
+    "sha256": "5cacd95f510f244dd01deef1cd4b046a8254b6816437ff552d615d0e6892c60d"
+  },
+  {
+    "path": "apps/lab-workbench/src/presentation/v2/wire.rs",
+    "sha256": "442c57b286e475a6c22db8e93043db21d68a6a68c63347f9e99fcef3b57b0eab"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/document_owner.rs",
+    "sha256": "183d3dbe14bf2dc55789c81f6dbb04a3edbdf1cedf009258f0e8ad79cf98c5d3"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/protocol.rs",
+    "sha256": "28deefcfb980552f43ae1e37528d60c9e6b5e04ff0eb4650d2ca77bb9c66c2dc"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/read_decode.rs",
+    "sha256": "04e128902bdab524ac4465563a80d294e56446803e29cad2bfa99af7e82fecc6"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/renderer_progress.rs",
+    "sha256": "7e4c75716dc18587b48833a316871d5e1c20e9f65ca0891f1ae22c5be4757373"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/replica.rs",
+    "sha256": "4a42a93615d7b8f5d157af12741e628c8bc73747cf9e8eb82b6cdf389aed72fc"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/selected_provider.rs",
+    "sha256": "d9f52a59cb538ab0cc035ee94d8d40a86194bb34d1bc8aa6564a7322b0400585"
+  },
+  {
+    "path": "apps/lab-workbench/src/private_ipc/transport.rs",
+    "sha256": "ec82283a8842febe91c746d2098fa542c25f0425340781ab1d7ba89b06e63a74"
+  },
+  {
+    "path": "apps/lab-workbench/src/readonly_limits.rs",
+    "sha256": "07e146b889cf066e15daf874b34cfe230cf6f7fd413d3818f32a2eb2d8eb1167"
+  },
+  {
+    "path": "apps/lab-workbench/src/readonly_values.rs",
+    "sha256": "b91a68f583425d600b423a925796f4546c9768360efb0124077cd104d3407e7f"
+  },
+  {
+    "path": "crates/lab-windows-job/src/lib.rs",
+    "sha256": "76e97d3bf75a3939e668360f95a3ce0f67d8397bc1361f79c9703c2639f744e9"
+  },
+  {
+    "path": "crates/lab-windows-job/src/pipe.rs",
+    "sha256": "0fe1f500bd74b5d553d596e5f1b123ade4594b991534847a8759054b0f3dbee5"
+  },
+  {
+    "path": "crates/lab-windows-job/src/windows.rs",
+    "sha256": "f8f5b44f89f149ff6e3f52a802a32ea47bc83c068ba23f1220d750e3d4334737"
+  },
+  {
+    "path": "scripts/support/native-glow-backend.rs",
+    "sha256": "dc5f8d4e48bfb8758b7ac0ef7e1afe6edd36ee593ff3d04d60594cde88b71944"
+  },
+  {
+    "path": "scripts/support/native-glow-device.rs",
+    "sha256": "2266fc6e8ed475b94edd363db35e66c7c3c69f13ad0f5793c325dc7f6bb1ff20"
+  }
+]

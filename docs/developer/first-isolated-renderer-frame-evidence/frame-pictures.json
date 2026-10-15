@@ -1,0 +1,122 @@
+[
+  {
+    "profile": "dev",
+    "scenario": "no-data",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-02.json",
+    "raw_rgba_archive_member": "actual-child/debug/22680-000000000000589818deaeaac1c6b059-1/frame-02.rgba",
+    "rgba_sha256": "75b909d592a7e69e77a43e39b4359f50a62762a5f259f0d07e7dfe9144390538",
+    "png": "dev-no-data.png",
+    "png_sha256": "a5b4d3c9e14aa9d7c0cf9118e8386be024bcd6ab8a6e8a7ed4f327afc1c3cb0f",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 0,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "dev",
+    "scenario": "scalar",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-03.json",
+    "raw_rgba_archive_member": "actual-child/debug/22680-000000000000589818deaeaac1c6b059-1/frame-03.rgba",
+    "rgba_sha256": "6536d56aad9f20b9ef0352850456e764e37aa7b414ff286c0301d7848478ca1d",
+    "png": "dev-scalar.png",
+    "png_sha256": "9b4bfa4eda38570641a580141c447e83085b685e7a8e8939662be2c9d74b36f8",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 0,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "dev",
+    "scenario": "selected-plot",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-05.json",
+    "raw_rgba_archive_member": "actual-child/debug/22680-000000000000589818deaeaac1c6b059-1/frame-05.rgba",
+    "rgba_sha256": "9b0e7d94d0a5a004cb8f6ef84eb97a4084f66cf3b50c4ce835c0ad6c0c26b8e7",
+    "png": "dev-selected-plot.png",
+    "png_sha256": "4e24faf0be94628c06ed705d48a4ce8d5bd622c3fb074f7a1d0d686492ea91a3",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 64,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "dev",
+    "scenario": "live-plot",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-07.json",
+    "raw_rgba_archive_member": "actual-child/debug/22680-000000000000589818deaeaac1c6b059-1/frame-07.rgba",
+    "rgba_sha256": "ca9d08d29b15fe26a46c605375cd14af28e1871ee299e2c6cc1324194992ebb5",
+    "png": "dev-live-plot.png",
+    "png_sha256": "52699a12329e22bf421a234972f2ec8cb3e90bf3960873c422838ee90ac1f642",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 65,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "dev",
+    "scenario": "document-replacement",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\debug\\target\\isolated-native-renderer\\22680-000000000000589818deaeaac1c6b059-1\\frame-11.json",
+    "raw_rgba_archive_member": "actual-child/debug/22680-000000000000589818deaeaac1c6b059-1/frame-11.rgba",
+    "rgba_sha256": "e26317b2dfea1f34158fd480500b2d4b4c99232babc960e098aa334d2d4e4fb7",
+    "png": "dev-document-replacement.png",
+    "png_sha256": "e980e9da65ba77cca32f7e81c8637564bb820dc4352d1cfacf1c23a640bf4cf8",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 65,
+    "epoch_revision": 3
+  },
+  {
+    "profile": "release",
+    "scenario": "no-data",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-02.json",
+    "raw_rgba_archive_member": "actual-child/release/6288-000000000000189018deaf55a3f20ef1-1/frame-02.rgba",
+    "rgba_sha256": "75b909d592a7e69e77a43e39b4359f50a62762a5f259f0d07e7dfe9144390538",
+    "png": "release-no-data.png",
+    "png_sha256": "a5b4d3c9e14aa9d7c0cf9118e8386be024bcd6ab8a6e8a7ed4f327afc1c3cb0f",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 0,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "release",
+    "scenario": "scalar",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-03.json",
+    "raw_rgba_archive_member": "actual-child/release/6288-000000000000189018deaf55a3f20ef1-1/frame-03.rgba",
+    "rgba_sha256": "b0f705d6f29f8238abf2c4bae9e3943dc7c0c476f34d6060a88a0ddad6e9b893",
+    "png": "release-scalar.png",
+    "png_sha256": "52ac3537ec3f34175946af3e0b32cec1438903b395734731f300a93ebbc99aa0",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 0,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "release",
+    "scenario": "selected-plot",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-04.json",
+    "raw_rgba_archive_member": "actual-child/release/6288-000000000000189018deaf55a3f20ef1-1/frame-04.rgba",
+    "rgba_sha256": "9b0e7d94d0a5a004cb8f6ef84eb97a4084f66cf3b50c4ce835c0ad6c0c26b8e7",
+    "png": "release-selected-plot.png",
+    "png_sha256": "4e24faf0be94628c06ed705d48a4ce8d5bd622c3fb074f7a1d0d686492ea91a3",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 64,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "release",
+    "scenario": "live-plot",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-06.json",
+    "raw_rgba_archive_member": "actual-child/release/6288-000000000000189018deaf55a3f20ef1-1/frame-06.rgba",
+    "rgba_sha256": "ca9d08d29b15fe26a46c605375cd14af28e1871ee299e2c6cc1324194992ebb5",
+    "png": "release-live-plot.png",
+    "png_sha256": "52699a12329e22bf421a234972f2ec8cb3e90bf3960873c422838ee90ac1f642",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 65,
+    "epoch_revision": 2
+  },
+  {
+    "profile": "release",
+    "scenario": "document-replacement",
+    "metadata": "D:\\rust_projects\\lab-runtime\\target\\release\\target\\isolated-native-renderer\\6288-000000000000189018deaf55a3f20ef1-1\\frame-09.json",
+    "raw_rgba_archive_member": "actual-child/release/6288-000000000000189018deaf55a3f20ef1-1/frame-09.rgba",
+    "rgba_sha256": "e26317b2dfea1f34158fd480500b2d4b4c99232babc960e098aa334d2d4e4fb7",
+    "png": "release-document-replacement.png",
+    "png_sha256": "e980e9da65ba77cca32f7e81c8637564bb820dc4352d1cfacf1c23a640bf4cf8",
+    "transform": "lossless GL bottom-left to PNG top-left row reversal only",
+    "points": 65,
+    "epoch_revision": 3
+  }
+]

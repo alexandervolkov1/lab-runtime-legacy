@@ -2,9 +2,10 @@
 //! discovery reconstruction, cache mutation, or laboratory submission methods.
 use super::PresentationEpoch;
 use crate::{
-    model::{Freshness, LivePoint, ReadAbsence, ReadQuality, ScalarKind},
     presentation::RuntimeRef,
+    readonly_values::{Freshness, LivePoint, ReadAbsence, ReadBinding, ReadQuality, ScalarKind},
 };
+use std::collections::{VecDeque, vec_deque};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) enum Scalar<'a> {
@@ -36,20 +37,88 @@ pub(crate) struct Origin<'a> {
 /// the trusted codec boundary, which proves count/finite/source-floor checks.
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Trace<'a> {
-    pub(crate) encoded: &'a [u8],
+    points: TracePoints<'a>,
     pub(crate) source_floor: Option<f64>,
 }
+#[derive(Clone, Copy, Debug)]
+enum TracePoints<'a> {
+    Encoded(&'a [u8]),
+    Cache(&'a VecDeque<LivePoint>, u64),
+}
 impl Trace<'_> {
-    pub(crate) fn len(&self) -> usize {
-        self.encoded.len() / 16
+    #[cfg(test)]
+    pub(crate) fn encoded_bytes(&self) -> Option<&[u8]> {
+        match self.points {
+            TracePoints::Encoded(bytes) => Some(bytes),
+            TracePoints::Cache(_, _) => None,
+        }
     }
-    pub(crate) fn points(&self) -> impl ExactSizeIterator<Item = LivePoint> + '_ {
-        self.encoded.chunks_exact(16).map(|pair| LivePoint {
-            time_seconds: f64::from_le_bytes(pair[..8].try_into().unwrap()),
-            value: f64::from_le_bytes(pair[8..].try_into().unwrap()),
-        })
+    pub(crate) fn encoded(bytes: &[u8], source_floor: Option<f64>) -> Trace<'_> {
+        Trace {
+            points: TracePoints::Encoded(bytes),
+            source_floor,
+        }
+    }
+    pub(crate) fn cache(points: &VecDeque<LivePoint>, dropped: u64) -> Trace<'_> {
+        Trace {
+            points: TracePoints::Cache(points, dropped),
+            source_floor: None,
+        }
+    }
+    pub(crate) fn len(&self) -> usize {
+        match self.points {
+            TracePoints::Encoded(bytes) => bytes.len() / 16,
+            TracePoints::Cache(points, _) => points.len(),
+        }
+    }
+    pub(crate) fn dropped(&self) -> Option<u64> {
+        match self.points {
+            TracePoints::Encoded(_) => None,
+            TracePoints::Cache(_, dropped) => Some(dropped),
+        }
+    }
+    pub(crate) fn last(&self) -> Option<LivePoint> {
+        match self.points {
+            TracePoints::Encoded(bytes) => {
+                bytes.chunks_exact(16).next_back().map(|pair| LivePoint {
+                    time_seconds: f64::from_le_bytes(pair[..8].try_into().unwrap()),
+                    value: f64::from_le_bytes(pair[8..].try_into().unwrap()),
+                })
+            }
+            TracePoints::Cache(points, _) => points.back().copied(),
+        }
+    }
+    pub(crate) fn points(&self) -> Points<'_> {
+        match self.points {
+            TracePoints::Encoded(bytes) => Points::Encoded(bytes.chunks_exact(16)),
+            TracePoints::Cache(points, _) => Points::Cache(points.iter()),
+        }
     }
 }
+pub(crate) enum Points<'a> {
+    Encoded(std::slice::ChunksExact<'a, u8>),
+    Cache(vec_deque::Iter<'a, LivePoint>),
+}
+impl Iterator for Points<'_> {
+    type Item = LivePoint;
+    fn next(&mut self) -> Option<LivePoint> {
+        match self {
+            Self::Encoded(pairs) => pairs.next().map(|pair| LivePoint {
+                time_seconds: f64::from_le_bytes(pair[..8].try_into().unwrap()),
+                value: f64::from_le_bytes(pair[8..].try_into().unwrap()),
+            }),
+            Self::Cache(points) => points.next().copied(),
+        }
+    }
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let len = match self {
+            Self::Encoded(pairs) => pairs.len(),
+            Self::Cache(points) => points.len(),
+        };
+        (len, Some(len))
+    }
+}
+impl ExactSizeIterator for Points<'_> {}
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Fields<'a> {
     pub(crate) scalar: Scalar<'a>,
@@ -76,10 +145,39 @@ impl SelectedRead<'_> {
         }
     }
 }
+/// Optional parent-cache entity view; the value and its own freshness travel
+/// together. A global Fresh cache cannot promote an individually Stale entity.
+pub(crate) struct RawEntity<'a> {
+    pub(crate) value: &'a serde_json::Value,
+    pub(crate) freshness: Freshness,
+}
 pub(crate) trait ReadOnlyProvider {
-    fn epoch(&self) -> PresentationEpoch;
-    fn incarnation(&self) -> u64;
+    /// Parent-cache adapters have no child epoch/incarnation. Absence is explicit.
+    fn epoch(&self) -> Option<PresentationEpoch>;
+    fn incarnation(&self) -> Option<u64>;
     fn original_freshness(&self) -> Freshness;
     fn current(&self) -> bool;
-    fn selected(&self, target: &RuntimeRef) -> Option<SelectedRead<'_>>;
+    /// The visitor cannot retain a reference to a frame-local decoded scalar.
+    /// Neither implementation builds a second model or point buffer.
+    fn with_selected(
+        &self,
+        target: &RuntimeRef,
+        binding: ReadBinding,
+        consume: &mut dyn FnMut(Option<SelectedRead<'_>>),
+    );
+    fn trace(&self, target: &RuntimeRef) -> Option<Trace<'_>>;
+    /// Optional bounded-display source; LRD1 deliberately does not contain it.
+    fn supports_raw_entities(&self) -> bool {
+        false
+    }
+    fn raw_entity(&self, _target: &RuntimeRef) -> Option<RawEntity<'_>> {
+        None
+    }
+    fn display_freshness(&self) -> Freshness {
+        if !self.current() && self.original_freshness() == Freshness::Fresh {
+            Freshness::Stale
+        } else {
+            self.original_freshness()
+        }
+    }
 }

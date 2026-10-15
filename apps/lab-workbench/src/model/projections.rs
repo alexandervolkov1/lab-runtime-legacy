@@ -5,8 +5,7 @@ use crate::presentation::RuntimeRef;
 use serde_json::Value;
 use std::collections::{BTreeMap, VecDeque};
 
-/// Maximum live display points retained for one trace.
-pub(crate) const LIVE_TRACE_POINTS: usize = 4_096;
+pub(crate) use crate::readonly_values::{Freshness, LIVE_TRACE_POINTS, LivePoint};
 /// Current Runtime maximum: 64 instruments with 16 parameters each.
 pub(crate) const MAX_READ_DESCRIPTORS: usize = 64 * 16;
 /// Aggregate decoded descriptor payload retained by Workbench.
@@ -17,20 +16,6 @@ pub(super) struct DescriptorObservation {
     pub(super) descriptor: ReadDescriptor,
     pub(super) freshness: Freshness,
     retained_bytes: usize,
-}
-
-/// Freshness of a rebuildable observation set.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
-pub(crate) enum Freshness {
-    /// No observation has been obtained in this client lifetime.
-    #[default]
-    Unknown,
-    /// A reconnect/resnapshot rebuild is in progress.
-    Rebuilding,
-    /// Values are based on the current attached boot/session/event stream.
-    Fresh,
-    /// Values are cached and must not be presented as current.
-    Stale,
 }
 
 /// Last observed plain Application value and its client-side freshness.
@@ -60,15 +45,6 @@ pub(crate) struct ResourceDetail {
     pub(crate) transport_generation: Value,
     /// Full detail is mutation-authoritative only while this is Fresh.
     pub(crate) freshness: Freshness,
-}
-
-/// One display-only live point; it is not Recorder data or physical evidence.
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub(crate) struct LivePoint {
-    /// Client/display timestamp expressed in seconds.
-    pub(crate) time_seconds: f64,
-    /// Observed numeric value.
-    pub(crate) value: f64,
 }
 
 /// Bounded display window for one Runtime source.

@@ -1,0 +1,38 @@
+{
+  "scope": "B3B4B FIRST ISOLATED REAL GL FRAME PASS in dev/release fixed existing B2B2 profile. Full B3B4, terminal general lifecycle, whole-host Rust and100cycles remain BLOCKED/unqualified. Activation false; C unselected.",
+  "native_experiments": [
+    {
+      "attempt": "first-native-dev-attempt-1",
+      "source_head": "d3f8f8a9546d0ab049e99bfda344d5ca736cefdf",
+      "binary_sha256": "6D49FA76E82CCC5C50B032D9865B9F22AA727C724ACDD698015E497EB7BE8113",
+      "result": "startup exit91; pre-handshake error text not captured; test observer panic poisoned its mutex"
+    },
+    {
+      "attempt": "first-native-dev-attempt-2",
+      "source_head": "2b1457b",
+      "binary_sha256": null,
+      "provenance_limit": "Intermediate identity file was overwritten before archival; exact intermediate binary hash is not recovered or fabricated. Source remains in Git.",
+      "result": "Device scale-one guard; cwd fixed; status observer still poisoned on expected startup failure"
+    },
+    {
+      "attempt": "first-native-dev-attempt-3",
+      "source_head": "1aa38c096cda40e1f15e96925ccc16a43f1fb632",
+      "identity_file": "first-native-dev-attempt-3-identity.json",
+      "result": "scale1.25 profile captured; original exit/IPC retirement and parent join observed without poisoned mutex"
+    }
+  ],
+  "earlier_checks": [
+    "Stage A shared values: typed-read tests pass dev/release.",
+    "Early B compile attempts found Windows Python cp1252 output in read.rs (fixed before source commit), Default inference requiring explicit cache types, and stale test assumptions about a reference selector. Raw compiler/test logs retained.",
+    "An exploratory GUI suite was cancelled after a simultaneous relink hit the running test.exe lock; final tests run serially.",
+    "Capsule checks built and rejected expected E0277/E0453, but PowerShell left LASTEXITCODE at the last expected negative rejection; script now resets it only after both controls pass.",
+    "Final-attempt-1 on41233f completed full dev526/45 and other gates; its CPU run was cancelled for the discovered individual-entry freshness bug. Completed results are historical to that source.",
+    "Two real Preview regressions failed before the freshness fix. Before-fix source is41233f plus the two new tests (their exact test blob is atf31f2d1); fixed sourcef31f2d1 passes both and all final suites.",
+    "The old scale1.25 assessment was an agent oversight: original B2B2 already used process-local with_dpi_aware(false). Commit973a1bd reuses exactly that accepted profile without changing Device guards or OS DPI. Standalone f31 smoke already passed dev/release; final child frames and fault cases now pass too.",
+    "Attempt4 at973a1bd produced real frames but title-only document replacement did not change visible Plot pixels; bounded assertions and actual axis replacement followed atdca775f. The 39MB assertion dump is preserved compressed.",
+    "Attempt5 atdca775f proved empty own-object ledger but exact Close challenge was consumed by interimStatus: parent correctly ExitedContained at exit0. Commitc1bf482 preserves the Close challenge until real own-object release; attempt6 passes.",
+    "Early native attempts2,4,5,6 and old standalone controls before per-run identity archival have source/raw evidence but some intermediate binary hashes were overwritten and are unavailable. No hash is fabricated. Final runs archive binary identities before execution.",
+    "Fault dev attempt1 at823c1a3 passed5 tests but owner stall happened before Ready (StartupDeadline). Final source1d297ad waits for actual frame progress publication before the injected stall and observes HeartbeatDeadline. Both attempts are retained."
+  ],
+  "artifact_verification_followup": "Artifact verifier variable shadow was corrected without altering gate results. Outer SHA inventory was changed from local CRLF Markdown bytes to canonical Git-blob bytes so independent downloads verify consistently. Raw archive/RGBA and binary hashes are unchanged."
+}

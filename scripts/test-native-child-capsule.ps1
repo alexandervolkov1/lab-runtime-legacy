@@ -19,20 +19,22 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Native capsule Clippy failed' }
     $compiled = @($records | Where-Object reason -eq 'compiler-artifact')
     $externs = @()
-    foreach ($name in @('eframe','glutin','glutin_winit','winit','raw_window_handle')) {
+    foreach ($name in @('eframe','glutin','glutin_winit','winit','raw_window_handle','egui_plot','serde','serde_json','lab_windows_job')) {
         $files = @($compiled | Where-Object { $_.target.name -eq $name } | ForEach-Object filenames | Where-Object { $_ -like '*.rlib' } | Select-Object -Unique)
         if ($files.Count -ne 1) { throw "Ambiguous native artifact $name" }
         $externs += @('--extern', "$name=$($files[0])")
     }
     foreach ($path in @($records | Where-Object reason -eq 'build-script-executed' | ForEach-Object linked_paths | Select-Object -Unique)) { $externs += @('-L', $path) }
     $native = (Join-Path $repo 'scripts/support/native-glow-device.rs').Replace('\','/')
-    $types = (Join-Path $repo 'apps/lab-native-child/src/readonly_v2.rs').Replace('\','/')
+    $types = (Join-Path $repo 'apps/lab-native-child/src/consumer.rs').Replace('\','/')
     $source = Join-Path $directory 'denied-send.rs'
     $wrapper = @"
 //! Compile-fail proof for the real native Device's non-Send boundary.
 #![deny(unsafe_code)]
-#![allow(dead_code)]
-#[path = "$types"] mod readonly_v2;
+#![allow(dead_code, unused_imports)]
+#[path = "$types"] mod consumer;
+pub(crate) use consumer::{presentation, private_ipc, readonly_limits, readonly_v2, readonly_values};
+mod gui { pub(crate) use crate::readonly_v2; }
 #[path = "$native"] mod device;
 fn main() { fn send<T: Send>() {} send::<device::Device>(); }
 "@
@@ -52,4 +54,7 @@ fn main() { fn send<T: Send>() {} send::<device::Device>(); }
     if ($binary.Count -ne 1) { throw 'Ambiguous Cargo target binary' }
     Get-FileHash -Algorithm SHA256 -LiteralPath $binary[0]
     Write-Output 'NATIVE CAPSULE Cargo build/Clippy PASS; non-Send E0277 and protected-policy E0453 rejection PASS; no GPU execution'
+    # Both negative compiler controls intentionally return nonzero. Do not expose
+    # the last expected rejection as the outcome of this successful script.
+    $global:LASTEXITCODE = 0
 } finally { Pop-Location }

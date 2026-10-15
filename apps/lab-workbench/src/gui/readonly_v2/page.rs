@@ -108,7 +108,7 @@ impl Page {
 
     pub(super) fn prepare(
         doc: &v2::AdmittedV2Document,
-        observations: &RuntimeObservations,
+        observations: &dyn ReadOnlyProvider,
         epoch: PresentationEpoch,
         location: Location,
     ) -> Self {
@@ -257,7 +257,7 @@ impl Page {
     fn describe(
         &mut self,
         doc: &v2::AdmittedV2Document,
-        observations: &RuntimeObservations,
+        observations: &dyn ReadOnlyProvider,
         component: &v2::Component,
         availability: v2::StaticAvailability,
     ) {

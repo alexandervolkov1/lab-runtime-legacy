@@ -1,17 +1,34 @@
-//! Inert Windows native child packaging proof. No event loop or renderer starts.
+//! Experimental read-only Windows renderer child. Not an activated product host.
 #![allow(
     dead_code,
-    reason = "compile-only capsule pending independent integration review"
+    reason = "private renderer qualification surface; activation remains false"
 )]
 
+#[cfg(windows)]
+#[path = "../../../scripts/support/native-glow-backend.rs"]
+mod backend;
+#[cfg(windows)]
+mod consumer;
 #[cfg(windows)]
 #[path = "../../../scripts/support/native-glow-device.rs"]
 mod device;
 #[cfg(windows)]
-mod readonly_v2;
+mod entry;
+#[cfg(windows)]
+pub(crate) use consumer::{
+    presentation, private_ipc, readonly_limits, readonly_v2, readonly_values,
+};
+#[cfg(windows)]
+mod gui {
+    pub(crate) use crate::readonly_v2;
+}
 
 fn main() {
     #[cfg(windows)]
-    let _native_owner_layout = std::mem::size_of::<device::Device>();
-    eprintln!("Native capsule compatibility target only; ACTIVATION_QUALIFIED=false");
+    if let Err(error) = entry::run() {
+        eprintln!("Read-only renderer child startup: {error}; ACTIVATION_QUALIFIED=false");
+        std::process::exit(91);
+    }
+    #[cfg(not(windows))]
+    eprintln!("Windows qualification target only; ACTIVATION_QUALIFIED=false");
 }
