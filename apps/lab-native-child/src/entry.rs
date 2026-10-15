@@ -76,6 +76,7 @@ struct Channels {
     pending: [Option<(Header, bool)>; 2],
     closed_sent: bool,
     diagnostic: Option<crate::private_ipc::renderer_progress::RendererProgress>,
+    reported_frame_completion: bool,
 }
 impl Channels {
     fn service(
@@ -187,6 +188,7 @@ impl Channels {
             self.control
                 .send(header, &payload)
                 .map_err(|e| format!("{e:?}"))?;
+            self.reported_frame_completion |= progress.completed != 0;
         } else if self.challenge.is_some() {
             self.status(replica, owner_progress, Kind::Status)?;
             self.diagnostic = Some(progress);
@@ -517,7 +519,7 @@ impl Display<'_, '_> {
         if state.mode == "crash" {
             std::process::exit(73);
         }
-        if state.mode == "owner-stall" {
+        if state.mode == "owner-stall" && state.io.reported_frame_completion {
             loop {
                 std::thread::park();
             }
@@ -765,6 +767,7 @@ pub(super) fn run() -> Result<()> {
             pending: [None; 2],
             closed_sent: false,
             diagnostic: None,
+            reported_frame_completion: false,
         },
         device,
         directory,

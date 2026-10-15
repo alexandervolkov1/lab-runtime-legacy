@@ -490,6 +490,16 @@ impl FaultHarness {
         );
         let recovery = response(&mut self.stream, "recovery");
         assert_eq!(recovery["result"]["record"]["admission"], "accepted");
+        assert_eq!(recovery["result"]["record"]["boot_id"], "boot");
+        assert_eq!(
+            recovery["result"]["record"]["request_id"],
+            json!({"scope":"scope","seq":"7"})
+        );
+        assert_eq!(recovery["result"]["record"]["op"], "reference_retune");
+        assert_eq!(
+            recovery["result"]["record"]["args"],
+            json!({"reference":"1","target":2.0,"rate":1.0})
+        );
         // This contains the original accepted identity, not a reconstructed one.
         assert!(
             self.rx.try_recv().is_err(),
@@ -597,6 +607,16 @@ fn native_renderer_owner_stall_does_not_mask_parent_or_restart() {
     assert_eq!(terminal.phase, Phase::ExitedContained);
     assert_eq!(terminal.exit_code, Some(77));
     assert!(terminal.termination_requests > 0);
+    assert!(
+        matches!(
+            terminal.reason,
+            Some(
+                crate::supervisor::Reason::HeartbeatDeadline
+                    | crate::supervisor::Reason::OwnerProgressDeadline
+            )
+        ),
+        "{terminal:?}"
+    );
     h.retired();
     h.restart(3, 64);
     h.finish("native-render-owner-stall",json!({"reason":format!("{:?}",terminal.reason),"old_exit_code":77,"old_own_object_cleanup":"UNQUALIFIED/OS containment","old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));

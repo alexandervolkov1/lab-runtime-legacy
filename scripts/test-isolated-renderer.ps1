@@ -15,6 +15,9 @@ try {
     $binary=@($records | Where-Object { $_.reason -eq 'compiler-artifact' -and $_.target.name -eq 'lab-native-child' } | ForEach-Object executable | Where-Object { $_ } | Select-Object -Unique)
     if ($binary.Count -ne 1) { throw 'Ambiguous child Cargo binary' }
     @{ source_head=$sourceHead; binary=$binary[0]; sha256=(Get-FileHash -LiteralPath $binary[0] -Algorithm SHA256).Hash; activation_qualified=$false; deployment_C=$null; test_only_job_commit_cap=1073741824 } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $directory 'identity.json')
+    $receipt=Join-Path $directory ("identity-"+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffff')+'.json')
+    Copy-Item -LiteralPath (Join-Path $directory 'identity.json') -Destination $receipt
+    Write-Output "CHILD_IDENTITY=$receipt"
     $previous=$env:LAB_ISOLATED_RENDERER_CHILD
     try {
         $env:LAB_ISOLATED_RENDERER_CHILD=$binary[0]
