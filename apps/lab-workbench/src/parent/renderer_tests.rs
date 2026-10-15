@@ -12,6 +12,10 @@ use std::{
 };
 
 const TEST_ONLY_COMMIT_CAP: usize = 1024 * 1024 * 1024;
+fn reading(bridge: &crate::private_ipc::TestBridge, milestone: &str) -> Value {
+    let status = bridge.status().unwrap();
+    json!({"milestone":milestone,"cumulative_peak_process_commit":status.sampled_commit.map(|r|r.peak_process_commit),"cumulative_peak_job_commit":status.sampled_commit.map(|r|r.peak_job_commit),"ipc_connected":status.connected,"ipc_io_bytes":status.io_bytes,"credits":status.credits,"owner_diagnostic":format!("{:?}",status.renderer)})
+}
 fn target() -> RuntimeRef {
     RuntimeRef::Signal {
         instrument: "instrument".into(),
@@ -155,7 +159,11 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         ));
     wait(|| pump.supervisor().unwrap().restart(launch("normal")).is_ok());
     let mut startup = None;
+    let mut memory = Vec::new();
     wait(|| {
+        if memory.is_empty() && directory.join("startup.json").is_file() {
+            memory.push(reading(&bridge, "child_startup_before_ready"));
+        }
         if let Ok(status) = pump.supervisor().unwrap().status()
             && matches!(
                 status.phase,
@@ -168,6 +176,7 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         false
     });
     let startup = startup.unwrap();
+    memory.push(reading(&bridge, "native_window_context_ready"));
     if startup.phase != Phase::Ready {
         let error = fs::read_to_string(directory.join("startup-error.json")).unwrap_or_default();
         let profile = fs::read_to_string(directory.join("native-profile.json")).unwrap_or_default();
@@ -216,6 +225,7 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         v["plot"] == true && v["observation_snapshot"] != 0 && v["plot_points"] == 0
     });
     let empty_pixels = pixels(&empty_path, &empty);
+    memory.push(reading(&bridge, "first_preview_no_data_readback"));
     assert_eq!(empty["cyan_pixels"], 0);
     assert!(empty["curve_samples"].as_array().unwrap().is_empty());
     bootstrap_records(
@@ -245,10 +255,12 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
                 .is_some_and(|s| s.contains("Runtime unit: V") && s.contains("Fresh\n"))
     });
     pixels(&scalar_path, &scalar);
+    memory.push(reading(&bridge, "selected_scalar_readback"));
     let (plot_path, plot) = find_frame(&directory, |v| {
         v["plot"] == true && v["current"] == true && v["plot_points"] == 64
     });
     let plot_pixels = pixels(&plot_path, &plot);
+    memory.push(reading(&bridge, "selected_plot_readback"));
     assert!(
         empty_pixels != plot_pixels,
         "selected trace did not change actual GL pixels"
@@ -261,6 +273,7 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         v["plot"] == true && v["current"] == true && v["plot_points"] == 65
     });
     let live_pixels = pixels(&live_path, &live);
+    memory.push(reading(&bridge, "live_snapshot_replacement_readback"));
     assert!(
         plot_pixels != live_pixels,
         "new observations did not change actual GL pixels"
@@ -281,6 +294,18 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
         v["plot"] == true && v["epoch_revision"] == 3 && v["plot_points"] == 65
     });
     let replacement_pixels = pixels(&replacement_path, &replacement);
+    memory.push(reading(&bridge, "document_replacement_readback"));
+    wait(|| {
+        bridge.status().is_ok_and(|s| {
+            s.renderer.is_some_and(|r| {
+                r.event_loop > 0
+                    && r.render_owner > 0
+                    && r.completed > 0
+                    && r.submitted >= r.completed
+                    && r.released_generations > 0
+            })
+        })
+    });
     assert!(
         live_pixels != replacement_pixels,
         "new document axes did not change actual GL pixels"
@@ -320,6 +345,8 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
     assert_eq!(ipc.handles, 0);
     assert_eq!(ipc.pending_io, 0);
     assert_eq!(ipc.credits.iter().sum::<usize>(), 4);
+    memory.push(json!({"milestone":"normal_shutdown_original_process_exit","cumulative_peak_process_commit":terminal.reading.peak_process_commit,"cumulative_peak_job_commit":terminal.reading.peak_job_commit}));
+    fs::write(directory.join("memory-milestones.json"),serde_json::to_vec_pretty(&json!({"kind":"sampled_cumulative_OS_Job_peaks_not_additive_phase_allocations","samples":memory})).unwrap()).unwrap();
     fs::write(directory.join("parent-result.json"),serde_json::to_vec_pretty(&json!({"first_isolated_real_gl_frame":"PASS","test_only_job_commit_cap":TEST_ONLY_COMMIT_CAP,"deployment_C":null,
         "peak_process_commit":terminal.reading.peak_process_commit,"peak_job_commit":terminal.reading.peak_job_commit,"workbench_id":identity,"presentation_revision":"3",
         "runtime_extra_query_mutation_status_retry":0,"final_phase":format!("{:?}",terminal.phase),"own_objects":0,"original_ipc_retired":true})).unwrap()).unwrap();
@@ -331,4 +358,340 @@ fn native_first_isolated_renderer_frames_from_parent_approved_snapshots() {
     );
     pump.shutdown().unwrap();
     assert_eq!(stops.load(Ordering::SeqCst), 1);
+}
+
+/// A single parent and original Job/IPC episode. No test opens a Runtime socket
+/// in the renderer or bypasses supervisor startup/retirement.
+struct FaultHarness {
+    pump: ParentPump<FakeClient>,
+    bridge: crate::private_ipc::TestBridge,
+    stream: BufReader<TcpStream>,
+    tx: SyncSender<ClientUpdate>,
+    rx: Receiver<Sent>,
+    signal: PumpSignal,
+    stops: Arc<AtomicUsize>,
+    identity: Value,
+}
+impl FaultHarness {
+    fn new(mode: &str, retirement_gate: Option<Arc<std::sync::atomic::AtomicBool>>) -> Self {
+        let (mut owner, tx, rx, stops) = fixture();
+        let signal = PumpSignal::default();
+        let mut adapter = ParentBridge::new(&owner.dispatcher, vec![target()]).unwrap();
+        adapter.turn(&owner.dispatcher);
+        let bridge = adapter.bridge.clone();
+        owner.private_bridge = Some(adapter);
+        let mut stream = open_api(&mut owner, &signal);
+        let mut pump = ParentPump::spawn(owner, signal.clone()).unwrap();
+        let factory = bridge.worker_factory().unwrap();
+        pump.install_supervisor(
+            move || {
+                let mut backend = factory();
+                if let Some(gate) = retirement_gate {
+                    backend.hold_retirement(gate);
+                }
+                backend
+            },
+            Policy::default(),
+        )
+        .unwrap();
+        request(&mut stream, "hello", "hello", json!({}));
+        response(&mut stream, "hello");
+        request(&mut stream, "identity", "presentation_get", json!({}));
+        let identity = response(&mut stream, "identity")["result"]["workbench_id"].clone();
+        request(
+            &mut stream,
+            "document",
+            "ui_replace_document",
+            json!({"expected":{"workbench_id":identity,"revision":"1"},"document":document("Isolated fault fixture μ Ω")}),
+        );
+        assert_eq!(
+            response(&mut stream, "document")["result"]["presentation_revision"],
+            "2"
+        );
+        wait(|| pump.supervisor().unwrap().restart(launch(mode)).is_ok());
+        Self {
+            pump,
+            bridge,
+            stream,
+            tx,
+            rx,
+            signal,
+            stops,
+            identity,
+        }
+    }
+    fn directory(&self, incarnation: u64) -> PathBuf {
+        launch("normal")
+            .executable
+            .parent()
+            .unwrap()
+            .join("target/isolated-native-renderer")
+            .join(format!(
+                "{}-{}-{incarnation}",
+                std::process::id(),
+                self.identity.as_str().unwrap()
+            ))
+    }
+    fn seed(&mut self) {
+        bootstrap_records(
+            &self.tx,
+            &self.rx,
+            &self.signal,
+            json!([{"kind":"signal","id":{"instrument":"instrument","parameter":"s0"},"generation":"1","value_type":"float","unit":{"id":"volt","symbol":"V"}}]),
+        );
+        send_update(
+            &self.tx,
+            &self.signal,
+            ClientUpdate::RecoveryProjection {
+                active: vec![record(KnownAdmission::Accepted)],
+                quarantined: vec![],
+            },
+        );
+        self.signal.wait_updates(7);
+        for i in 0..64 {
+            sample(&self.tx, &self.signal, i, ((i as f64) * 0.15).sin() * 4.);
+            self.signal.wait_updates(8 + i as usize);
+        }
+    }
+    fn replace(&mut self) {
+        let mut replacement = document("Current parent document after display fault");
+        replacement.plots[0].axes.y_max = Some(20.);
+        request(
+            &mut self.stream,
+            "replace",
+            "ui_replace_document",
+            json!({"expected":{"workbench_id":self.identity,"revision":"2"},"document":replacement}),
+        );
+        assert_eq!(
+            response(&mut self.stream, "replace")["result"]["presentation_revision"],
+            "3"
+        );
+    }
+    fn continuity(&mut self, revision: &str) {
+        request(
+            &mut self.stream,
+            "presentation",
+            "presentation_get",
+            json!({}),
+        );
+        let view = response(&mut self.stream, "presentation");
+        assert_eq!(view["result"]["workbench_id"], self.identity);
+        assert_eq!(view["result"]["presentation_revision"], revision);
+        request(&mut self.stream, "status", "client_status", json!({}));
+        assert_eq!(
+            response(&mut self.stream, "status")["result"]["runtime_client"]["freshness"],
+            "fresh"
+        );
+        request(
+            &mut self.stream,
+            "recovery",
+            "recovery_get",
+            json!({"kind":"active","index":"0","expected":null}),
+        );
+        let recovery = response(&mut self.stream, "recovery");
+        assert_eq!(recovery["result"]["record"]["admission"], "accepted");
+        // This contains the original accepted identity, not a reconstructed one.
+        assert!(
+            self.rx.try_recv().is_err(),
+            "display fault/restoration submitted Runtime work"
+        );
+        assert_eq!(self.stops.load(Ordering::SeqCst), 0);
+    }
+    fn terminal(&self) -> crate::supervisor::Status {
+        self.pump
+            .supervisor()
+            .unwrap()
+            .wait_status(|s| matches!(s.phase, Phase::ExitedHealthy | Phase::ExitedContained))
+    }
+    fn retired(&self) {
+        let ipc = self.bridge.status().unwrap();
+        assert!(ipc.retired);
+        assert_eq!(ipc.handles, 0);
+        assert_eq!(ipc.pending_io, 0);
+        assert_eq!(ipc.io_bytes, 0);
+        assert_eq!(ipc.credits.iter().sum::<usize>(), 4);
+    }
+    fn restart(&self, revision: u64, points: u64) {
+        self.retired();
+        wait(|| {
+            self.pump
+                .supervisor()
+                .unwrap()
+                .restart(launch("normal"))
+                .is_ok()
+        });
+        let (path, frame) = find_frame(&self.directory(2), |v| {
+            v["epoch_revision"] == revision
+                && v["plot"] == true
+                && v["current"] == true
+                && v["plot_points"] == points
+        });
+        pixels(&path, &frame);
+        assert!(frame["completed"].as_u64().unwrap() > 0);
+        wait(|| self.pump.supervisor().unwrap().stop(Stop::Graceful).is_ok());
+        let terminal = self.terminal();
+        assert_eq!(terminal.phase, Phase::ExitedHealthy, "{terminal:?}");
+        self.retired();
+    }
+    fn finish(&mut self, mode: &str, details: Value) {
+        self.continuity("3");
+        let terminal = self.terminal();
+        fs::write(self.directory(1).join("parent-fault-result.json"),serde_json::to_vec_pretty(&json!({"scenario":mode,"details":details,"original_process_exit_and_ipc_retirement":true,"explicit_restart_latest_snapshots":true,"extra_runtime_query_mutation_status_retry":0,"workbench_id":self.identity,"presentation_revision":"3","final_incarnation":terminal.incarnation,"final_phase":format!("{:?}",terminal.phase),"restart_peak_process_commit":terminal.reading.peak_process_commit,"restart_peak_job_commit":terminal.reading.peak_job_commit,"deployment_C":null,"os_containment_is_not_gpu_cleanup":true})).unwrap()).unwrap();
+        println!(
+            "ISOLATED_FAULT PASS mode={mode} evidence={} extra_runtime_submissions=0",
+            self.directory(1).display()
+        );
+        self.pump.shutdown().unwrap();
+        assert_eq!(self.stops.load(Ordering::SeqCst), 1);
+    }
+}
+
+#[test]
+#[ignore = "Windows actual isolated GL fault/restart qualification"]
+fn native_renderer_crash_exit_with_pending_original_ipc_blocks_restart() {
+    use std::sync::atomic::AtomicBool;
+    let gate = Arc::new(AtomicBool::new(false));
+    let mut h = FaultHarness::new("crash", Some(gate.clone()));
+    let (path, frame) = find_frame(&h.directory(1), |v| {
+        v["completed"].as_u64().is_some_and(|c| c > 0)
+    });
+    pixels(&path, &frame);
+    let unretired = h
+        .pump
+        .supervisor()
+        .unwrap()
+        .wait_status(|s| s.phase == Phase::ExitUnconfirmed);
+    assert_eq!(unretired.alive, Some(false));
+    assert_eq!(unretired.exit_code, Some(73));
+    let ipc = h.bridge.status().unwrap();
+    assert!(!ipc.retired);
+    assert!(ipc.handles > 0);
+    assert_eq!(
+        h.pump.supervisor().unwrap().restart(launch("normal")),
+        Err(crate::supervisor::Rejected::ExitUnconfirmed)
+    );
+    h.seed();
+    h.replace();
+    h.continuity("3");
+    gate.store(true, Ordering::Release);
+    let terminal = h.terminal();
+    assert_eq!(terminal.phase, Phase::ExitedContained);
+    assert_eq!(terminal.exit_code, Some(73));
+    h.retired();
+    h.restart(3, 64);
+    h.finish("crash-exit-before-ipc-retirement",json!({"old_exit_code":73,"restart_rejected_before_original_ipc_receipts":true,"old_own_object_cleanup":"UNQUALIFIED/crash","old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));
+}
+
+#[test]
+#[ignore = "Windows actual isolated GL owner stall qualification"]
+fn native_renderer_owner_stall_does_not_mask_parent_or_restart() {
+    let mut h = FaultHarness::new("owner-stall", None);
+    let (path, frame) = find_frame(&h.directory(1), |v| {
+        v["completed"].as_u64().is_some_and(|c| c > 0)
+    });
+    pixels(&path, &frame);
+    h.seed();
+    h.replace();
+    h.continuity("3");
+    let terminal = h.terminal();
+    assert_eq!(terminal.phase, Phase::ExitedContained);
+    assert_eq!(terminal.exit_code, Some(77));
+    assert!(terminal.termination_requests > 0);
+    h.retired();
+    h.restart(3, 64);
+    h.finish("native-render-owner-stall",json!({"reason":format!("{:?}",terminal.reason),"old_exit_code":77,"old_own_object_cleanup":"UNQUALIFIED/OS containment","old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));
+}
+
+#[test]
+#[ignore = "Windows actual GPU pending handoff and stop qualification"]
+fn native_renderer_pending_completion_handoff_stop_retains_original_root() {
+    let mut h = FaultHarness::new("pending", None);
+    let directory = h.directory(1);
+    wait(|| directory.join("pending.json").is_file());
+    h.seed();
+    h.replace();
+    h.continuity("3");
+    wait(|| directory.join("handoff-pending.json").is_file());
+    let pending: Value =
+        serde_json::from_slice(&fs::read(directory.join("handoff-pending.json")).unwrap()).unwrap();
+    assert_eq!(pending["max_live_parsed"], 1);
+    assert_eq!(pending["assembly_retained"], true);
+    assert!(pending["ledger"].as_str().unwrap().contains("Some("));
+    let old_applied = h.bridge.status().unwrap().applied[0];
+    let old_owner = h.pump.supervisor().unwrap().status().unwrap().owner_counter;
+    let until = Instant::now() + Duration::from_millis(2200);
+    while Instant::now() < until {
+        h.continuity("3");
+        thread::sleep(Duration::from_millis(20));
+    }
+    assert_eq!(
+        h.bridge.status().unwrap().applied[0],
+        old_applied,
+        "new document was Applied while old GPU/parsed ownership remained"
+    );
+    let live = h.pump.supervisor().unwrap().status().unwrap();
+    assert_eq!(live.phase, Phase::Ready);
+    assert!(live.owner_counter > old_owner);
+    assert!(!directory.join("admitted-2.json").exists());
+    assert!(!directory.join("own-retired.json").exists());
+    wait(|| h.pump.supervisor().unwrap().stop(Stop::Graceful).is_ok());
+    let terminal = h.terminal();
+    assert_eq!(terminal.phase, Phase::ExitedContained);
+    assert_eq!(terminal.exit_code, Some(77));
+    assert!(!directory.join("own-retired.json").exists());
+    h.retired();
+    h.restart(3, 64);
+    h.finish("pending-gpu-document-handoff-stop",json!({"bounded_complete_assembly_survived_transfer_deadline":true,"old_applied_unchanged":old_applied,"max_live_parsed":1,"old_gpu_cleanup":"BLOCKED/pending until OS containment","pending":pending,"old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));
+}
+
+#[test]
+#[ignore = "Windows actual GL stale-read during snapshot stall qualification"]
+fn native_renderer_snapshot_stall_preserves_non_current_latch() {
+    let mut h = FaultHarness::new("snapshot-stall", None);
+    // Establish the normal initial no-data frame before publishing samples.
+    find_frame(&h.directory(1), |v| {
+        v["plot"] == true && v["observation_snapshot"] != 0 && v["plot_points"] == 0
+    });
+    h.seed();
+    let (path, fresh) = find_frame(&h.directory(1), |v| {
+        v["plot"] == true && v["current"] == true && v["plot_points"] == 64
+    });
+    let fresh_pixels = pixels(&path, &fresh);
+    wait(|| h.directory(1).join("snapshot-stalled.json").is_file());
+    sample(&h.tx, &h.signal, 64, 8.);
+    h.signal.wait_updates(72);
+    // A parent-approved source fence invalidates the old replica independently
+    // of a still-Fresh Runtime model. No fabricated client event/discovery.
+    h.bridge.announce(2, fresh["source"].as_u64().unwrap() + 1);
+    let (path, stale) = find_frame(&h.directory(1), |v| {
+        v["plot"] == true
+            && v["current"] == false
+            && v["observation_snapshot"] == fresh["observation_snapshot"]
+    });
+    let stale_pixels = pixels(&path, &stale);
+    assert!(
+        fresh_pixels != stale_pixels,
+        "source fence did not change actual stale presentation"
+    );
+    assert!(stale["labels"].as_str().unwrap().contains("Stale"));
+    let owner_before = h.pump.supervisor().unwrap().status().unwrap().owner_counter;
+    wait(|| {
+        h.pump
+            .supervisor()
+            .unwrap()
+            .status()
+            .is_ok_and(|s| s.owner_counter > owner_before)
+    });
+    assert!(
+        !h.bridge.status().unwrap().child_read_current,
+        "heartbeat falsely promoted the old read"
+    );
+    h.replace();
+    h.continuity("3");
+    wait(|| h.pump.supervisor().unwrap().stop(Stop::Graceful).is_ok());
+    let terminal = h.terminal();
+    assert_eq!(terminal.phase, Phase::ExitedHealthy);
+    h.retired();
+    h.restart(3, 65);
+    h.finish("snapshot-stall-with-parent-source-fence",json!({"original_fresh_snapshot":fresh["observation_snapshot"],"old_read_non_current_despite_owner_heartbeat":true,"old_own_objects_after_close":0,"old_peak_process_commit":terminal.reading.peak_process_commit,"old_peak_job_commit":terminal.reading.peak_job_commit}));
 }

@@ -75,6 +75,7 @@ struct Channels {
     closing: bool,
     pending: [Option<(Header, bool)>; 2],
     closed_sent: bool,
+    diagnostic: Option<crate::private_ipc::renderer_progress::RendererProgress>,
 }
 impl Channels {
     fn service(
@@ -83,6 +84,7 @@ impl Channels {
         owner_progress: u64,
         healthy: bool,
         stall: bool,
+        progress: crate::private_ipc::renderer_progress::RendererProgress,
     ) -> Result<()> {
         let sent = self.control.poll_send().map_err(|e| format!("{e:?}"))?;
         if sent && self.closed_sent {
@@ -174,8 +176,20 @@ impl Channels {
             self.control
                 .send(header, &[index as u8])
                 .map_err(|e| format!("{e:?}"))?;
+        } else if let Some(progress) = self.diagnostic.take() {
+            let payload = progress.encode();
+            let mut header = Header::control(
+                Kind::Diagnostic,
+                self.identity,
+                self.sequence.next().map_err(str::to_owned)?,
+            );
+            header.bytes += payload.len();
+            self.control
+                .send(header, &payload)
+                .map_err(|e| format!("{e:?}"))?;
         } else if self.challenge.is_some() {
             self.status(replica, owner_progress, Kind::Status)?;
+            self.diagnostic = Some(progress);
         }
         Ok(())
     }
@@ -231,6 +245,7 @@ struct State {
     fatal: Option<String>,
     paused: bool,
     pending: bool,
+    snapshot_stalled: bool,
     pointer: egui::Pos2,
     modifiers: egui::Modifiers,
     input: Vec<egui::Event>,
@@ -263,10 +278,22 @@ impl State {
         }
     }
     fn service(&mut self, replica: &mut Replica, healthy: bool) {
-        let stall = self.mode == "snapshot-stall" && self.completed != 0;
+        let stall = self.snapshot_stalled;
+        let progress = {
+            let device = self.device.borrow();
+            crate::private_ipc::renderer_progress::RendererProgress {
+                event_loop: self.owner_progress,
+                render_owner: self.render_owner_progress,
+                submitted: device.counters.frames as u64,
+                completed: self.completed,
+                own_objects: device.counters.objects as u64,
+                released_generations: device.counters.generations_released as u64,
+                pending: self.pending,
+            }
+        };
         if let Err(error) = self
             .io
-            .service(replica, self.owner_progress, healthy, stall)
+            .service(replica, self.owner_progress, healthy, stall, progress)
         {
             self.fail(error);
         }
@@ -423,6 +450,14 @@ impl Display<'_, '_> {
             other => return Err(format!("frame completion: {other:?}")),
         }
         state.completed = state.completed.saturating_add(1);
+        if state.mode == "snapshot-stall"
+            && state.plot
+            && report.plot_points >= 64
+            && !state.snapshot_stalled
+        {
+            state.snapshot_stalled = true;
+            state.note("snapshot-stalled",json!({"completed":state.completed,"source":header.map_or(0,|h|h.source),"observation_snapshot":header.map_or(0,|h|h.snapshot)}))?;
+        }
         if capture {
             if state.captures >= 24 {
                 return Err("bounded framebuffer evidence limit".into());
@@ -729,6 +764,7 @@ pub(super) fn run() -> Result<()> {
             closing: false,
             pending: [None; 2],
             closed_sent: false,
+            diagnostic: None,
         },
         device,
         directory,
@@ -739,6 +775,7 @@ pub(super) fn run() -> Result<()> {
         fatal: None,
         paused: false,
         pending: false,
+        snapshot_stalled: false,
         pointer: egui::Pos2::ZERO,
         modifiers: egui::Modifiers::NONE,
         input: Vec::new(),

@@ -5,6 +5,8 @@ mod document_owner;
 pub(crate) mod protocol;
 #[path = "../../lab-workbench/src/private_ipc/read_decode.rs"]
 pub(crate) mod reads;
+#[path = "../../lab-workbench/src/private_ipc/renderer_progress.rs"]
+pub(crate) mod renderer_progress;
 #[path = "../../lab-workbench/src/private_ipc/replica.rs"]
 mod replica;
 #[path = "../../lab-workbench/src/private_ipc/selected_provider.rs"]

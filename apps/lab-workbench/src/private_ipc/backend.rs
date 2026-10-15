@@ -30,6 +30,9 @@ pub(crate) struct Status {
     pub(crate) turns: u64,
     pub(crate) received_frames: u64,
     pub(crate) child_read_current: bool,
+    pub(crate) renderer: Option<super::renderer_progress::RendererProgress>,
+    #[cfg(test)]
+    pub(crate) sampled_commit: Option<Reading>,
     #[cfg(test)]
     pub(crate) io_held: bool,
     pub(crate) retiring: bool,
@@ -258,6 +261,7 @@ pub(crate) struct IpcBackend {
     turns: u64,
     received_frames: u64,
     child_read_current: bool,
+    renderer: Option<super::renderer_progress::RendererProgress>,
     diagnostic_burst: usize,
     #[cfg(test)]
     retirement_gate: Option<Arc<AtomicBool>>,
@@ -303,6 +307,7 @@ impl IpcBackend {
             turns: 0,
             received_frames: 0,
             child_read_current: false,
+            renderer: None,
             diagnostic_burst: 0,
             #[cfg(test)]
             retirement_gate: None,
@@ -313,6 +318,8 @@ impl IpcBackend {
         }
     }
     fn publish(&self, error: Option<&'static str>) {
+        #[cfg(test)]
+        let sampled_commit = self.job.as_ref().and_then(|job| job.verify_limits().ok());
         if let Ok(mut shared) = self.bridge.shared.lock() {
             let credits = credit_counts(&shared.pool);
             let previous_error = shared.status.error;
@@ -331,6 +338,9 @@ impl IpcBackend {
                 turns: self.turns,
                 received_frames: self.received_frames,
                 child_read_current: self.child_read_current,
+                renderer: self.renderer,
+                #[cfg(test)]
+                sampled_commit,
                 #[cfg(test)]
                 io_held: self
                     .io_gate
@@ -445,6 +455,11 @@ impl IpcBackend {
                         }
                     }
                     Kind::Diagnostic if self.hello_ack && payload.len() + 16 <= DIAGNOSTIC => {
+                        if let Some(progress) =
+                            super::renderer_progress::RendererProgress::decode(payload)
+                        {
+                            self.renderer = Some(progress);
+                        }
                         // Allow four records between owner status messages. Kernel
                         // pipe storage is not an application queue: never let a
                         // diagnostic flood continuously precede close/heartbeat.
@@ -672,6 +687,7 @@ impl Backend for IpcBackend {
         self.applied_epoch = None;
         self.progress = None;
         self.child_read_current = false;
+        self.renderer = None;
         self.challenge = None;
         self.close = None;
         self.close_sent = false;

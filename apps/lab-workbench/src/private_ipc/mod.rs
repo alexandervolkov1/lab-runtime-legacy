@@ -11,9 +11,12 @@ pub(crate) mod parent_bridge;
 mod protocol;
 mod read_decode;
 mod reads;
+mod renderer_progress;
 mod replica;
 mod selected_provider;
 mod transport;
+#[cfg(test)]
+pub(crate) use backend::Bridge as TestBridge;
 pub(crate) use document_owner::DocumentOwner;
 pub(crate) use replica::Replica;
 
