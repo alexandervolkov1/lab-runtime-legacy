@@ -68,6 +68,25 @@ user.GetClientRect.argtypes = [w.HWND, c.POINTER(w.RECT)]
 user.GetClientRect.restype = w.BOOL
 user.GetDpiForWindow.argtypes = [w.HWND]
 user.GetDpiForWindow.restype = w.UINT
+user.GetForegroundWindow.restype = w.HWND
+
+
+class Keyboard(c.Structure):
+    _fields_ = [("virtual", w.WORD), ("scan", w.WORD), ("flags", w.DWORD),
+                ("time", w.DWORD), ("extra", c.c_size_t)]
+
+
+class InputPayload(c.Union):
+    _fields_ = [("keyboard", Keyboard), ("reserved_mouse_size", c.c_byte * 32)]
+
+
+class Input(c.Structure):
+    _fields_ = [("kind", w.DWORD), ("payload", InputPayload)]
+
+
+assert c.sizeof(Input) == 40, "Windows x64 INPUT ABI"
+user.SendInput.argtypes = [w.UINT, c.POINTER(Input), c.c_int]
+user.SendInput.restype = w.UINT
 
 
 def wait_json(path, process, seconds=25):
@@ -127,9 +146,19 @@ for renderer in ("wgpu", "glow"):
                                         actual_window_dpi=user.GetDpiForWindow(hwnd)))
                     click(frame["button_pixels"])
                     click(frame["editor_pixels"])
-                    # Targeted OS window messages, not physical keyboard/IME qualification.
+                    # winit pairs CHAR with a preceding key event; bare WM_CHAR
+                    # is ignored. Let Windows produce the full Unicode sequence.
+                    # Send only while our original child owns foreground focus.
                     for char in "TestЖ":
-                        post(0x0102, ord(char), 1)  # WM_CHAR
+                        owner()
+                        assert user.GetForegroundWindow() == hwnd
+                        pair = (Input * 2)()
+                        for index in range(2):
+                            pair[index].kind = 1
+                            pair[index].payload.keyboard = Keyboard(0, ord(char), 4 | (2 if index else 0), 0, 0)
+                        assert user.SendInput(2, pair, c.sizeof(Input)) == 2
+                        actions.append(dict(unicode_send_input=ord(char), original_foreground_verified=True))
+                    time.sleep(.2)
                     post(0x0100, 0x25, (0x4B << 16) | 1)  # left arrow
                     post(0x0101, 0x25, (0x4B << 16) | (3 << 30) | 1)
                     for stage in range(1, 6):
