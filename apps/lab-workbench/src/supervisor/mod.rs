@@ -60,6 +60,7 @@ pub(crate) enum Call {
     PollExit,
     Challenge,
     ReadProgress,
+    Service,
     Close,
     Terminate,
     Retire,
@@ -167,6 +168,10 @@ pub(crate) struct Progress {
 }
 /// All methods execute only on the sole OS worker; no model callback is accepted.
 pub(crate) trait Backend {
+    /// Bounded independent transport progress, including while closing.
+    fn service(&mut self) -> Result<(), lab_windows_job::Error> {
+        Ok(())
+    }
     fn prepare(&mut self, launch: &Launch, incarnation: u64) -> Result<(), lab_windows_job::Error>;
     fn resume(&mut self) -> Result<(), lab_windows_job::Error>;
     fn has_process(&self) -> bool;
@@ -176,6 +181,11 @@ pub(crate) trait Backend {
     fn close(&mut self, incarnation: u64, sequence: u64) -> Result<(), lab_windows_job::Error>;
     fn terminate(&mut self, rollback: bool) -> Result<(), lab_windows_job::Error>;
     fn retire(&mut self) -> Result<lab_windows_job::Reading, lab_windows_job::Error>;
+    /// True only for pending original I/O receipts, not a failed release call.
+    /// Re-observe that same episode after process proof; never admit replacement.
+    fn retirement_pending(&self) -> bool {
+        false
+    }
     fn objects(&self) -> lab_windows_job::Objects;
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -550,9 +560,11 @@ impl Worker {
                         self.status.phase = terminal_phase;
                     }
                     Err(e) => {
-                        self.status.cleanup_error.get_or_insert(e);
+                        if !backend.retirement_pending() {
+                            self.status.cleanup_error.get_or_insert(e);
+                        }
                         self.status.phase = Phase::ExitUnconfirmed;
-                        self.retire_failed = true;
+                        self.retire_failed = !backend.retirement_pending();
                     }
                 }
                 self.status.objects = backend.objects();
@@ -618,6 +630,13 @@ impl Worker {
                     self.start(backend, launch)
                 }
                 _ => {}
+            }
+        }
+        if backend.has_process() && !self.retire_failed && self.status.alive != Some(false) {
+            self.publish(Some(Call::Service));
+            if let Err(e) = backend.service() {
+                self.status.original_error.get_or_insert(e);
+                self.begin_stop(backend, Reason::OsFailure, false);
             }
         }
         self.observe(backend);

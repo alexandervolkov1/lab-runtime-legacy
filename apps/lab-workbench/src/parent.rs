@@ -52,6 +52,8 @@ pub(crate) struct ParentOwner<C: ParentClient> {
     rebuild: RebuildCoordinator,
     pub(crate) endpoint: Option<WorkbenchEndpoint>,
     stopped: bool,
+    #[cfg(windows)]
+    pub(crate) private_bridge: Option<crate::private_ipc::parent_bridge::ParentBridge>,
     shutdown_error: Option<&'static str>,
 }
 
@@ -76,6 +78,8 @@ impl<C: ParentClient> ParentOwner<C> {
             rebuild: Default::default(),
             endpoint,
             stopped: false,
+            #[cfg(windows)]
+            private_bridge: None,
             shutdown_error: None,
         }
     }
@@ -93,6 +97,17 @@ impl<C: ParentClient> ParentOwner<C> {
                 _ => break,
             };
             let events = self.dispatcher.apply_client_update(update.clone());
+            #[cfg(windows)]
+            if let Some(bridge) = &mut self.private_bridge {
+                bridge.after_update(
+                    &update,
+                    &self.dispatcher.observations,
+                    self.dispatcher
+                        .hello
+                        .as_ref()
+                        .map(|hello| hello.boot_id.as_str()),
+                );
+            }
             if let Some(endpoint) = &mut self.endpoint {
                 endpoint.route_events(&mut self.dispatcher, events);
             }
@@ -112,6 +127,10 @@ impl<C: ParentClient> ParentOwner<C> {
         self.ensure_default_plot();
         if let Some(endpoint) = &mut self.endpoint {
             report.external_calls = endpoint.service_owner(&mut self.dispatcher);
+        }
+        #[cfg(windows)]
+        if let Some(bridge) = &mut self.private_bridge {
+            bridge.turn(&self.dispatcher);
         }
         report
     }

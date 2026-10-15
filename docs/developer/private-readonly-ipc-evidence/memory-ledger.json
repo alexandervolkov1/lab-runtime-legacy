@@ -1,0 +1,29 @@
+{
+  "source_head": "82d8ad12e3cf71f7b389a21e94e456b214da9e0d",
+  "encoded_slots_bytes": 4194304,
+  "io_bytes": 139264,
+  "diagnostic_bytes": 65536,
+  "encoded_io_diagnostic_ceiling": 4399104,
+  "document_parsed_accounted_peak": 2207552,
+  "persistent_child_parsed_documents": 0,
+  "maximum_selected_points": 16384,
+  "maximum_selected_fixture_encoded_bytes": 267132,
+  "kernel_buffers": "4 KiB / 64 KiB creation hints, not exact OS allocation bound",
+  "commit": "original Job observations; separate from encoded/parsed ledgers; fixture cap 134217728 is not production C",
+  "dev_normal_fixture_commit": {
+    "peak_process_commit": 8183808,
+    "peak_job_commit": 14737408
+  },
+  "dev_retained_obligations": [
+    "RETAINED shutdown=false process_proved=true status=Status { connected: true, handshaken: true, applied: [1, 0], pending_io: 2, handles: 6, io_bytes: 139264, coalesced: 0, diagnostic_records: 0, turns: 7, received_frames: 3, child_read_current: false, io_held: true, retiring: true, retired: false, credits: [2, 0, 1, 1, 0], error: None }",
+    "RETAINED shutdown=true process_proved=true status=Status { connected: true, handshaken: true, applied: [1, 0], pending_io: 2, handles: 6, io_bytes: 139264, coalesced: 0, diagnostic_records: 0, turns: 21, received_frames: 4, child_read_current: false, io_held: true, retiring: true, retired: false, credits: [2, 0, 1, 1, 0], error: None }"
+  ],
+  "release_normal_fixture_commit": {
+    "peak_process_commit": 8134656,
+    "peak_job_commit": 14688256
+  },
+  "release_retained_obligations": [
+    "RETAINED shutdown=false process_proved=true status=Status { connected: true, handshaken: true, applied: [1, 0], pending_io: 2, handles: 6, io_bytes: 139264, coalesced: 0, diagnostic_records: 0, turns: 6, received_frames: 3, child_read_current: false, io_held: true, retiring: true, retired: false, credits: [2, 0, 1, 1, 0], error: None }",
+    "RETAINED shutdown=true process_proved=true status=Status { connected: true, handshaken: true, applied: [1, 0], pending_io: 2, handles: 6, io_bytes: 139264, coalesced: 0, diagnostic_records: 0, turns: 6, received_frames: 3, child_read_current: false, io_held: true, retiring: true, retired: false, credits: [2, 0, 1, 1, 0], error: None }"
+  ]
+}

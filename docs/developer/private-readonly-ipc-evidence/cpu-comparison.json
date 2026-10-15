@@ -1,0 +1,112 @@
+[
+  {
+    "profile": "dev",
+    "suite": "geometry",
+    "cases": 119,
+    "max_accounted": 4610337,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_GEOMETRY_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "5a3965c7048ead21598511406fb54dd05c0405f85f47f1bd280fc6c3b19ccca3"
+  },
+  {
+    "profile": "dev",
+    "suite": "memory",
+    "cases": 125,
+    "max_accounted": 4458653,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_MEMORY_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "dc886e08c977626b9a44381232a8fdb752449dff6c7cad41e05ab86a21bf329b"
+  },
+  {
+    "profile": "dev",
+    "suite": "frames",
+    "cases": 12,
+    "max_accounted": 4355499,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_FRAMES_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "183418b05c55bd1c66590904b7bc2a44b5a56504461e2f5cb78298e7a642278a"
+  },
+  {
+    "profile": "dev",
+    "suite": "host-no-upload",
+    "cases": 4,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_NO_UPLOAD_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "a4107ee9560497abd15d67a0fbad53838c2ccac7d529ca93ffaeff91ad07690d"
+  },
+  {
+    "profile": "dev",
+    "suite": "retirement",
+    "cases": 9,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/TERMINAL_GPU_PENDING_DEV.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "dc889156b8fbb83589f22ddad7f9e787be287f09fc3f3cabf1e1ca3a8ce978ea"
+  },
+  {
+    "profile": "dev",
+    "suite": "plot",
+    "comparison": "exact B3B2 qualified output, normalized line endings"
+  },
+  {
+    "profile": "dev",
+    "suite": "bounded",
+    "comparison": "exact B3B2 qualified output, normalized line endings"
+  },
+  {
+    "profile": "release",
+    "suite": "geometry",
+    "cases": 119,
+    "max_accounted": 4610337,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_GEOMETRY_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "5a3965c7048ead21598511406fb54dd05c0405f85f47f1bd280fc6c3b19ccca3"
+  },
+  {
+    "profile": "release",
+    "suite": "memory",
+    "cases": 125,
+    "max_accounted": 4458653,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FRAME_OWNERSHIP_MEMORY_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "dc886e08c977626b9a44381232a8fdb752449dff6c7cad41e05ab86a21bf329b"
+  },
+  {
+    "profile": "release",
+    "suite": "frames",
+    "cases": 12,
+    "max_accounted": 4355499,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_FRAMES_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "183418b05c55bd1c66590904b7bc2a44b5a56504461e2f5cb78298e7a642278a"
+  },
+  {
+    "profile": "release",
+    "suite": "host-no-upload",
+    "cases": 4,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/FALLIBLE_RETIREMENT_NO_UPLOAD_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "a4107ee9560497abd15d67a0fbad53838c2ccac7d529ca93ffaeff91ad07690d"
+  },
+  {
+    "profile": "release",
+    "suite": "retirement",
+    "cases": 9,
+    "max_accounted": 4367945,
+    "reference": "apps/lab-workbench/src/gui/readonly_v2/TERMINAL_GPU_PENDING_RELEASE.csv",
+    "comparison": "all columns exact except scheduling-dependent wait_calls",
+    "normalized_sha256": "dc889156b8fbb83589f22ddad7f9e787be287f09fc3f3cabf1e1ca3a8ce978ea"
+  },
+  {
+    "profile": "release",
+    "suite": "plot",
+    "comparison": "exact B3B2 qualified output, normalized line endings"
+  },
+  {
+    "profile": "release",
+    "suite": "bounded",
+    "comparison": "exact B3B2 qualified output, normalized line endings"
+  }
+]
