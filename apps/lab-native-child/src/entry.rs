@@ -77,6 +77,9 @@ struct Channels {
     closed_sent: bool,
     diagnostic: Option<crate::private_ipc::renderer_progress::RendererProgress>,
     reported_frame_completion: bool,
+    document_applied_sent: bool,
+    post_admission_status: bool,
+    frame_admitted: bool,
     assembling: bool,
 }
 impl Channels {
@@ -89,6 +92,10 @@ impl Channels {
         progress: crate::private_ipc::renderer_progress::RendererProgress,
     ) -> Result<()> {
         let sent = self.control.poll_send().map_err(|e| format!("{e:?}"))?;
+        if sent && self.post_admission_status {
+            self.frame_admitted = true;
+            self.post_admission_status = false;
+        }
         if sent && self.closed_sent {
             return Ok(());
         }
@@ -186,6 +193,7 @@ impl Channels {
             self.control
                 .send(header, &[index as u8])
                 .map_err(|e| format!("{e:?}"))?;
+            self.document_applied_sent |= index == 0 && applied;
         } else if let Some(progress) = self.diagnostic.take() {
             let payload = progress.encode();
             let mut header = Header::control(
@@ -219,7 +227,14 @@ impl Channels {
         payload[24] = u8::from(replica.read_is_current(Instant::now()));
         self.control
             .send(header, &payload)
-            .map_err(|e| format!("{e:?}"))
+            .map_err(|e| format!("{e:?}"))?;
+        // Order the real owner Status after parsed admission/Applied and finish
+        // its original write before the first potentially costly GL frame. This
+        // is transport progress, not an assertion that the parent accepted Ready
+        // or that a frame/GPU completion already exists.
+        self.post_admission_status =
+            kind == Kind::Status && owner_progress != 0 && self.document_applied_sent;
+        Ok(())
     }
 }
 
@@ -390,6 +405,7 @@ impl Display<'_, '_> {
     fn draw(&mut self) -> Result<()> {
         let state = &mut self.state;
         if state.suspension.paused()
+            || !state.io.frame_admitted
             // Do not spend a maximum Plot frame's CPU/GL time between chunks
             // of the same bounded transfer. Keep the old Preview/document and
             // service native/control events; no deadline, credit or buffer grows.
@@ -921,6 +937,9 @@ pub(super) fn run() -> Result<()> {
             closed_sent: false,
             diagnostic: None,
             reported_frame_completion: false,
+            document_applied_sent: false,
+            post_admission_status: false,
+            frame_admitted: false,
             assembling: false,
         },
         device,
