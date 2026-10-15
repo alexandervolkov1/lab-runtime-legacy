@@ -1,0 +1,49 @@
+[package]
+name = "lab-wgpu-proof"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+publish = false
+
+# Independent test workspace: enabling WGPU must not alter product features,
+# root resolution, or any existing application's dependency graph.
+[workspace]
+
+[[bin]]
+name = "lab-wgpu-proof"
+path = "src/main.rs"
+test = false
+bench = false
+
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "=0.36.2", default-features = false, features = ["glow", "default_fonts", "accesskit"] }
+egui-wgpu = { version = "=0.36.2", default-features = false }
+wgpu = { version = "=30.0.1", default-features = false, features = ["std", "dx12", "wgsl", "counters"] }
+egui_plot = { version = "=0.37.0", default-features = false }
+glutin = { version = "=0.32.3", default-features = false, features = ["egl", "wgl"] }
+glutin-winit = { version = "=0.5.0", default-features = false, features = ["egl", "wgl"] }
+winit = { version = "=0.30.13", default-features = false, features = ["rwh_06"] }
+raw-window-handle = { version = "=0.6.2", default-features = false, features = ["std"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+lab-windows-job = { path = "../../../crates/lab-windows-job" }
+
+[lints.rust]
+unsafe_code = "deny"
+missing_docs = "warn"
+
+[lints.clippy]
+all = "warn"
+
+# Same existing egui diagnostic-cache policy as the product workspace.
+[profile.dev.package."egui:0.36.2"]
+debug-assertions = false
+overflow-checks = true
+
+# Never unwind an unresolved GPU owner on panic.
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

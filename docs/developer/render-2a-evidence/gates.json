@@ -1,0 +1,567 @@
+{
+  "proof": [
+    {
+      "name": "dev-fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "scripts/support/wgpu-proof/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "dev",
+      "started_utc": "2026-10-15T19:42:24.464535+00:00",
+      "elapsed_seconds": 0.189,
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "dev-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--manifest-path",
+        "scripts/support/wgpu-proof/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--profile",
+        "dev",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "dev",
+      "started_utc": "2026-10-15T19:42:24.654360+00:00",
+      "elapsed_seconds": 0.282,
+      "exit_code": 0,
+      "log_sha256": "2bc683fb4e4f4f21ee9ee39e2b8ecce2efe20d3b1be57bda5316aa519ab3d30a"
+    },
+    {
+      "name": "dev-build",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "scripts/support/wgpu-proof/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--profile",
+        "dev"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "dev",
+      "started_utc": "2026-10-15T19:42:24.941136+00:00",
+      "elapsed_seconds": 3.218,
+      "exit_code": 0,
+      "log_sha256": "69607809cc64ef69fc0a7a1e68c920f0f17c53d3766cfb44df99c7a2d9ea486f"
+    },
+    {
+      "name": "dev-gpu",
+      "command": [
+        "D:\\rust\\lab-runtime\\scripts\\support\\wgpu-proof\\target\\debug\\lab-wgpu-proof.exe",
+        "--controller",
+        "D:\\rust\\lab-runtime\\target\\render-2a\\dev-final\\gpu"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "dev",
+      "started_utc": "2026-10-15T19:42:28.164402+00:00",
+      "elapsed_seconds": 66.958,
+      "exit_code": 0,
+      "log_sha256": "a8c33cbcdfc9f8a71c2abec16c587e781ea883f199491c7143be8812b01608ba",
+      "binary_sha256": "5b63f60a6fcfa757e7b3c958126658b3c58bb6c1c2a88481ea53506253403a29",
+      "binary_bytes": 39292416
+    },
+    {
+      "name": "release-fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "scripts/support/wgpu-proof/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "release",
+      "started_utc": "2026-10-15T19:43:35.308160+00:00",
+      "elapsed_seconds": 0.199,
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "release-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--manifest-path",
+        "scripts/support/wgpu-proof/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--profile",
+        "release",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "release",
+      "started_utc": "2026-10-15T19:43:35.508321+00:00",
+      "elapsed_seconds": 25.654,
+      "exit_code": 0,
+      "log_sha256": "9dc100f629cf483b0e566dad9d980b91510d7eb26cbbcbc3de81cf48749dbd0f"
+    },
+    {
+      "name": "release-build",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "scripts/support/wgpu-proof/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--profile",
+        "release"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "release",
+      "started_utc": "2026-10-15T19:44:01.166768+00:00",
+      "elapsed_seconds": 56.241,
+      "exit_code": 0,
+      "log_sha256": "fac0981d775a00ea653f524bb26d79c6118f13d62f143b816a6cb39457d21f32"
+    },
+    {
+      "name": "release-gpu",
+      "command": [
+        "D:\\rust\\lab-runtime\\scripts\\support\\wgpu-proof\\target\\release\\lab-wgpu-proof.exe",
+        "--controller",
+        "D:\\rust\\lab-runtime\\target\\render-2a\\release-final\\gpu"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "profile": "release",
+      "started_utc": "2026-10-15T19:44:57.412081+00:00",
+      "elapsed_seconds": 64.162,
+      "exit_code": 0,
+      "log_sha256": "ca63116dbdf7fb73091cc879061623303ee4492d20bdd167026aadc491fc18a6",
+      "binary_sha256": "6c29ef787ae81581c334e4ccb4b69759728f6ffa37aa7eeefe7cecfad3f90e57",
+      "binary_bytes": 8980480
+    }
+  ],
+  "existing_regressions": [
+    {
+      "name": "dev-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "lab-workbench",
+        "-p",
+        "lab-native-child",
+        "-p",
+        "lab-windows-job",
+        "--locked",
+        "--all-targets",
+        "--all-features",
+        "--profile",
+        "dev",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:48:12.826744+00:00",
+      "elapsed_seconds": 0.355,
+      "exit_code": 0,
+      "log_sha256": "9a30d54c8b16d7e49510b182028079bca120aeebb7d662e88f8566e6196a49f6",
+      "executed_test_binaries": [],
+      "experiment_directories": [],
+      "test_results": [],
+      "verdict": "PASS"
+    },
+    {
+      "name": "dev-glow-faults",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-port-1-gl.ps1",
+        "-BuildProfile",
+        "dev",
+        "-TestCommitCap",
+        "536870912",
+        "-TestFilter",
+        "native_isolated_gpu_fault_matrix"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:50:55.248782+00:00",
+      "elapsed_seconds": 58.529,
+      "exit_code": 0,
+      "log_sha256": "c6116ed14931ae2647c9d416c01e4a677f825d3309bcbeda2b884d0482c9de08",
+      "executed_test_binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70069248,
+          "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+        }
+      ],
+      "experiment_directories": [
+        "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T1950554998094"
+      ],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 56.06s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "dev-glow-frames",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-port-1-gl.ps1",
+        "-BuildProfile",
+        "dev",
+        "-TestCommitCap",
+        "536870912",
+        "-TestFilter",
+        "native_first_isolated_renderer_frames_from_parent_approved_snapshots"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:50:44.070744+00:00",
+      "elapsed_seconds": 3.722,
+      "exit_code": 0,
+      "log_sha256": "4a2ab40878bacb78ffe17cf1b0995ea2142746c8c86d387dea569b7e26028a3d",
+      "executed_test_binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70069248,
+          "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+        }
+      ],
+      "experiment_directories": [
+        "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T1950443241536"
+      ],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 1.41s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "dev-glow-pending",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-port-1-gl.ps1",
+        "-BuildProfile",
+        "dev",
+        "-TestCommitCap",
+        "536870912",
+        "-TestFilter",
+        "native_renderer_pending_completion_handoff_stop_retains_original_root"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:50:47.793972+00:00",
+      "elapsed_seconds": 7.454,
+      "exit_code": 0,
+      "log_sha256": "96517fe41f0408d743451b6a915512efdea31831b5796af9a5175f449d900c76",
+      "executed_test_binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70069248,
+          "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+        }
+      ],
+      "experiment_directories": [
+        "D:\\rust\\lab-runtime\\target\\port-1\\dev-20261015T1950480255288"
+      ],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 5.31s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "dev-workbench",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--profile",
+        "dev",
+        "--",
+        "--test-threads=1"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:44:10.827442+00:00",
+      "elapsed_seconds": 241.998,
+      "exit_code": 0,
+      "log_sha256": "05d22c6c840f70ec5e714ea5d420df2a16586a135e7177ef85972c4a1170cdaf",
+      "executed_test_binaries": [
+        {
+          "path": "target\\debug\\deps\\lab_workbench-f3432b4847ea6d74.exe",
+          "bytes": 70069248,
+          "sha256": "db0df146d179a9e1e3b1ea182a4d485b27b33bc84ac07b98d815be0c587c06b4"
+        }
+      ],
+      "experiment_directories": [],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+        "test result: ok. 537 passed; 0 failed; 58 ignored; 0 measured; 0 filtered out; finished in 240.99s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:44:07.421514+00:00",
+      "elapsed_seconds": 3.405,
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "executed_test_binaries": [],
+      "experiment_directories": [],
+      "test_results": [],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "lab-workbench",
+        "-p",
+        "lab-native-child",
+        "-p",
+        "lab-windows-job",
+        "--locked",
+        "--all-targets",
+        "--all-features",
+        "--profile",
+        "release",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:50:43.580203+00:00",
+      "elapsed_seconds": 0.354,
+      "exit_code": 0,
+      "log_sha256": "5089e1c94f049189c2882fc87c84f7dc7b10bacee71a9d1d0a37f5d69d73d594",
+      "executed_test_binaries": [],
+      "experiment_directories": [],
+      "test_results": [],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-focused-recheck",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--release",
+        "supervisor::tests::in_flight_handle_retirement_never_publishes_terminal_or_admits_replacement",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:50:20.244585+00:00",
+      "elapsed_seconds": 0.355,
+      "exit_code": 0,
+      "log_sha256": "dd10a56611da6d4c567ad3ef9eae5a6d190b4baf6aa4647670486e1a8735d32e",
+      "executed_test_binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30511616,
+          "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+        }
+      ],
+      "experiment_directories": [],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.02s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-glow-faults",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-port-1-gl.ps1",
+        "-BuildProfile",
+        "release",
+        "-TestCommitCap",
+        "536870912",
+        "-TestFilter",
+        "native_isolated_gpu_fault_matrix"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:52:04.076615+00:00",
+      "elapsed_seconds": 53.938,
+      "exit_code": 0,
+      "log_sha256": "bdc944ebb709c6508d6b09b985bc12384289e3a5baca34d1f111af84a6123302",
+      "executed_test_binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30511616,
+          "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+        }
+      ],
+      "experiment_directories": [
+        "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T1952043109205"
+      ],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 51.54s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-glow-frames",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-port-1-gl.ps1",
+        "-BuildProfile",
+        "release",
+        "-TestCommitCap",
+        "536870912",
+        "-TestFilter",
+        "native_first_isolated_renderer_frames_from_parent_approved_snapshots"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:51:53.778505+00:00",
+      "elapsed_seconds": 2.983,
+      "exit_code": 0,
+      "log_sha256": "1abce3e95169e76ab2cf6fb91422290bf441532f0ecf443c9fcb4848c55cdd1f",
+      "executed_test_binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30511616,
+          "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+        }
+      ],
+      "experiment_directories": [
+        "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T1951540138729"
+      ],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.86s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-glow-pending",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-port-1-gl.ps1",
+        "-BuildProfile",
+        "release",
+        "-TestCommitCap",
+        "536870912",
+        "-TestFilter",
+        "native_renderer_pending_completion_handoff_stop_retains_original_root"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:51:56.763033+00:00",
+      "elapsed_seconds": 7.313,
+      "exit_code": 0,
+      "log_sha256": "6d2d73572821ce0494febcf68d0c048919f00ff42e330e9e1a785ca9da3691a8",
+      "executed_test_binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30511616,
+          "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+        }
+      ],
+      "experiment_directories": [
+        "D:\\rust\\lab-runtime\\target\\port-1\\release-20261015T1951569991149"
+      ],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 5.21s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-workbench-recheck",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--release",
+        "--",
+        "--test-threads=1"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:50:20.600134+00:00",
+      "elapsed_seconds": 22.979,
+      "exit_code": 0,
+      "log_sha256": "73f275047c079187ad61930490a541a835113138de9c36d60e6da406a6749aa6",
+      "executed_test_binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30511616,
+          "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+        }
+      ],
+      "experiment_directories": [],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+        "test result: ok. 537 passed; 0 failed; 58 ignored; 0 measured; 0 filtered out; finished in 22.66s"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "name": "release-workbench",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--profile",
+        "release",
+        "--",
+        "--test-threads=1"
+      ],
+      "source_head": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+      "started_utc": "2026-10-15T19:48:13.182425+00:00",
+      "elapsed_seconds": 23.154,
+      "exit_code": 101,
+      "log_sha256": "c7203f81c8afcdd8d77df0d72f37543fd6f9d60410fa38ed62b119509f7f7058",
+      "executed_test_binaries": [
+        {
+          "path": "target\\release\\deps\\lab_workbench-99f44df52bbcdbc8.exe",
+          "bytes": 30511616,
+          "sha256": "c43c9c63094545c38444e3921678d79a9e34a27fc24fc40d7f0245c00944042f"
+        }
+      ],
+      "experiment_directories": [],
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s",
+        "test result: FAILED. 536 passed; 1 failed; 58 ignored; 0 measured; 0 filtered out; finished in 22.78s"
+      ],
+      "verdict": "FAIL"
+    }
+  ]
+}

@@ -1,0 +1,5638 @@
+[
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f03.json",
+    "rgba_sha256": "322551ae9d28ab2771bd72682f3ac3e12d8035172048a44d07043237b49d6562"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f04.json",
+    "rgba_sha256": "2214085e63dc8262da1e126bc624e95e7bc5c57999e2e27fd6ff44f8e5d9a39c"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f05.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f06.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "invalid_partial_rejected_before_gpu": true,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f07.json",
+    "rgba_sha256": "98701488eaa622f0945b78af30ce7bb3d773a59185daae38e052a92627a50f73"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f08.json",
+    "rgba_sha256": "184b29ab3a909126e9d31ffca5e0573f49a3101e84aee289a09e0c377cb2426d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f09.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f10.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g0-f11.json",
+    "rgba_sha256": "55b03054e07f7e32a13fbfd9aace7bd1cc4422f01bce5214562f2190cad96c57"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f03.json",
+    "rgba_sha256": "322551ae9d28ab2771bd72682f3ac3e12d8035172048a44d07043237b49d6562"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f04.json",
+    "rgba_sha256": "2214085e63dc8262da1e126bc624e95e7bc5c57999e2e27fd6ff44f8e5d9a39c"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f05.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f06.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "invalid_partial_rejected_before_gpu": true,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f07.json",
+    "rgba_sha256": "98701488eaa622f0945b78af30ce7bb3d773a59185daae38e052a92627a50f73"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f08.json",
+    "rgba_sha256": "184b29ab3a909126e9d31ffca5e0573f49a3101e84aee289a09e0c377cb2426d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f09.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f10.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "dev",
+    "backend": "frames",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/dev-final/gpu/frames/g1-f11.json",
+    "rgba_sha256": "55b03054e07f7e32a13fbfd9aace7bd1cc4422f01bce5214562f2190cad96c57"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f03.json",
+    "rgba_sha256": "32c1671b293def6ea51625ea74a50e8962523aee5ed1f0bbdd84fbaef7861755"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f04.json",
+    "rgba_sha256": "a714c36d59dfcb08fb4379402d9222204f33d513b72a8be06079e30c6e097691"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f05.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f06.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f07.json",
+    "rgba_sha256": "a063bff82acabaa7a8e445c99ed35a214af24407f94002ede8cad447f66ac955"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f08.json",
+    "rgba_sha256": "5635bce8a27c2cd8b9cef8d395fc604ed1a9549cb97703be4e88f01aeaeac38e"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f09.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f10.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g0-f11.json",
+    "rgba_sha256": "e886e64f16cce1fea7fd9a949b7ea76905e22f5d422636d324a48588ec781b24"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f03.json",
+    "rgba_sha256": "32c1671b293def6ea51625ea74a50e8962523aee5ed1f0bbdd84fbaef7861755"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f04.json",
+    "rgba_sha256": "a714c36d59dfcb08fb4379402d9222204f33d513b72a8be06079e30c6e097691"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f05.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f06.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f07.json",
+    "rgba_sha256": "a063bff82acabaa7a8e445c99ed35a214af24407f94002ede8cad447f66ac955"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f08.json",
+    "rgba_sha256": "5635bce8a27c2cd8b9cef8d395fc604ed1a9549cb97703be4e88f01aeaeac38e"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f09.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f10.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "dev",
+    "backend": "glow",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/dev-final/gpu/glow/g1-f11.json",
+    "rgba_sha256": "e886e64f16cce1fea7fd9a949b7ea76905e22f5d422636d324a48588ec781b24"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f03.json",
+    "rgba_sha256": "322551ae9d28ab2771bd72682f3ac3e12d8035172048a44d07043237b49d6562"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f04.json",
+    "rgba_sha256": "2214085e63dc8262da1e126bc624e95e7bc5c57999e2e27fd6ff44f8e5d9a39c"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f05.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f06.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "invalid_partial_rejected_before_gpu": true,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f07.json",
+    "rgba_sha256": "98701488eaa622f0945b78af30ce7bb3d773a59185daae38e052a92627a50f73"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f08.json",
+    "rgba_sha256": "184b29ab3a909126e9d31ffca5e0573f49a3101e84aee289a09e0c377cb2426d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f09.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f10.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g0-f11.json",
+    "rgba_sha256": "55b03054e07f7e32a13fbfd9aace7bd1cc4422f01bce5214562f2190cad96c57"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f03.json",
+    "rgba_sha256": "322551ae9d28ab2771bd72682f3ac3e12d8035172048a44d07043237b49d6562"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f04.json",
+    "rgba_sha256": "2214085e63dc8262da1e126bc624e95e7bc5c57999e2e27fd6ff44f8e5d9a39c"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f05.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f06.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "invalid_partial_rejected_before_gpu": true,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f07.json",
+    "rgba_sha256": "98701488eaa622f0945b78af30ce7bb3d773a59185daae38e052a92627a50f73"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f08.json",
+    "rgba_sha256": "184b29ab3a909126e9d31ffca5e0573f49a3101e84aee289a09e0c377cb2426d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f09.json",
+    "rgba_sha256": "613e2ff734ed2ac6de469458d26e2f8e2474fdd7522b1623d04218d86087be14"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f10.json",
+    "rgba_sha256": "8cd206a813e0fece0b4aadcfe220f6020957384820227d98ee139fff7661621d"
+  },
+  {
+    "profile": "release",
+    "backend": "frames",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/release-final/gpu/frames/g1-f11.json",
+    "rgba_sha256": "55b03054e07f7e32a13fbfd9aace7bd1cc4422f01bce5214562f2190cad96c57"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f03.json",
+    "rgba_sha256": "32c1671b293def6ea51625ea74a50e8962523aee5ed1f0bbdd84fbaef7861755"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f04.json",
+    "rgba_sha256": "a714c36d59dfcb08fb4379402d9222204f33d513b72a8be06079e30c6e097691"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f05.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f06.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f07.json",
+    "rgba_sha256": "a063bff82acabaa7a8e445c99ed35a214af24407f94002ede8cad447f66ac955"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f08.json",
+    "rgba_sha256": "5635bce8a27c2cd8b9cef8d395fc604ed1a9549cb97703be4e88f01aeaeac38e"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f09.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f10.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g0-f11.json",
+    "rgba_sha256": "e886e64f16cce1fea7fd9a949b7ea76905e22f5d422636d324a48588ec781b24"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 0,
+      "free": "{}",
+      "index_bytes": 17424,
+      "indices": 4356,
+      "mesh_fnv64": "384551ec7e3dbdf2",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 570
+      },
+      "primitives": 4,
+      "sample": [
+        519.0,
+        560.8724365234375
+      ],
+      "scalar": "No data",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        117.21875,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            2048,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 26080,
+      "vertices": 1304
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f00.json",
+    "rgba_sha256": "c95c7722499a2effdb0822dfdd98ff28ceab4bf18a94f69d1df16da1a4f5fd6d"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 1,
+      "free": "{}",
+      "index_bytes": 17496,
+      "indices": 4374,
+      "mesh_fnv64": "2e0254a80e044031",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 0,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 0,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            592,
+            0
+          ],
+          "size": [
+            125,
+            23
+          ]
+        }
+      ],
+      "vertex_bytes": 26320,
+      "vertices": 1316
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f01.json",
+    "rgba_sha256": "bd8a1e6696c1a6971e533fca01b72126bfc011f1275866257ee46225da4917b4"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 2,
+      "free": "{}",
+      "index_bytes": 22152,
+      "indices": 5538,
+      "mesh_fnv64": "48ada3688dcc5de4",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3434,
+        "magenta": 0,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 31520,
+      "vertices": 1576
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f02.json",
+    "rgba_sha256": "73ec85be9f69253f279f8c82da35a5cc28ec90adf4f227d1872ae13093b62dc0"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 3,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "ec983458d2d13f13",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3406,
+        "magenta": 3515,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 768
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        547.6004028320312
+      ],
+      "scalar": "23.50 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f03.json",
+    "rgba_sha256": "32c1671b293def6ea51625ea74a50e8962523aee5ed1f0bbdd84fbaef7861755"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 4,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "994c6986a3e3bcaa",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "RENDER-2A read-only fixture",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            718,
+            0
+          ],
+          "size": [
+            27,
+            21
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f04.json",
+    "rgba_sha256": "a714c36d59dfcb08fb4379402d9222204f33d513b72a8be06079e30c6e097691"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 5,
+      "free": "{}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(0)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            746,
+            0
+          ],
+          "size": [
+            260,
+            14
+          ]
+        }
+      ],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f05.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 6,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f06.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 7,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": [
+            16,
+            16
+          ],
+          "size": [
+            32,
+            32
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f07.json",
+    "rgba_sha256": "a063bff82acabaa7a8e445c99ed35a214af24407f94002ede8cad447f66ac955"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 8,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "2df423f68965551c",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "texture_corner": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(1)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(1)",
+          "options": "TextureOptions { magnification: Linear, minification: Linear, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            512,
+            512
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f08.json",
+    "rgba_sha256": "5635bce8a27c2cd8b9cef8d395fc604ed1a9549cb97703be4e88f01aeaeac38e"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 9,
+      "free": "{Managed(1)}",
+      "index_bytes": 26784,
+      "indices": 6696,
+      "mesh_fnv64": "3f6f0cfc2fda2fb6",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "texture_corner": [
+          18,
+          18,
+          22,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 4,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": null,
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 36640,
+      "vertices": 1832
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f09.json",
+    "rgba_sha256": "d2d94b2f28452a561751c5c962ea838579e919816ad05122a4cc3d1f11f83939"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 10,
+      "free": "{}",
+      "index_bytes": 26808,
+      "indices": 6702,
+      "mesh_fnv64": "c18cad656090b36f",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3387,
+        "magenta": 3514,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [
+        {
+          "id": "Managed(2)",
+          "options": "TextureOptions { magnification: Nearest, minification: Nearest, wrap_mode: ClampToEdge, mipmap_mode: None }",
+          "position": null,
+          "size": [
+            64,
+            64
+          ]
+        }
+      ],
+      "vertex_bytes": 36720,
+      "vertices": 1836
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f10.json",
+    "rgba_sha256": "7ac24bb924fbbf554be3962a7edc1dc56778da99a7f1ba1a910df6f1215c29eb"
+  },
+  {
+    "profile": "release",
+    "backend": "glow",
+    "receipt": {
+      "frame": 11,
+      "free": "{}",
+      "index_bytes": 1197096,
+      "indices": 299274,
+      "mesh_fnv64": "1dfd3b863f986666",
+      "pixels": {
+        "bytes": 4915200,
+        "cyan": 3395,
+        "magenta": 3539,
+        "origin": "top-left RGBA8",
+        "pass": true,
+        "sample_hits": 32,
+        "texture_center": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "texture_corner": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "white": 732
+      },
+      "primitives": 5,
+      "sample": [
+        530.875,
+        467.3447265625
+      ],
+      "scalar": "27.25 degC",
+      "scalar_rect": [
+        12.0,
+        36.0,
+        163.28125,
+        70.0
+      ],
+      "texture_id": "Managed(2)",
+      "title": "Replacement: voltage history",
+      "updates": [],
+      "vertex_bytes": 1337040,
+      "vertices": 66852
+    },
+    "path": "target/render-2a/release-final/gpu/glow/g1-f11.json",
+    "rgba_sha256": "e886e64f16cce1fea7fd9a949b7ea76905e22f5d422636d324a48588ec781b24"
+  }
+]

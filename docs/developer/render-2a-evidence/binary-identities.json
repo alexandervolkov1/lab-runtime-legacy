@@ -1,0 +1,14 @@
+[
+  {
+    "profile": "dev",
+    "path": "scripts/support/wgpu-proof/target/debug/lab-wgpu-proof.exe",
+    "sha256": "5b63f60a6fcfa757e7b3c958126658b3c58bb6c1c2a88481ea53506253403a29",
+    "bytes": 39292416
+  },
+  {
+    "profile": "release",
+    "path": "scripts/support/wgpu-proof/target/release/lab-wgpu-proof.exe",
+    "sha256": "6c29ef787ae81581c334e4ccb4b69759728f6ffa37aa7eeefe7cecfad3f90e57",
+    "bytes": 8980480
+  }
+]

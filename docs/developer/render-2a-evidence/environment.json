@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-15T19:44:32.8182983Z",
+  "rustc": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cpu": [
+    {
+      "Name": "AMD Ryzen 5 9600X 6-Core Processor             ",
+      "NumberOfCores": 6,
+      "NumberOfLogicalProcessors": 12
+    }
+  ],
+  "os": {
+    "Caption": "\u041c\u0430\u0439\u043a\u0440\u043e\u0441\u043e\u0444\u0442 Windows 10 Pro",
+    "Version": "10.0.19045",
+    "BuildNumber": "19045",
+    "OSArchitecture": "64-\u0440\u0430\u0437\u0440\u044f\u0434\u043d\u0430\u044f"
+  },
+  "installed_gpus": [
+    {
+      "Name": "NVIDIA GeForce RTX 3060 Ti",
+      "DriverVersion": "32.0.16.1692",
+      "AdapterRAM": 4293918720
+    },
+    {
+      "Name": "AMD Radeon(TM) Graphics",
+      "DriverVersion": "32.0.21042.62",
+      "AdapterRAM": 536870912
+    }
+  ],
+  "note": "Diagnostics only; actual selected adapter is recorded inside each GPU child; no hardware whitelist"
+}

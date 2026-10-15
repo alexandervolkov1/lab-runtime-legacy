@@ -42,11 +42,12 @@ Resolution/DPI expansion, backend alternatives and other-platform process hosts
 require their later stages and review. Historical B3B4C and the unmerged #43
 BLOCKED record retain their original provenance.
 
-The [RENDER-1 backend design](render-1-backend-separation.md) recommends shared
-egui preparation and independent GPU owners, with standard egui-wgpu inside the
-existing winit child as the next proof candidate. This is a design review with
-unchanged executable inputs; WGPU execution, backend selection and the required
-ownership extraction remain unimplemented pending independent review.
+The approved [RENDER-1 backend design](render-1-backend-separation.md) selects
+shared egui preparation and independent GPU owners. The separate test-only
+[RENDER-2A proof](render-2a-wgpu-proof.md) exercises stock egui-wgpu with actual
+DX12 offscreen pixels and the same fixtures as Custom Glow. Production backend
+selection, surface/private-IPC integration and paired ownership extraction remain
+unimplemented pending their own review. This proof does not activate GUI v2.
 
 - Runtime owns experiment state, acquisition, controllers, central output
   authority, configuration and durable Recorder history. Workbench owns
