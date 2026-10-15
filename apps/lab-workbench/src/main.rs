@@ -13,6 +13,7 @@ mod presentation;
 #[cfg(windows)]
 mod private_ipc;
 mod readonly_cache;
+mod readonly_limits;
 mod readonly_values;
 #[path = "gui/rebuild.rs"]
 mod rebuild;

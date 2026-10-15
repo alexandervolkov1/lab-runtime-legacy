@@ -546,6 +546,7 @@ fn unresolved_references_and_cycles_are_only_locally_checked() {
 fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
     for source in [
         include_str!("mod.rs"),
+        include_str!("consumer.rs"),
         include_str!("bounded.rs"),
         include_str!("dto.rs"),
         include_str!("validation.rs"),
@@ -595,7 +596,7 @@ fn architecture_guard_parser_has_no_execution_or_publication_dependency() {
     let limits = include_str!("limits.rs").replace("\r\n", "\n");
     assert_eq!(
         limits.split_once("\n\n").unwrap().1,
-        "pub(super) use crate::external::{\n    FRAME_BYTES, JSON_BODY_BYTES, JSON_DEPTH, JSON_STRING_BYTES, JSON_VALUES, NAME_BYTES,\n};\npub(super) use crate::presentation::PRESENTATION_FILE_BYTES;\n"
+        "pub(super) use crate::readonly_limits::{\n    FRAME_BYTES, JSON_BODY_BYTES, JSON_DEPTH, JSON_STRING_BYTES, JSON_VALUES, NAME_BYTES,\n    PRESENTATION_FILE_BYTES,\n};\n"
     );
     let source = include_str!("source_v1.rs").replace("\r\n", "\n");
     assert_eq!(

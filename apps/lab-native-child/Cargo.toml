@@ -6,12 +6,22 @@ license.workspace = true
 publish.workspace = true
 rust-version = "1.95"
 
+[[bin]]
+name = "lab-native-child"
+path = "src/main.rs"
+test = false
+bench = false
+
 [target.'cfg(windows)'.dependencies]
 eframe = { version = "=0.36.2", default-features = false, features = ["glow", "default_fonts", "accesskit"] }
 glutin = { version = "=0.32.3", default-features = false, features = ["egl", "wgl"] }
 glutin-winit = { version = "=0.5.0", default-features = false, features = ["egl", "wgl"] }
 winit = { version = "=0.30.13", default-features = false, features = ["rwh_06"] }
 raw-window-handle = { version = "=0.6.2", default-features = false, features = ["std"] }
+egui_plot = { version = "=0.37.0", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+lab-windows-job = { path = "../../crates/lab-windows-job" }
 
 # Only the shared, audited Device source permits unsafe. Protected application
 # packages still inherit workspace unsafe_code=forbid.

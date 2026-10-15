@@ -23,7 +23,7 @@ try {
     }
     foreach ($linkPath in @($records | Where-Object { $_.reason -eq 'build-script-executed' } | ForEach-Object { $_.linked_paths } | Select-Object -Unique)) { $externs += @('-L', $linkPath) }
     $root = (Join-Path $repo 'apps/lab-workbench/src').Replace('\', '/')
-    $modules = @('client','dispatcher','external','gui','model','ownership','parent','presentation','private_ipc','recovery','storage','supervisor') | ForEach-Object {
+    $modules = @('client','dispatcher','external','gui','readonly_limits','readonly_values','readonly_cache','model','ownership','parent','presentation','private_ipc','recovery','storage','supervisor') | ForEach-Object {
         $path = if (Test-Path "$root/$_.rs") { "$root/$_.rs" } else { "$root/$_/mod.rs" }
         "#[path = `"$path`"] mod $_;"
     }

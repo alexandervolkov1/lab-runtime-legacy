@@ -9,6 +9,7 @@ mod document_owner;
 pub(crate) mod fixture;
 pub(crate) mod parent_bridge;
 mod protocol;
+mod read_decode;
 mod reads;
 mod replica;
 mod selected_provider;
