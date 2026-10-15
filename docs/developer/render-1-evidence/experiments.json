@@ -1,0 +1,242 @@
+[
+  {
+    "gate": "dev-glow-faults",
+    "profile": "dev",
+    "result": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "test_filter": "native_isolated_gpu_fault_matrix",
+      "test_only_commit_cap": 536870912,
+      "incarnation_directories": 34,
+      "native_files": 378,
+      "failure": null,
+      "verdict": "PASS",
+      "deployment_C": null,
+      "activation_qualified": false
+    },
+    "identity": {
+      "sha256": "FE4709968EE5D75F0EFDC79BC72E353B2973A174174897E0E1A0A75413145797",
+      "deployment_C": null,
+      "test_only_job_commit_cap": 536870912,
+      "activation_qualified": false,
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "binary": "D:\\rust\\lab-runtime\\target\\debug\\lab-native-child.exe"
+    },
+    "experiment": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "toolchain": [
+        "rustc 1.95.0 (59807616e 2026-04-14)",
+        "binary: rustc",
+        "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+        "commit-date: 2026-04-14",
+        "host: x86_64-pc-windows-msvc",
+        "release: 1.95.0",
+        "LLVM version: 22.1.2"
+      ],
+      "test_only_commit_cap": 536870912,
+      "deployment_C": null,
+      "activation_qualified": false,
+      "hardware_is_admission_input": false,
+      "historical_224_MiB_qualification_transferred": false
+    }
+  },
+  {
+    "gate": "dev-glow-frames",
+    "profile": "dev",
+    "result": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "test_filter": "native_first_isolated_renderer_frames_from_parent_approved_snapshots",
+      "test_only_commit_cap": 536870912,
+      "incarnation_directories": 1,
+      "native_files": 27,
+      "failure": null,
+      "verdict": "PASS",
+      "deployment_C": null,
+      "activation_qualified": false
+    },
+    "identity": {
+      "sha256": "FE4709968EE5D75F0EFDC79BC72E353B2973A174174897E0E1A0A75413145797",
+      "test_only_job_commit_cap": 536870912,
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "binary": "D:\\rust\\lab-runtime\\target\\debug\\lab-native-child.exe",
+      "activation_qualified": false,
+      "deployment_C": null
+    },
+    "experiment": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "toolchain": [
+        "rustc 1.95.0 (59807616e 2026-04-14)",
+        "binary: rustc",
+        "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+        "commit-date: 2026-04-14",
+        "host: x86_64-pc-windows-msvc",
+        "release: 1.95.0",
+        "LLVM version: 22.1.2"
+      ],
+      "test_only_commit_cap": 536870912,
+      "deployment_C": null,
+      "activation_qualified": false,
+      "hardware_is_admission_input": false,
+      "historical_224_MiB_qualification_transferred": false
+    }
+  },
+  {
+    "gate": "dev-glow-pending",
+    "profile": "dev",
+    "result": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "test_filter": "native_renderer_pending_completion_handoff_stop_retains_original_root",
+      "test_only_commit_cap": 536870912,
+      "incarnation_directories": 2,
+      "native_files": 19,
+      "failure": null,
+      "verdict": "PASS",
+      "deployment_C": null,
+      "activation_qualified": false
+    },
+    "identity": {
+      "test_only_job_commit_cap": 536870912,
+      "activation_qualified": false,
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "deployment_C": null,
+      "binary": "D:\\rust\\lab-runtime\\target\\debug\\lab-native-child.exe",
+      "sha256": "FE4709968EE5D75F0EFDC79BC72E353B2973A174174897E0E1A0A75413145797"
+    },
+    "experiment": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "toolchain": [
+        "rustc 1.95.0 (59807616e 2026-04-14)",
+        "binary: rustc",
+        "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+        "commit-date: 2026-04-14",
+        "host: x86_64-pc-windows-msvc",
+        "release: 1.95.0",
+        "LLVM version: 22.1.2"
+      ],
+      "test_only_commit_cap": 536870912,
+      "deployment_C": null,
+      "activation_qualified": false,
+      "hardware_is_admission_input": false,
+      "historical_224_MiB_qualification_transferred": false
+    }
+  },
+  {
+    "gate": "release-glow-faults",
+    "profile": "release",
+    "result": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "test_filter": "native_isolated_gpu_fault_matrix",
+      "test_only_commit_cap": 536870912,
+      "incarnation_directories": 34,
+      "native_files": 374,
+      "failure": null,
+      "verdict": "PASS",
+      "deployment_C": null,
+      "activation_qualified": false
+    },
+    "identity": {
+      "sha256": "FB9E8D4813ADB5E4A82175F5D0C065F4509C1DD3C31F3A9A8BDAD5325857882E",
+      "activation_qualified": false,
+      "binary": "D:\\rust\\lab-runtime\\target\\release\\lab-native-child.exe",
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "deployment_C": null,
+      "test_only_job_commit_cap": 536870912
+    },
+    "experiment": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "toolchain": [
+        "rustc 1.95.0 (59807616e 2026-04-14)",
+        "binary: rustc",
+        "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+        "commit-date: 2026-04-14",
+        "host: x86_64-pc-windows-msvc",
+        "release: 1.95.0",
+        "LLVM version: 22.1.2"
+      ],
+      "test_only_commit_cap": 536870912,
+      "deployment_C": null,
+      "activation_qualified": false,
+      "hardware_is_admission_input": false,
+      "historical_224_MiB_qualification_transferred": false
+    }
+  },
+  {
+    "gate": "release-glow-frames",
+    "profile": "release",
+    "result": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "test_filter": "native_first_isolated_renderer_frames_from_parent_approved_snapshots",
+      "test_only_commit_cap": 536870912,
+      "incarnation_directories": 1,
+      "native_files": 27,
+      "failure": null,
+      "verdict": "PASS",
+      "deployment_C": null,
+      "activation_qualified": false
+    },
+    "identity": {
+      "test_only_job_commit_cap": 536870912,
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "activation_qualified": false,
+      "sha256": "FB9E8D4813ADB5E4A82175F5D0C065F4509C1DD3C31F3A9A8BDAD5325857882E",
+      "deployment_C": null,
+      "binary": "D:\\rust\\lab-runtime\\target\\release\\lab-native-child.exe"
+    },
+    "experiment": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "toolchain": [
+        "rustc 1.95.0 (59807616e 2026-04-14)",
+        "binary: rustc",
+        "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+        "commit-date: 2026-04-14",
+        "host: x86_64-pc-windows-msvc",
+        "release: 1.95.0",
+        "LLVM version: 22.1.2"
+      ],
+      "test_only_commit_cap": 536870912,
+      "deployment_C": null,
+      "activation_qualified": false,
+      "hardware_is_admission_input": false,
+      "historical_224_MiB_qualification_transferred": false
+    }
+  },
+  {
+    "gate": "release-glow-pending",
+    "profile": "release",
+    "result": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "test_filter": "native_renderer_pending_completion_handoff_stop_retains_original_root",
+      "test_only_commit_cap": 536870912,
+      "incarnation_directories": 2,
+      "native_files": 19,
+      "failure": null,
+      "verdict": "PASS",
+      "deployment_C": null,
+      "activation_qualified": false
+    },
+    "identity": {
+      "sha256": "FB9E8D4813ADB5E4A82175F5D0C065F4509C1DD3C31F3A9A8BDAD5325857882E",
+      "activation_qualified": false,
+      "deployment_C": null,
+      "test_only_job_commit_cap": 536870912,
+      "binary": "D:\\rust\\lab-runtime\\target\\release\\lab-native-child.exe",
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed"
+    },
+    "experiment": {
+      "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+      "toolchain": [
+        "rustc 1.95.0 (59807616e 2026-04-14)",
+        "binary: rustc",
+        "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+        "commit-date: 2026-04-14",
+        "host: x86_64-pc-windows-msvc",
+        "release: 1.95.0",
+        "LLVM version: 22.1.2"
+      ],
+      "test_only_commit_cap": 536870912,
+      "deployment_C": null,
+      "activation_qualified": false,
+      "hardware_is_admission_input": false,
+      "historical_224_MiB_qualification_transferred": false
+    }
+  }
+]

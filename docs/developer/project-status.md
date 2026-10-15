@@ -42,6 +42,12 @@ Resolution/DPI expansion, backend alternatives and other-platform process hosts
 require their later stages and review. Historical B3B4C and the unmerged #43
 BLOCKED record retain their original provenance.
 
+The [RENDER-1 backend design](render-1-backend-separation.md) recommends shared
+egui preparation and independent GPU owners, with standard egui-wgpu inside the
+existing winit child as the next proof candidate. This is a design review with
+unchanged executable inputs; WGPU execution, backend selection and the required
+ownership extraction remain unimplemented pending independent review.
+
 - Runtime owns experiment state, acquisition, controllers, central output
   authority, configuration and durable Recorder history. Workbench owns
   presentation. Neither Workbench nor script lifetime owns the experiment.

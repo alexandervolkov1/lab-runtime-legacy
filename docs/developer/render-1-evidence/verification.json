@@ -1,0 +1,212 @@
+{
+  "checked_utc": "2026-10-15T18:54:29.445506+00:00",
+  "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+  "executable_delta": false,
+  "protected_roots": [
+    "apps",
+    "crates",
+    "scripts",
+    "clients",
+    "Cargo.toml",
+    "Cargo.lock"
+  ],
+  "unchanged_inputs": 361,
+  "documentation_links_verified": 47,
+  "links": [
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "render-1-evidence/pre-merge.json"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "render-1-evidence/merge.json"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/gui/readonly_v2/mod.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/gui/readonly_v2/frame.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/gui/readonly_v2/texture_owner.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/gui/readonly_v2/host_session.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../scripts/support/native-glow-backend.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../scripts/support/native-glow-device.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-native-child/src/entry.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/private_ipc/document_owner.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/private_ipc/replica.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/parent.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/supervisor/mod.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/private_ipc/mod.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "../../apps/lab-workbench/src/gui/readonly_v2/finite_trace.rs"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "render-1-evidence/upstream-sources.json"
+    },
+    {
+      "source": "docs/developer/render-1-backend-separation.md",
+      "target": "render-1-validation.md"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-backend-separation.md"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/unchanged-inputs.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/gates.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/parent-receipts.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/graphics-contexts.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/framebuffers.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/dev-glow-replacement.png"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/release-glow-replacement.png"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/pictures.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "port-1-evidence/gates.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "port-1-gl-capability-admission.md"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/binary-identities.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/experiments.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/raw-evidence.zip"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/raw-manifest.json"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-sha256.txt"
+    },
+    {
+      "source": "docs/developer/render-1-validation.md",
+      "target": "render-1-evidence/verification.json"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../linux-runtime.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../release-license-evidence.txt"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "gl-capability-contract.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "port-1-gl-capability-admission.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "render-1-backend-separation.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../architecture.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../safety-and-failures.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../recorder-sqlite.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../recovery-and-faults.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../api/README.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../workbench-api.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../reference/transports.md"
+    },
+    {
+      "source": "docs/developer/project-status.md",
+      "target": "../README.md"
+    }
+  ],
+  "fresh_gates_passed": 11,
+  "raw_zip_members_verified": 907,
+  "json_parse": "PASS",
+  "diff_check": "PASS",
+  "wgpu_compile_or_execution": false,
+  "activation_qualified": false,
+  "upstream_source_inspection_only": true
+}

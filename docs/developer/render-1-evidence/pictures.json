@@ -1,0 +1,18 @@
+[
+  {
+    "profile": "dev",
+    "png": "dev-glow-replacement.png",
+    "png_sha256": "53abf37bc3e98e50a40b808464146e2a5434e8de4c42857f35b3b8177188e610",
+    "original": "target/debug/target/isolated-native-renderer/17116-00000000000042dc18dec854cefd3abd-1/frame-09.json",
+    "original_rgba_sha256": "c07df98b321a09076bea6db373dc7b5ec4c6fdb20344d72cfce38a7b8ec75e61",
+    "transformation": "Lossless RGBA encoding; GL bottom-up rows reversed; no resampling"
+  },
+  {
+    "profile": "release",
+    "png": "release-glow-replacement.png",
+    "png_sha256": "53abf37bc3e98e50a40b808464146e2a5434e8de4c42857f35b3b8177188e610",
+    "original": "target/release/target/isolated-native-renderer/16116-0000000000003ef418dec879e621f9b1-1/frame-09.json",
+    "original_rgba_sha256": "c07df98b321a09076bea6db373dc7b5ec4c6fdb20344d72cfce38a7b8ec75e61",
+    "transformation": "Lossless RGBA encoding; GL bottom-up rows reversed; no resampling"
+  }
+]

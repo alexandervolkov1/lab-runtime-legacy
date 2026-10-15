@@ -1,0 +1,24 @@
+{
+  "scope": "Fresh original Glow regression only; no WGPU execution or real-Runtime B3B5 integration",
+  "source_head": "ea5789c1077ed1c8ac7f0651599d7daea2a232ed",
+  "fresh_gates": 11,
+  "summary": {
+    "dev": {
+      "native_contexts": 37,
+      "framebuffer_captures": 78,
+      "parent_receipts": 19,
+      "peak_process_commit": 153235456,
+      "peak_job_commit": 159801344
+    },
+    "release": {
+      "native_contexts": 37,
+      "framebuffer_captures": 76,
+      "parent_receipts": 19,
+      "peak_process_commit": 152145920,
+      "peak_job_commit": 158720000
+    }
+  },
+  "test_only_commit_cap": 536870912,
+  "deployment_C": null,
+  "activation_qualified": false
+}

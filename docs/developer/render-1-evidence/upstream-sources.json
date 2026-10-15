@@ -1,0 +1,153 @@
+{
+  "kind": "Source inspection only; WGPU was not compiled or executed",
+  "dependency_changes": false,
+  "new_dependency_approval": false,
+  "inspected": [
+    {
+      "package": "egui-0.36.2",
+      "package_sha256": "dc938cc27cd911415e1e4d151bc56ff9df063d8db081374e87aeb805ea74b2ba",
+      "checksum_source": "repository Cargo.lock",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "96347750ef7eaee0ea163eb6d38f48dc2e48ceb0d8d3a27d15b963a6f8206952",
+          "lines": 356
+        },
+        {
+          "path": "src/lib.rs",
+          "sha256": "159e4831e7345351c0ce430e31e64a1d7641d9cf4d2d832deb7606b618c94cbe",
+          "lines": 694
+        },
+        {
+          "path": "src/context.rs",
+          "sha256": "c1152788996a49f6ebfb45d817d4e9541d731334c12817ee075d448c0e55eea3",
+          "lines": 4528
+        },
+        {
+          "path": "src/data/output.rs",
+          "sha256": "87a7ab7e0381cd38def0604c3a63582536e1c37f7038318124f7d73ca102f16d",
+          "lines": 809
+        }
+      ],
+      "cargo_cache_integrity_verified": true
+    },
+    {
+      "package": "epaint-0.36.2",
+      "package_sha256": "a0ec0308dc23130fc1a7d4623a8534c2ed069c6dc84e258ee4f3de99615aa1a3",
+      "checksum_source": "repository Cargo.lock",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "2b5f3f795605521b777f1ae44f716814d734dd5608a052b180326f11f2c2c518",
+          "lines": 392
+        },
+        {
+          "path": "src/lib.rs",
+          "sha256": "10d0b5f1ff7c5c3191c7a53d6e3f9c48b9561cf7df4b1970f0f4546719d70b8c",
+          "lines": 161
+        },
+        {
+          "path": "src/textures.rs",
+          "sha256": "ef2ccc4ceb221c49e65f702a11efb0980a55d2073ddb4d89d1e3f9bb637f9e62",
+          "lines": 380
+        }
+      ],
+      "cargo_cache_integrity_verified": true
+    },
+    {
+      "package": "eframe-0.36.2",
+      "package_sha256": "55ad41fac6e3149abb4866e93df37dbd33baa95db525c3368c944584e95a5dc2",
+      "checksum_source": "repository Cargo.lock",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "e4f9203c36a20873416e9a5054528706b2e7c89c5c52fd6ff0d66c16e6b5a418",
+          "lines": 569
+        },
+        {
+          "path": "src/epi.rs",
+          "sha256": "9dad50a69b22c031c125df16b76d9bed59e8695c97639f927b8f7f8ccb3fe820",
+          "lines": 984
+        },
+        {
+          "path": "src/native/epi_integration.rs",
+          "sha256": "54770c41c9036bd5139e14a045d75303b428c73c066ee3def9bd14b57f7b9e96",
+          "lines": 467
+        },
+        {
+          "path": "src/native/wgpu_integration.rs",
+          "sha256": "b776ccf1b1642229abce524a22fc2ec53b362be5bb97bbe326c56d0ca2a54934",
+          "lines": 1390
+        }
+      ],
+      "cargo_cache_integrity_verified": true
+    },
+    {
+      "package": "egui-wgpu-0.36.2",
+      "package_sha256": "5cef1f6d1bba40b09a4d0d62cb822b81030922cfbf65c5373398c3a3caafc5bd",
+      "checksum_source": "cached Cargo sparse registry index",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "cd2f49b8f2ccd77e0d03643fb82b2cb8fac31d88e6b5c444aa0a7eba0567a6ce",
+          "lines": 340
+        },
+        {
+          "path": "src/renderer.rs",
+          "sha256": "f12f5b914c3fe042d025f9ec11e6890607bf774125772b0ae900677cb63465f4",
+          "lines": 1178
+        },
+        {
+          "path": "src/winit.rs",
+          "sha256": "700364b7fe1fe2b8f6b1fc28f1a8cf58b6c78bf63e7849cdfded18461470fe2e",
+          "lines": 800
+        },
+        {
+          "path": "src/capture.rs",
+          "sha256": "c16f0548435842ce212b4aa5d8ec84b9b6ef9868e95c7cf285bf85ac3ab952fb",
+          "lines": 267
+        },
+        {
+          "path": "src/lib.rs",
+          "sha256": "91cdd2d78b4a6b4fd9f6fccd1414a0c1fed8972660a0df2c8ef0bf73077f2b7c",
+          "lines": 555
+        }
+      ],
+      "cargo_cache_integrity_verified": true
+    },
+    {
+      "package": "wgpu-30.0.1",
+      "package_sha256": "527ccdf43dd5b2e8676eed9984ce00e2bbb0a1b85b70c1969dcb6cd2eb55ab9e",
+      "checksum_source": "cached Cargo sparse registry index",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "920e38a10484891fca696907fdfcccf3a4600b1736f4f4d138815557c10b28e7",
+          "lines": 278
+        },
+        {
+          "path": "src/api/queue.rs",
+          "sha256": "14dae3b36f75911a5ac4ed556d48875930e097990649110f9a5e53deada8d846",
+          "lines": 394
+        },
+        {
+          "path": "src/api/device.rs",
+          "sha256": "6adbd3b5bb966fb20601cd55f0cf1b0cffd48fc615c72029dfe3c116b9c88e8f",
+          "lines": 1002
+        },
+        {
+          "path": "src/api/texture.rs",
+          "sha256": "d278b7badb427b5f77aa9363763f1d0dbed1575bf1a5af684be9d2c50c4031cd",
+          "lines": 202
+        },
+        {
+          "path": "src/api/render_pass.rs",
+          "sha256": "95a595c1092ce49d2924cdfaaa417c98a0b8349914a3a2cd66f89a0e84c8d958",
+          "lines": 685
+        }
+      ],
+      "cargo_cache_integrity_verified": true
+    }
+  ],
+  "note": "Existing local registry source verified against Cargo package checksum and cached crate archive. This is source provenance, not a new transitive license or safety audit."
+}

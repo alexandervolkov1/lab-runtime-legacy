@@ -1,0 +1,4738 @@
+[
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec857c261504d-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec857c261504d-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85822994aa2-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85822994aa2-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec858f0a03623-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec858f0a03623-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec859c7d58cac-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec859c7d58cac-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85a7ddb9071-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85a7ddb9071-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85b3b435c3a-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85b3b435c3a-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85c0a3dba63-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85c0a3dba63-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85ce090e804-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85ce090e804-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85daf812419-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85daf812419-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85e7f691556-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85e7f691556-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85f4e5b2553-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec85f4e5b2553-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8601e473930-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8601e473930-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec860ec4fd2dd-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec860ec4fd2dd-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec861bb43c4da-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec861bb43c4da-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8628b2b2143-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8628b2b2143-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec86359340828-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec86359340828-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8642aed1911-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-faults",
+    "path": "target/debug/target/isolated-native-renderer/11524-0000000000002d0418dec8642aed1911-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-frames",
+    "path": "target/debug/target/isolated-native-renderer/17116-00000000000042dc18dec854cefd3abd-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-pending",
+    "path": "target/debug/target/isolated-native-renderer/6584-00000000000019b818dec855f43e4271-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "dev",
+    "gate": "dev-glow-pending",
+    "path": "target/debug/target/isolated-native-renderer/6584-00000000000019b818dec855f43e4271-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87ced7b3445-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87ced7b3445-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87d3caecf5a-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87d3caecf5a-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87df83e5c9b-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87df83e5c9b-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87eb2dd3d5c-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87eb2dd3d5c-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87f67032489-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec87f67032489-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88021a34e9e-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88021a34e9e-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec880dd30c513-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec880dd30c513-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec881a4bdf2f8-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec881a4bdf2f8-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8826ff8e621-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8826ff8e621-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88338770156-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88338770156-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec883f229c21b-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec883f229c21b-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec884bb8ed170-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec884bb8ed170-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88585e36de5-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88585e36de5-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8865124003e-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8865124003e-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8870cae959f-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec8870cae959f-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec887d7029cd4-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec887d7029cd4-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88891a375c1-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-faults",
+    "path": "target/release/target/isolated-native-renderer/3184-0000000000000c7018dec88891a375c1-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-frames",
+    "path": "target/release/target/isolated-native-renderer/16116-0000000000003ef418dec879e621f9b1-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-pending",
+    "path": "target/release/target/isolated-native-renderer/7752-0000000000001e4818dec87b2339dfc5-1/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  },
+  {
+    "profile": "release",
+    "gate": "release-glow-pending",
+    "path": "target/release/target/isolated-native-renderer/7752-0000000000001e4818dec87b2339dfc5-2/native-profile.json",
+    "report": {
+      "graphics": {
+        "admitted": true,
+        "capabilities": {
+          "color_bits": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "default_framebuffer_complete": true,
+          "double_buffered": true,
+          "embedded": false,
+          "max_texture_size": 32768,
+          "max_viewport": [
+            32768,
+            32768
+          ],
+          "profile_mask": 1,
+          "version": [
+            3,
+            3
+          ]
+        },
+        "diagnostics": {
+          "context_flags": 0,
+          "framebuffer_config": "color=Some(Rgb { r_size: 8, g_size: 8, b_size: 8 }) alpha=8 depth=0 stencil=0 samples=0",
+          "platform_api": "WGL",
+          "renderer": "NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2",
+          "shading_language_version": "3.30 NVIDIA via Cg compiler",
+          "vendor": "NVIDIA Corporation",
+          "version": "3.3.0 NVIDIA 616.92"
+        },
+        "drawable": [
+          1280,
+          960
+        ],
+        "error": null,
+        "error_kind": null,
+        "required_entry_points": 64,
+        "scale": 1.0,
+        "stage": "ready"
+      },
+      "monitors": [
+        {
+          "name": "\\\\.\\DISPLAY1",
+          "position": [
+            0,
+            0
+          ],
+          "scale": 1.0,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "primary_scale": 1.0
+    }
+  }
+]
