@@ -149,9 +149,13 @@ impl Channels {
                 )
                 .map_err(|e| format!("{e:?}"))?;
             self.hello_ack = true;
-        } else if self.closing && healthy {
-            self.status(replica, owner_progress, Kind::Closed)?;
-            self.closed_sent = true;
+        } else if self.closing {
+            // Preserve the exact Close challenge until real own-object release.
+            // An interim Status must not consume it while retirement is pending.
+            if healthy {
+                self.status(replica, owner_progress, Kind::Closed)?;
+                self.closed_sent = true;
+            }
         } else if let Some(index) = self.pending.iter().position(Option::is_some) {
             let (decision, applied) = self.pending[index].take().unwrap();
             let mut header = Header::control(
