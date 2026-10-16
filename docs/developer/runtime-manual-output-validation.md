@@ -1,6 +1,6 @@
 # Runtime manual-output validation
 
-`ACTIVATION_QUALIFIED=false`. [Draft PR #53](https://github.com/alexandervolkov1/lab-runtime/pull/53)
+`ACTIVATION_QUALIFIED=false`. [Draft PR #53](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/53)
 is for independent review, not release or
 physical-device qualification. No Workbench/GUI, Windows Job, GPU, memory audit or
 hardware run was performed. No previous PR was merged for this task.

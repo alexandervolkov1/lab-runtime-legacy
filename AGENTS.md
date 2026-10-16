@@ -1,8 +1,8 @@
 # Historical repository: agent instructions
 
-`alexandervolkov1/lab-runtime` is preserved as a reproducible historical project.
+`alexandervolkov1/lab-runtime-legacy` is archived as a reproducible historical project.
 Active development in this repository has stopped. The standalone Runtime is
-maintained in [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next).
+maintained in [lab-runtime](https://github.com/alexandervolkov1/lab-runtime).
 Workbench will be developed separately under a new user assignment.
 
 Resuming development here requires an explicit new assignment from the user.

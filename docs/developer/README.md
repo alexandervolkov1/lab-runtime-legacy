@@ -1,9 +1,9 @@
 # Developer and API documentation
 
-This is the preserved documentation of a historical project; active development
+This is the preserved documentation of the archived `lab-runtime-legacy` project; active development
 here has stopped. The [root agent instructions](../../AGENTS.md) govern any
 explicitly requested maintenance. Old plans and qualification limits do not
-authorize more work. Use [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next)
+authorize more work. Use [lab-runtime](https://github.com/alexandervolkov1/lab-runtime)
 for the standalone Runtime; Workbench needs a separate new user assignment.
 
 This section is for integrators, driver authors and maintainers. It is separate

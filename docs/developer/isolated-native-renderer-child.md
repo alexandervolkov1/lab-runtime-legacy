@@ -7,9 +7,9 @@ remains **BLOCKED**. `ACTIVATION_QUALIFIED=false`.
 
 ## Review decision and preserved baseline
 
-Independent review accepted the [original compatibility assessment](https://github.com/alexandervolkov1/lab-runtime/blob/4eded4648ce96db3dcc9304fa20bd492e0ab1096/docs/developer/isolated-native-renderer-child.md)
+Independent review accepted the [original compatibility assessment](https://github.com/alexandervolkov1/lab-runtime-legacy/blob/4eded4648ce96db3dcc9304fa20bd492e0ab1096/docs/developer/isolated-native-renderer-child.md)
 and selected **Option B: explicit admission handoff**. Work continues in Draft
-[PR #40](https://github.com/alexandervolkov1/lab-runtime/pull/40), branch
+[PR #40](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/40), branch
 `feature/dgui-4c7b3b4-isolated-native-renderer-child`. The original assessment,
 compile controls, raw evidence and hashes remain historical at `4eded4648ce96db3dcc9304fa20bd492e0ab1096`;
 the old evidence directory and SHA256 file are not overwritten or relabeled.

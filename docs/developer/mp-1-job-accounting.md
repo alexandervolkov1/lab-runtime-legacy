@@ -1,7 +1,7 @@
 # MP-1: Windows Job commit accounting investigation
 
 Status: **OPEN, narrowed by reproducible native evidence**, pending independent
-review in [Draft PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51).
+review in [Draft PR #51](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/51).
 `ACTIVATION_QUALIFIED=false`. No release, production activation or memory
 deployment policy is selected.
 
@@ -37,7 +37,7 @@ into a recovered observation.
 
 ## Provenance and TIME-1 merge
 
-PR [#50](https://github.com/alexandervolkov1/lab-runtime/pull/50) was merged with
+PR [#50](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/50) was merged with
 ordinary merge commit **`30a20e3867e1bb08e2aff3405a7015266add70ed`** after checking
 remote HEAD `f7c41c4638c5841f954fb6a522ca8d4fe9d85467`, base
 `5c0730c8f827de9b326cabaf4176ae21d2e3308b`, a clean working tree and all **112**

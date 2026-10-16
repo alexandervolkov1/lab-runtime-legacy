@@ -234,7 +234,7 @@ An additional historical ignored M17.4 process-overlap gate remains **BLOCKED**:
 its held Recorder Start fixture returns recording_unavailable before the second
 mutation is accepted. The same failure was reproduced by compiling and running
 the unmodified archived B3A merge source with the exact locked test artifacts,
-without the new parent component; see the [original baseline reproduction](https://github.com/alexandervolkov1/lab-runtime/blob/4bfec46962851351f7452ef80cf4d8ce6a3380bb/docs/developer/independent-parent-pump-evidence.txt#L40).
+without the new parent component; see the [original baseline reproduction](https://github.com/alexandervolkov1/lab-runtime-legacy/blob/4bfec46962851351f7452ef80cf4d8ce6a3380bb/docs/developer/independent-parent-pump-evidence.txt#L40).
 This gate drives dispatcher/rebuild directly.
 Its original fixture/assertion remains unchanged; thirteen other virtual process
 acceptance cases pass in each profile. A suitable acceptance-aware Recorder fault

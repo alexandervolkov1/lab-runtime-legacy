@@ -1,12 +1,17 @@
-# lab-runtime
+# lab-runtime-legacy
 
-> **Historical project — active development here has stopped.** The standalone
-> Runtime is maintained in [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next).
+> **Archived historical project — active development here has stopped.** The standalone
+> Runtime is maintained in [lab-runtime](https://github.com/alexandervolkov1/lab-runtime).
 > Workbench will be developed separately under a new user assignment. Earlier
 > plans, unfinished milestones and qualification limits are historical records,
 > not instructions to continue work. Resuming development here requires an
 > explicit user assignment. The sources and documentation below preserve the old
 > project; closure does not imply that unfinished work or qualification is complete.
+
+The former `lab-runtime` repository is preserved here as `lab-runtime-legacy`.
+For the current headless application, use the standalone
+[Runtime release](https://github.com/alexandervolkov1/lab-runtime/releases/tag/v0.1.0-preview.8).
+The instructions and releases below belong to this historical project.
 
 lab-runtime collects measurements from laboratory instruments, displays them in
 live plots, and records experiments in a local database. It also supports
@@ -26,7 +31,7 @@ Workbench from a Windows computer on the same trusted local network.
 
 ## Download
 
-Open [GitHub Releases](https://github.com/alexandervolkov1/lab-runtime/releases/tag/v0.1.0-preview.5)
+Open [GitHub Releases](https://github.com/alexandervolkov1/lab-runtime-legacy/releases/tag/v0.1.0-preview.5)
 and expand **Assets**. This guide accompanies `v0.1.0-preview.5`, a pre-release.
 
 | Computer | Download |
@@ -85,7 +90,7 @@ The [User manual](docs/README.md) then covers:
 - [common problems](docs/troubleshooting.md).
 
 Writing integrations or building the software? Use the separate
-[Developer and API documentation on GitHub](https://github.com/alexandervolkov1/lab-runtime/blob/v0.1.0-preview.5/docs/developer/README.md).
+[Developer and API documentation on GitHub](https://github.com/alexandervolkov1/lab-runtime-legacy/blob/v0.1.0-preview.5/docs/developer/README.md).
 It needs an Internet connection and is not needed for the walkthrough.
 
 ## Safety and license

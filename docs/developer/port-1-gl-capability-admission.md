@@ -12,7 +12,7 @@ Base main is the B3B4C merge `d96111f488d8535c294879e767832d537219108a`.
 Branch: `feature/port-1-gl-capability-admission`.
 Final executed source: **`18c1aeb77899e0c7736831fcc0e49b8161f54702`**.
 Subsequent review commits add documentation/evidence only.
-[Draft PR #43](https://github.com/alexandervolkov1/lab-runtime/pull/43) remains
+[Draft PR #43](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/43) remains
 unmerged at `04c0e5180a4bc45ae12c7b62fdb3b86ad8f10e7c`; its BLOCKED record
 is preserved. No release or product activation occurred.
 

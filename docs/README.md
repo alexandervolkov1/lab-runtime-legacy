@@ -1,5 +1,10 @@
 # User manual
 
+This is the archived manual for `lab-runtime-legacy`, formerly `lab-runtime`.
+For the maintained standalone Runtime, use the
+[current user guide](https://github.com/alexandervolkov1/lab-runtime/blob/main/docs/README.md).
+The Runtime/Workbench instructions below describe only the historical packages.
+
 Use these guides with the downloaded Runtime and Workbench packages. You do not
 need a compiler, a source checkout or a programming language.
 
@@ -24,7 +29,7 @@ blindly.
 
 ## Separate technical documentation
 
-[Developer and API documentation on GitHub](https://github.com/alexandervolkov1/lab-runtime/blob/v0.1.0-preview.5/docs/developer/README.md) covers integrations,
+[Developer and API documentation on GitHub](https://github.com/alexandervolkov1/lab-runtime-legacy/blob/v0.1.0-preview.5/docs/developer/README.md) covers integrations,
 drivers, protocols, builds and internal contracts. It is not part of the first-use
 walkthrough or the portable package and needs an Internet connection.
 [Back to the project](../README.md).

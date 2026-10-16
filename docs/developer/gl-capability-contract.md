@@ -2,7 +2,7 @@
 
 This is the current admission policy for explicitly requested Windows test-only
 renderer experiments. It supersedes the hardware-fingerprint restriction used
-to stop B3B5 in [historical Draft PR #43](https://github.com/alexandervolkov1/lab-runtime/pull/43).
+to stop B3B5 in [historical Draft PR #43](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/43).
 That PR and B3B1-B3B4C evidence remain historical records; they are not rewritten.
 `ACTIVATION_QUALIFIED=false`. The ordinary Workbench still selects GUI v1.
 

@@ -15,7 +15,7 @@ RENDER-2 requires an independent decision before implementation.
 
 ## Merge and source identity
 
-PORT-1 [PR #44](https://github.com/alexandervolkov1/lab-runtime/pull/44) was marked
+PORT-1 [PR #44](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/44) was marked
 Ready and merged using an ordinary merge commit after rechecking the remote
 HEAD/base, all 398 canonical hashes and the post-qualification delta:
 
@@ -31,7 +31,7 @@ The merge tree equals the reviewed HEAD tree. Local main was fast-forwarded and
 verified clean before creating `feature/render-1-backend-separation`.
 [Pre-merge audit](render-1-evidence/pre-merge.json) and
 [merge parents](render-1-evidence/merge.json) preserve these checks.
-[PR #43](https://github.com/alexandervolkov1/lab-runtime/pull/43) remains an unmerged
+[PR #43](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/43) remains an unmerged
 historical BLOCKED record; its HEAD is `04c0e5180a4bc45ae12c7b62fdb3b86ad8f10e7c`.
 
 ## Current dependencies and ownership

@@ -8,7 +8,7 @@ or musl-only systems.
 
 ## Download and check
 
-From the [release page](https://github.com/alexandervolkov1/lab-runtime/releases/tag/v0.1.0-preview.5),
+From the [release page](https://github.com/alexandervolkov1/lab-runtime-legacy/releases/tag/v0.1.0-preview.5),
 download these files into the same directory:
 
 - `lab-runtime-v0.1.0-preview.5-linux-x86_64.tar.gz`;

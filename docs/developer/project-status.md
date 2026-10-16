@@ -1,7 +1,8 @@
 # Historical project status and development map
 
-Active development in this repository has stopped. The standalone Runtime is
-maintained in [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next);
+This repository is archived as `lab-runtime-legacy`; active development has stopped.
+The standalone Runtime is
+maintained in [lab-runtime](https://github.com/alexandervolkov1/lab-runtime);
 Workbench will be developed separately under a new user assignment. The results,
 plans and qualification limits below describe this historical project. Words such
 as "current", "approved", "pending" and "next" in older records refer to their
@@ -9,9 +10,14 @@ original scope, not an active task. Unfinished or blocked work remains unfinishe
 or blocked. Resuming development here requires an explicit new user assignment;
 see the [root agent instructions](../../AGENTS.md).
 
+The repository was formerly named `lab-runtime`. Historical Markdown links now
+use `lab-runtime-legacy`. Original machine evidence and transcripts retain their
+captured URLs; resolve those old-project references against `lab-runtime-legacy`,
+not the new standalone repository that now owns the `lab-runtime` name.
+
 ## Historical published baseline
 
-[v0.1.0-preview.4](https://github.com/alexandervolkov1/lab-runtime/releases/tag/v0.1.0-preview.4)
+[v0.1.0-preview.4](https://github.com/alexandervolkov1/lab-runtime-legacy/releases/tag/v0.1.0-preview.4)
 is published and its seven uploaded assets were downloaded and hash-verified.
 Its exact source is `cc32f827708ee9fefe63394245dcce1aa437e520`; the final license
 packaging commit changes no production Rust/Cargo inputs from the M18 merge.
@@ -34,14 +40,14 @@ not product behavior. User packages contain the manual and two safe virtual
 configuration examples. Experimental clients, hardware/protocol examples and
 engineering references remain in the source repository.
 
-Check [GitHub Releases](https://github.com/alexandervolkov1/lab-runtime/releases)
+Check [GitHub Releases](https://github.com/alexandervolkov1/lab-runtime-legacy/releases)
 for the current publication status and downloadable assets. This source document
 does not assert whether preview.5 has been published. The preview.4 commit above
 identifies the historical published source, not a moving latest-release pointer.
 
 ## Implemented boundaries
 
-The final scoped Runtime change, [PR #53](https://github.com/alexandervolkov1/lab-runtime/pull/53),
+The final scoped Runtime change, [PR #53](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/53),
 was merged at `7f91e715051f2b0d0ba1cde24a61d7135e15c0fc`. See the
 [manual actuator control and implementation review](runtime-manual-output-review.md),
 [API contract](../api/manual-output.md) and
@@ -84,7 +90,7 @@ elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
 The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
-([PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51), merged before the
+([PR #51](https://github.com/alexandervolkov1/lab-runtime-legacy/pull/51), merged before the
 current Runtime branch at `2426fc0823e1d6a5e28425cc8ebc2e5f079953cb`)
 reproduces over-limit peak accounting without GPU and in the historical-source
 DX12 negative control. The current Windows build accounts an OS console helper
@@ -193,8 +199,8 @@ Historical milestone reports, external reviews, original bench databases and
 temporary execution permissions are not current development instructions. They
 remain byte-recoverable from the immutable published source:
 
-- [Engineering reports at preview.4](https://github.com/alexandervolkov1/lab-runtime/tree/cc32f827708ee9fefe63394245dcce1aa437e520/ai)
-- [Hardware examples/data at preview.4](https://github.com/alexandervolkov1/lab-runtime/tree/cc32f827708ee9fefe63394245dcce1aa437e520/examples)
+- [Engineering reports at preview.4](https://github.com/alexandervolkov1/lab-runtime-legacy/tree/cc32f827708ee9fefe63394245dcce1aa437e520/ai)
+- [Hardware examples/data at preview.4](https://github.com/alexandervolkov1/lab-runtime-legacy/tree/cc32f827708ee9fefe63394245dcce1aa437e520/examples)
 
 Use `git show v0.1.0-preview.4:<path>` for a historical text, or `git archive` into
 a new external destination for binary files. Recover each database together with
