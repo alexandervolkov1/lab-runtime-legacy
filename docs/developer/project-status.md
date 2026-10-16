@@ -68,7 +68,9 @@ operator/recovery path; Parent retains one Runtime client/scope. Control require
 `--experimental-eframe-controls` and remains disabled in observation mode. Other
 control kinds stay inactive, and GUI v1 remains the default. See the
 [actual dev/release WGPU, Glow smoke, observation and crash/restart results](control-1-validation.md).
-CONTROL-1 is awaiting independent review; no activation or release is implied.
+CONTROL-1 is awaiting independent review in
+[Draft PR #52](https://github.com/alexandervolkov1/lab-runtime/pull/52);
+no activation or release is implied.
 
 The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
 ([PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51), independently

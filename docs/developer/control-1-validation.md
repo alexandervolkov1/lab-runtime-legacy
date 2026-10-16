@@ -1,6 +1,8 @@
 # CONTROL-1 Windows/MSVC validation
 
-`ACTIVATION_QUALIFIED=false`. Independent review is required. Ordinary GUI v1
+`ACTIVATION_QUALIFIED=false`.
+[Draft PR #52](https://github.com/alexandervolkov1/lab-runtime/pull/52) requires
+independent review. Ordinary GUI v1
 remains the default; control in the stock isolated GUI requires an explicit flag.
 No release, physical instrument acceptance or production activation was performed.
 MP-1 is OPEN, deferred research; the current
