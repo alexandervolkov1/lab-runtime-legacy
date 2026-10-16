@@ -184,7 +184,12 @@ try:
     time.sleep(2)
     start = common.read_json(directory/'lifecycle.json'); assert start['minimized']
     minimized_at=time.monotonic()
-    updated = bb(endpoint,'updated','bb-while-minimized')
+    bb(endpoint,'updated','bb-while-minimized')
+    large_started=time.monotonic()
+    updated = bb(endpoint,'boundary','bb-large-while-minimized')
+    admitted=common.wait(lambda:(lambda v:v if v and v['document_revision']==int(updated['presentation_revision']) else None)(common.read_json(directory/'lifecycle.json')), 'large document admitted while minimized', 10)
+    assert admitted['canonical_document_bytes']>900000
+    result['large_document']=dict(canonical_bytes=admitted['canonical_document_bytes'],admission_observed_seconds=time.monotonic()-large_started,revision=updated['presentation_revision'])
     until=time.monotonic()+120
     while time.monotonic()<until:
         assert parent.p.poll() is None and runtime.p.poll() is None
@@ -197,7 +202,7 @@ try:
     assert not any(v.get('incarnation',0)>1 for v in parent.lines)
     minimized_seconds=time.monotonic()-minimized_at
     user.ShowWindow(child['hwnd'],9); focus(child)
-    restored = capture(directory,lambda v:live(v) and v['display']['heading']=='EFRAME-3 API updated furnace',back['ui_counter'])
+    restored = capture(directory,lambda v:live(v) and v['display']['heading']=='EFRAME-3 API updated furnace' and v['document_revision']==int(updated['presentation_revision']),back['ui_counter'])
     actions.append(dict(minimized_seconds=minimized_seconds,logic_before=start,logic_after=end,same_child_pid=child['pid'],same_incarnation=1))
     assert relay.connections==1 and len(relay.requests)==wire
     before_fault = bb(endpoint,'verify','bb-before-crash')

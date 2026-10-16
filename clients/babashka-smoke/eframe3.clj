@@ -6,12 +6,12 @@
 
 (defn check [ok message] (when-not ok (throw (ex-info message {}))))
 (defn document [source stage]
-  (let [updated? (= stage "updated")
+  (let [updated? (contains? #{"updated" "boundary"} stage)
         status (fn [id title target] {:id id :title title :kind {:kind "status" :source target}})
         plot (fn [id title] {:id id :title title :kind {:kind "plot" :plot_id "temperature-plot"}})
         controls (mapv (fn [i] {:id (str "inert-" i) :label (str "Read-only reference " i)
                                 :kind "set_reference" :target {:kind "reference" :reference "1"} :confirm true}) (range 6))]
-    {:format_version 1 :document_id "eframe-3-virtual-furnace"
+    (cond-> {:format_version 1 :document_id "eframe-3-virtual-furnace"
      :windows [{:id "furnace-window" :title (if updated? "EFRAME-3 API updated furnace" "EFRAME-3 Virtual furnace")
                 :tabs [{:id "live-tab" :title "Live furnace"
                         :panels [(status "temperature" "Furnace temperature" source)
@@ -34,13 +34,21 @@
                        ;; Same source deliberately repeated to exercise unique stock legend names.
                        {:id "duplicate-trace" :source source :display_label "Furnace" :visible true
                         :style {:color "#40c080" :width 1.0} :display_unit "degC"}]}]
-     :controls controls}))
+     :controls controls}
+      (= stage "boundary")
+      (update :windows into
+              (mapv (fn [wi]
+                      {:id (str "boundary-window-" wi) :title "Large document boundary view"
+                       :tabs (mapv (fn [ti] {:id (str "boundary-tab-" wi "-" ti)
+                                             :title (apply str (repeat 512 "T")) :panels []})
+                                   (range 52))})
+                    (range 30))))))
 
 (let [[port stage output] *command-line-args*
       transcript (atom [])
       calls (atom 0)]
-  (check (and output (contains? #{"initial" "updated" "verify"} stage))
-         "usage: bb eframe3.clj PORT initial|updated|verify NEW_RESULT.json")
+  (check (and output (contains? #{"initial" "updated" "boundary" "verify"} stage))
+         "usage: bb eframe3.clj PORT initial|updated|boundary|verify NEW_RESULT.json")
   (check (not (.exists (java.io.File. output))) "evidence destination already exists")
   (with-open [socket (Socket.)]
     (.connect socket (InetSocketAddress. "127.0.0.1" (Integer/parseInt port)) 2000)
@@ -77,7 +85,7 @@
               attachment #(select-keys (get-in % [:runtime_client :hello]) [:boot_id :scope :next_seq])]
           (when candidate
             (check (= candidate (:document after)) "exact document readback failed")
-            (check (= (:presentation_revision applied) (:presentation_revision after)) "revision mismatch"))
+            (check (= (str (inc (bigint (:presentation_revision before)))) (:presentation_revision applied) (:presentation_revision after)) "revision mismatch"))
           (check (= (attachment baseline) (attachment status)) "Runtime attachment changed")
           (let [result {:passed true :stage stage :workbench_id (:workbench_id hello)
                         :presentation_revision (:presentation_revision after) :source source

@@ -51,21 +51,24 @@ impl Channels {
             return Ok(());
         }
         let now = Instant::now();
-        let mut bytes = OWNER_BYTES;
+        let mut control_bytes = CONTROL;
+        let mut snapshot_bytes = 2 * CHUNK;
         let mut messages = OWNER_MESSAGES;
-        // eframe deliberately throttles hidden-window logic to about 100 ms.
-        // A framed read needs separate header/payload completion steps. Drive
-        // up to four nonblocking steps here so challenges do not wait several
-        // hidden ticks. All steps SHARE the original byte/message allowance;
-        // this is neither a worker nor fabricated paint/GPU progress.
-        for _ in 0..OWNER_MESSAGES {
+        // Hidden-window logic is throttled to about 100 ms. Separate control
+        // allowance prevents a challenge from consuming the byte credit needed
+        // to deliver a full bulk chunk. Two chunks per callback also keep a legal
+        // 1 MiB document within the ORIGINAL two-second transfer deadline.
+        // Eight nonblocking framing steps share four completed-message credits,
+        // 4 KiB control + 128 KiB bulk. No buffers/credits, worker, deadline or
+        // paint/GPU progress authority are added by this scheduling allowance.
+        for _ in 0..2 * OWNER_MESSAGES {
             if messages > 0
                 && let Some((header, payload)) = self
                     .control
-                    .receive_bounded(self.identity, now, bytes)
+                    .receive_bounded(self.identity, now, control_bytes)
                     .map_err(|e| format!("{e:?}"))?
             {
-                bytes -= header.bytes;
+                control_bytes -= header.bytes;
                 messages -= 1;
                 match header.kind {
                     Kind::Hello if !self.hello && payload.is_empty() => self.hello = true,
@@ -93,10 +96,10 @@ impl Channels {
                     && self.acknowledged
                     && let Some((header, payload)) = self
                         .snapshot
-                        .receive_bounded(self.identity, now, bytes)
+                        .receive_bounded(self.identity, now, snapshot_bytes)
                         .map_err(|e| format!("{e:?}"))?
                 {
-                    bytes -= header.bytes;
+                    snapshot_bytes -= header.bytes;
                     messages -= 1;
                     if !replica.chunk(header, payload, now).map_err(str::to_owned)? {
                         continue;
@@ -257,6 +260,7 @@ impl eframe::App for Host {
                 "owner_counter":self.counter,"ui_counter":self.ui_counter,
                 "minimized":ctx.input(|i|i.viewport().minimized),
                 "document_revision":self.document.identity().map(|h|h.epoch.revision),
+                "canonical_document_bytes":self.document.document().map(|d|d.canonical_bytes().len()),
                 "observation_snapshot":self.replica.accepted(1).map(|h|h.snapshot)}),
             );
             self.last_lifecycle = Instant::now();
