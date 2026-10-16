@@ -667,21 +667,7 @@ impl OutputAuthority {
             .snapshot
             .in_flight
             .ok_or(OutputError::UnknownDispatch)?;
-        if dispatch.id != id || !reported.is_finite() {
-            return Err(OutputError::UnknownDispatch.into());
-        }
-        self.snapshot.reported_readback = Some(OutputObservation {
-            value: reported,
-            at,
-        });
-        if reported == dispatch.value {
-            self.complete(id, DispatchOutcome::ReadbackVerified, at)?;
-            Ok(true)
-        } else {
-            self.snapshot.readback_failure = Some(OutputReadbackFailure::Mismatch);
-            self.complete(id, DispatchOutcome::Failed, at)?;
-            Ok(false)
-        }
+        self.complete_transport_readback_exact(id, reported, reported == dispatch.value, at)
     }
 
     /// Complete a protocol-specific exact raw readback comparison.

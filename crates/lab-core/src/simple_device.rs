@@ -301,35 +301,7 @@ impl SimpleResponsePlan {
         if extract_end > self.exact_length {
             return Err(Error::InvalidConfiguration("simple extract out of bounds"));
         }
-        let mut occupied: Vec<Option<(u8, SimpleResponseMatchKind)>> =
-            vec![None; self.exact_length];
-        for comparison in &self.matches {
-            if comparison.expected.is_empty() || comparison.expected.len() > 16 {
-                return Err(Error::InvalidConfiguration("invalid simple response match"));
-            }
-            let end = comparison
-                .offset
-                .checked_add(comparison.expected.len())
-                .ok_or(Error::InvalidConfiguration(
-                    "simple response offset overflow",
-                ))?;
-            if end > self.exact_length {
-                return Err(Error::InvalidConfiguration("simple match out of bounds"));
-            }
-            for (index, expected) in comparison.expected.iter().copied().enumerate() {
-                let slot = &mut occupied[comparison.offset + index];
-                if let Some((prior, prior_kind)) = *slot
-                    && (prior != expected
-                        || prior_kind != SimpleResponseMatchKind::Literal
-                        || comparison.kind != SimpleResponseMatchKind::Literal)
-                {
-                    return Err(Error::InvalidConfiguration(
-                        "invalid simple response match overlap",
-                    ));
-                }
-                *slot = Some((expected, comparison.kind));
-            }
-        }
+        let occupied = validate_response_evidence(self.exact_length, &self.matches, self.checksum)?;
         if occupied[self.extract_offset..extract_end]
             .iter()
             .any(Option::is_some)
@@ -337,21 +309,9 @@ impl SimpleResponsePlan {
             return Err(Error::InvalidConfiguration("simple extract overlaps match"));
         }
         if let Some(checksum) = self.checksum {
-            let end = checksum
-                .offset
-                .checked_add(checksum.algorithm.width())
-                .ok_or(Error::InvalidConfiguration(
-                    "simple checksum offset overflow",
-                ))?;
-            if checksum.offset == 0
-                || checksum.offset > MAX_SIMPLE_CHECKSUM_INPUT_BYTES
-                || end > self.exact_length
-            {
-                return Err(Error::InvalidConfiguration("simple checksum out of bounds"));
-            }
-            if occupied[checksum.offset..end].iter().any(Option::is_some)
-                || ranges_overlap(self.extract_offset, extract_end, checksum.offset, end)
-            {
+            // The shared evidence validator checked bounds and match overlap.
+            let end = checksum.offset + checksum.algorithm.width();
+            if ranges_overlap(self.extract_offset, extract_end, checksum.offset, end) {
                 return Err(Error::InvalidConfiguration("simple checksum overlap"));
             }
         }

@@ -1355,33 +1355,11 @@ impl Runtime {
                 .map(|reference| QueryResult::Reference(reference.snapshot()))
                 .ok_or(ControllerError::UnknownReference.into()),
             Query::Discover => {
-                let mut descriptors: Vec<_> = self
-                    .instruments
-                    .values()
-                    .map(|instrument| instrument.descriptor.clone())
-                    .chain(
-                        self.metakon_instruments
-                            .values()
-                            .map(|instrument| instrument.descriptor.clone()),
-                    )
-                    .chain(
-                        self.simple_device_instruments
-                            .iter()
-                            .filter(|(id, _)| !self.prepared_simple_devices.contains(id))
-                            .map(|(_, instrument)| instrument.descriptor.clone()),
-                    )
-                    .chain(
-                        self.thermal_plants
-                            .values()
-                            .map(|instrument| instrument.descriptor.clone()),
-                    )
-                    .chain(
-                        self.managed
-                            .values()
-                            .map(|component| component.descriptor.clone()),
-                    )
-                    .collect();
-                descriptors.sort_by_key(|descriptor| descriptor.id);
+                let mut descriptors = self.activation_instrument_descriptors();
+                // Activation captures prepared topology for provenance. Ordinary
+                // discovery must keep it hidden until the publication barrier.
+                descriptors
+                    .retain(|descriptor| !self.prepared_simple_devices.contains(&descriptor.id));
                 Ok(QueryResult::Instruments(descriptors))
             }
             Query::DescribeInstrument(id) => {
