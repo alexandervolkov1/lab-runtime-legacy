@@ -468,3 +468,18 @@ impl Drop for Reservation {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Reservation;
+
+    #[test]
+    fn released_reservation_rejects_commit_before_pointer_arithmetic() {
+        let mut reservation = Reservation::reserve(65536).unwrap();
+        reservation.release().unwrap();
+        let error = reservation.commit(65536).unwrap_err();
+        assert_eq!(error.operation, "commit bound");
+        reservation.decommit().unwrap();
+        reservation.release().unwrap();
+    }
+}
