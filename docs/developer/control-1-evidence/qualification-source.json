@@ -1,0 +1,17 @@
+{
+  "source": "0d3f3a4e6bb187cb0e9523dd697d7ac0d98fa7cd",
+  "root_builds_and_gates": "000a6548f6bd88ef72c682347a2643de4383b48c",
+  "rust_cargo_changes_after_root_gates": [],
+  "stock_host_builds": "35fbfc986fb73a7d636594e1714a7bb8fb0034e2",
+  "rust_cargo_changes_after_host_builds": [
+    "apps/lab-workbench/src/parent.rs",
+    "apps/lab-workbench/src/private_ipc/fixture.rs"
+  ],
+  "stock_explanation": "Only Parent submodule-path attributes and standalone malformed-version fixture changed after the host build. Neither is a host import. The shared protocol/controls and all host Rust/Cargo inputs are identical.",
+  "after_root_gates": [
+    "clients/babashka-smoke/control1.clj",
+    "scripts/support/eframe-host/control1.py"
+  ],
+  "dependencies_added": false,
+  "identical_relink_bytes_claimed": false
+}

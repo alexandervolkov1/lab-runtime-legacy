@@ -61,6 +61,15 @@ reviewed within TIME-1 scope and merged through PR #50 at
 elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
+Experimental [CONTROL-1](control-1-reference-retune.md) adds explicit ramp
+Reference retune in the stock isolated eframe window. Existing Workbench API
+configuration and a separate Apply/Confirm flow use the Parent's existing
+operator/recovery path; Parent retains one Runtime client/scope. Control requires
+`--experimental-eframe-controls` and remains disabled in observation mode. Other
+control kinds stay inactive, and GUI v1 remains the default. See the
+[actual dev/release WGPU, Glow smoke, observation and crash/restart results](control-1-validation.md).
+CONTROL-1 is awaiting independent review; no activation or release is implied.
+
 The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
 ([PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51), independently
 reviewed and merged at `2426fc0823e1d6a5e28425cc8ebc2e5f079953cb`)

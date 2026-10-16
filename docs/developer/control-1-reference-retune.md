@@ -97,5 +97,6 @@ or Runtime scope. It records both wire directions, original exit/IPC retirement,
 native screenshots, unchanged attachment and exactly one confirmed operation.
 All failed attempts, run-local config and Recorder DB/WAL/SHM are retained.
 
-Actual qualification results and limitations are recorded separately after the
-new runs; unchanged heavy renderer/resource tests are reused with source proof.
+See the [actual Windows qualification](control-1-validation.md), original
+API/wire/window/fault evidence and limits. Unchanged heavy renderer/resource
+tests are reused with source proof.

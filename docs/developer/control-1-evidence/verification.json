@@ -1,0 +1,11 @@
+{
+  "source": "0d3f3a4e6bb187cb0e9523dd697d7ac0d98fa7cd",
+  "raw_zip_bytes": 22856862,
+  "raw_zip_sha256": "6e1bee075e102b19091058ba02a8aceb6c46ee852881f09d83033a4ea2cb8606",
+  "raw_members": 740,
+  "pngs": 60,
+  "all_archive_crc_length_sha256_checked": true,
+  "originals_preserved": true,
+  "recorder": "Run-local DB and every existing WAL/SHM companion are preserved exactly together. Runtime process teardown is not a Recorder flushed/sealed receipt.",
+  "activation_qualified": false
+}
