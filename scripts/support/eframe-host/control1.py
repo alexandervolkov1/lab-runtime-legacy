@@ -151,7 +151,7 @@ def press(ready,frame,label):
 def state(frame):return frame['display'].get('control_state') or {}
 def draft(frame):return next(v for v in frame['display']['controls'] if v['id']=='retune')
 def live(frame):return bool(frame['display']['scalars']) and frame['display']['scalars'][0]['freshness']=='Fresh'
-def mutations(relay):return [r for r in relay.requests if 'seq' in r]
+def mutations(relay):return [r for r in relay.requests if 'request_id' in r]
 
 runtime=parent=relay=api=None;child=None
 result=dict(passed=False,profile=PROFILE,renderer=RENDERER,mode=MODE,
@@ -253,9 +253,9 @@ finally:
                 event=Input();event.payload.mouse=Mouse(0,0,0,flags,0,0);inject(child,event)
         except AssertionError:pass
     if api:common.write(OUT/'observer-api.json',api.transcript);api.close()
+    if relay:relay.close();result['relay_errors']=relay.errors
     if parent and parent.p.poll() is None:parent.p.terminate();parent.p.wait(timeout=10)
     if runtime and runtime.p.poll() is None:runtime.p.terminate();runtime.p.wait(timeout=10)
-    if relay:relay.close();result['relay_errors']=relay.errors
     if parent:parent.finish()
     if runtime:runtime.finish()
     result.update(captures=captures,actions=actions)
