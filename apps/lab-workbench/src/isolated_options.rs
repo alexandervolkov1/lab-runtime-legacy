@@ -105,11 +105,12 @@ mod tests {
     fn opt_in_requires_renderer_executable_and_explicit_memory_without_fallback() {
         assert!(args(&["--experimental-eframe", "wgpu"]).is_err());
         assert!(args(&["--experimental-eframe-commit-limit", "1073741824"]).is_err());
+        let executable = std::env::current_dir().unwrap().join("lab-eframe-host.exe");
         let base = [
             "--experimental-eframe",
             "wgpu",
             "--experimental-eframe-child",
-            r"D:\lab\lab-eframe-host.exe",
+            executable.to_str().unwrap(),
             "--experimental-eframe-commit-limit",
             "1073741824",
         ];
