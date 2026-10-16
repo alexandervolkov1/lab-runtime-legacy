@@ -28,6 +28,7 @@ struct Selected {
 pub(crate) struct ParentBridge {
     pub(crate) bridge: Bridge,
     selected: Vec<Selected>,
+    follow_document: bool,
     revision: u64,
     snapshot: u64,
     source: u64,
@@ -69,6 +70,7 @@ impl ParentBridge {
                     origin: None,
                 })
                 .collect(),
+            follow_document: false,
             revision: 0,
             snapshot: 0,
             source: 0,
@@ -76,6 +78,63 @@ impl ParentBridge {
             dirty: true,
             error: None,
         })
+    }
+    /// Experimental stock host follows only display references in the one
+    /// authoritative document. Newly selected reads need original provenance;
+    /// cached observations alone cannot manufacture a source witness.
+    pub(crate) fn for_document<C: ParentClient>(
+        dispatcher: &WorkbenchDispatcher<C>,
+    ) -> Result<Self> {
+        let mut bridge = Self::new(dispatcher, Vec::new())?;
+        bridge.follow_document = true;
+        Ok(bridge)
+    }
+    fn select_document<C: ParentClient>(
+        &mut self,
+        dispatcher: &WorkbenchDispatcher<C>,
+    ) -> Result<()> {
+        let mut targets = Vec::with_capacity(TRACES);
+        let document = &dispatcher.presentation;
+        let mut add = |target: &RuntimeRef| -> Result<()> {
+            if crate::readonly_values::ReadBinding::for_target(target).is_some()
+                && !targets.contains(target)
+            {
+                if targets.len() == TRACES {
+                    return Err("document selected reference bound");
+                }
+                targets.push(target.clone());
+            }
+            Ok(())
+        };
+        for panel in document
+            .windows
+            .iter()
+            .flat_map(|window| &window.tabs)
+            .flat_map(|tab| &tab.panels)
+        {
+            match &panel.kind {
+                crate::presentation::PanelKind::Status { source } => add(source)?,
+                crate::presentation::PanelKind::Plot { plot_id } => {
+                    if let Some(plot) = document.plots.iter().find(|plot| &plot.id == plot_id) {
+                        for trace in plot.traces.iter().filter(|trace| trace.visible) {
+                            add(&trace.source)?;
+                        }
+                    }
+                }
+                crate::presentation::PanelKind::Controls { .. } => {}
+            }
+        }
+        let mut selected = Vec::with_capacity(TRACES);
+        for target in targets {
+            let origin = self
+                .selected
+                .iter_mut()
+                .find(|old| old.target == target)
+                .and_then(|old| old.origin.take());
+            selected.push(Selected { target, origin });
+        }
+        self.selected = selected;
+        Ok(())
     }
     /// Called once after applying each original FIFO update. Preserve boot and
     /// frozen-projection revision before the general cache discards its envelope.
@@ -239,6 +298,9 @@ impl ParentBridge {
         };
         self.bridge.announce(epoch.revision, self.minimum_source);
         if self.revision != epoch.revision {
+            if self.follow_document {
+                self.select_document(dispatcher)?;
+            }
             let source = v2::ValidatedV1Document::check(&dispatcher.presentation)
                 .map_err(|_| "parent v1 source admission")?;
             let document =

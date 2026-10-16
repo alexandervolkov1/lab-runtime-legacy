@@ -1,0 +1,17 @@
+{
+  "pr": 47,
+  "reviewed_head": "a02af8b97c09e7086630aba388cb5ffc8ec15cb5",
+  "reviewed_base": "d8314efd32435b7b95891216c8a1d2a4753e9ec2",
+  "merge": "6205d6c1751420ecce4ae85c6d52a21b2d6c8264",
+  "parents": [
+    "d8314efd32435b7b95891216c8a1d2a4753e9ec2",
+    "a02af8b97c09e7086630aba388cb5ffc8ec15cb5"
+  ],
+  "merge_tree": "4fc6716b200e4f1be6d5a1275c109aa283091816",
+  "reviewed_tree": "4fc6716b200e4f1be6d5a1275c109aa283091816",
+  "verified_canonical_sha256_records": 491,
+  "post_qualification_changes": "documentation/evidence only",
+  "local_main_synchronized": true,
+  "clean_before_eframe2_branch": true,
+  "pr43": "OPEN Draft/BLOCKED at 04c0e5180a4bc45ae12c7b62fdb3b86ad8f10e7c"
+}

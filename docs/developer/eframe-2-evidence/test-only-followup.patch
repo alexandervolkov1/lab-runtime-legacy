@@ -1,0 +1,55 @@
+diff --git a/apps/lab-workbench/src/isolated_options.rs b/apps/lab-workbench/src/isolated_options.rs
+index 8bde183..fa79bc3 100644
+--- a/apps/lab-workbench/src/isolated_options.rs
++++ b/apps/lab-workbench/src/isolated_options.rs
+@@ -107,0 +108 @@ mod tests {
++        let executable = std::env::current_dir().unwrap().join("lab-eframe-host.exe");
+@@ -112 +113 @@ mod tests {
+-            r"D:\lab\lab-eframe-host.exe",
++            executable.to_str().unwrap(),
+diff --git a/apps/lab-workbench/src/parent/renderer_tests.rs b/apps/lab-workbench/src/parent/renderer_tests.rs
+index a3dd9f4..a984f59 100644
+--- a/apps/lab-workbench/src/parent/renderer_tests.rs
++++ b/apps/lab-workbench/src/parent/renderer_tests.rs
+@@ -72,0 +73,28 @@ fn wait(mut predicate: impl FnMut() -> bool) {
++fn observed_ipc_status(
++    mut read: impl FnMut() -> Result<crate::private_ipc::TestStatus, &'static str>,
++) -> crate::private_ipc::TestStatus {
++    let mut observed = None;
++    wait(|| match read() {
++        Ok(status) => {
++            observed = Some(status);
++            true
++        }
++        Err("IPC metadata busy") => false,
++        Err(error) => panic!("unexpected IPC observation error: {error}"),
++    });
++    observed.expect("checked metadata observation")
++}
++#[test]
++fn metadata_busy_is_not_a_retirement_receipt_and_does_not_panic_the_observer() {
++    let mut attempts = 0;
++    let status = observed_ipc_status(|| {
++        attempts += 1;
++        if attempts == 1 {
++            Err("IPC metadata busy")
++        } else {
++            Ok(Default::default())
++        }
++    });
++    assert_eq!(attempts, 2);
++    assert!(!status.retired);
++}
+@@ -553 +581,4 @@ impl FaultHarness {
+-        let ipc = self.bridge.status().unwrap();
++        // Supervisor terminal publication is not a reservation of Bridge's
++        // nonblocking metadata mutex. Observe the same IPC root within the
++        // existing finite test deadline; Busy is never a retirement receipt.
++        let ipc = observed_ipc_status(|| self.bridge.status());
+diff --git a/apps/lab-workbench/src/private_ipc/mod.rs b/apps/lab-workbench/src/private_ipc/mod.rs
+index 9cc5d86..b40aa18 100644
+--- a/apps/lab-workbench/src/private_ipc/mod.rs
++++ b/apps/lab-workbench/src/private_ipc/mod.rs
+@@ -21 +21 @@ mod ui_document;
+-pub(crate) use backend::Bridge as TestBridge;
++pub(crate) use backend::{Bridge as TestBridge, Status as TestStatus};

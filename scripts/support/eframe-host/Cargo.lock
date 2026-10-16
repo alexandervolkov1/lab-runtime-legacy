@@ -1493,6 +1493,7 @@ dependencies = [
  "lab-windows-job",
  "log",
  "raw-window-handle",
+ "serde",
  "serde_json",
 ]
 

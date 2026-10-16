@@ -6,6 +6,7 @@ mod dispatcher;
 mod distributed_tests;
 mod external;
 mod gui;
+mod isolated_options;
 mod model;
 mod ownership;
 mod parent;
@@ -31,11 +32,12 @@ use std::{io::Read, net::SocketAddrV4, path::PathBuf, process::ExitCode};
 
 fn usage() {
     eprintln!(
-        "usage: lab-workbench --connect ADDRESS|ws://HOST/application/v1|wss://HOST/application/v1 [--observe] [--allow-remote-tcp] [--allow-insecure-ws] [--ws-origin ORIGIN] [--ws-token-env NAME|--ws-token-file PATH] [--ws-ca-file PATH] [--scope SCOPE] [--workspace PATH] [--workbench-listen 127.0.0.1:PORT]"
+        "usage: lab-workbench --connect ADDRESS|ws://HOST/application/v1|wss://HOST/application/v1 [--observe] [--allow-remote-tcp] [--allow-insecure-ws] [--ws-origin ORIGIN] [--ws-token-env NAME|--ws-token-file PATH] [--ws-ca-file PATH] [--scope SCOPE] [--workspace PATH] [--workbench-listen 127.0.0.1:PORT] [--experimental-eframe wgpu|glow --experimental-eframe-child ABSOLUTE_EXE --experimental-eframe-commit-limit BYTES [--experimental-eframe-restart-limit 0..3] [--experimental-eframe-capture]]"
     );
 }
 
 struct Arguments {
+    experimental: Option<gui::ExperimentalGui>,
     address: RuntimeEndpoint,
     observation_only: bool,
     scope: Option<String>,
@@ -49,6 +51,7 @@ fn arguments() -> Result<Arguments, &'static str> {
 
 fn arguments_from(args: impl IntoIterator<Item = String>) -> Result<Arguments, &'static str> {
     let mut args = args.into_iter();
+    let mut experimental = isolated_options::Candidate::default();
     let mut address = None;
     let mut scope = None;
     let mut workspace = None;
@@ -61,6 +64,9 @@ fn arguments_from(args: impl IntoIterator<Item = String>) -> Result<Arguments, &
     let mut token_file = None;
     let mut ca_file = None;
     while let Some(argument) = args.next() {
+        if experimental.argument(&argument, &mut args)? {
+            continue;
+        }
         match argument.as_str() {
             "--connect" if address.is_none() => {
                 address = Some(args.next().ok_or("--connect needs an address")?);
@@ -149,6 +155,7 @@ fn arguments_from(args: impl IntoIterator<Item = String>) -> Result<Arguments, &
         )?
     };
     Ok(Arguments {
+        experimental: experimental.finish()?,
         address,
         observation_only,
         scope,
@@ -173,6 +180,7 @@ fn run() -> Result<(), String> {
             .to_owned(),
     };
     gui::run(gui::GuiLaunch {
+        experimental: arguments.experimental,
         address: arguments.address,
         observation_only: arguments.observation_only,
         scope: arguments.scope,

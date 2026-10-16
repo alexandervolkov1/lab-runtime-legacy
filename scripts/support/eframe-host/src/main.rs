@@ -1,6 +1,20 @@
-//! Test-only standard eframe host. No Runtime client or private IPC endpoint.
+//! Experimental standard eframe host. One read-only private IPC consumer; no Runtime client.
 #![forbid(unsafe_code)]
 
+#[cfg(windows)]
+mod consumer;
+#[cfg(windows)]
+pub(crate) use consumer::{presentation, readonly_limits, readonly_values};
+#[cfg(windows)]
+mod ipc_app;
+#[cfg(windows)]
+mod private_ipc;
+#[cfg(windows)]
+mod ui;
+#[cfg(windows)]
+mod gui {
+    pub(crate) use crate::consumer as readonly_v2;
+}
 #[cfg(windows)]
 mod app;
 #[cfg(windows)]
@@ -27,6 +41,7 @@ fn main() {
             controller::run(renderer, std::path::Path::new(dir)),
         [_, mode, renderer, destination, dir] if mode == "--renderer" && destination == "--receipts" =>
             app::run(renderer, std::path::Path::new(dir)),
+        [_, control, snapshot, identity, incarnation, parent, mode] if control.starts_with(r"\\.\pipe\lab-workbench-") => ipc_app::run(control, snapshot, identity, incarnation, parent, mode),
         _ => Err("test-only usage: --launch wgpu|glow NEW_ABSOLUTE_DIRECTORY; child: --renderer wgpu|glow --receipts DIRECTORY".into()),
     };
     if let Err(error) = result {

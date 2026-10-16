@@ -2,8 +2,7 @@
 //! existing Assembly credit until the consumer explicitly resolves admission.
 //! The encoded-only consumer retains zero parsed documents; a paired renderer
 //! owner may retain one, and must release it before the next parsed admission.
-use super::{DocumentOwner, document_owner::AdmissionKey, protocol::*, reads};
-use crate::gui::readonly_v2::{host_session::HostSession, texture_owner::FrameBackend};
+use super::{protocol::*, reads};
 use crate::presentation::v2;
 use std::{
     rc::Rc,
@@ -11,23 +10,25 @@ use std::{
 };
 
 #[derive(Clone, Copy)]
-struct Transfer {
+pub(super) struct Transfer {
     index: usize,
     header: Header,
     filled: usize,
     started: Instant,
 }
+pub(super) struct AdmissionKey;
+
 pub(crate) struct Replica {
-    pool: Pool,
-    incoming: [Option<Transfer>; 2],
+    pub(super) pool: Pool,
+    pub(super) incoming: [Option<Transfer>; 2],
     accepted: [Option<Header>; 2],
-    parsed_peak: usize,
-    required: [u64; 2],
+    pub(super) parsed_peak: usize,
+    pub(super) required: [u64; 2],
     fence_seen: Option<Instant>,
-    read_invalidated: bool,
-    renderer: Option<Rc<AdmissionKey>>,
+    pub(super) read_invalidated: bool,
+    pub(super) renderer: Option<Rc<AdmissionKey>>,
     document_attempt: Option<Header>,
-    stopped: bool,
+    pub(super) stopped: bool,
 }
 /// Only this post-admission result can authorize an Applied/Skipped receipt.
 #[derive(Clone, Copy, Debug)]
@@ -82,22 +83,6 @@ impl Replica {
             stopped: false,
         }
     }
-    pub(crate) fn renderer<B: FrameBackend>(
-        session: &mut HostSession<B>,
-    ) -> (Self, DocumentOwner<'_, B>) {
-        let key = Rc::new(AdmissionKey);
-        let mut replica = Self::new();
-        replica.renderer = Some(key.clone());
-        (
-            replica,
-            DocumentOwner {
-                key,
-                document: None,
-                identity: None,
-                session,
-            },
-        )
-    }
     /// One complete candidate, never a parsed document or additional byte copy.
     pub(crate) fn document_candidate(&self) -> Option<Header> {
         self.incoming[0]
@@ -120,27 +105,7 @@ impl Replica {
         }
         self.admit_document_with(|document, _| drop(document))
     }
-    pub(crate) fn admit_renderer_document<B: FrameBackend>(
-        &mut self,
-        owner: &mut DocumentOwner<'_, B>,
-    ) -> Result<DocumentDecision> {
-        if self
-            .renderer
-            .as_ref()
-            .is_none_or(|key| !Rc::ptr_eq(key, &owner.key))
-        {
-            return Err("unpaired renderer document owner");
-        }
-        if owner.document.is_some() {
-            return Err("old parsed document remains alive");
-        }
-        owner.ensure_retired()?;
-        self.admit_document_with(|document, header| {
-            owner.document = Some(document);
-            owner.identity = Some(header);
-        })
-    }
-    fn admit_document_with(
+    pub(super) fn admit_document_with(
         &mut self,
         retain: impl FnOnce(v2::AdmittedV2Document, Header),
     ) -> Result<DocumentDecision> {
@@ -182,35 +147,6 @@ impl Replica {
         }
         self.commit(0, applied);
         Ok(DocumentDecision { header, applied })
-    }
-    /// Sequential restoration only: the candidate must be resolved first, and
-    /// current control fences must still permit the accepted epoch/source.
-    pub(crate) fn restore_renderer_document<B: FrameBackend>(
-        &mut self,
-        owner: &mut DocumentOwner<'_, B>,
-    ) -> Result<()> {
-        if self.stopped
-            || self.incoming[0].is_some()
-            || owner.document.is_some()
-            || self
-                .renderer
-                .as_ref()
-                .is_none_or(|key| !Rc::ptr_eq(key, &owner.key))
-        {
-            return Err("renderer restoration fenced");
-        }
-        owner.ensure_retired()?;
-        let (header, bytes) = self.snapshot(0).ok_or("no accepted document")?;
-        if header.epoch.revision < self.required[0] {
-            return Err("accepted epoch superseded by parent fence");
-        }
-        let document = v2::admit(bytes).map_err(|_| "accepted document re-admission")?;
-        self.parsed_peak = self.parsed_peak.max(document.allocation().accounted_bytes);
-        owner.document = Some(document);
-        owner.identity = Some(header);
-        // Restoring display does not restore observation freshness.
-        self.read_invalidated = true;
-        Ok(())
     }
     pub(crate) fn fence(&mut self, revision: u64, source: u64, now: Instant) -> Result<()> {
         if revision == 0 || revision < self.required[0] || source < self.required[1] {

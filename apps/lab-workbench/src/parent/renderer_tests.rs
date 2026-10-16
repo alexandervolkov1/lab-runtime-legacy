@@ -70,6 +70,34 @@ fn wait(mut predicate: impl FnMut() -> bool) {
         thread::sleep(Duration::from_millis(2));
     }
 }
+fn observed_ipc_status(
+    mut read: impl FnMut() -> Result<crate::private_ipc::TestStatus, &'static str>,
+) -> crate::private_ipc::TestStatus {
+    let mut observed = None;
+    wait(|| match read() {
+        Ok(status) => {
+            observed = Some(status);
+            true
+        }
+        Err("IPC metadata busy") => false,
+        Err(error) => panic!("unexpected IPC observation error: {error}"),
+    });
+    observed.expect("checked metadata observation")
+}
+#[test]
+fn metadata_busy_is_not_a_retirement_receipt_and_does_not_panic_the_observer() {
+    let mut attempts = 0;
+    let status = observed_ipc_status(|| {
+        attempts += 1;
+        if attempts == 1 {
+            Err("IPC metadata busy")
+        } else {
+            Ok(Default::default())
+        }
+    });
+    assert_eq!(attempts, 2);
+    assert!(!status.retired);
+}
 fn find_frame(directory: &Path, mut predicate: impl FnMut(&Value) -> bool) -> (PathBuf, Value) {
     let mut found = None;
     wait(|| {
@@ -550,7 +578,10 @@ impl FaultHarness {
             .wait_status(|s| matches!(s.phase, Phase::ExitedHealthy | Phase::ExitedContained))
     }
     fn retired(&self) {
-        let ipc = self.bridge.status().unwrap();
+        // Supervisor terminal publication is not a reservation of Bridge's
+        // nonblocking metadata mutex. Observe the same IPC root within the
+        // existing finite test deadline; Busy is never a retirement receipt.
+        let ipc = observed_ipc_status(|| self.bridge.status());
         assert!(ipc.retired);
         assert_eq!(ipc.handles, 0);
         assert_eq!(ipc.pending_io, 0);

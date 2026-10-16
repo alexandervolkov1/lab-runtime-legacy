@@ -1,0 +1,19 @@
+{
+  "runner_note": "Original gate runner recorded HEAD at command completion; individual E2 result.json records capture HEAD at startup. The corrected runner now records both.",
+  "gates": [
+    {
+      "gate": "dev-workbench-tests",
+      "compiled_source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "head_at_completion": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "evidence": "Gate started before the test-only follow-up; its 600-test executable reports 542 passed / 58 ignored. Follow-up adds the separately tested 601st test. Original receipt/log are preserved."
+    },
+    {
+      "gate": "dev-cpu-preview",
+      "compiled_source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "head_at_completion": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "evidence": "Started before the test-only follow-up. Standalone CPU consumer has no cfg(test) imports; follow-up changes no code in this executable. Original runner records completion HEAD."
+    }
+  ],
+  "executable_inputs_after_qualification": "No production logic changes after 14db. Follow-ups change cfg(test) reexports, the legacy retirement observer, its deterministic unit and a CLI test-only absolute path. Exact patch retained.",
+  "final_test_source": "e86e3cd291be45163ac41b9978141a39b23e12d6"
+}

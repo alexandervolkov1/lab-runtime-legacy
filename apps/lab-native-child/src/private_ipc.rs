@@ -7,11 +7,15 @@ pub(crate) mod protocol;
 pub(crate) mod reads;
 #[path = "../../lab-workbench/src/private_ipc/renderer_progress.rs"]
 pub(crate) mod renderer_progress;
+#[path = "../../lab-workbench/src/private_ipc/renderer_replica.rs"]
+mod renderer_replica;
 #[path = "../../lab-workbench/src/private_ipc/replica.rs"]
 mod replica;
 #[path = "../../lab-workbench/src/private_ipc/selected_provider.rs"]
 mod selected_provider;
 #[path = "../../lab-workbench/src/private_ipc/transport.rs"]
 pub(crate) mod transport;
+#[path = "../../lab-workbench/src/private_ipc/ui_document.rs"]
+mod ui_document;
 pub(crate) use document_owner::DocumentOwner;
 pub(crate) use replica::Replica;

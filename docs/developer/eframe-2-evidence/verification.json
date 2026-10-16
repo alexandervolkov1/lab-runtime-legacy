@@ -1,0 +1,15 @@
+{
+  "required_gates": 35,
+  "all_required_gates_passed": true,
+  "raw_members": 2412,
+  "raw_uncompressed_bytes": 1749204874,
+  "raw_archive_bytes": 24982172,
+  "raw_archive_sha256": "3aabe821ceac97a95a552db070b7b9e22b0d18a058059ae9dfb8da7172117041",
+  "all_members_decompressed_crc_length_sha256_verified": true,
+  "e2_cases": 8,
+  "original_eframe_children": 12,
+  "verified_key_pngs": 40,
+  "default_v1_native_cases": 2,
+  "activation_qualified": false,
+  "mp1": "OPEN"
+}

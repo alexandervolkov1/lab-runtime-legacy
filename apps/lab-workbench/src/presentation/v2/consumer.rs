@@ -19,6 +19,8 @@ mod encoding;
 mod graph;
 #[path = "limits.rs"]
 mod limits;
+#[path = "read_target.rs"]
+pub(crate) mod read_target;
 #[path = "structure.rs"]
 mod structure;
 #[path = "validation.rs"]

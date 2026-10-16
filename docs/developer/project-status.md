@@ -41,6 +41,14 @@ historical ownership and qualification evidence preserved. Legacy GPU custody
 extraction is not the main GUI path. See [EFRAME-1 validation](eframe-1-validation.md)
 for actual backend/window/memory results and remaining limits.
 
+The experimental [EFRAME-2 integration](eframe-2-standard-integration.md) connects
+that stock host to the existing ParentPump, ParentBridge, private IPC and Windows
+Job Supervisor. It retains one Runtime client/scope, dispatcher, recovery journal
+and PresentationDocument owner. Renderer, memory limit and bounded restart policy
+are explicit opt-ins; v1 remains the default. See the [actual virtual Runtime/API/
+window/fault evidence](eframe-2-validation.md). EFRAME-2 awaits independent review;
+`ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
+
 The optional Custom Glow renderer has a separate, test-only
 [PORT-1 capability contract](gl-capability-contract.md) and
 [current-machine qualification report](port-1-gl-capability-admission.md).
@@ -54,9 +62,9 @@ BLOCKED record retain their original provenance.
 The approved [RENDER-1 backend design](render-1-backend-separation.md) selects
 shared egui preparation and independent GPU owners. The separate test-only
 [RENDER-2A proof](render-2a-wgpu-proof.md) exercises stock egui-wgpu with actual
-DX12 offscreen pixels and the same fixtures as Custom Glow. Production backend
-selection and private-IPC integration remain unimplemented pending their own
-review. RENDER-2A stays a historical independent proof; EFRAME-1 does not resume
+DX12 offscreen pixels and the same fixtures as Custom Glow. Production activation remains pending its own review; the separate EFRAME-2
+experiment supplies stock-host private IPC integration. RENDER-2A stays a
+historical independent proof; EFRAME-1 does not resume
 RENDER-2B paired GPU custody extraction or activate GUI v2.
 
 - Runtime owns experiment state, acquisition, controllers, central output

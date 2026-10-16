@@ -1,0 +1,42 @@
+[
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "same_workbench_id": true,
+    "old_child_pid": 12092,
+    "new_child_pid": 8944,
+    "before_crash_sample_seconds": 5.4036694,
+    "restored_sample_seconds": 7.9029499,
+    "unchanged_document_revision": true
+  },
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "same_workbench_id": true,
+    "old_child_pid": 4432,
+    "new_child_pid": 19852,
+    "before_crash_sample_seconds": 6.1020258,
+    "restored_sample_seconds": 8.9005496,
+    "unchanged_document_revision": true
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "same_workbench_id": true,
+    "old_child_pid": 6820,
+    "new_child_pid": 13476,
+    "before_crash_sample_seconds": 4.0001955,
+    "restored_sample_seconds": 5.2033613,
+    "unchanged_document_revision": true
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "same_workbench_id": true,
+    "old_child_pid": 15020,
+    "new_child_pid": 5556,
+    "before_crash_sample_seconds": 3.5029263,
+    "restored_sample_seconds": 4.9019525,
+    "unchanged_document_revision": true
+  }
+]
