@@ -8,6 +8,7 @@ rust-version = "1.95"
 
 [features]
 fixture-probes = []
+accounting-probes = ["fixture-probes"]
 
 # Local audited ABI capsule, no third-party dependencies. Workbench retains
 # workspace unsafe_code=forbid; only this crate's windows module permits FFI.

@@ -17,7 +17,8 @@ pub struct Error {
 pub struct Limits {
     /// Per-process committed-memory limit, not resident/Rust/VRAM bytes.
     pub process_commit: usize,
-    /// Whole single-child Job committed-memory limit.
+    /// Aggregate committed-memory admission limit for all Job members, including
+    /// OS console helpers. Not a bound on PeakJobMemoryUsed (see MP-1 report).
     pub job_commit: usize,
 }
 impl Limits {
@@ -36,9 +37,11 @@ impl Limits {
 /// Read-back OS accounting, separate from Preview and driver memory.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Reading {
-    /// Peak committed memory charged to a process by the Job API.
+    /// Maximum process commit high-water mark across Job members, not necessarily
+    /// the original child. A failed Job-wide charge can advance this OS counter.
     pub peak_process_commit: usize,
-    /// Peak committed memory charged to the Job.
+    /// Aggregate OS commit high-water mark, not current usage or proof that an
+    /// allocation succeeded. Can exceed the admission limit on a denied charge.
     pub peak_job_commit: usize,
 }
 /// Current owned kernel-object counts, not global OS allocations.
@@ -58,6 +61,8 @@ mod windows;
 #[cfg(windows)]
 pub mod pipe;
 
+#[cfg(all(windows, feature = "accounting-probes"))]
+pub use windows::accounting;
 #[cfg(windows)]
 pub use windows::{Job, ProcessWitness};
 #[cfg(all(windows, feature = "fixture-probes"))]

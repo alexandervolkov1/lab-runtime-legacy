@@ -1,0 +1,25 @@
+{
+  "final_probe_source": "e84101adf8e273ee8e4058c9898a184b0a3087a0",
+  "preliminary_attempts": [
+    {
+      "case": "initial cargo run / missing target/mp-1 parent",
+      "outcome": "controller exited code 1 before Job creation or child launch; parent directory created explicitly; retry data retained under cpu-dev-attempt-1",
+      "note": "first dependency solve selected syn 3.0.9 and unicode-ident 1.0.27; both pinned back to existing root versions 3.0.5 / 1.0.24 before qualification"
+    },
+    {
+      "case": "cpu-dev-attempt-1, cpu-dev-attempt-2, cpu-dev-windowed-attempt-1, graph-dev-attempt-1",
+      "outcome": "exploratory observations retained; not final qualified executable identities",
+      "note": "schema expanded to record member images, returned sizes and VirtualQuery. Source was not yet committed; do not assign final source/binary hashes to these runs."
+    },
+    {
+      "case": "qualified-dev-1 and qualified-release-1",
+      "outcome": "all native observation checks passed at e9ced95288bb3114dc2b5b1fb3d5d74d6037ebfc; retained separately",
+      "note": "subsequent review added a released-reservation guard and native regression. Final complete CPU/graph matrices repeated at e84101a."
+    },
+    {
+      "case": "source metadata audit setup",
+      "outcome": "two overly broad identity assertions failed, without executing a child: blank-line comparison, then README mismatch against TIME-1 qualified source",
+      "note": "final audit ignores only comments/blank lines/false diagnostic module declaration for default capsule; lists the README-only difference explicitly. App and renderer executable sources remain raw-blob identical."
+    }
+  ]
+}

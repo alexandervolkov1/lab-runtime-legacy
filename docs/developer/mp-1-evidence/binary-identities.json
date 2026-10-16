@@ -1,0 +1,62 @@
+{
+  "probe_source": "e84101adf8e273ee8e4058c9898a184b0a3087a0",
+  "graphical_source": "b05007fc64efdfc2e675fd485d5f5a9ef2a13b11",
+  "historical_graphical_binary_reused": false,
+  "binaries": [
+    {
+      "subsystem": "console",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-dev-final/build-console/debug/lab-job-accounting.exe",
+      "bytes": 598016,
+      "sha256": "cc5b6bb8e02e73e1c9f645e223108b647e3f39b5505770ade6d0cc213cce7223",
+      "profile": "dev",
+      "PE_machine": "0x8664",
+      "PE_subsystem": 3
+    },
+    {
+      "subsystem": "windowed",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-dev-final/build-windowed/debug/lab-job-accounting.exe",
+      "bytes": 598016,
+      "sha256": "d59c0de35fc2fb09601af71afafa49e5e093bf0da2af9b633dc2cff0d475b9cb",
+      "profile": "dev",
+      "PE_machine": "0x8664",
+      "PE_subsystem": 2
+    },
+    {
+      "subsystem": "historical-render-2a",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\render-2a-source\\scripts\\support\\wgpu-proof\\target\\debug\\lab-wgpu-proof.exe",
+      "bytes": 39292928,
+      "sha256": "1ef88b6176876a24c2d74680abc8ecd486e2d025f0f00bd3b978c0ec4874d5aa",
+      "profile": "dev",
+      "PE_machine": "0x8664",
+      "PE_subsystem": 3
+    },
+    {
+      "subsystem": "console",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-release-final/build-console/release/lab-job-accounting.exe",
+      "bytes": 290304,
+      "sha256": "f8c3aa5acd67cd8c33b2fe15b1ae88217191e9298858ef86efb0f0047950bad4",
+      "profile": "release",
+      "PE_machine": "0x8664",
+      "PE_subsystem": 3
+    },
+    {
+      "subsystem": "windowed",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-release-final/build-windowed/release/lab-job-accounting.exe",
+      "bytes": 290304,
+      "sha256": "7ef603893b9261abb79806703d21f120bcc64bc90503ea9189d9ffd3de2d92b4",
+      "profile": "release",
+      "PE_machine": "0x8664",
+      "PE_subsystem": 2
+    },
+    {
+      "subsystem": "historical-render-2a",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\render-2a-source\\scripts\\support\\wgpu-proof\\target\\release\\lab-wgpu-proof.exe",
+      "bytes": 8980480,
+      "sha256": "ec31bba365f886015113752835437eab809103f1c5d4dcb2f34108e25bfc2c54",
+      "profile": "release",
+      "PE_machine": "0x8664",
+      "PE_subsystem": 3
+    }
+  ],
+  "SDK_ABI_matches_Rust_checked_layout": true
+}
