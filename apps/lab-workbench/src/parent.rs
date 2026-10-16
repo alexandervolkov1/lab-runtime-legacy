@@ -187,8 +187,10 @@ impl<C: ParentClient> ParentOwner<C> {
 }
 
 #[cfg(all(test, windows))]
+#[path = "parent/control_tests.rs"]
 mod control_tests;
 #[cfg(windows)]
+#[path = "parent/controls.rs"]
 mod controls;
 impl<C: ParentClient> Drop for ParentOwner<C> {
     fn drop(&mut self) {
