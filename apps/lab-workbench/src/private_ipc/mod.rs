@@ -18,7 +18,7 @@ mod selected_provider;
 mod transport;
 mod ui_document;
 #[cfg(test)]
-pub(crate) use backend::Bridge as TestBridge;
+pub(crate) use backend::{Bridge as TestBridge, Status as TestStatus};
 pub(crate) use document_owner::DocumentOwner;
 pub(crate) use replica::Replica;
 
