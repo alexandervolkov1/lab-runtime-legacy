@@ -371,6 +371,14 @@ The target must be an eligible output. Non-SimpleDevice built-in output ranges m
 remain within `0.0..=100.0`; SimpleDevice definitions are cross-validated against
 their typed output semantics.
 
+Configuration safe barriers use the normal Runtime safety path for both Metakon
+and SimpleDevice. A physical barrier remains pending until the configured ACK or
+readback evidence is received. Replacing a safe profile invalidates its previous
+safe confirmation and requests the new safe value through that same path. A
+completed configuration apply confirms the policy commit; inspect `output` for the
+subsequent physical safe result. No lease is issued while that result is pending,
+and an ambiguous started safe write is not resent automatically.
+
 A controller declares all of these required fields:
 
 | Group | Fields and constraints |

@@ -28,6 +28,8 @@
 
 mod components;
 mod configuration;
+#[cfg(test)]
+mod configuration_safety_tests;
 pub(crate) use configuration::PreparedSimpleOverlayPublication;
 mod instruments;
 mod lifecycle;
