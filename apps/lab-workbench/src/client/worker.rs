@@ -2161,6 +2161,10 @@ fn parse_hello(envelope: &Value) -> Option<HelloState> {
         .map(|operation| operation.as_str().map(str::to_owned))
         .collect::<Option<Vec<_>>>()?;
     Some(HelloState {
+        time_anchor: crate::time_context::TimeAnchor::from_hello(
+            result,
+            result.get("boot_id")?.as_str()?,
+        ),
         boot_id: result.get("boot_id")?.as_str()?.to_owned(),
         scope: result.get("scope")?.as_str()?.to_owned(),
         next_seq: parse_decimal(result.get("next_seq")?.as_str()?)?,
@@ -2287,6 +2291,7 @@ mod tests {
 
     fn hello_state(next_seq: u64) -> HelloState {
         HelloState {
+            time_anchor: None,
             boot_id: "boot".into(),
             scope: "scope".into(),
             next_seq,

@@ -52,6 +52,7 @@ strings!(ScalarKind { Boolean=>"boolean",Integer=>"integer",Number=>"number",Tex
 strings!(CandidateKind { Boolean=>"boolean",Integer=>"integer",Number=>"number",Text=>"text",Enum=>"enum",PropertyScalar=>"property_scalar" });
 strings!(Purpose { RecordingLabel=>"recording_label",ReferenceFixed=>"reference_fixed",PropertyValue=>"property_value",LocalOnly=>"local_only" });
 strings!(Selector { SignalSample=>"signal_sample",ConfigurationPropertyCurrent=>"configuration_property_current",ReferenceValue=>"reference_value",ControllerState=>"controller_state",RecorderState=>"recorder_state" });
+strings!(TimeAxisMode { LocalCalendar=>"local_calendar",Utc=>"utc",RuntimeElapsed=>"runtime_elapsed",ExperimentElapsed=>"experiment_elapsed" });
 strings!(Density { Comfortable=>"comfortable",Compact=>"compact" });
 strings!(Layout { Row=>"row",Column=>"column" });
 strings!(V1PanelKind { Controls=>"controls",Plot=>"plot",Status=>"status" });
@@ -80,7 +81,7 @@ object!(Tab; id,title,panels;);
 object!(Panel; id,title,components; v1_kind);
 object!(V1ControlOrigin; kind,target,confirm;);
 object!(Plot; id,title,time_window_seconds,axes,traces;);
-object!(Axes; y_min,y_max;);
+object!(Axes; y_min,y_max; time_mode);
 object!(Trace; id,data_id,display_label,visible,style,display_unit;);
 object!(TraceStyle; color,width;);
 object!(DataBinding; id,selector,target,expect_kind;);

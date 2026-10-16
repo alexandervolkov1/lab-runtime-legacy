@@ -386,6 +386,7 @@ impl WorkbenchModel {
         self.recovery.scope = Some(hello.scope.clone());
         self.recovery.next_seq = Some(hello.next_seq);
         self.recovery.event_cursor = Some(hello.event_latest.clone());
+        self.observations.time_anchor = hello.time_anchor.clone();
         self.hello = Some(hello);
         self.connection = ConnectionState::Ready;
         self.observations.begin_rebuild();

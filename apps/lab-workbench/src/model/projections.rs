@@ -82,6 +82,8 @@ impl LiveTraceBuffer {
 /// All Runtime observations owned by the Workbench cache, never by presentation.
 #[derive(Clone, Debug, Default, PartialEq)]
 pub(crate) struct RuntimeObservations {
+    /// Boot-scoped OS UTC display estimate; never inferred from arrival time.
+    pub(crate) time_anchor: Option<crate::time_context::TimeAnchor>,
     /// Observed entity projections by stable identity.
     pub(crate) entities: BTreeMap<RuntimeRef, Observation>,
     /// Bounded live display buffers by stable identity.

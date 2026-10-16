@@ -1548,6 +1548,7 @@ mod tests {
 
     fn hello() -> HelloState {
         HelloState {
+            time_anchor: None,
             boot_id: "boot".to_owned(),
             scope: "scope".to_owned(),
             next_seq: 2,

@@ -21,6 +21,7 @@ egui_plot = { version = "=0.37.0", default-features = false }
 image = { version = "=0.25.10", default-features = false, features = ["png"] }
 log = { version = "=0.4.33", features = ["std"] }
 raw-window-handle = "=0.6.2"
+time = { version = "=0.3.55", features = ["local-offset"] }
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
 lab-windows-job = { path = "../../../crates/lab-windows-job" }

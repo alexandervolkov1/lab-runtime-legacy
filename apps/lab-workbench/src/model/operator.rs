@@ -988,6 +988,7 @@ mod tests {
         let mut model = WorkbenchModel::new(PresentationDocument::empty("operator-test"));
         model.connection = ConnectionState::Ready;
         model.hello = Some(HelloState {
+            time_anchor: None,
             boot_id: "boot".into(),
             scope: "scope".into(),
             next_seq: 1,

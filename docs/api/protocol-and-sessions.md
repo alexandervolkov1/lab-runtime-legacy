@@ -145,9 +145,21 @@ the same attached connection. The result is the authoritative negotiation respon
 | `event_oldest` | oldest cursor from which complete replay remains possible |
 | `event_latest` | freshest committed event cursor |
 | `protocol` / `application` | protocol and package/API version identity |
+| `time_anchor` | optional boot-scoped OS UTC display estimate; absent/null on older/unavailable hosts |
 
 Clients must consume this response. Static client knowledge is useful for typed DTOs,
 but it must not override the connected Runtime's advertised operation list or limits.
+
+TIME-1 adds optional `time_anchor` to the result, independently of Recorder.
+It contains the same `boot_id`, `source:"system_clock"`, unsigned decimal-string
+`monotonic_before_ns`, `monotonic_after_ns`, `bracket_uncertainty_ns`, signed
+decimal-string `utc_unix_us`, and `utc_accuracy_ns:null` (absolute OS UTC accuracy
+unverified). It is immutable within the boot and uses the measurement clock origin.
+Estimate UTC nanoseconds as `utc_unix_us * 1000 + measurement_ns - monotonic_after_ns`;
+the bracket bounds sampling uncertainty only. This is display metadata, never a
+control clock or device timestamp. Clients may ignore the extension; new clients
+must support old responses without it. Request/envelope/session contracts remain
+unchanged. See the [complete TIME-1 contract](../developer/time-1-time-axis.md).
 
 ## New and retained scopes
 

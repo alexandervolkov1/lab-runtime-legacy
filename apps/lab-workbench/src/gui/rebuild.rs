@@ -673,6 +673,7 @@ mod tests {
 
     fn hello() -> HelloState {
         HelloState {
+            time_anchor: None,
             boot_id: "boot".into(),
             scope: "scope".into(),
             next_seq: 1,

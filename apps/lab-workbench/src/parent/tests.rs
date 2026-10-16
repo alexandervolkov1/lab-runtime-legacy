@@ -337,6 +337,7 @@ fn unconfirmed_stop_retains_same_join_and_owner_until_later_observation() {
 }
 fn hello() -> ClientUpdate {
     ClientUpdate::Hello(HelloState {
+        time_anchor: None,
         boot_id: "boot".into(),
         scope: "scope".into(),
         next_seq: 9,

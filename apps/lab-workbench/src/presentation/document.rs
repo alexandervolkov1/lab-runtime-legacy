@@ -276,6 +276,10 @@ pub(crate) struct Plot {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct AxisOptions {
+    /// Absent means local calendar when a boot-matched UTC binding is available,
+    /// otherwise Runtime elapsed. Experiment elapsed requires an authoritative start.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) time_mode: Option<super::v2::TimeAxisMode>,
     /// Optional lower Y bound.
     pub(crate) y_min: Option<f64>,
     /// Optional upper Y bound.

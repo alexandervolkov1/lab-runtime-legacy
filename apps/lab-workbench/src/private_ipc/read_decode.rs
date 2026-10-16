@@ -1,4 +1,4 @@
-//! Pure borrowed LRD1 decoder shared by the parent validator and native child.
+//! Pure borrowed LRD1/LRD2 decoder shared by the parent validator and native child.
 use super::protocol::*;
 use crate::{
     gui::readonly_v2::observation_source::{Fields, Origin as ViewOrigin, Scalar, Trace, Unit},
@@ -53,6 +53,39 @@ impl<'a> Reader<'a> {
         Ok(value)
     }
 }
+fn prefix(reader: &mut Reader<'_>) -> Result<(usize, u8, Option<crate::time_context::TimeAnchor>)> {
+    let version = reader.take(4)?;
+    if version != b"LRD1" && version != b"LRD2" {
+        return Err("selected codec version");
+    }
+    let count = reader.byte()? as usize;
+    let freshness = reader.byte()?;
+    let anchor = if version == b"LRD2" {
+        let boot = reader.text(BOOT)?;
+        if boot.is_empty() {
+            return Err("empty clock boot");
+        }
+        let before_ns = reader.integer()?;
+        let after_ns = reader.integer()?;
+        let utc_us = i64::from_le_bytes(reader.take(8)?.try_into().unwrap());
+        if after_ns < before_ns {
+            return Err("invalid clock bracket");
+        }
+        Some(crate::time_context::TimeAnchor {
+            boot_id: boot.to_owned(),
+            before_ns,
+            after_ns,
+            utc_us,
+        })
+    } else {
+        None
+    };
+    Ok((count, freshness, anchor))
+}
+/// Decode only fixed bounded display metadata; full validation remains mandatory.
+pub(crate) fn time_anchor(bytes: &[u8]) -> Result<Option<crate::time_context::TimeAnchor>> {
+    prefix(&mut Reader { bytes, used: 0 }).map(|(_, _, anchor)| anchor)
+}
 /// Validate all variants, finite values and counts without copying the payload.
 /// The parsed RuntimeRef is one bounded scratch value, dropped each iteration.
 pub(crate) fn validate(bytes: &[u8]) -> Result<()> {
@@ -83,14 +116,10 @@ pub(super) fn inspect_with<'a>(
         return Err("selected read byte bound");
     }
     let mut reader = Reader { bytes, used: 0 };
-    if reader.take(4)? != b"LRD1" {
-        return Err("selected codec version");
-    }
-    let count = reader.byte()? as usize;
+    let (count, overall, _) = prefix(&mut reader)?;
     if count > TRACES {
         return Err("selected trace bound");
     }
-    let overall = reader.byte()?;
     if overall > 3 {
         return Err("selected freshness");
     }
@@ -287,6 +316,17 @@ pub(super) fn decode_freshness(tag: u8) -> Freshness {
 /// Receiving a newer transport ordinal never authorizes older source data or a
 /// freshness promotion without another parent source update.
 pub(crate) fn successor(old: &[u8], new: &[u8], advanced_source: bool) -> Result<()> {
+    match (time_anchor(old)?, time_anchor(new)?) {
+        (Some(before), Some(after)) if before.boot_id == after.boot_id && before != after => {
+            return Err("changed immutable boot clock anchor");
+        }
+        (before, Some(after))
+            if !advanced_source && before.as_ref().is_none_or(|a| a.boot_id != after.boot_id) =>
+        {
+            return Err("unapproved clock source change");
+        }
+        _ => {}
+    }
     let old = inspect(old)?;
     let new = inspect(new)?;
     for after in new.into_iter().flatten() {

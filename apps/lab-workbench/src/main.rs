@@ -25,6 +25,7 @@ mod renderer_capabilities;
 mod storage;
 #[cfg(windows)]
 mod supervisor;
+mod time_context;
 
 use client::endpoint::RuntimeEndpoint;
 use presentation::default_presentation_path;

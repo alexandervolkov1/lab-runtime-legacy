@@ -432,6 +432,7 @@ impl<'a> Builder<'a> {
                     title: text(&plot.title),
                     time_window_seconds: Number(plot.time_window_seconds),
                     axes: Axes {
+                        time_mode: plot.axes.time_mode,
                         y_min: plot.axes.y_min.map(Number),
                         y_max: plot.axes.y_max.map(Number),
                     },

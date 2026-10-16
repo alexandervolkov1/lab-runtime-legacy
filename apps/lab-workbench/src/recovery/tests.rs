@@ -36,6 +36,7 @@ fn record(seq: u64) -> RecoveryRecord {
 
 fn hello(boot_id: &str, scope: &str) -> HelloState {
     HelloState {
+        time_anchor: None,
         boot_id: boot_id.into(),
         scope: scope.into(),
         next_seq: 2,
