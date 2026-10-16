@@ -32,8 +32,8 @@ identifies the historical published source, not a moving latest-release pointer.
 
 ## Implemented boundaries
 
-The current scoped Runtime change is [manual actuator control and implementation
-review](runtime-manual-output-review.md), with the [API contract](../api/manual-output.md)
+The current scoped Runtime change, [Draft PR #53](https://github.com/alexandervolkov1/lab-runtime/pull/53),
+is [manual actuator control and implementation review](runtime-manual-output-review.md), with the [API contract](../api/manual-output.md)
 and [validation](runtime-manual-output-validation.md). It adds explicit scope-owned
 power acquisition, renewal, delivery and safe return through existing OutputAuthority,
 plus a direct external Babashka experiment. It also removes local validation/catalog
