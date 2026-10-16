@@ -34,7 +34,8 @@ for name, args in [('SetForegroundWindow', [w.HWND]), ('SetFocus', [w.HWND]),
                    ('GetDpiForWindow', [w.HWND]), ('ClientToScreen', [w.HWND, c.POINTER(w.POINT)]),
                    ('SetCursorPos', [c.c_int, c.c_int]), ('AttachThreadInput', [w.DWORD, w.DWORD, w.BOOL]),
                    ('SetWindowPos', [w.HWND,w.HWND,c.c_int,c.c_int,c.c_int,c.c_int,w.UINT]),
-                   ('GetCursorPos', [c.POINTER(w.POINT)]), ('GetWindowRect', [w.HWND,c.POINTER(w.RECT)])]:
+                   ('GetCursorPos', [c.POINTER(w.POINT)]), ('GetWindowRect', [w.HWND,c.POINTER(w.RECT)]),
+                   ('IsIconic', [w.HWND]), ('ShowWindow', [w.HWND,c.c_int])]:
     getattr(user, name).argtypes = args
 user.GetForegroundWindow.restype = w.HWND
 kernel = c.WinDLL('kernel32', use_last_error=True)
@@ -65,6 +66,9 @@ def place(ready):
 
 def focus(ready):
     owner(ready)
+    if user.IsIconic(ready['hwnd']):
+        user.ShowWindow(ready['hwnd'],9)
+        common.wait(lambda:not user.IsIconic(ready['hwnd']),'restore original test window',3)
     if user.GetForegroundWindow() == ready['hwnd']: return
     user.GetQueueStatus(0x4ff)
     current = kernel.GetCurrentThreadId()
@@ -146,12 +150,13 @@ def bb(endpoint, stage, name):
     path=OUT/(name+'.json')
     with (OUT/(name+'.log')).open('wb') as log:
         reply=subprocess.run(['bb',str(ROOT/'clients/babashka-smoke/control1.clj'),endpoint.split(':')[1],stage,str(path)],
-                             cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,timeout=20)
+                             cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,timeout=20,creationflags=subprocess.CREATE_NO_WINDOW)
     assert reply.returncode==0,(OUT/(name+'.log')).read_text(encoding='utf-8')
     value=common.read_json(path);assert value['passed'];return value
 
 captures=[];actions=[]
 def capture(directory,predicate=lambda _:True,after=0):
+    focus(child)
     value=common.wait(lambda:common.receipts(directory,lambda v:v['ui_counter']>after and predicate(v)),'CONTROL-1 stock screenshot',20)
     captures.append(str(value[0]));return value[1]
 def widget(frame,label):return next(w for w in frame['display']['widgets'] if w['label']==label)
@@ -221,7 +226,7 @@ try:
             accepted=capture(directory,lambda v:state(v).get('stage')=='accepted',proposal['ui_counter'])
             assert state(accepted)['result'] is None
             original=child
-            subprocess.run(['taskkill','/PID',str(original['pid']),'/F'],check=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=5)
+            subprocess.run(['taskkill','/PID',str(original['pid']),'/F'],check=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=5,creationflags=subprocess.CREATE_NO_WINDOW)
             relay.release.set()
             assert runtime.p.poll() is None and parent.p.poll() is None
             directory=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{wid}-2'
