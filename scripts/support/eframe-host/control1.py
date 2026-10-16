@@ -165,7 +165,11 @@ def press(ready,frame,label):
     click(ready,button['rect']);actions.append({'click':label,'rect':button['rect']})
 def state(frame):return frame['display'].get('control_state') or {}
 def draft(frame):return next(v for v in frame['display']['controls'] if v['id']=='retune')
-def live(frame):return bool(frame['display']['scalars']) and frame['display']['scalars'][0]['freshness']=='Fresh'
+def live(frame):
+    display=frame['display']
+    return (bool(display['scalars']) and display['scalars'][0]['freshness']=='Fresh'
+        and bool(display['plots']) and all(p['freshness']=='Fresh' and p['points']>=2
+            and p['unit']=='\u00b0C' for p in display['plots']))
 def mutations(relay):return [r for r in relay.requests if 'request_id' in r]
 
 runtime=parent=relay=api=None;child=None
