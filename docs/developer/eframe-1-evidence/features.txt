@@ -1,0 +1,1243 @@
+lab-eframe-host v0.1.0 (D:\rust\lab-runtime\scripts\support\eframe-host)
+в”њв”Ђв”Ђ egui_plot v0.37.0
+в”‚   в”њв”Ђв”Ђ egui v0.36.2
+в”‚   в”‚   в”њв”Ђв”Ђ emath v0.36.2
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ bytemuck v1.25.2
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ bytemuck_derive feature "default"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ bytemuck_derive v1.12.1 (proc-macro)
+в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ proc-macro2 feature "default"
+в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ proc-macro2 v1.0.107
+в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ unicode-ident feature "default"
+в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ unicode-ident v1.0.24
+в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ proc-macro2 feature "proc-macro"
+в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ proc-macro2 v1.0.107 (*)
+в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ quote feature "default"
+в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ quote v1.0.47
+в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ proc-macro2 v1.0.107 (*)
+в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ quote feature "proc-macro"
+в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ quote v1.0.47 (*)
+в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ proc-macro2 feature "proc-macro" (*)
+в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ syn feature "default"
+в”‚   в”‚   в”‚   в”‚                   в”њв”Ђв”Ђ syn v3.0.5
+в”‚   в”‚   в”‚   в”‚                   в”‚   в”њв”Ђв”Ђ proc-macro2 v1.0.107 (*)
+в”‚   в”‚   в”‚   в”‚                   в”‚   в”њв”Ђв”Ђ quote v1.0.47 (*)
+в”‚   в”‚   в”‚   в”‚                   в”‚   в””в”Ђв”Ђ unicode-ident feature "default" (*)
+в”‚   в”‚   в”‚   в”‚                   в”њв”Ђв”Ђ syn feature "clone-impls"
+в”‚   в”‚   в”‚   в”‚                   в”‚   в””в”Ђв”Ђ syn v3.0.5 (*)
+в”‚   в”‚   в”‚   в”‚                   в”њв”Ђв”Ђ syn feature "derive"
+в”‚   в”‚   в”‚   в”‚                   в”‚   в””в”Ђв”Ђ syn v3.0.5 (*)
+в”‚   в”‚   в”‚   в”‚                   в”њв”Ђв”Ђ syn feature "parsing"
+в”‚   в”‚   в”‚   в”‚                   в”‚   в””в”Ђв”Ђ syn v3.0.5 (*)
+в”‚   в”‚   в”‚   в”‚                   в”њв”Ђв”Ђ syn feature "printing"
+в”‚   в”‚   в”‚   в”‚                   в”‚   в””в”Ђв”Ђ syn v3.0.5 (*)
+в”‚   в”‚   в”‚   в”‚                   в””в”Ђв”Ђ syn feature "proc-macro"
+в”‚   в”‚   в”‚   в”‚                       в”њв”Ђв”Ђ syn v3.0.5 (*)
+в”‚   в”‚   в”‚   в”‚                       в”њв”Ђв”Ђ proc-macro2 feature "proc-macro" (*)
+в”‚   в”‚   в”‚   в”‚                       в””в”Ђв”Ђ quote feature "proc-macro" (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ bytemuck feature "derive"
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck v1.25.2 (*)
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ bytemuck feature "bytemuck_derive"
+в”‚   в”‚   в”‚           в””в”Ђв”Ђ bytemuck v1.25.2 (*)
+в”‚   в”‚   в”њв”Ђв”Ђ epaint v0.36.2
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ ecolor v0.36.2
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ emath v0.36.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ emath v0.36.2 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ ahash feature "no-rng"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ ahash v0.8.12
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ cfg-if feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ cfg-if v1.0.4
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ once_cell feature "alloc"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ once_cell v1.21.4
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ once_cell feature "race"
+в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ once_cell v1.21.4
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ zerocopy feature "simd"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ zerocopy v0.8.59
+в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ zerocopy-derive feature "default"
+в”‚   в”‚   в”‚   в”‚                   в””в”Ђв”Ђ zerocopy-derive v0.8.59 (proc-macro)
+в”‚   в”‚   в”‚   в”‚                       в”њв”Ђв”Ђ proc-macro2 feature "default" (*)
+в”‚   в”‚   в”‚   в”‚                       в”њв”Ђв”Ђ quote feature "default" (*)
+в”‚   в”‚   в”‚   в”‚                       в”њв”Ђв”Ђ syn feature "default"
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”њв”Ђв”Ђ syn v2.0.119
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в”њв”Ђв”Ђ proc-macro2 v1.0.107 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в”њв”Ђв”Ђ quote v1.0.47 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в””в”Ђв”Ђ unicode-ident feature "default" (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”њв”Ђв”Ђ syn feature "clone-impls"
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в””в”Ђв”Ђ syn v2.0.119 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”њв”Ђв”Ђ syn feature "derive"
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в””в”Ђв”Ђ syn v2.0.119 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”њв”Ђв”Ђ syn feature "parsing"
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в””в”Ђв”Ђ syn v2.0.119 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”њв”Ђв”Ђ syn feature "printing"
+в”‚   в”‚   в”‚   в”‚                       в”‚   в”‚   в””в”Ђв”Ђ syn v2.0.119 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚   в””в”Ђв”Ђ syn feature "proc-macro"
+в”‚   в”‚   в”‚   в”‚                       в”‚       в”њв”Ђв”Ђ syn v2.0.119 (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚       в”њв”Ђв”Ђ proc-macro2 feature "proc-macro" (*)
+в”‚   в”‚   в”‚   в”‚                       в”‚       в””в”Ђв”Ђ quote feature "proc-macro" (*)
+в”‚   в”‚   в”‚   в”‚                       в””в”Ђв”Ђ syn feature "full"
+в”‚   в”‚   в”‚   в”‚                           в””в”Ђв”Ђ syn v2.0.119 (*)
+в”‚   в”‚   в”‚   в”‚       [build-dependencies]
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ version_check feature "default"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ version_check v0.9.5
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ ahash feature "std"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ ahash v0.8.12 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ epaint_default_fonts feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ epaint_default_fonts v0.36.2
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ font-types feature "std"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ font-types v0.12.5
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ bytemuck feature "min_const_generics"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ bytemuck v1.25.2 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ harfrust feature "default"
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ harfrust v0.12.0
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bitflags feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ bitflags v2.13.2
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "extern_crate_alloc"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ bytemuck v1.25.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ read-fonts feature "experimental_font_api"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ read-fonts v0.41.0
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ once_cell feature "alloc" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ once_cell feature "race" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ font-types feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ font-types v0.12.5 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ font-types feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ font-types v0.12.5 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ smallvec feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ smallvec v1.16.1
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ harfrust feature "std"
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ harfrust v0.12.0 (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ read-fonts feature "std"
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ read-fonts v0.41.0 (*)
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ font-types feature "std" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ log v0.4.33
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "std"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ log v0.4.33
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ nohash-hasher feature "default"
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ nohash-hasher v0.2.0
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ nohash-hasher feature "std"
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ nohash-hasher v0.2.0
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ parking_lot feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ parking_lot v0.12.5
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ lock_api feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ lock_api v0.4.14
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ scopeguard v1.2.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ lock_api feature "atomic_usize"
+в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ lock_api v0.4.14 (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ parking_lot_core feature "default"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ parking_lot_core v0.9.12
+в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ cfg-if feature "default" (*)
+в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ windows-link feature "default"
+в”‚   в”‚   в”‚   в”‚                   в””в”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ self_cell feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ self_cell v1.3.0
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ skrifa feature "autohint_shaping"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ skrifa v0.44.0
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ read-fonts v0.41.0 (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ skrifa feature "std"
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ skrifa v0.44.0 (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ read-fonts feature "std" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ unicode-general-category feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ unicode-general-category v1.1.0
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ unicode-segmentation feature "default"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ unicode-segmentation v1.13.3
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ vello_cpu feature "f32_pipeline"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ vello_cpu v0.1.0
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ vello_common v0.1.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ fearless_simd v0.4.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ guillotiere v0.7.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ euclid v0.22.14
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ num-traits v0.2.19
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ libm feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”њв”Ђв”Ђ libm v0.2.16
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в””в”Ђв”Ђ libm feature "arch"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚                   в””в”Ђв”Ђ libm v0.2.16
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           [build-dependencies]
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ autocfg feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в””в”Ђв”Ђ autocfg v1.5.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ thiserror v2.0.20
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ thiserror-impl feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ thiserror-impl v2.0.20 (proc-macro)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в”њв”Ђв”Ђ proc-macro2 feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в”њв”Ђв”Ђ quote feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ syn feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ peniko feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚       в”‚       в”њв”Ђв”Ђ peniko v0.6.1
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”њв”Ђв”Ђ bytemuck v1.25.2 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”њв”Ђв”Ђ color v0.3.3
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в””в”Ђв”Ђ bytemuck v1.25.2 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”њв”Ђв”Ђ kurbo v0.13.1
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”њв”Ђв”Ђ arrayvec v0.7.8
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”њв”Ђв”Ђ polycool v0.4.0
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ arrayvec v0.7.8
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”њв”Ђв”Ђ smallvec feature "const_new"
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ smallvec v1.16.1
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ smallvec feature "const_generics"
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ smallvec v1.16.1
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”‚   в””в”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”њв”Ђв”Ђ linebender_resource_handle v0.1.1
+в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в””в”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ color feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚       в”‚           в””в”Ђв”Ђ color v0.3.3 (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ hashbrown feature "default-hasher"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ hashbrown v0.17.1
+в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ foldhash v0.2.0
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ vello_cpu feature "std"
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ vello_cpu v0.1.0 (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ vello_common feature "std"
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ vello_common v0.1.0 (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ fearless_simd feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ fearless_simd v0.4.1
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ peniko feature "std"
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ peniko v0.6.1 (*)
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ color feature "std"
+в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ color v0.3.3 (*)
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ kurbo feature "std"
+в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ kurbo v0.13.1 (*)
+в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ polycool feature "std"
+в”‚   в”‚   в”‚   в”‚           в”‚       в””в”Ђв”Ђ polycool v0.4.0 (*)
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ linebender_resource_handle feature "std"
+в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ linebender_resource_handle v0.1.1
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ vello_cpu feature "u8_pipeline"
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ vello_cpu v0.1.0 (*)
+в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”њв”Ђв”Ђ ahash feature "no-rng" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ ahash feature "std" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ accesskit feature "default"
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ accesskit v0.24.1
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ uuid v1.26.1
+в”‚   в”‚   в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ log feature "std" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ nohash-hasher feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ unicode-segmentation feature "default" (*)
+в”‚   в”‚   в””в”Ђв”Ђ itertools feature "default"
+в”‚   в”‚       в”њв”Ђв”Ђ itertools v0.15.0
+в”‚   в”‚       в”‚   в””в”Ђв”Ђ either v1.18.0
+в”‚   в”‚       в””в”Ђв”Ђ itertools feature "use_std"
+в”‚   в”‚           в”њв”Ђв”Ђ itertools v0.15.0 (*)
+в”‚   в”‚           в”њв”Ђв”Ђ itertools feature "use_alloc"
+в”‚   в”‚           в”‚   в””в”Ђв”Ђ itertools v0.15.0 (*)
+в”‚   в”‚           в””в”Ђв”Ђ either feature "use_std"
+в”‚   в”‚               в”њв”Ђв”Ђ either v1.18.0
+в”‚   в”‚               в””в”Ђв”Ђ either feature "std"
+в”‚   в”‚                   в””в”Ђв”Ђ either v1.18.0
+в”‚   в”њв”Ђв”Ђ emath v0.36.2 (*)
+в”‚   в”њв”Ђв”Ђ ahash feature "no-rng" (*)
+в”‚   в””в”Ђв”Ђ ahash feature "std" (*)
+в”њв”Ђв”Ђ eframe feature "accesskit"
+в”‚   в”њв”Ђв”Ђ eframe v0.36.2
+в”‚   в”‚   в”њв”Ђв”Ђ egui_glow v0.36.2
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui v0.36.2 (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ epaint feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ epaint v0.36.2 (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ emath feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ emath v0.36.2 (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ ecolor feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ ecolor v0.36.2 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "std" (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ glow feature "default"
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ glow v0.17.0
+в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”њв”Ђв”Ђ ahash feature "no-rng" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ ahash feature "std" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ document-features feature "default"
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ document-features v0.2.12 (proc-macro)
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ litrs feature "default"
+в”‚   в”‚   в”‚           в””в”Ђв”Ђ litrs v1.0.0
+в”‚   в”‚   в”њв”Ђв”Ђ egui feature "bytemuck" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ log feature "std" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ parking_lot feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ egui-wgpu feature "capture"
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ egui-wgpu v0.36.2
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ egui v0.36.2 (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ winit v0.30.13
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ tracing v0.1.44
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ tracing-core v0.1.36
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ pin-project-lite feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ pin-project-lite v0.2.17
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ unicode-segmentation feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ raw-window-handle feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ raw-window-handle v0.6.2
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ raw-window-handle feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle v0.6.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ raw-window-handle feature "alloc"
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ raw-window-handle v0.6.2
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ cursor-icon feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ cursor-icon v1.2.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ cursor-icon feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ cursor-icon v1.2.0
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ cursor-icon feature "alloc"
+в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ cursor-icon v1.2.0
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ dpi feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ dpi v0.1.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ dpi feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ dpi v0.1.2
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ smol_str feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ smol_str v0.2.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ smol_str feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ smol_str v0.2.2
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Devices_HumanInterfaceDevice"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-targets feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ windows-targets v0.52.6
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в””в”Ђв”Ђ windows_x86_64_msvc feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚               в””в”Ђв”Ђ windows_x86_64_msvc v0.52.6
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_Devices"
+в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32"
+в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Foundation"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Globalization"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Graphics_Dwm"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_Graphics"
+в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Graphics_Gdi"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_Graphics" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Media"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Security"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Com"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System"
+в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Com_StructuredStorage"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System_Com" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_LibraryLoader"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Ole"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_SystemInformation"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_SystemServices"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Threading"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_WindowsProgramming"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Accessibility"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI"
+в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Controls"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_HiDpi"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Input_Ime"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI_Input"
+в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Input_KeyboardAndMouse"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI_Input" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Input_Pointer"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI_Input" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Input_Touch"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI_Input" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Shell"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_TextServices"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_WindowsAndMessaging"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ windows-sys feature "default"
+в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚       в”‚   [build-dependencies]
+в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ cfg_aliases feature "default"
+в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ cfg_aliases v0.2.2
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ ahash feature "no-rng" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ ahash feature "std" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ document-features feature "default" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ epaint feature "bytemuck" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ log feature "std" (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ thiserror feature "default"
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ thiserror feature "std"
+в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ type-map feature "default"
+в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ type-map v0.5.1
+в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ rustc-hash feature "default"
+в”‚   в”‚   в”‚       в”‚           в”њв”Ђв”Ђ rustc-hash v2.1.3
+в”‚   в”‚   в”‚       в”‚           в””в”Ђв”Ђ rustc-hash feature "std"
+в”‚   в”‚   в”‚       в”‚               в””в”Ђв”Ђ rustc-hash v2.1.3
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ web-time feature "default"
+в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ web-time v1.1.0
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ wgpu feature "std"
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ wgpu v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ arrayvec v0.7.8
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu-types v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle v0.6.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "extern_crate_alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "min_const_generics" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ static_assertions feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ static_assertions v1.1.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ naga-types feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ naga-types v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в”њв”Ђв”Ђ indexmap v2.14.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ equivalent v1.0.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ hashbrown v0.17.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в”њв”Ђв”Ђ rustc-hash v1.1.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в”њв”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в”њв”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в””в”Ђв”Ђ hashbrown feature "inline-more"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚               в””в”Ђв”Ђ hashbrown v0.17.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ cfg-if feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ document-features feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "extern_crate_alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "min_const_generics" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ parking_lot feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ hashbrown feature "inline-more" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ static_assertions feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ arrayvec v0.7.8
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bit-set v0.10.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ bit-vec v0.9.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bit-vec v0.9.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ indexmap v2.14.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle v0.6.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ rustc-hash v1.1.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-types v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ once_cell feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ once_cell v1.21.4
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ once_cell feature "alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ document-features feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "extern_crate_alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "min_const_generics" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ parking_lot feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ hashbrown feature "inline-more" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ naga feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ naga v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ arrayvec v0.7.8
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bit-set v0.10.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ codespan-reporting v0.13.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ unicode-width feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”њв”Ђв”Ђ unicode-width v0.2.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ unicode-width feature "cjk"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚           в””в”Ђв”Ђ unicode-width v0.2.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ indexmap v2.14.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ libm v0.2.16
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ num-traits v0.2.19 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ rustc-hash v1.1.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ cfg-if feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ once_cell feature "alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ once_cell feature "race" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ hashbrown feature "inline-more" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ half feature "num-traits"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ half v2.7.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”њв”Ђв”Ђ cfg-if feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”њв”Ђв”Ђ zerocopy feature "derive"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в”њв”Ђв”Ђ zerocopy v0.8.59 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”‚   в””в”Ђв”Ђ zerocopy feature "zerocopy-derive"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”‚       в””в”Ђв”Ђ zerocopy v0.8.59 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в”њв”Ђв”Ђ zerocopy feature "simd" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ num-traits feature "libm"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚           в””в”Ђв”Ђ num-traits v0.2.19 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ naga-types feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ spirv feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ spirv v0.4.0+sdk-1.4.341.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ unicode-ident feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ unicode-ident v1.0.24
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       [build-dependencies]
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ cfg_aliases feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ naga-types feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core-deps-windows-linux-android feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ wgpu-core-deps-windows-linux-android v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ wgpu-hal feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ wgpu-hal v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ arrayvec v0.7.8
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ bit-set v0.10.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ once_cell v1.21.4
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ ordered-float v5.5.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ num-traits v0.2.19 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ raw-window-handle v0.6.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ wgpu-types v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ windows v0.62.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows-collections v0.3.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ windows-core v0.62.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”њв”Ђв”Ђ windows-implement v0.60.2 (proc-macro)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ proc-macro2 v1.0.107 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ quote v1.0.47 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "clone-impls" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "full" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "parsing" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "printing" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в””в”Ђв”Ђ syn feature "proc-macro" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”њв”Ђв”Ђ windows-interface v0.59.3 (proc-macro)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ proc-macro2 v1.0.107 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ quote v1.0.47 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "clone-impls" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "full" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "parsing" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в”њв”Ђв”Ђ syn feature "printing" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в””в”Ђв”Ђ syn feature "proc-macro" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”њв”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”њв”Ђв”Ђ windows-result v0.4.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”‚   в””в”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ windows-strings v0.5.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚           в””в”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows-core v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows-future v0.3.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ windows-core v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ windows-threading v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows-numerics v0.3.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ windows-core v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ windows-core v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ windows-result v0.4.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ cfg-if feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ bytemuck feature "derive" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ bytemuck feature "extern_crate_alloc" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ bytemuck feature "min_const_generics" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ smallvec feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ smallvec feature "union"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ smallvec v1.16.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ parking_lot feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ hashbrown feature "inline-more" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ static_assertions feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ naga feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ naga-types feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ ash feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ ash v0.38.0+1.3.281
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ libloading feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ libloading v0.8.9
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚           в””в”Ђв”Ђ windows-link feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ ash feature "debug"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ ash v0.38.0+1.3.281 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ ash feature "loaded"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ ash v0.38.0+1.3.281 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ ash feature "libloading"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в”‚   в””в”Ђв”Ђ ash v0.38.0+1.3.281 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ ash feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ ash v0.38.0+1.3.281 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ ash feature "std" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ libloading feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ glow feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ glutin_wgl_sys feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ glutin_wgl_sys v0.6.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       [build-dependencies]
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ gl_generator feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚           в””в”Ђв”Ђ gl_generator v0.14.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ khronos_api feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚   в””в”Ђв”Ђ khronos_api v3.1.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ log feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚   в””в”Ђв”Ђ log v0.4.33
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в””в”Ђв”Ђ xml-rs feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                   в””в”Ђв”Ђ xml-rs v0.8.29
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ gpu-allocator feature "hashbrown"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ gpu-allocator v0.28.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ log v0.4.33
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ presser v0.3.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ thiserror v2.0.20 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ ash feature "debug" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ hashbrown feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ hashbrown v0.16.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в”њв”Ђв”Ђ equivalent v1.0.2
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в”њв”Ђв”Ђ foldhash v0.2.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в””в”Ђв”Ђ allocator-api2 feature "alloc"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚       в””в”Ђв”Ђ allocator-api2 v0.2.21
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ hashbrown feature "allocator-api2"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в””в”Ђв”Ђ hashbrown v0.16.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ hashbrown feature "default-hasher"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в””в”Ђв”Ђ hashbrown v0.16.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ hashbrown feature "equivalent"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в””в”Ђв”Ђ hashbrown v0.16.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ hashbrown feature "inline-more"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”‚   в””в”Ђв”Ђ hashbrown v0.16.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в””в”Ђв”Ђ hashbrown feature "raw-entry"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚       в””в”Ђв”Ђ hashbrown v0.16.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ windows feature "Win32_Graphics_Direct3D12"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚       в””в”Ђв”Ђ windows feature "Win32"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚           в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚           в””в”Ђв”Ђ windows feature "Win32_Foundation"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚               в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚               в””в”Ђв”Ђ windows feature "Win32" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ windows feature "Win32_Graphics_Dxgi_Common"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics_Dxgi"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”‚       в””в”Ђв”Ђ windows feature "Win32_Graphics" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ windows feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚           в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚           в””в”Ђв”Ђ windows feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ windows-collections feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚   в”њв”Ђв”Ђ windows-collections v0.3.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚   в””в”Ђв”Ђ windows-core feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚       в”њв”Ђв”Ђ windows-core v0.62.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚       в”њв”Ђв”Ђ windows-result feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚       в”‚   в””в”Ђв”Ђ windows-result v0.4.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚       в””в”Ђв”Ђ windows-strings feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚           в””в”Ђв”Ђ windows-strings v0.5.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ windows-core feature "std" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ windows-future feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚   в”њв”Ђв”Ђ windows-future v0.3.2 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”‚   в””в”Ђв”Ђ windows-core feature "std" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в””в”Ђв”Ђ windows-numerics feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                   в”њв”Ђв”Ђ windows-numerics v0.3.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                   в””в”Ђв”Ђ windows-core feature "std" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ khronos-egl feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ khronos-egl v6.0.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ libloading feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ libc feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в”њв”Ђв”Ђ libc v0.2.189
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ libc feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”‚           в””в”Ђв”Ђ libc v0.2.189
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ khronos-egl feature "1_5"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в”њв”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ khronos-egl feature "1_4"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚           в”њв”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚           в””в”Ђв”Ђ khronos-egl feature "1_3"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в”њв”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚               в””в”Ђв”Ђ khronos-egl feature "1_2"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                   в”њв”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                   в””в”Ђв”Ђ khronos-egl feature "1_1"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                       в”њв”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                       в””в”Ђв”Ђ khronos-egl feature "1_0"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚                           в””в”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ khronos-egl feature "dynamic"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в”њв”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ khronos-egl feature "libloading"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚       в””в”Ђв”Ђ khronos-egl v6.0.0 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ range-alloc feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ range-alloc v0.1.5
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”њв”Ђв”Ђ renderdoc-sys feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в”‚   в””в”Ђв”Ђ renderdoc-sys v1.1.0
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ wgpu-naga-bridge feature "default"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚                   в””в”Ђв”Ђ wgpu-naga-bridge v30.0.1
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚                       в”њв”Ђв”Ђ wgpu-types v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚                       в””в”Ђв”Ђ naga feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               [build-dependencies]
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ cfg_aliases feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-hal feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ wgpu-naga-bridge feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   [build-dependencies]
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ cfg_aliases feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ wgpu-core feature "std"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core feature "portable-atomic"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ wgpu-hal feature "portable-atomic"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core feature "renderdoc"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core feature "wgpu-core-deps-windows-linux-android"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ wgpu-core-deps-windows-linux-android feature "renderdoc"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core-deps-windows-linux-android v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ wgpu-hal feature "renderdoc"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚           в””в”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core feature "wgsl"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ naga feature "wgsl-in"
+в”‚   в”‚   в”‚       в”‚   в”‚   в”‚       в””в”Ђв”Ђ naga v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ wgpu-hal feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”‚   [build-dependencies]
+в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ cfg_aliases feature "default" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ raw-window-handle feature "std" (*)
+в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ wgpu-core feature "std" (*)
+в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ wgpu-types feature "std"
+в”‚   в”‚   в”‚       в”‚       в”њв”Ђв”Ђ wgpu-types v30.0.1 (*)
+в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ naga-types feature "std"
+в”‚   в”‚   в”‚       в”‚           в””в”Ђв”Ђ naga-types v30.0.1 (*)
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ wgpu feature "wgsl"
+в”‚   в”‚   в”‚           в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚   в”‚   в”‚           в””в”Ђв”Ђ wgpu-core feature "wgsl" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ egui-wgpu feature "winit"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-wgpu v0.36.2 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-wgpu feature "capture" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-wgpu feature "winit" (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit feature "rwh_06"
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”њв”Ђв”Ђ web-time feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ static_assertions feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ glow feature "default" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ winit feature "rwh_06" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ egui-winit feature "clipboard"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-winit v0.36.2
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui v0.36.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ profiling v1.0.18
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ log feature "std" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ web-time feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ accesskit_winit feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ accesskit_winit v0.32.2
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ accesskit feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "std" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ accesskit_windows feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ accesskit_windows v0.32.1
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ accesskit feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ static_assertions feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_Foundation" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_Globalization"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_Graphics_Gdi"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_System_Com"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_System"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚       в””в”Ђв”Ђ windows feature "Win32" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_System_LibraryLoader"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_System_Ole"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_System_Variant"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_UI_Accessibility"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_UI"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚       в””в”Ђв”Ђ windows feature "Win32" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_UI_Input_KeyboardAndMouse"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_UI_Input"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚       в””в”Ђв”Ђ windows feature "Win32_UI" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "Win32_UI_WindowsAndMessaging"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows feature "Win32_UI" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows-core feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в”њв”Ђв”Ђ windows-core v0.62.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в”‚   в””в”Ђв”Ђ windows-core feature "std" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ accesskit_consumer feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚               в””в”Ђв”Ђ accesskit_consumer v0.35.0
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚                   в”њв”Ђв”Ђ accesskit feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚                   в””в”Ђв”Ђ hashbrown feature "default-hasher" (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "wayland"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "ahash"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "memmap2"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "sctk"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "wayland-backend"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "wayland-client"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "wayland-protocols"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit feature "wayland-protocols-plasma"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "x11"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "percent-encoding"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ winit feature "x11-dl"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit feature "x11rb"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ winit v0.30.13 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ accesskit_winit feature "accesskit_unix"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ accesskit_winit v0.32.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ accesskit_winit feature "async-io"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ accesskit_winit v0.32.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ accesskit_winit feature "rwh_06"
+в”‚   в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ accesskit_winit v0.32.2 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ winit feature "rwh_06" (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ arboard feature "image-data"
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ arboard v3.6.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ log feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Foundation" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Storage_FileSystem"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_Storage"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_DataExchange"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Memory"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Ole" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Shell" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ windows-sys feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ clipboard-win feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ clipboard-win v5.4.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ error-code feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ error-code v3.4.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ clipboard-win feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ clipboard-win v5.4.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ error-code feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ error-code v3.4.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в”њв”Ђв”Ђ image feature "bmp"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ image v0.25.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ bytemuck feature "extern_crate_alloc" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ num-traits feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ num-traits v0.2.19 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в””в”Ђв”Ђ num-traits feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚       в””в”Ђв”Ђ num-traits v0.2.19 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ byteorder-lite feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ byteorder-lite v0.1.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в””в”Ђв”Ђ byteorder-lite feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚       в””в”Ђв”Ђ byteorder-lite v0.1.0
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”њв”Ђв”Ђ moxcms feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms v0.8.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ num-traits feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ pxfm feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ pxfm v0.1.30
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "avx_luts"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms feature "avx"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”‚   в””в”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "lut"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "avx_shaper_fixed_point_paths"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "avx" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "avx_shaper_paths"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "avx" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "lut" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "neon_luts"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms feature "lut" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "neon"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "neon_shaper_fixed_point_paths"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "neon" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "neon_shaper_paths"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "neon" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "sse_luts"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms feature "lut" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "sse"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”њв”Ђв”Ђ moxcms feature "sse_shaper_fixed_point_paths"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в”‚   в””в”Ђв”Ђ moxcms feature "sse" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚   в””в”Ђв”Ђ moxcms feature "sse_shaper_paths"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚       в”њв”Ђв”Ђ moxcms v0.8.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в”‚       в””в”Ђв”Ђ moxcms feature "sse" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚       в””в”Ђв”Ђ png feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚           в””в”Ђв”Ђ png v0.18.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”њв”Ђв”Ђ crc32fast feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ crc32fast v1.5.2
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ cfg-if feature "default" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ crc32fast feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в””в”Ђв”Ђ crc32fast v1.5.2 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”њв”Ђв”Ђ fdeflate feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ fdeflate v0.3.7
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в””в”Ђв”Ђ simd-adler32 feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚           в”њв”Ђв”Ђ simd-adler32 v0.3.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚           в”њв”Ђв”Ђ simd-adler32 feature "const-generics"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚           в”‚   в””в”Ђв”Ђ simd-adler32 v0.3.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚           в””в”Ђв”Ђ simd-adler32 feature "std"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚               в””в”Ђв”Ђ simd-adler32 v0.3.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”њв”Ђв”Ђ flate2 feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ flate2 v1.1.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ crc32fast v1.5.2 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ miniz_oxide feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”‚   в”њв”Ђв”Ђ miniz_oxide v0.9.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ adler2 v2.0.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ simd-adler32 v0.3.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”‚   в””в”Ђв”Ђ miniz_oxide feature "with-alloc"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”‚       в””в”Ђв”Ђ miniz_oxide v0.9.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ miniz_oxide feature "simd"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚       в”њв”Ђв”Ђ miniz_oxide v0.9.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚       в””в”Ђв”Ђ miniz_oxide feature "simd-adler32"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚           в””в”Ђв”Ђ miniz_oxide v0.9.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ flate2 feature "runtime_detection"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ flate2 v1.1.10 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ crc32fast feature "std" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ flate2 feature "rust_backend"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в”њв”Ђв”Ђ flate2 v1.1.10 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в”њв”Ђв”Ђ flate2 feature "any_impl"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в”‚   в””в”Ђв”Ђ flate2 v1.1.10 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в””в”Ђв”Ђ flate2 feature "miniz_oxide"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚           в”њв”Ђв”Ђ flate2 v1.1.10 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚           в””в”Ђв”Ђ flate2 feature "any_impl" (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”њв”Ђв”Ђ miniz_oxide feature "default"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ miniz_oxide v0.8.9
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в”њв”Ђв”Ђ adler2 v2.0.1
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в”‚   в””в”Ђв”Ђ simd-adler32 v0.3.10
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ miniz_oxide feature "with-alloc"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в”‚       в””в”Ђв”Ђ miniz_oxide v0.8.9 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚               в””в”Ђв”Ђ miniz_oxide feature "simd"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚                   в”њв”Ђв”Ђ miniz_oxide v0.8.9 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚                   в””в”Ђв”Ђ miniz_oxide feature "simd-adler32"
+в”‚   в”‚   в”‚   в”‚       в”‚   в”‚                       в””в”Ђв”Ђ miniz_oxide v0.8.9 (*)
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ image feature "png"
+в”‚   в”‚   в”‚   в”‚       в”‚       в””в”Ђв”Ђ image v0.25.10 (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ arboard feature "core-graphics"
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ arboard v3.6.1 (*)
+в”‚   в”‚   в”‚   в”‚       в”њв”Ђв”Ђ arboard feature "image"
+в”‚   в”‚   в”‚   в”‚       в”‚   в””в”Ђв”Ђ arboard v3.6.1 (*)
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ arboard feature "windows-sys"
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ arboard v3.6.1 (*)
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ windows-sys feature "Win32_Graphics_Gdi" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-winit feature "arboard"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ egui-winit v0.36.2 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-winit feature "bytemuck"
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ egui-winit v0.36.2 (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ egui feature "bytemuck" (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ egui-winit feature "smithay-clipboard"
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ egui-winit v0.36.2 (*)
+в”‚   в”‚   в”њв”Ђв”Ђ image feature "png" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ glutin feature "egl"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin v0.32.3
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ once_cell feature "default"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ once_cell v1.21.4
+в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ once_cell feature "std" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ bitflags feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ libloading feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin_wgl_sys feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Foundation" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Graphics_Gdi" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Graphics_OpenGL"
+в”‚   в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.52.0 (*)
+в”‚   в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_Graphics" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_LibraryLoader" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_WindowsAndMessaging" (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin_egl_sys feature "default"
+в”‚   в”‚   в”‚   в”‚       в””в”Ђв”Ђ glutin_egl_sys v0.7.1
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows-sys feature "Win32_Foundation" (*)
+в”‚   в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows-sys feature "Win32_Graphics_Gdi" (*)
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ windows-sys feature "default" (*)
+в”‚   в”‚   в”‚   в”‚           [build-dependencies]
+в”‚   в”‚   в”‚   в”‚           в””в”Ђв”Ђ gl_generator feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   [build-dependencies]
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ cfg_aliases feature "default" (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin feature "glutin_egl_sys"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin v0.32.3 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin feature "libloading"
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ glutin v0.32.3 (*)
+в”‚   в”‚   в”њв”Ђв”Ђ glutin feature "wgl"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin v0.32.3 (*)
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin feature "glutin_wgl_sys"
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin v0.32.3 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin feature "windows-sys"
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ glutin v0.32.3 (*)
+в”‚   в”‚   в”њв”Ђв”Ђ glutin-winit feature "egl"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin-winit v0.5.0
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin v0.32.3 (*)
+в”‚   в”‚   в”‚   в”‚   в”њв”Ђв”Ђ raw-window-handle feature "default" (*)
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ winit feature "rwh_06" (*)
+в”‚   в”‚   в”‚   в”‚   [build-dependencies]
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ cfg_aliases feature "default" (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin feature "egl" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ glutin-winit feature "wgl"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ glutin-winit v0.5.0 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ glutin feature "wgl" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ pollster feature "default"
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ pollster v1.0.1
+в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_Foundation"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.61.2
+в”‚   в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-link v0.2.1
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32"
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32_Foundation" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_System_Com"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_System"
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Input_KeyboardAndMouse"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI_Input"
+в”‚   в”‚   в”‚       в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚       в””в”Ђв”Ђ windows-sys feature "Win32_UI"
+в”‚   в”‚   в”‚           в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚           в””в”Ђв”Ђ windows-sys feature "Win32" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_Shell"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в”њв”Ђв”Ђ windows-sys feature "Win32_UI_WindowsAndMessaging"
+в”‚   в”‚   в”‚   в”њв”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "Win32_UI" (*)
+в”‚   в”‚   в””в”Ђв”Ђ windows-sys feature "default"
+в”‚   в”‚       в””в”Ђв”Ђ windows-sys v0.61.2 (*)
+в”‚   в””в”Ђв”Ђ egui-winit feature "accesskit"
+в”‚       в””в”Ђв”Ђ egui-winit v0.36.2 (*)
+в”њв”Ђв”Ђ eframe feature "default_fonts"
+в”‚   в”њв”Ђв”Ђ eframe v0.36.2 (*)
+в”‚   в””в”Ђв”Ђ egui feature "default_fonts"
+в”‚       в”њв”Ђв”Ђ egui v0.36.2 (*)
+в”‚       в””в”Ђв”Ђ epaint feature "default_fonts"
+в”‚           в”њв”Ђв”Ђ epaint v0.36.2 (*)
+в”‚           в””в”Ђв”Ђ epaint feature "epaint_default_fonts"
+в”‚               в””в”Ђв”Ђ epaint v0.36.2 (*)
+в”њв”Ђв”Ђ eframe feature "glow"
+в”‚   в””в”Ђв”Ђ eframe v0.36.2 (*)
+в”њв”Ђв”Ђ eframe feature "wgpu"
+в”‚   в”њв”Ђв”Ђ eframe v0.36.2 (*)
+в”‚   в”њв”Ђв”Ђ eframe feature "egui-wgpu"
+в”‚   в”‚   в””в”Ђв”Ђ eframe v0.36.2 (*)
+в”‚   в”њв”Ђв”Ђ eframe feature "wgpu_no_default_features"
+в”‚   в”‚   в””в”Ђв”Ђ eframe v0.36.2 (*)
+в”‚   в””в”Ђв”Ђ egui-wgpu feature "default"
+в”‚       в”њв”Ђв”Ђ egui-wgpu v0.36.2 (*)
+в”‚       в”њв”Ђв”Ђ egui-wgpu feature "fragile-send-sync-non-atomic-wasm"
+в”‚       в”‚   в”њв”Ђв”Ђ egui-wgpu v0.36.2 (*)
+в”‚       в”‚   в””в”Ђв”Ђ wgpu feature "fragile-send-sync-non-atomic-wasm"
+в”‚       в”‚       в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚       в”њв”Ђв”Ђ wgpu-core feature "fragile-send-sync-non-atomic-wasm"
+в”‚       в”‚       в”‚   в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚       в”‚       в”‚   в””в”Ђв”Ђ wgpu-hal feature "fragile-send-sync-non-atomic-wasm"
+в”‚       в”‚       в”‚       в”њв”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚       в”‚       в””в”Ђв”Ђ wgpu-types feature "fragile-send-sync-non-atomic-wasm"
+в”‚       в”‚       в”‚           в””в”Ђв”Ђ wgpu-types v30.0.1 (*)
+в”‚       в”‚       в””в”Ђв”Ђ wgpu-types feature "fragile-send-sync-non-atomic-wasm" (*)
+в”‚       в”њв”Ђв”Ђ egui-wgpu feature "macos-window-resize-jitter-fix"
+в”‚       в”‚   в”њв”Ђв”Ђ egui-wgpu v0.36.2 (*)
+в”‚       в”‚   в””в”Ђв”Ђ wgpu feature "metal"
+в”‚       в”‚       в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚       в””в”Ђв”Ђ wgpu-core feature "metal"
+в”‚       в”‚           в””в”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚       в”њв”Ђв”Ђ wgpu feature "default"
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "dx12"
+в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”‚   в””в”Ђв”Ђ wgpu-core feature "dx12"
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core feature "wgpu-core-deps-windows-linux-android" (*)
+в”‚       в”‚   в”‚       в””в”Ђв”Ђ wgpu-core-deps-windows-linux-android feature "dx12"
+в”‚       в”‚   в”‚           в”њв”Ђв”Ђ wgpu-core-deps-windows-linux-android v30.0.1 (*)
+в”‚       в”‚   в”‚           в””в”Ђв”Ђ wgpu-hal feature "dx12"
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ once_cell feature "std" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ naga feature "hlsl-out"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ naga v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "gpu-allocator"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "once_cell"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "windows"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ gpu-allocator feature "d3d12"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ gpu-allocator v0.28.0 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Devices_DeviceAndDriverInstallation"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Devices"
+в”‚       в”‚   в”‚               в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚       в””в”Ђв”Ђ windows feature "Win32" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Devices_Display"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Devices" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Direct3D"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Direct3D12" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Direct3D_Dxc"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics_Direct3D" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Direct3D_Fxc"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics_Direct3D" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_DirectComposition"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Dxgi_Common" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Gdi" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Security"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_System_Diagnostics_Debug"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_System_Diagnostics"
+в”‚       в”‚   в”‚               в”‚       в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚       в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_System_Kernel"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_System_Performance"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_System_Threading"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_System" (*)
+в”‚       в”‚   в”‚               в””в”Ђв”Ђ windows feature "Win32_UI_WindowsAndMessaging" (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "gles"
+в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”‚   в””в”Ђв”Ђ wgpu-core feature "gles"
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core feature "wgpu-core-deps-windows-linux-android" (*)
+в”‚       в”‚   в”‚       в””в”Ђв”Ђ wgpu-core-deps-windows-linux-android feature "gles"
+в”‚       в”‚   в”‚           в”њв”Ђв”Ђ wgpu-core-deps-windows-linux-android v30.0.1 (*)
+в”‚       в”‚   в”‚           в””в”Ђв”Ђ wgpu-hal feature "gles"
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ naga feature "glsl-out"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ naga v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "windows" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "windows-result"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Gdi" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_OpenGL"
+в”‚       в”‚   в”‚               в”‚   в”њв”Ђв”Ђ windows v0.62.2 (*)
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ windows feature "Win32_Graphics" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_System_LibraryLoader" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_UI_WindowsAndMessaging" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows-result feature "std" (*)
+в”‚       в”‚   в”‚               в””в”Ђв”Ђ wgpu-types feature "web"
+в”‚       в”‚   в”‚                   в””в”Ђв”Ђ wgpu-types v30.0.1 (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "metal" (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "parking_lot"
+в”‚       в”‚   в”‚   в””в”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "std" (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "vulkan"
+в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”‚   в””в”Ђв”Ђ wgpu-core feature "vulkan"
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu-core feature "wgpu-core-deps-windows-linux-android" (*)
+в”‚       в”‚   в”‚       в””в”Ђв”Ђ wgpu-core-deps-windows-linux-android feature "vulkan"
+в”‚       в”‚   в”‚           в”њв”Ђв”Ђ wgpu-core-deps-windows-linux-android v30.0.1 (*)
+в”‚       в”‚   в”‚           в””в”Ђв”Ђ wgpu-hal feature "vulkan"
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ naga feature "spv-out"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ naga v30.0.1 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "gpu-allocator" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ wgpu-hal feature "windows" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ gpu-allocator feature "vulkan"
+в”‚       в”‚   в”‚               в”‚   в””в”Ђв”Ђ gpu-allocator v0.28.0 (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Devices_Display" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Foundation" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Dxgi" (*)
+в”‚       в”‚   в”‚               в”њв”Ђв”Ђ windows feature "Win32_Graphics_Dxgi_Common" (*)
+в”‚       в”‚   в”‚               в””в”Ђв”Ђ windows feature "Win32_Graphics_Gdi" (*)
+в”‚       в”‚   в”њв”Ђв”Ђ wgpu feature "webgpu"
+в”‚       в”‚   в”‚   в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”‚   в””в”Ђв”Ђ wgpu feature "web"
+в”‚       в”‚   в”‚       в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚       в”‚   в”‚       в””в”Ђв”Ђ wgpu-types feature "web" (*)
+в”‚       в”‚   в””в”Ђв”Ђ wgpu feature "wgsl" (*)
+в”‚       в””в”Ђв”Ђ wgpu feature "webgl"
+в”‚           в”њв”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚           в”њв”Ђв”Ђ wgpu feature "web" (*)
+в”‚           в”њв”Ђв”Ђ wgpu feature "wgpu-core"
+в”‚           в”‚   в””в”Ђв”Ђ wgpu v30.0.1 (*)
+в”‚           в””в”Ђв”Ђ wgpu-core feature "webgl"
+в”‚               в”њв”Ђв”Ђ wgpu-core v30.0.1 (*)
+в”‚               в””в”Ђв”Ђ wgpu-types feature "web" (*)
+в”њв”Ђв”Ђ log feature "default" (*)
+в”њв”Ђв”Ђ log feature "std" (*)
+в”њв”Ђв”Ђ raw-window-handle feature "default" (*)
+в”њв”Ђв”Ђ image feature "png" (*)
+в”њв”Ђв”Ђ lab-windows-job feature "default"
+в”‚   в””в”Ђв”Ђ lab-windows-job v0.1.0 (D:\rust\lab-runtime\crates\lab-windows-job)
+в””в”Ђв”Ђ serde_json feature "default"
+    в”њв”Ђв”Ђ serde_json v1.0.151
+    в”‚   в”њв”Ђв”Ђ memchr v2.8.3
+    в”‚   в”њв”Ђв”Ђ serde_core v1.0.229
+    в”‚   в”њв”Ђв”Ђ itoa feature "default"
+    в”‚   в”‚   в””в”Ђв”Ђ itoa v1.0.18
+    в”‚   в””в”Ђв”Ђ zmij feature "default"
+    в”‚       в””в”Ђв”Ђ zmij v1.0.23
+    в””в”Ђв”Ђ serde_json feature "std"
+        в”њв”Ђв”Ђ serde_json v1.0.151 (*)
+        в”њв”Ђв”Ђ memchr feature "std"
+        в”‚   в”њв”Ђв”Ђ memchr v2.8.3
+        в”‚   в””в”Ђв”Ђ memchr feature "alloc"
+        в”‚       в””в”Ђв”Ђ memchr v2.8.3
+        в””в”Ђв”Ђ serde_core feature "std"
+            в””в”Ђв”Ђ serde_core v1.0.229

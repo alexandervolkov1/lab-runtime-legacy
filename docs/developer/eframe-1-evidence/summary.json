@@ -1,0 +1,45 @@
+{
+  "source": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+  "host_source": "eb36ff1e7d79e448af6e8a3b194480f55f203033",
+  "processes": 12,
+  "normal_framebuffers": 24,
+  "regression_gates": 20,
+  "original_failed_regression": "dev-preview",
+  "custom_glow_frames": 153,
+  "custom_glow_contexts": 74,
+  "memory": [
+    {
+      "profile": "dev",
+      "renderer": "wgpu",
+      "process_peak": 623493120,
+      "job_peak": 630067200,
+      "cap": 1073741824
+    },
+    {
+      "profile": "dev",
+      "renderer": "glow",
+      "process_peak": 183386112,
+      "job_peak": 189960192,
+      "cap": 1073741824
+    },
+    {
+      "profile": "release",
+      "renderer": "wgpu",
+      "process_peak": 606613504,
+      "job_peak": 613187584,
+      "cap": 1073741824
+    },
+    {
+      "profile": "release",
+      "renderer": "glow",
+      "process_peak": 184438784,
+      "job_peak": 191016960,
+      "cap": 1073741824
+    }
+  ],
+  "archive_sha256": "338fd7d9b5baa37d711d6fa19a404994f51d0355c6e6bcdb7afeca03450b9994",
+  "archive_bytes": 9635388,
+  "archive_members": 1429,
+  "historical_render2a_raw_sha256": "872d21e4a5613c44735442cf8f334ae339c38392b78a9e00e897dab309a619c9",
+  "activation_qualified": false
+}

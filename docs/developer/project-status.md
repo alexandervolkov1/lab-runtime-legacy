@@ -32,7 +32,16 @@ identifies the historical published source, not a moving latest-release pointer.
 
 ## Implemented boundaries
 
-The isolated native renderer has a separate, test-only
+The current GUI direction is **standard egui/eframe**, with stock WGPU preferred
+and stock Glow as the alternative. [EFRAME-1](eframe-1-standard-host.md) adds a
+separate test-only isolated native host and reuses a small standard egui_plot
+painting function. It does not connect to Runtime or change ordinary Workbench
+v1 startup. Custom Glow remains optional experimental/educational code with all
+historical ownership and qualification evidence preserved. Legacy GPU custody
+extraction is not the main GUI path. See [EFRAME-1 validation](eframe-1-validation.md)
+for actual backend/window/memory results and remaining limits.
+
+The optional Custom Glow renderer has a separate, test-only
 [PORT-1 capability contract](gl-capability-contract.md) and
 [current-machine qualification report](port-1-gl-capability-admission.md).
 CPU/GPU/driver fingerprints are diagnostic, not launch allowlists. The existing
@@ -46,8 +55,9 @@ The approved [RENDER-1 backend design](render-1-backend-separation.md) selects
 shared egui preparation and independent GPU owners. The separate test-only
 [RENDER-2A proof](render-2a-wgpu-proof.md) exercises stock egui-wgpu with actual
 DX12 offscreen pixels and the same fixtures as Custom Glow. Production backend
-selection, surface/private-IPC integration and paired ownership extraction remain
-unimplemented pending their own review. This proof does not activate GUI v2.
+selection and private-IPC integration remain unimplemented pending their own
+review. RENDER-2A stays a historical independent proof; EFRAME-1 does not resume
+RENDER-2B paired GPU custody extraction or activate GUI v2.
 
 - Runtime owns experiment state, acquisition, controllers, central output
   authority, configuration and durable Recorder history. Workbench owns

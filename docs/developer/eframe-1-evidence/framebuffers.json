@@ -1,0 +1,938 @@
+[
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "stage": 0,
+    "png": "dev-wgpu-0.png",
+    "sha256": "71f093bc16e1787c8c4e04c8aa2223acbf044c1ec8a374c405c04e7b9d5055d1",
+    "receipt": {
+      "bright_pixels": 778861,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 1,
+      "clicked": 0,
+      "close_requested": false,
+      "colored_pixels": 0,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 0,
+      "local_text": "",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 0,
+      "pointer_moves": 1,
+      "stage": 0,
+      "texts": 0,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 0,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1569
+  },
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "stage": 1,
+    "png": "dev-wgpu-1.png",
+    "sha256": "ece0b8a0f5f0d2ff8ccd7fb4a34a47ca0b078b36f21f0794530d349565f20ac1",
+    "receipt": {
+      "bright_pixels": 776394,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 2,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 4842,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 1,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5385,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1403
+  },
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "stage": 2,
+    "png": "dev-wgpu-2.png",
+    "sha256": "ed41157087bd43326e1e72d0aad44fed5ffb9e9a6c9d01aa22478347d10956ee",
+    "receipt": {
+      "bright_pixels": 771689,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 3,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 11318,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 2,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5369,
+    "plot_green_pixels": 5923,
+    "header_dark_pixels": 1397
+  },
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "stage": 3,
+    "png": "dev-wgpu-3.png",
+    "sha256": "fdece704bc553bfe1b09a84e40db47c3531a6ec34a9c08655d6a85eb35f9c4d2",
+    "receipt": {
+      "bright_pixels": 464412,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 4,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 8697,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 600,
+      "inner_rect": "Some([[190.0 213.0] - [990.0 813.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 3,
+      "texts": 5,
+      "width": 800,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 3875,
+    "plot_green_pixels": 4323,
+    "header_dark_pixels": 1266
+  },
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "stage": 4,
+    "png": "dev-wgpu-4.png",
+    "sha256": "67cbc2868bc7dc026ed1f0abc9b58342aa4d4bef2686cb583342efd5e98562db",
+    "receipt": {
+      "bright_pixels": 1265016,
+      "button_pixels": [
+        65.25,
+        87.46875
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 5,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 20720,
+      "editor_pixels": [
+        437.90625,
+        88.1953125
+      ],
+      "focus_events": 1,
+      "height": 900,
+      "inner_rect": "Some([[126.7 142.0] - [1086.7 742.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.5,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 4,
+      "texts": 5,
+      "width": 1440,
+      "zoom_factor": 1.5
+    },
+    "plot_blue_pixels": 10374,
+    "plot_green_pixels": 11545,
+    "header_dark_pixels": 3650
+  },
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "stage": 5,
+    "png": "dev-wgpu-5.png",
+    "sha256": "59fb4125aeb71255ea87086c20c7d58529e3e6a381a88e2b38da70a98d94fdda",
+    "receipt": {
+      "bright_pixels": 772016,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 6,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 10924,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 2,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 5,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5369,
+    "plot_green_pixels": 5923,
+    "header_dark_pixels": 1271
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "stage": 0,
+    "png": "dev-glow-0.png",
+    "sha256": "b49b626551958cf38408f4cf78f748b313861ad6ee11abc63b1f3448a3431d73",
+    "receipt": {
+      "bright_pixels": 780051,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 1,
+      "clicked": 0,
+      "close_requested": false,
+      "colored_pixels": 0,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 0,
+      "local_text": "",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 0,
+      "pointer_moves": 1,
+      "stage": 0,
+      "texts": 0,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 0,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1942
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "stage": 1,
+    "png": "dev-glow-1.png",
+    "sha256": "9fd2872db1ae4abb923c851a5dad43af897e837f8b64be8a9d53645ac6f3ccd1",
+    "receipt": {
+      "bright_pixels": 776400,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 2,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 4850,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 1,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5379,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1401
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "stage": 2,
+    "png": "dev-glow-2.png",
+    "sha256": "9471c2b44d218530bf9d70627989cdd7a5f2add306101475471eebb5888098db",
+    "receipt": {
+      "bright_pixels": 771694,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 3,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 11329,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 2,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5363,
+    "plot_green_pixels": 5914,
+    "header_dark_pixels": 1395
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "stage": 3,
+    "png": "dev-glow-3.png",
+    "sha256": "3caef72d5443292b01054af3f39e22891d01bf45006c96863e2540c7aef32fff",
+    "receipt": {
+      "bright_pixels": 464409,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 4,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 8700,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 600,
+      "inner_rect": "Some([[190.0 213.0] - [990.0 813.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 3,
+      "texts": 5,
+      "width": 800,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 3868,
+    "plot_green_pixels": 4316,
+    "header_dark_pixels": 1269
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "stage": 4,
+    "png": "dev-glow-4.png",
+    "sha256": "14366832799bc027fcfcb8cf57fae002089d75d7c30fa2eca042a6d375434e3e",
+    "receipt": {
+      "bright_pixels": 1265010,
+      "button_pixels": [
+        65.25,
+        87.46875
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 5,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 20721,
+      "editor_pixels": [
+        437.90625,
+        88.1953125
+      ],
+      "focus_events": 1,
+      "height": 900,
+      "inner_rect": "Some([[126.7 142.0] - [1086.7 742.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.5,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 4,
+      "texts": 5,
+      "width": 1440,
+      "zoom_factor": 1.5
+    },
+    "plot_blue_pixels": 10381,
+    "plot_green_pixels": 11545,
+    "header_dark_pixels": 3651
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "stage": 5,
+    "png": "dev-glow-5.png",
+    "sha256": "70348dd08baa3cecc1ebb1f40d22331012ca108e40a977eb225dc814012317a9",
+    "receipt": {
+      "bright_pixels": 772021,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 6,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 10935,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 2,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 5,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5363,
+    "plot_green_pixels": 5914,
+    "header_dark_pixels": 1270
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "stage": 0,
+    "png": "release-wgpu-0.png",
+    "sha256": "9dd5f49e76dd8d6ae16de58c6b4318410325249558ffea8f38bcc3db489e0d5d",
+    "receipt": {
+      "bright_pixels": 780051,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 1,
+      "clicked": 0,
+      "close_requested": false,
+      "colored_pixels": 0,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 0,
+      "local_text": "",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 0,
+      "pointer_moves": 1,
+      "stage": 0,
+      "texts": 0,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 0,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1943
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "stage": 1,
+    "png": "release-wgpu-1.png",
+    "sha256": "ece0b8a0f5f0d2ff8ccd7fb4a34a47ca0b078b36f21f0794530d349565f20ac1",
+    "receipt": {
+      "bright_pixels": 776394,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 2,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 4842,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 1,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5385,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1403
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "stage": 2,
+    "png": "release-wgpu-2.png",
+    "sha256": "17b821a8c0ac3d00105ef930b67c239f13db368167b96f7858ec5c55960b65a1",
+    "receipt": {
+      "bright_pixels": 771657,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 3,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 11352,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 2,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5369,
+    "plot_green_pixels": 5923,
+    "header_dark_pixels": 1395
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "stage": 3,
+    "png": "release-wgpu-3.png",
+    "sha256": "99e122206f32a0a832984523ea75f3121b429bb51217a134649a03d1bacc2730",
+    "receipt": {
+      "bright_pixels": 464444,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 4,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 8663,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 600,
+      "inner_rect": "Some([[190.0 213.0] - [990.0 813.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 3,
+      "texts": 5,
+      "width": 800,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 3875,
+    "plot_green_pixels": 4323,
+    "header_dark_pixels": 1268
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "stage": 4,
+    "png": "release-wgpu-4.png",
+    "sha256": "67cbc2868bc7dc026ed1f0abc9b58342aa4d4bef2686cb583342efd5e98562db",
+    "receipt": {
+      "bright_pixels": 1265016,
+      "button_pixels": [
+        65.25,
+        87.46875
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 5,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 20720,
+      "editor_pixels": [
+        437.90625,
+        88.1953125
+      ],
+      "focus_events": 1,
+      "height": 900,
+      "inner_rect": "Some([[126.7 142.0] - [1086.7 742.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.5,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 4,
+      "texts": 5,
+      "width": 1440,
+      "zoom_factor": 1.5
+    },
+    "plot_blue_pixels": 10374,
+    "plot_green_pixels": 11545,
+    "header_dark_pixels": 3650
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "stage": 5,
+    "png": "release-wgpu-5.png",
+    "sha256": "59fb4125aeb71255ea87086c20c7d58529e3e6a381a88e2b38da70a98d94fdda",
+    "receipt": {
+      "bright_pixels": 772016,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 6,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 10924,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 2,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 5,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5369,
+    "plot_green_pixels": 5923,
+    "header_dark_pixels": 1271
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "stage": 0,
+    "png": "release-glow-0.png",
+    "sha256": "b49b626551958cf38408f4cf78f748b313861ad6ee11abc63b1f3448a3431d73",
+    "receipt": {
+      "bright_pixels": 780051,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 1,
+      "clicked": 0,
+      "close_requested": false,
+      "colored_pixels": 0,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 0,
+      "local_text": "",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 0,
+      "pointer_moves": 1,
+      "stage": 0,
+      "texts": 0,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 0,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1942
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "stage": 1,
+    "png": "release-glow-1.png",
+    "sha256": "9fd2872db1ae4abb923c851a5dad43af897e837f8b64be8a9d53645ac6f3ccd1",
+    "receipt": {
+      "bright_pixels": 776400,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 2,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 4850,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 1,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5379,
+    "plot_green_pixels": 0,
+    "header_dark_pixels": 1401
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "stage": 2,
+    "png": "release-glow-2.png",
+    "sha256": "86b8edb1a6b01f446c91d7e0c063731b9af165ce76fb23c719a997b5735badbc",
+    "receipt": {
+      "bright_pixels": 771662,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 3,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 11363,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 2,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5363,
+    "plot_green_pixels": 5914,
+    "header_dark_pixels": 1393
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "stage": 3,
+    "png": "release-glow-3.png",
+    "sha256": "146cb539345628116fe40c37b0318f6a2720e52d4cec7e2b0e153952d14c29c7",
+    "receipt": {
+      "bright_pixels": 464441,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 4,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 8666,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 1,
+      "height": 600,
+      "inner_rect": "Some([[190.0 213.0] - [990.0 813.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 3,
+      "texts": 5,
+      "width": 800,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 3868,
+    "plot_green_pixels": 4316,
+    "header_dark_pixels": 1271
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "stage": 4,
+    "png": "release-glow-4.png",
+    "sha256": "558b11f9f422576e3e2b6d9a7833aa6e41b86bb18fc4d5455acfcd0e5e95c10e",
+    "receipt": {
+      "bright_pixels": 1264942,
+      "button_pixels": [
+        65.25,
+        87.46875
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 5,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 20793,
+      "editor_pixels": [
+        437.90625,
+        88.1953125
+      ],
+      "focus_events": 1,
+      "height": 900,
+      "inner_rect": "Some([[126.7 142.0] - [1086.7 742.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.5,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 4,
+      "texts": 5,
+      "width": 1440,
+      "zoom_factor": 1.5
+    },
+    "plot_blue_pixels": 10381,
+    "plot_green_pixels": 11545,
+    "header_dark_pixels": 3648
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "stage": 5,
+    "png": "release-glow-5.png",
+    "sha256": "70348dd08baa3cecc1ebb1f40d22331012ca108e40a977eb225dc814012317a9",
+    "receipt": {
+      "bright_pixels": 772021,
+      "button_pixels": [
+        43.5,
+        59.0
+      ],
+      "capture_api": "eframe ViewportCommand::Screenshot / Event::Screenshot",
+      "captures": 6,
+      "clicked": 1,
+      "close_requested": false,
+      "colored_pixels": 10935,
+      "editor_pixels": [
+        291.9375,
+        59.5
+      ],
+      "focus_events": 2,
+      "height": 720,
+      "inner_rect": "Some([[190.0 213.0] - [1290.0 933.0]])",
+      "keys": 2,
+      "local_text": "Test\u0416",
+      "native_pixels_per_point": 1.0,
+      "pixels_per_point": 1.0,
+      "pointer_buttons": 4,
+      "pointer_moves": 3,
+      "stage": 5,
+      "texts": 5,
+      "width": 1100,
+      "zoom_factor": 1.0
+    },
+    "plot_blue_pixels": 5363,
+    "plot_green_pixels": 5914,
+    "header_dark_pixels": 1270
+  }
+]

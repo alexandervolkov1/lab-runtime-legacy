@@ -2,6 +2,7 @@
 
 mod app;
 mod controls;
+mod plot_ui;
 mod presentation;
 pub(crate) mod readonly_v2;
 #[cfg(test)]

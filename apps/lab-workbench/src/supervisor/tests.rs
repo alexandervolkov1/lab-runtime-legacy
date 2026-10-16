@@ -717,7 +717,18 @@ fn in_flight_handle_retirement_never_publishes_terminal_or_admits_replacement() 
     .unwrap();
     root.restart(launch()).unwrap();
     root.wait_status(|s| s.phase == Phase::Ready);
-    root.stop(Stop::Graceful).unwrap();
+    // Ready is a snapshot, not a reservation of the nonblocking request mutex.
+    // SUP-1: allow transient contention while arranging this retirement test.
+    // Production stop remains a single try_lock; the separate Busy test above
+    // still proves that it never waits. No request has been admitted on Busy.
+    let stop_deadline = Instant::now() + Duration::from_secs(3);
+    loop {
+        match root.stop(Stop::Graceful) {
+            Ok(()) => break,
+            Err(Rejected::Busy) if Instant::now() < stop_deadline => std::thread::yield_now(),
+            other => panic!("retirement fixture stop was not admitted: {other:?}"),
+        }
+    }
     entered.wait(); // Process proof exists, but the retirement call is stalled.
     let status = root.status().unwrap();
     assert_eq!(status.phase, Phase::Stopping);

@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-15T21:30:34.715962+00:00",
+  "source": "8cede781cf5e920bf2d64c7d466b5cb356494f56",
+  "base": "d8314efd32435b7b95891216c8a1d2a4753e9ec2",
+  "source_inputs_verified": 446,
+  "post_qualification_executable_delta": false,
+  "local_links_verified": 39,
+  "raw_members_sealed": 1429,
+  "host_gates_passed": 6,
+  "host_process_cases_passed": 12,
+  "regression_gates_passed": 19,
+  "initial_failed_regression_preserved": "dev-preview",
+  "prior_failed_host_attempts_preserved": true,
+  "mp1_open": true,
+  "sup1_test_fix_separate": true,
+  "activation_qualified": false,
+  "diff_check": "PASS"
+}

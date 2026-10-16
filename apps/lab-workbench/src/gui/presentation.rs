@@ -7,7 +7,7 @@ use crate::{
     presentation::{PanelKind, Plot, PresentationDocument, RuntimeRef, Trace},
 };
 use eframe::egui::{self, Color32};
-use egui_plot::{HoverPosition, Line, Plot as EguiPlot, PlotPoint, PlotPoints};
+use egui_plot::{Plot as EguiPlot, PlotPoint};
 use std::collections::{BTreeMap, HashSet};
 use std::time::Duration;
 
@@ -330,44 +330,18 @@ fn show_observed_plot<'a>(
     curves: &'a [ObservedCurve<'a>],
     observations: &'a RuntimeObservations,
 ) {
-    // HoverPosition carries a name, not an item ID. Keep legend names unique
-    // even when presentation labels repeat, so units/freshness use the selected
-    // curve's source. IDs, buffer contents and the document remain unchanged.
-    let mut named_curves: Vec<(String, &ObservedCurve<'_>)> = Vec::with_capacity(curves.len());
-    for curve in curves {
-        let mut name = curve.label.to_owned();
-        let mut suffix = 2;
-        while named_curves.iter().any(|(used, _)| used == &name) {
-            name = format!("{} ({suffix})", curve.label);
-            suffix += 1;
-        }
-        named_curves.push((name, curve));
-    }
-    view.label_formatter(|hover| {
-        let HoverPosition::NearDataPoint {
-            plot_name,
-            position,
-            ..
-        } = hover
-        else {
-            return None;
-        };
-        let (_, curve) = named_curves.iter().find(|(name, _)| name == plot_name)?;
-        line_tooltip(plot_name, curve, observations, *position)
-    })
-    .show(ui, |plot_ui| {
-        for (name, curve) in named_curves
-            .iter()
-            .filter(|(_, curve)| !curve.points.is_empty())
-        {
-            let mut line = Line::new(name, PlotPoints::Borrowed(&curve.points))
-                .id(curve.id)
-                .width(curve.width);
-            if let Some(color) = curve.color {
-                line = line.color(color);
-            }
-            plot_ui.line(line);
-        }
+    let display: Vec<_> = curves
+        .iter()
+        .map(|curve| super::plot_ui::Curve {
+            id: curve.id,
+            label: curve.label,
+            points: &curve.points,
+            width: curve.width,
+            color: curve.color,
+        })
+        .collect();
+    super::plot_ui::show(ui, view, &display, |name, index, position| {
+        line_tooltip(name, &curves[index], observations, position)
     });
 }
 

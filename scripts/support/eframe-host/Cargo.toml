@@ -1,0 +1,37 @@
+[package]
+name = "lab-eframe-host"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+publish = false
+
+# Test-only feature resolution; ordinary Workbench startup is unchanged.
+[workspace]
+
+[[bin]]
+name = "lab-eframe-host"
+path = "src/main.rs"
+test = false
+bench = false
+
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "=0.36.2", default-features = false, features = ["wgpu", "glow", "default_fonts", "accesskit"] }
+egui_plot = { version = "=0.37.0", default-features = false }
+image = { version = "=0.25.10", default-features = false, features = ["png"] }
+log = { version = "=0.4.33", features = ["std"] }
+raw-window-handle = "=0.6.2"
+serde_json = "1"
+lab-windows-job = { path = "../../../crates/lab-windows-job" }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[lints.clippy]
+all = "warn"
+
+# Existing egui diagnostic-cache policy, not a GPU ownership policy.
+[profile.dev.package."egui:0.36.2"]
+debug-assertions = false
+overflow-checks = true

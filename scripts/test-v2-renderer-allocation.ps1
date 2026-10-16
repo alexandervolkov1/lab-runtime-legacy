@@ -101,6 +101,7 @@ mod gui {
 pub(crate) use crate::rebuild;
 #[path = "$sourceRoot/gui/app.rs"] mod app;
 #[path = "$sourceRoot/gui/controls.rs"] mod controls;
+#[path = "$sourceRoot/gui/plot_ui.rs"] mod plot_ui;
 #[path = "$sourceRoot/gui/presentation.rs"] mod presentation;
 #[path = "$sourceRoot/gui/readonly_v2/mod.rs"] pub(crate) mod readonly_v2;
 #[path = "$support/v1-renderer-probe.rs"] mod v1_probe;
