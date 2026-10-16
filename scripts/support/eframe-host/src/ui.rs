@@ -138,10 +138,12 @@ pub(super) fn paint(
         reads.epoch() == Some(header.epoch)
             && reads.incarnation() == Some(header.identity.incarnation)
     });
-    let mut report = Report::default();
-    report.pointer = ui
-        .ctx()
-        .input(|i| i.pointer.latest_pos().map(|p| [p.x, p.y]));
+    let mut report = Report {
+        pointer: ui
+            .ctx()
+            .input(|i| i.pointer.latest_pos().map(|p| [p.x, p.y])),
+        ..Default::default()
+    };
     controls.status(ui, &mut report);
     ui.label(format!(
         "Parent-approved revision {} · {:?}",
