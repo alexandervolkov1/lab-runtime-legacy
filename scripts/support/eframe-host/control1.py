@@ -32,7 +32,9 @@ user.SetProcessDpiAwarenessContext.argtypes = [c.c_void_p]
 assert user.SetProcessDpiAwarenessContext(c.c_void_p(-4))
 for name, args in [('SetForegroundWindow', [w.HWND]), ('SetFocus', [w.HWND]),
                    ('GetDpiForWindow', [w.HWND]), ('ClientToScreen', [w.HWND, c.POINTER(w.POINT)]),
-                   ('SetCursorPos', [c.c_int, c.c_int]), ('AttachThreadInput', [w.DWORD, w.DWORD, w.BOOL])]:
+                   ('SetCursorPos', [c.c_int, c.c_int]), ('AttachThreadInput', [w.DWORD, w.DWORD, w.BOOL]),
+                   ('SetWindowPos', [w.HWND,w.HWND,c.c_int,c.c_int,c.c_int,c.c_int,w.UINT]),
+                   ('GetCursorPos', [c.POINTER(w.POINT)]), ('GetWindowRect', [w.HWND,c.POINTER(w.RECT)])]:
     getattr(user, name).argtypes = args
 user.GetForegroundWindow.restype = w.HWND
 kernel = c.WinDLL('kernel32', use_last_error=True)
@@ -54,6 +56,12 @@ def owner(ready):
     pid = w.DWORD()
     user.GetWindowThreadProcessId(ready['hwnd'],c.byref(pid))
     assert pid.value == ready['pid'], 'original HWND/PID'
+
+def place(ready):
+    owner(ready)
+    # Deterministic test placement prevents OS cascade/default positioning from
+    # putting a requested native input point outside the interactive desktop.
+    assert user.SetWindowPos(ready['hwnd'],None,20,20,0,0,0x15)
 
 def focus(ready):
     owner(ready)
@@ -85,6 +93,8 @@ def click(ready, rect):
     focus(ready); scale=user.GetDpiForWindow(ready['hwnd'])/96.
     point=w.POINT(round((rect[0]+rect[2])/2*scale),round((rect[1]+rect[3])/2*scale))
     assert user.ClientToScreen(ready['hwnd'],c.byref(point)); assert user.SetCursorPos(point.x,point.y)
+    actual=w.POINT();assert user.GetCursorPos(c.byref(actual))
+    assert (actual.x,actual.y)==(point.x,point.y),'native point was clipped outside the desktop'
     time.sleep(.06)
     for flags in (2,4):
         event=Input();event.payload.mouse=Mouse(0,0,0,flags,0,0);inject(ready,event);time.sleep(.06)
@@ -177,6 +187,7 @@ try:
     configured=bb(endpoint,'configure','bb-configure');wid=configured['workbench_id']
     directory=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{wid}-1'
     child=common.wait(lambda:common.read_json(directory/'ready.json'),'native stock window')
+    place(child)
     # As in the existing native fixture, clear only input addressed to this
     # original foreground window; an interrupted driver can leave a button held.
     focus(child)
@@ -215,6 +226,7 @@ try:
             assert runtime.p.poll() is None and parent.p.poll() is None
             directory=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{wid}-2'
             child=common.wait(lambda:common.read_json(directory/'ready.json'),'controlled GUI restart')
+            place(child)
             retired=common.wait(lambda:next((v for v in parent.lines if v.get('incarnation')==1 and v.get('phase')=='ExitedContained'),None),'old process/IPC retirement')
             assert retired['objects']==[0,0,0] and retired['ipc_retired'] and retired['ipc_handles']==retired['ipc_pending_io']==0
             result.update(crash_retirement=retired,original_window=original)
