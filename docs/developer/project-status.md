@@ -62,6 +62,7 @@ elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
 The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
+([Draft PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51))
 reproduces over-limit peak accounting without GPU and in the historical-source
 DX12 negative control. The current Windows build accounts an OS console helper
 and advances high-water counters on a denied Job commit. Exact historical

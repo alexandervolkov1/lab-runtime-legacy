@@ -1,7 +1,8 @@
 # MP-1: Windows Job commit accounting investigation
 
 Status: **OPEN, narrowed by reproducible native evidence**, pending independent
-review. `ACTIVATION_QUALIFIED=false`. No release, production activation or memory
+review in [Draft PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51).
+`ACTIVATION_QUALIFIED=false`. No release, production activation or memory
 deployment policy is selected.
 
 The CPU-only experiment reproduces an aggregate peak above the configured Job
