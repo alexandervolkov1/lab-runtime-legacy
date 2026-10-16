@@ -7,6 +7,11 @@ tessellation, submission and screenshot readback. The shared `gui/plot_ui.rs`
 function also paints the existing Workbench v1 plots with `egui_plot`; it owns
 neither a document nor a client. Custom Glow and its Preview remain separate.
 
+Current desktop acceptance follows the [scoped memory requirements](../../../docs/developer/project-status.md#current-desktop-memory-requirements).
+Our structure/queue/history budgets do not bound all eframe resources or the whole
+GUI process. MP-1 remains deferred research and does not alone block user preview;
+the historical tests and fixture caps below remain evidence, not universal bounds.
+
 ```
 python scripts/support/eframe-host/audit.py
 python scripts/support/eframe-host/qualify.py dev UNIQUE_RUN_NAME

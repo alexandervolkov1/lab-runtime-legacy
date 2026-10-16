@@ -62,14 +62,31 @@ elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
 The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
-([Draft PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51))
+([PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51), independently
+reviewed and merged at `2426fc0823e1d6a5e28425cc8ebc2e5f079953cb`)
 reproduces over-limit peak accounting without GPU and in the historical-source
 DX12 negative control. The current Windows build accounts an OS console helper
 and advances high-water counters on a denied Job commit. Exact historical
 attribution and undocumented Windows helper/accounting details remain unverified:
-**MP-1 stays OPEN**. New bounded probes and native Supervisor/IPC dev/release
-evidence support independent review; no product launch policy, memory cap or
-renderer is automatically changed.
+**MP-1 stays OPEN as deferred research outside the current plan**. This question
+alone does not block a user preview. Historical results and failed attempts are
+retained; no further Windows-internals investigation is required for CONTROL-1.
+
+### Current desktop memory requirements
+
+The target is an ordinary desktop application on a sufficiently capable PC.
+Stock eframe manages the native window, rendering and its internal graphics
+resources; a byte-exact proof of their upper bound is not required. Budgets for
+our documents, queues, snapshots and history retain their stated scopes:
+**8 MiB is not a limit on the whole GUI process**. Windows Job limits are a
+separate operational setting. Existing measurements and the experimental 1 GiB
+cap are neither a universal guarantee nor a deployment recommendation.
+
+Acceptance checks focus on acceptable consumption on the target PC, no identified
+unbounded accumulation when repeating working operations, and preservation of
+Runtime continuity and data when the GUI fails. Feature readiness is qualified
+separately. `ACTIVATION_QUALIFIED=false` remains unchanged; this policy does not
+activate a GUI, select a renderer or change a memory limit automatically.
 
 The optional Custom Glow renderer has a separate, test-only
 [PORT-1 capability contract](gl-capability-contract.md) and
