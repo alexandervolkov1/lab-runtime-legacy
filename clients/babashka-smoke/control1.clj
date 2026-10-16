@@ -14,7 +14,7 @@
                                {:id "plot-panel" :title "Live virtual furnace"
                                 :kind {:kind "plot" :plot_id "temperature"}}]}]}]
    :plots [{:id "temperature" :title "Virtual furnace measurement"
-            :time_window_seconds 60.0 :axes {:time_mode "runtime_elapsed"}
+            :time_window_seconds 60.0 :axes {:time_mode "runtime_elapsed" :y_min nil :y_max nil}
             :traces [{:id "sample" :source source :display_label "Temperature" :visible true
                       :style {:color "#6090f0" :width 2.0} :display_unit "°C"}]}]
    :controls [{:id "retune" :label "Set Reference (ramp target/rate)" :kind "set_reference"
