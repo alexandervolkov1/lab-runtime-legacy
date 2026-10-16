@@ -1,6 +1,9 @@
 //! Minimal native Workbench GUI over the one bounded Application client owner.
 
 mod app;
+#[cfg(windows)]
+mod isolated;
+pub(crate) use crate::isolated_options::ExperimentalGui;
 mod controls;
 mod plot_ui;
 mod presentation;
@@ -18,6 +21,7 @@ use crate::{
 use std::{net::SocketAddrV4, path::PathBuf};
 
 pub(crate) struct GuiLaunch {
+    pub(crate) experimental: Option<ExperimentalGui>,
     pub(crate) address: RuntimeEndpoint,
     pub(crate) observation_only: bool,
     pub(crate) scope: Option<String>,
@@ -56,6 +60,24 @@ pub(crate) fn run(launch: GuiLaunch) -> Result<(), String> {
         .map(PreparedEndpoint::bind)
         .transpose()
         .map_err(|error| error.to_string())?;
+    #[cfg(windows)]
+    if let Some(options) = launch.experimental {
+        return isolated::run(
+            options,
+            launch.address,
+            launch.observation_only,
+            desired_scope,
+            journal_path,
+            presentation,
+            presentation_problem,
+            ownership,
+            endpoint,
+        );
+    }
+    #[cfg(not(windows))]
+    if launch.experimental.is_some() {
+        return Err("isolated eframe host requires Windows".into());
+    }
     let address = launch.address;
     let options = eframe::NativeOptions {
         renderer: eframe::Renderer::Glow,

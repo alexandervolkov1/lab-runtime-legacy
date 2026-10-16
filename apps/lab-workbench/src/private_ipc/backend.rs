@@ -19,6 +19,7 @@ use std::{
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub(crate) struct Status {
+    pub(crate) window_close_requested: bool,
     pub(crate) connected: bool,
     pub(crate) handshaken: bool,
     pub(crate) applied: [u64; 2],
@@ -242,6 +243,7 @@ pub(crate) struct IpcBackend {
     close: Option<u64>,
     close_sent: bool,
     close_received: bool,
+    window_close_requested: bool,
     control_failed: bool,
     bulk_failed: bool,
     in_bulk: bool,
@@ -289,6 +291,7 @@ impl IpcBackend {
             close: None,
             close_sent: false,
             close_received: false,
+            window_close_requested: false,
             control_failed: false,
             bulk_failed: false,
             in_bulk: false,
@@ -324,6 +327,7 @@ impl IpcBackend {
             let credits = credit_counts(&shared.pool);
             let previous_error = shared.status.error;
             shared.status = Status {
+                window_close_requested: self.window_close_requested,
                 connected: self.connected == [true; 2],
                 handshaken: self.hello_ack,
                 applied: self.applied,
@@ -405,6 +409,9 @@ impl IpcBackend {
                 match header.kind {
                     Kind::HelloAck if self.hello_sent && !self.hello_ack && payload.is_empty() => {
                         self.hello_ack = true
+                    }
+                    Kind::WindowClose if self.hello_ack && payload.is_empty() => {
+                        self.window_close_requested = true;
                     }
                     Kind::Status | Kind::Closed if self.hello_ack && payload.len() == 32 => {
                         if payload[24] > 1 || payload[25..] != [0; 7] {
@@ -692,6 +699,7 @@ impl Backend for IpcBackend {
         self.close = None;
         self.close_sent = false;
         self.close_received = false;
+        self.window_close_requested = false;
         self.control_failed = false;
         self.bulk_failed = false;
         self.sent_fence = None;

@@ -3,12 +3,13 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 import tarfile
 import tomllib
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-OUT = ROOT / "target/eframe-1/dependencies"
+OUT = Path(sys.argv[1]).resolve() if len(sys.argv) == 2 else ROOT / "target/eframe-1/dependencies"
 OUT.mkdir(parents=True, exist_ok=True)
 metadata = json.loads(subprocess.check_output([
     "cargo", "metadata", "--manifest-path", str(HERE / "Cargo.toml"),

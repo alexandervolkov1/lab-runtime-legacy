@@ -12,9 +12,11 @@ mod protocol;
 mod read_decode;
 mod reads;
 mod renderer_progress;
+mod renderer_replica;
 mod replica;
 mod selected_provider;
 mod transport;
+mod ui_document;
 #[cfg(test)]
 pub(crate) use backend::Bridge as TestBridge;
 pub(crate) use document_owner::DocumentOwner;
@@ -31,3 +33,6 @@ mod tests;
 
 #[cfg(test)]
 mod selected_preview_tests;
+
+#[cfg(test)]
+mod ui_document_tests;

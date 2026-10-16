@@ -1,7 +1,7 @@
 //! One parsed renderer document, separate from the four encoded credits. The
 //! paired admission key cannot be cloned or manufactured by a consumer. This
 //! owner has no native Device, deletion operation, or shutdown authority.
-use super::protocol::*;
+use super::{protocol::*, replica::AdmissionKey};
 use crate::{
     gui::readonly_v2::{
         host_session::{CleanupOutcome, HostSession},
@@ -10,8 +10,6 @@ use crate::{
     presentation::v2,
 };
 use std::rc::Rc;
-
-pub(super) struct AdmissionKey;
 
 /// Trusted outer-root ownership, like HostSession: retain this owner on Pending.
 /// Borrows prevent replacement while Preview lives; arbitrary destruction of
