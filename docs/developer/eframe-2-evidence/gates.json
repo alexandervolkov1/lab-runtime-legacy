@@ -1,0 +1,604 @@
+{
+  "required": [
+    {
+      "name": "dev-root-build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "lab-runtime",
+        "-p",
+        "lab-workbench",
+        "-p",
+        "lab-native-child",
+        "--locked"
+      ],
+      "source": "0c82ded383025ae4f3d7454eac0fa5e7511e0a1e",
+      "exit_code": 0,
+      "elapsed_seconds": 6.072739899973385,
+      "utc": "2026-10-16T06:08:05.857398+00:00",
+      "log_sha256": "5039f0798265d6d7cf57fd6331c7b56f05f0694b32b8a22b9739365e44b43140"
+    },
+    {
+      "name": "dev-stock-build",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "scripts/support/eframe-host/Cargo.toml",
+        "--locked"
+      ],
+      "source": "0c82ded383025ae4f3d7454eac0fa5e7511e0a1e",
+      "exit_code": 0,
+      "elapsed_seconds": 5.624622500035912,
+      "utc": "2026-10-16T06:08:11.684540+00:00",
+      "log_sha256": "56e4343a0a3098640f55dd1bd0440393ac93622c5e86cfc0aff6adc29ccaa2a5"
+    },
+    {
+      "name": "release-root-build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "lab-runtime",
+        "-p",
+        "lab-workbench",
+        "-p",
+        "lab-native-child",
+        "--locked",
+        "--release"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 32.389624900068156,
+      "utc": "2026-10-16T06:11:32.984987+00:00",
+      "log_sha256": "a220ab4f00dd719f2fdb4e133705bf9288ac5077656fb22c7c1ac3ba13e3720c"
+    },
+    {
+      "name": "release-stock-build",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "scripts/support/eframe-host/Cargo.toml",
+        "--locked",
+        "--release"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 16.088621399947442,
+      "utc": "2026-10-16T06:11:49.356734+00:00",
+      "log_sha256": "d5b93c5b82d4d8cfeaa1ae649af41a1392b2c66da0ea8542997f05adfd70b4ec"
+    },
+    {
+      "name": "dev-workbench-tests",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--",
+        "--test-threads=1"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "exit_code": 0,
+      "elapsed_seconds": 605.080557600013,
+      "utc": "2026-10-16T06:21:05.664762+00:00",
+      "log_sha256": "4dddde949497a91232c487728bfcea7a53d91cb1e267f207162c4feb2918ff20"
+    },
+    {
+      "name": "release-workbench-tests",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--release",
+        "--",
+        "--test-threads=1"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 123.33376790001057,
+      "utc": "2026-10-16T06:13:52.907067+00:00",
+      "log_sha256": "c224031b7d4b8c7b8dddd9bf003cdc6742abb606f3bde082a73b45e1798f9036"
+    },
+    {
+      "name": "dev-ipc-observer-after-exit",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "metadata_busy_is_not_a_retirement_receipt_and_does_not_panic_the_observer"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "source_at_completion": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "exit_code": 0,
+      "elapsed_seconds": 11.018579100025818,
+      "utc": "2026-10-16T06:23:03.722304+00:00",
+      "log_sha256": "1a4c40156cc55e1c288222876c29e1cae20699697eff376f401739e3830b143e"
+    },
+    {
+      "name": "release-ipc-observer",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--release",
+        "metadata_busy_is_not_a_retirement_receipt_and_does_not_panic_the_observer"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "source_at_completion": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "exit_code": 0,
+      "elapsed_seconds": 74.42641400010325,
+      "utc": "2026-10-16T06:27:25.707990+00:00",
+      "log_sha256": "19678e57e111d419678591ccc90d28f2a144d85a0781fab210a45ddb87f38ce9"
+    },
+    {
+      "name": "dev-cli-path-regression",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "isolated_options::tests"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 15.977179100038484,
+      "utc": "2026-10-16T06:38:17.742355+00:00",
+      "log_sha256": "53ed31cd52362b68b69b76b70916fb5ac607b16e11bf283296e59de89e5e21eb"
+    },
+    {
+      "name": "release-cli-path-regression",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "lab-workbench",
+        "--locked",
+        "--release",
+        "isolated_options::tests"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 74.62330460001249,
+      "utc": "2026-10-16T06:39:32.617023+00:00",
+      "log_sha256": "7566180f82652954a4cae134bd8872a6aa05afd19bef5ef321e8bd54e9c62548"
+    },
+    {
+      "name": "dev-native-supervisor",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-windows-supervisor.ps1",
+        "-BuildProfile",
+        "dev"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 15.636657599941827,
+      "utc": "2026-10-16T06:13:35.367488+00:00",
+      "log_sha256": "3ee808b77fb873eab265ae81fad08d4654495462ce53dee84d81f308e5324936"
+    },
+    {
+      "name": "release-native-supervisor",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-windows-supervisor.ps1",
+        "-BuildProfile",
+        "release"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 16.463763499981724,
+      "utc": "2026-10-16T06:15:03.660943+00:00",
+      "log_sha256": "4d605ef8a0e0577f59cb50d866c34665635f0d09910315ed568cdda2905dabf7"
+    },
+    {
+      "name": "dev-native-ipc",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-private-ipc.ps1",
+        "-BuildProfile",
+        "dev"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 62.53523010003846,
+      "utc": "2026-10-16T06:14:38.128716+00:00",
+      "log_sha256": "134b64f0e989baee13154dc5e6e588c68d33e296e00b18372b51ac74d88e6dcf"
+    },
+    {
+      "name": "release-native-ipc",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-private-ipc.ps1",
+        "-BuildProfile",
+        "release"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 116.68127419997472,
+      "utc": "2026-10-16T06:17:00.588263+00:00",
+      "log_sha256": "aebe513e7dbd9f9df0986babb87299c6d92ba6ae8bdb1355f590fcff766c140e"
+    },
+    {
+      "name": "dev-custom-glow-corrected",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-isolated-renderer.ps1",
+        "-BuildProfile",
+        "dev"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "source_at_completion": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "exit_code": 0,
+      "elapsed_seconds": 187.1095062000677,
+      "utc": "2026-10-16T06:26:11.079120+00:00",
+      "log_sha256": "3c7553e2c2c5c5a68ccf3caafe402b06a6719b2fc12471f549f187baad75dae4"
+    },
+    {
+      "name": "release-custom-glow",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-isolated-renderer.ps1",
+        "-BuildProfile",
+        "release"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 118.84084329998586,
+      "utc": "2026-10-16T06:18:59.699604+00:00",
+      "log_sha256": "a77ab8ca0713ae784a02e80120d96f61459d7532ab1cc24e0d2338de2ff77c6e"
+    },
+    {
+      "name": "dev-cpu-preview",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-v2-renderer-allocation.ps1",
+        "-BuildProfile",
+        "dev"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "exit_code": 0,
+      "elapsed_seconds": 1244.9176823999733,
+      "utc": "2026-10-16T06:36:35.398735+00:00",
+      "log_sha256": "0d9812590cacc31c45c7beb2f8395e5124ccae801b8d5790e0d3344530ebd8fa"
+    },
+    {
+      "name": "release-cpu-preview",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/test-v2-renderer-allocation.ps1",
+        "-BuildProfile",
+        "release"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 202.4720194999827,
+      "utc": "2026-10-16T06:39:58.074909+00:00",
+      "log_sha256": "c3eb8e8bdf18c9e015cee02550d83da64c0fefee7fa6c91686d93b399390e6c7"
+    },
+    {
+      "name": "final-dev-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "lab-workbench",
+        "-p",
+        "lab-native-child",
+        "-p",
+        "lab-windows-job",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 8.902831200044602,
+      "utc": "2026-10-16T06:39:41.726716+00:00",
+      "log_sha256": "038358a71813311a24b10e731211adb24f7e766c666bd39d91fe7eee95c8a2cb"
+    },
+    {
+      "name": "final-release-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "lab-workbench",
+        "-p",
+        "lab-native-child",
+        "-p",
+        "lab-windows-job",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--release",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 17.892406499944627,
+      "utc": "2026-10-16T06:39:59.822429+00:00",
+      "log_sha256": "2549a315b2c738b9cab299387855a2705029dead2ce527d27d63e58b2f2e8d08"
+    },
+    {
+      "name": "dev-stock-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--manifest-path",
+        "scripts/support/eframe-host/Cargo.toml",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 0.8425525999628007,
+      "utc": "2026-10-16T06:15:23.028978+00:00",
+      "log_sha256": "520a2dfdec7786fd380c2ba4d4a0c5f0b1cb1b39a1783b8a6bbf09dd0c7a25da"
+    },
+    {
+      "name": "release-stock-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--manifest-path",
+        "scripts/support/eframe-host/Cargo.toml",
+        "--locked",
+        "--release",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 76.03399539995007,
+      "utc": "2026-10-16T06:16:39.290919+00:00",
+      "log_sha256": "de493eefd17cf1a3cd3be87d64f1ee8ab83439cac33f738dce84316b489ab80d"
+    },
+    {
+      "name": "final-code-fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 3.34425960003864,
+      "utc": "2026-10-16T06:40:03.365199+00:00",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-stock-fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "scripts/support/eframe-host/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "source": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "source_at_completion": "51d28103838fe574cb84d0cadd57b03fa81c8dfa",
+      "exit_code": 0,
+      "elapsed_seconds": 0.32242949993815273,
+      "utc": "2026-10-16T06:27:45.472499+00:00",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "dependency-audit",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/audit.py",
+        "target/eframe-2/dependencies"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 75.83924589992967,
+      "utc": "2026-10-16T06:12:16.457282+00:00",
+      "log_sha256": "23f23e24a4701f4cb821ca1f2275ca9208a50bb9744bd9577e87bc0ccf28ac7d"
+    },
+    {
+      "name": "dev-default-v1",
+      "command": [
+        "python",
+        "target/eframe-2/gates/v1_smoke.py",
+        "dev"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 2.4885349000105634,
+      "utc": "2026-10-16T06:39:57.929637+00:00",
+      "log_sha256": "ac32b0f8d4dfae2e6ba4eb99f938ca176e653b1921bfe9b8b8906fce797ddfb0"
+    },
+    {
+      "name": "release-default-v1",
+      "command": [
+        "python",
+        "target/eframe-2/gates/v1_smoke.py",
+        "release"
+      ],
+      "source": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "source_at_completion": "e86e3cd291be45163ac41b9978141a39b23e12d6",
+      "exit_code": 0,
+      "elapsed_seconds": 1.2081365999765694,
+      "utc": "2026-10-16T06:39:59.356180+00:00",
+      "log_sha256": "98f265f1717cee94598604c3fce0005ae719714665c45cee8280aedbdb8e9f9c"
+    },
+    {
+      "name": "dev-wgpu-fault-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "dev",
+        "wgpu",
+        "dev-wgpu-verified",
+        "fault"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 27.441755099920556,
+      "utc": "2026-10-16T06:11:06.720547+00:00",
+      "log_sha256": "c944a4feb763f6c46e6740abd9f207b17e612aa87358c6d20e871fb12a55428a"
+    },
+    {
+      "name": "dev-wgpu-normal-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "dev",
+        "wgpu",
+        "dev-wgpu-normal-verified",
+        "normal"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 25.683498700032942,
+      "utc": "2026-10-16T06:11:32.625702+00:00",
+      "log_sha256": "610ebbf709cc3c416899af029ad76c98586415786f348aee7b2dcaf65136254c"
+    },
+    {
+      "name": "dev-glow-fault-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "dev",
+        "glow",
+        "dev-glow-verified",
+        "fault"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 25.99878009990789,
+      "utc": "2026-10-16T06:10:23.703358+00:00",
+      "log_sha256": "683c55ffe3f62eac3561b7a9f7bb345d0f56fd566257decc475afefdf7ea2130"
+    },
+    {
+      "name": "dev-glow-normal-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "dev",
+        "glow",
+        "dev-glow-normal-verified",
+        "normal"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 15.173928599921055,
+      "utc": "2026-10-16T06:10:39.079645+00:00",
+      "log_sha256": "7103b0349171b9761b6991d3e542d73854519167daace81aeb4f267de9fc4668"
+    },
+    {
+      "name": "release-wgpu-fault-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "release",
+        "wgpu",
+        "release-wgpu-verified",
+        "fault"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 21.766647699987516,
+      "utc": "2026-10-16T06:14:06.145058+00:00",
+      "log_sha256": "7a453a5251f2c9371d0acf7efdbc7df5ab2d0388137ad3f796df55262e623b21"
+    },
+    {
+      "name": "release-wgpu-normal-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "release",
+        "wgpu",
+        "release-wgpu-normal-verified",
+        "normal"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 12.366704200045206,
+      "utc": "2026-10-16T06:14:18.760486+00:00",
+      "log_sha256": "f49bc26ad7e1aaa9744fe8ad08f3175ff8789d310f28b6451624f1a9aa288c03"
+    },
+    {
+      "name": "release-glow-fault-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "release",
+        "glow",
+        "release-glow-verified",
+        "fault"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 21.908241100027226,
+      "utc": "2026-10-16T06:13:31.393385+00:00",
+      "log_sha256": "1b85fb968c3363f29b041b69ec20ebe3331e0ea86d20d184e52e84de423b5195"
+    },
+    {
+      "name": "release-glow-normal-verified",
+      "command": [
+        "python",
+        "scripts/support/eframe-host/e2.py",
+        "release",
+        "glow",
+        "release-glow-normal-verified",
+        "normal"
+      ],
+      "source": "14dbef205b8438e6abd7e7caaadacbec08bbeac6",
+      "exit_code": 0,
+      "elapsed_seconds": 12.477387399994768,
+      "utc": "2026-10-16T06:13:44.081736+00:00",
+      "log_sha256": "a8001f3d65aad7ae14fc348b74ceaf196a7462a3304e3dcdd55911f1956d2ce5"
+    }
+  ],
+  "known_preserved_failed_gates": [
+    "dev-glow-fault",
+    "dev-custom-glow",
+    "dev-ipc-observer-regression"
+  ]
+}

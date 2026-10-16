@@ -1,0 +1,36 @@
+{
+  "capture_api": "stock eframe Screenshot",
+  "display": {
+    "heading": "EFRAME-2 API replaced document",
+    "panels": [
+      "Scalar with original unit",
+      "Live Plot"
+    ],
+    "plots": [
+      {
+        "freshness": "Fresh",
+        "label": "Virtual measurement",
+        "last": [
+          5.2033613,
+          25.203
+        ],
+        "points": 47
+      }
+    ],
+    "scalars": [
+      {
+        "freshness": "Fresh",
+        "generation": 1,
+        "label": "Scalar with original unit",
+        "unit": "°C",
+        "value": "25.203"
+      }
+    ]
+  },
+  "document_id": "eframe-2-real-parent",
+  "document_revision": 5,
+  "incarnation": 2,
+  "observation_snapshot": 64,
+  "owner_counter": 46,
+  "runtime_clients": 0
+}

@@ -1,0 +1,35 @@
+{
+  "gpus": [
+    {
+      "Name": "AMD Radeon(TM) Graphics",
+      "DriverVersion": "32.0.21030.2001"
+    }
+  ],
+  "cpu": [
+    {
+      "Name": "AMD Ryzen 5 6600H with Radeon Graphics         "
+    }
+  ],
+  "deployment_memory_policy": null,
+  "utc": "2026-10-16T06:23:28.3199056Z",
+  "os": [
+    {
+      "Caption": "Майкрософт Windows 10 Pro",
+      "Version": "10.0.19045",
+      "BuildNumber": "19045"
+    }
+  ],
+  "rustc": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "activation_qualified": false,
+  "experimental_commit_cap": 1073741824,
+  "selected_adapter": "AMD Radeon(TM) Graphics; Vulkan for WGPU; OpenGL diagnostics in original framework.log"
+}

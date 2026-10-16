@@ -44,8 +44,26 @@ actual native DPI reported by eframe/Windows. Changing egui zoom does not prove
 an OS DPI transition. Fault cases abort the process or deliberately stall its UI
 after the first frame; the original Job contains the stalled child.
 
-No Runtime, Workbench Parent, recovery journal, private IPC endpoint, apparatus,
+The EFRAME-1 fixture commands above create no Runtime, Workbench Parent, recovery
+journal, private IPC endpoint, apparatus,
 network connection or public API is created. The one-byte file is test-driver
 control only, not a proposed replacement for private IPC. EFRAME-2 requires a
 separate review of the real Parent/child snapshot adapter. MP-1 remains open;
 SUP-1's original failure remains in RENDER-2A evidence. `ACTIVATION_QUALIFIED=false`.
+
+
+## EFRAME-2 experimental Parent integration
+
+The same executable also accepts only the original Parent-generated private IPC
+launch arguments for the stock child. Start that path through the real
+`lab-workbench.exe` opt-in, with an explicit executable path, renderer and process/
+Job commit limit. It creates no Runtime client in the child. Parent retains its
+one client/scope, dispatcher, document and recovery journal. Default Workbench v1
+startup is unchanged; no renderer fallback or deployment memory default is added.
+
+See [EFRAME-2 design and launch](../../../docs/developer/eframe-2-standard-integration.md)
+and [validation](../../../docs/developer/eframe-2-validation.md). Finite E2E fixtures
+start a real, exclusively virtual Runtime and real Workbench, then use the existing
+Workbench API to replace the document. Each normal/fault case uses a unique output
+directory and checks complete PNG CRC/pixels, client traffic and original process/
+IPC retirement. `ACTIVATION_QUALIFIED=false`; MP-1 remains open.

@@ -1,0 +1,34 @@
+[
+  {
+    "profile": "dev",
+    "renderer": "wgpu",
+    "process_commit_peak": 458719232,
+    "job_commit_peak": 465285120,
+    "experimental_cap": 1073741824,
+    "deployment_memory_policy": null
+  },
+  {
+    "profile": "dev",
+    "renderer": "glow",
+    "process_commit_peak": 175525888,
+    "job_commit_peak": 182099968,
+    "experimental_cap": 1073741824,
+    "deployment_memory_policy": null
+  },
+  {
+    "profile": "release",
+    "renderer": "wgpu",
+    "process_commit_peak": 439689216,
+    "job_commit_peak": 446259200,
+    "experimental_cap": 1073741824,
+    "deployment_memory_policy": null
+  },
+  {
+    "profile": "release",
+    "renderer": "glow",
+    "process_commit_peak": 152367104,
+    "job_commit_peak": 158924800,
+    "experimental_cap": 1073741824,
+    "deployment_memory_policy": null
+  }
+]
