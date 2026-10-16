@@ -97,6 +97,7 @@ try:
     config = config.replace('time_constant_ms = 8000','time_constant_ms = 120000')
     # Recorder-disabled run demonstrates the handshake's independent time source.
     config = config.replace('[recording]\nenabled = true', '[recording]\nenabled = false')
+    config = config.replace('policy = "required"', 'policy = "best_effort"')
     config = config.replace('path = "history.sqlite"', 'path = "'+str(OUT/'history.sqlite').replace('\\','/')+'"')
     (OUT/'runtime.toml').write_text(config, encoding='utf-8')
     runtime = common.Process('runtime', [RUNTIME,'--serve','--config',OUT/'runtime.toml'])
