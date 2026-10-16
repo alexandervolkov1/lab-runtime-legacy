@@ -228,9 +228,9 @@ cases add 16 verified PNGs. Sixteen representative PNG/JSON pairs are directly
 versioned. Stock eframe Screenshot is the capture API; no graphics API readback
 implementation was added.
 
-The [raw archive](eframe-3-evidence/raw-evidence.zip) is 32,033,039 bytes with 636
+The [raw archive](eframe-3-evidence/raw-evidence.zip) is 32,077,831 bytes with 637
 outer members, SHA256
-`f987972877e4a609b2ccc8c73ea683ced2734bafe375defd8dbeeeba89f3c92e`.
+`223324542f2e422327dbaed6ca7b40d136c764c5c241cdcadd647b794f21df4a`.
 Every member's CRC, length and SHA256 was checked against the
 [manifest](eframe-3-evidence/raw-manifest.json). It retains actual run configuration,
 API/wire transcripts, Parent/child lifecycle and framework logs, all final
@@ -249,7 +249,16 @@ rectangles, foreground/keyboard-state handling, the actual minimized heartbeat
 failure, and a 30-second exploratory pass. Their raw logs, exact binary hashes and
 dirty flags remain in the archive. Exact intermediate uncommitted source
 snapshots were not retained; those runs are diagnostic evidence, not qualified
-source claims. The [provenance notes](eframe-3-evidence/provenance-notes.json)
+source claims. A final checksum audit found that `git archive` had applied CRLF conversion,
+so the initial source inventory and changed-file manifest were archive-byte hashes
+incorrectly labelled canonical. All 476 final source records and the final changed-
+file manifest now use raw `git cat-file` blobs. The nested previous-stage inventory
+keeps its original CRLF hashes with this explicit correction. Tested commit IDs,
+per-case binary identities, root source equality and runtime receipts are unchanged.
+The earlier unpushed documentation commit is retained in history rather than amended.
+See [source hash correction](eframe-3-evidence/source-hash-correction.json).
+
+The [provenance notes](eframe-3-evidence/provenance-notes.json)
 identify each case and the Workbench artifact rebuilds explicitly.
 
 No release, production activation, automatic renderer fallback, new Runtime API,

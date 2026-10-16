@@ -1,8 +1,8 @@
 {
-  "archive_sha256": "f987972877e4a609b2ccc8c73ea683ced2734bafe375defd8dbeeeba89f3c92e",
-  "archive_bytes": 32033039,
-  "members": 636,
-  "uncompressed_bytes": 115167917,
+  "archive_sha256": "223324542f2e422327dbaed6ca7b40d136c764c5c241cdcadd647b794f21df4a",
+  "archive_bytes": 32077831,
+  "members": 637,
+  "uncompressed_bytes": 115342846,
   "files": [
     {
       "path": "children/eframe3-final-dev-glow-normal/5260-000000000000148c18def4004a744269-1/frame-00.json",
@@ -3126,8 +3126,8 @@
     },
     {
       "path": "summary/provenance-notes.json",
-      "bytes": 4899,
-      "sha256": "18b4ed884c8f97592b173497b973a8c1f228ea85f44499df490b84feaceddbbf"
+      "bytes": 5235,
+      "sha256": "b7ca921bcd02acc5a586434c166fbced2dcd742889ce5b61d6c261555941e275"
     },
     {
       "path": "summary/root-build-feature-comparison.json",
@@ -3145,9 +3145,14 @@
       "sha256": "c85ab91105cd2430e80837a70cdb55b7fa6db3a173e36951c49aa9543b6399ce"
     },
     {
+      "path": "summary/source-hash-correction.json",
+      "bytes": 174141,
+      "sha256": "5d719d14d8292744e86d58fd77330085506f727e99cd8c2603d96b774e20e901"
+    },
+    {
       "path": "summary/source-inputs.json",
-      "bytes": 88966,
-      "sha256": "3b8aef870a26c6ae442c513dfe9d2126ddaac26d467999b4d9ef3491a74c256e"
+      "bytes": 89054,
+      "sha256": "6feac3643a81348c43e89bca8f280df32cca5c0c07a453eac1886577bb43d3ac"
     },
     {
       "path": "summary/windows-environment.json",
@@ -3171,8 +3176,8 @@
     },
     {
       "path": "verification/seal_final.py",
-      "bytes": 11404,
-      "sha256": "977fe494aaaa3f57c588edee7e7211785ee5cb25387f6fd1defd568f35b671ff"
+      "bytes": 11768,
+      "sha256": "af47e4e81e17491a796b4747b2a69bd2276f126122fe4938e59d15c094527ca3"
     },
     {
       "path": "verification/verify_final_frames.py",
