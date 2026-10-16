@@ -1,0 +1,145 @@
+{
+  "cpu": [
+    {
+      "case": "both-64-step-16",
+      "windowed": false,
+      "members": 2,
+      "before_denial_private": 51040256,
+      "after_denial_private": 51044352,
+      "request": 16777216,
+      "peak_process": 51044352,
+      "peak_job": 57573376,
+      "limit_messages": [
+        9
+      ]
+    },
+    {
+      "case": "both-64-step-4",
+      "windowed": false,
+      "members": 2,
+      "before_denial_private": 59453440,
+      "after_denial_private": 59453440,
+      "request": 4194304,
+      "peak_process": 63647744,
+      "peak_job": 70201344,
+      "limit_messages": [
+        10
+      ]
+    },
+    {
+      "case": "historical-16-16",
+      "windowed": false,
+      "members": 2,
+      "before_denial_private": 10051584,
+      "after_denial_private": 10059776,
+      "request": 1048576,
+      "peak_process": 11100160,
+      "peak_job": 17678336,
+      "limit_messages": [
+        10
+      ]
+    },
+    {
+      "case": "process-16-job-64",
+      "windowed": false,
+      "members": 2,
+      "before_denial_private": 16347136,
+      "after_denial_private": 16351232,
+      "request": 1048576,
+      "peak_process": 16351232,
+      "peak_job": 22908928,
+      "limit_messages": [
+        9
+      ]
+    },
+    {
+      "case": "process-64-job-16",
+      "windowed": false,
+      "members": 2,
+      "before_denial_private": 10055680,
+      "after_denial_private": 10063872,
+      "request": 1048576,
+      "peak_process": 11104256,
+      "peak_job": 17674240,
+      "limit_messages": [
+        10
+      ]
+    },
+    {
+      "case": "both-64-step-16",
+      "windowed": true,
+      "members": 1,
+      "before_denial_private": 51032064,
+      "after_denial_private": 51032064,
+      "request": 16777216,
+      "peak_process": 51032064,
+      "peak_job": 51032064,
+      "limit_messages": [
+        9
+      ]
+    },
+    {
+      "case": "both-64-step-4",
+      "windowed": true,
+      "members": 1,
+      "before_denial_private": 63668224,
+      "after_denial_private": 63668224,
+      "request": 4194304,
+      "peak_process": 63668224,
+      "peak_job": 63668224,
+      "limit_messages": [
+        9
+      ]
+    },
+    {
+      "case": "historical-16-16",
+      "windowed": true,
+      "members": 1,
+      "before_denial_private": 16433152,
+      "after_denial_private": 16433152,
+      "request": 1048576,
+      "peak_process": 16433152,
+      "peak_job": 16433152,
+      "limit_messages": [
+        9
+      ]
+    },
+    {
+      "case": "process-16-job-64",
+      "windowed": true,
+      "members": 1,
+      "before_denial_private": 16318464,
+      "after_denial_private": 16318464,
+      "request": 1048576,
+      "peak_process": 16318464,
+      "peak_job": 16318464,
+      "limit_messages": [
+        9
+      ]
+    },
+    {
+      "case": "process-64-job-16",
+      "windowed": true,
+      "members": 1,
+      "before_denial_private": 16392192,
+      "after_denial_private": 16392192,
+      "request": 1048576,
+      "peak_process": 17440768,
+      "peak_job": 17440768,
+      "limit_messages": [
+        10
+      ]
+    }
+  ],
+  "graphical": [
+    {
+      "graphical": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-dev-final\\graphical",
+      "peak_process": 13746176,
+      "peak_job": 20307968,
+      "conhost_private": 6561792,
+      "current_child_private": 2498560,
+      "exit": 92
+    }
+  ],
+  "passed": true
+}

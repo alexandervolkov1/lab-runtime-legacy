@@ -1,0 +1,143 @@
+{
+  "qualified_source": "e84101adf8e273ee8e4058c9898a184b0a3087a0",
+  "native_supervisor_and_IPC_started_at": "e9ced95288bb3114dc2b5b1fb3d5d74d6037ebfc",
+  "subsequent_differences": "accounting-probes-only reservation guard and regression; default Supervisor/IPC executable paths unchanged",
+  "gates": [
+    {
+      "path": "target\\mp-1\\abi-build.log",
+      "sha256": "96cb000eade31b92ed0a859829b78429a5c343f2b37409450bde6959c2944b92",
+      "bytes": 9,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\capsule-clippy-dev-final.log",
+      "sha256": "7da847beb8020784802f6282681a06259e2ee1f8705c4787218fbbce3fe36247",
+      "bytes": 164,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\capsule-clippy-dev.log",
+      "sha256": "78f12f062d4cd9b5232244962d8e20b1ee8d9bc1ea38ea607ca8889d1d7de4ff",
+      "bytes": 164,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\capsule-clippy-release.log",
+      "sha256": "b5040b8493e893f4b4ba2ebd51ec953f77f1fab295f8af3fee00e379b11bd188",
+      "bytes": 154,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\capsule-test-dev.log",
+      "sha256": "8527cf5fbf4c55729846927531c6e70076258273975a006e07da6751b081c8b4",
+      "bytes": 704,
+      "suites": [
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "path": "target\\mp-1\\capsule-test-release.log",
+      "sha256": "05221a6f7425cafac1f39a79bec7d3a0f829f3306d42a1869d6c7209d5632a64",
+      "bytes": 696,
+      "suites": [
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "path": "target\\mp-1\\diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\ipc-dev.log",
+      "sha256": "72eba8fae41d24528a10ab49e4bcbf506d0605be2820c8bb333c0baa95a7a423",
+      "bytes": 8923,
+      "suites": [
+        {
+          "passed": 22,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "path": "target\\mp-1\\ipc-release.log",
+      "sha256": "311236c531b616afc05c50a99a605a00a247c2b9428858dbc2865905226ad8e9",
+      "bytes": 8905,
+      "suites": [
+        {
+          "passed": 22,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "path": "target\\mp-1\\probe-clippy-dev.log",
+      "sha256": "e8224212e11fe154d1b04774a14db2a81ab8ef17aa05a6c40a69d76e1549f98b",
+      "bytes": 266,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\probe-clippy-release.log",
+      "sha256": "a5682a3dd27164f7d5e701837583422455c1ceb7366bd3078d4016188ad40310",
+      "bytes": 406,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\probe-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "suites": []
+    },
+    {
+      "path": "target\\mp-1\\supervisor-dev.log",
+      "sha256": "84a6af24cfb1f693faad750d8979a1b11e2e239cab782cc92f804778bbaedbe5",
+      "bytes": 3937,
+      "suites": [
+        {
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "path": "target\\mp-1\\supervisor-release.log",
+      "sha256": "625e4d56058299b13a8a4f2811b3f5adf1cf077a3bbb8607baaf77c63b37cdd0",
+      "bytes": 3923,
+      "suites": [
+        {
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "path": "target\\mp-1\\workspace-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "suites": []
+    }
+  ]
+}

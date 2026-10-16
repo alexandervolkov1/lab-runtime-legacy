@@ -55,10 +55,20 @@ minimized. Its external Babashka virtual-furnace experiment and
 EFRAME-3 read-only scope and merged through PR #49.
 Experimental [TIME-1](time-1-time-axis.md) adds boot-scoped read-only clock
 metadata and configurable stock plot time labels, with
-[Windows virtual/API/compatibility evidence](time-1-validation.md) pending
-independent TIME-1 review. OS UTC accuracy remains unverified, and experiment
+[Windows virtual/API/compatibility evidence](time-1-validation.md), independently
+reviewed within TIME-1 scope and merged through PR #50 at
+`30a20e3867e1bb08e2aff3405a7015266add70ed`. OS UTC accuracy remains unverified, and experiment
 elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
+
+The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
+reproduces over-limit peak accounting without GPU and in the historical-source
+DX12 negative control. The current Windows build accounts an OS console helper
+and advances high-water counters on a denied Job commit. Exact historical
+attribution and undocumented Windows helper/accounting details remain unverified:
+**MP-1 stays OPEN**. New bounded probes and native Supervisor/IPC dev/release
+evidence support independent review; no product launch policy, memory cap or
+renderer is automatically changed.
 
 The optional Custom Glow renderer has a separate, test-only
 [PORT-1 capability contract](gl-capability-contract.md) and

@@ -1,0 +1,107 @@
+{
+  "archive": "docs\\developer\\render-2a-evidence\\raw-evidence.zip",
+  "archive_sha256": "872d21e4a5613c44735442cf8f334ae339c38392b78a9e00e897dab309a619c9",
+  "exact_archived_records": [
+    {
+      "profile": "dev-final",
+      "admission.json": {
+        "path": "target/render-2a/dev-final/gpu/low-cap/admission.json",
+        "sha256": "980efa73926344db7ff038e2d8380a05a9a1ef4087eacb0667d51feac017498c",
+        "data": {
+          "job_cap": 16777216,
+          "pid": 7104,
+          "process_cap": 16777216,
+          "suspended_membership_verified": true
+        }
+      },
+      "entered.json": {
+        "path": "target/render-2a/dev-final/gpu/low-cap/entered.json",
+        "sha256": "aba9ba2ae164aa7c408e29cfab9111457531b11150613e7516698e39140fa6b3",
+        "data": {
+          "case": "low-cap",
+          "pid": 7104
+        }
+      },
+      "failure.json": {
+        "path": "target/render-2a/dev-final/gpu/low-cap/failure.json",
+        "sha256": "589a7902c98cc09677333c04d480d813ece6433236611496cbcbdb7f6fed51c3",
+        "data": {
+          "error": "No suitable graphics adapter found; noop not requested, vulkan not requested, metal not requested, dx12 found no adapters, gl not requested, webgpu not requested",
+          "native_memory_cleanup": false,
+          "root_retained": false,
+          "stage": "initialization before published root"
+        }
+      },
+      "process.json": {
+        "path": "target/render-2a/dev-final/gpu/low-cap/process.json",
+        "sha256": "4987a92fea6d41beacaa815bb4d76903f4b981e4178edab038336edd898acb49",
+        "data": {
+          "admitted": true,
+          "case": "low-cap",
+          "contained": true,
+          "elapsed_ms": 30018,
+          "exit": 92,
+          "expected_outcome": true,
+          "ipc_obligations": "none: bounded receipt files only",
+          "job_cap": 16777216,
+          "launch_error": null,
+          "original_process_retired": true,
+          "peak_job_commit": 21614592,
+          "peak_process_commit": 15032320,
+          "process_cap": 16777216
+        }
+      }
+    },
+    {
+      "profile": "release-final",
+      "admission.json": {
+        "path": "target/render-2a/release-final/gpu/low-cap/admission.json",
+        "sha256": "81c6a5332fc43015ac09000faaf675a702fe1e363142dc77bfc476d1506d02dc",
+        "data": {
+          "job_cap": 16777216,
+          "pid": 14820,
+          "process_cap": 16777216,
+          "suspended_membership_verified": true
+        }
+      },
+      "entered.json": {
+        "path": "target/render-2a/release-final/gpu/low-cap/entered.json",
+        "sha256": "a3594060bb3656ce0c9fd0bb8beeb4f6f6bfc3ded88fe8360827759d849aacc7",
+        "data": {
+          "case": "low-cap",
+          "pid": 14820
+        }
+      },
+      "failure.json": {
+        "path": "target/render-2a/release-final/gpu/low-cap/failure.json",
+        "sha256": "589a7902c98cc09677333c04d480d813ece6433236611496cbcbdb7f6fed51c3",
+        "data": {
+          "error": "No suitable graphics adapter found; noop not requested, vulkan not requested, metal not requested, dx12 found no adapters, gl not requested, webgpu not requested",
+          "native_memory_cleanup": false,
+          "root_retained": false,
+          "stage": "initialization before published root"
+        }
+      },
+      "process.json": {
+        "path": "target/render-2a/release-final/gpu/low-cap/process.json",
+        "sha256": "c20dabd6e4de1b9d8d4525f172941d00cb053f94980ba41144973bf77c4d422f",
+        "data": {
+          "admitted": true,
+          "case": "low-cap",
+          "contained": true,
+          "elapsed_ms": 30012,
+          "exit": 92,
+          "expected_outcome": true,
+          "ipc_obligations": "none: bounded receipt files only",
+          "job_cap": 16777216,
+          "launch_error": null,
+          "original_process_retired": true,
+          "peak_job_commit": 21524480,
+          "peak_process_commit": 14954496,
+          "process_cap": 16777216
+        }
+      }
+    }
+  ],
+  "limitations": "Original membership enumeration and per-member independent memory were not recorded; conhost attribution of historical exact deltas is an inference from same-source reproduction, not a recovered observation."
+}

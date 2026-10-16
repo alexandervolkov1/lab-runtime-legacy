@@ -1,0 +1,57 @@
+{
+  "source": "e84101adf8e273ee8e4058c9898a184b0a3087a0",
+  "source_status": [],
+  "profile": "release",
+  "utc": "2026-10-16T10:33:19.2043718Z",
+  "windows": {
+    "product": "Windows 10 Pro",
+    "build": "19045",
+    "ubr": 6691,
+    "version": "22H2"
+  },
+  "os_architecture": "X64",
+  "process_architecture": "X64",
+  "processor": [
+    {
+      "Name": "AMD Ryzen 5 6600H with Radeon Graphics         ",
+      "Architecture": 9
+    }
+  ],
+  "graphics": [
+    {
+      "Name": "AMD Radeon(TM) Graphics",
+      "DriverVersion": "32.0.21030.2001",
+      "PNPDeviceID": "PCI\\VEN_1002&DEV_1681&SUBSYS_16811002&REV_C9\\4&31F4EC98&0&0041"
+    }
+  ],
+  "rustc": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "binaries": [
+    {
+      "subsystem": "console",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-release-final/build-console/release/lab-job-accounting.exe",
+      "bytes": 290304,
+      "sha256": "f8c3aa5acd67cd8c33b2fe15b1ae88217191e9298858ef86efb0f0047950bad4"
+    },
+    {
+      "subsystem": "windowed",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\qualified-release-final/build-windowed/release/lab-job-accounting.exe",
+      "bytes": 290304,
+      "sha256": "7ef603893b9261abb79806703d21f120bcc64bc90503ea9189d9ffd3de2d92b4"
+    },
+    {
+      "subsystem": "historical-render-2a",
+      "path": "D:\\rust_projects\\lab-runtime\\target\\mp-1\\render-2a-source\\scripts\\support\\wgpu-proof\\target\\release\\lab-wgpu-proof.exe",
+      "bytes": 8980480,
+      "sha256": "ec31bba365f886015113752835437eab809103f1c5d4dcb2f34108e25bfc2c54"
+    }
+  ]
+}
