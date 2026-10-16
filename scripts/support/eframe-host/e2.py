@@ -20,19 +20,20 @@ import zlib
 import time
 
 ROOT=Path(__file__).resolve().parents[3]
-PROFILE,RENDERER,RUN=sys.argv[1:4]
-SCENARIO=sys.argv[4] if len(sys.argv)>4 else 'fault'
-assert SCENARIO in ('fault','normal')
-assert PROFILE in ('dev','release') and RENDERER in ('wgpu','glow')
-assert RUN.replace('-','').isalnum()
-OUT=ROOT/'target/eframe-2'/RUN
-OUT.mkdir(parents=True,exist_ok=False)
-BIN='debug' if PROFILE=='dev' else 'release'
-RUNTIME=ROOT/'target'/BIN/'lab-runtime.exe'
-PARENT=ROOT/'target'/BIN/'lab-workbench.exe'
-CHILD=ROOT/'scripts/support/eframe-host/target'/BIN/'lab-eframe-host.exe'
-SOURCE=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-IDENTITIES={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (RUNTIME,PARENT,CHILD)}
+if __name__ == "__main__":
+    PROFILE,RENDERER,RUN=sys.argv[1:4]
+    SCENARIO=sys.argv[4] if len(sys.argv)>4 else 'fault'
+    assert SCENARIO in ('fault','normal')
+    assert PROFILE in ('dev','release') and RENDERER in ('wgpu','glow')
+    assert RUN.replace('-','').isalnum()
+    OUT=ROOT/'target/eframe-2'/RUN
+    OUT.mkdir(parents=True,exist_ok=False)
+    BIN='debug' if PROFILE=='dev' else 'release'
+    RUNTIME=ROOT/'target'/BIN/'lab-runtime.exe'
+    PARENT=ROOT/'target'/BIN/'lab-workbench.exe'
+    CHILD=ROOT/'scripts/support/eframe-host/target'/BIN/'lab-eframe-host.exe'
+    SOURCE=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    IDENTITIES={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (RUNTIME,PARENT,CHILD)}
 user=c.WinDLL('user32',use_last_error=True)
 user.GetWindowThreadProcessId.argtypes=[w.HWND,c.POINTER(w.DWORD)]
 user.PostMessageW.argtypes=[w.HWND,w.UINT,w.WPARAM,w.LPARAM]
@@ -181,79 +182,80 @@ def original_window_close(ready):
     pid=w.DWORD();user.GetWindowThreadProcessId(ready['hwnd'],c.byref(pid));assert pid.value==ready['pid']
     assert user.PostMessageW(ready['hwnd'],0x10,0,0),c.get_last_error()
 
-runtime=parent=relay=api=None
-result=dict(source=SOURCE,profile=PROFILE,renderer=RENDERER,scenario=SCENARIO,binaries=IDENTITIES,activation_qualified=False,passed=False)
-try:
-    config=(ROOT/'examples/runtime.minimal.toml').read_text(encoding='utf-8').replace('path = "history.sqlite"','path = "'+str(OUT/'history.sqlite').replace('\\','/')+'"')
-    (OUT/'runtime.toml').write_text(config,encoding='utf-8')
-    runtime=Process('runtime',[RUNTIME,'--serve','--config',OUT/'runtime.toml'])
-    ready=wait(lambda:next((line for line in runtime.lines if line.get('state')=='ready' and 'port'in line),None),'real Runtime readiness')
-    relay=Relay(('127.0.0.1',int(ready['port'])))
-    parent=Process('parent',[PARENT,'--connect',f'127.0.0.1:{relay.port}','--workspace',OUT/'workspace','--workbench-listen','127.0.0.1:0',
-        '--experimental-eframe',RENDERER,'--experimental-eframe-child',CHILD,'--experimental-eframe-commit-limit','1073741824',
-        '--experimental-eframe-restart-limit','1','--experimental-eframe-capture'])
-    endpoint=wait(lambda:next((line['workbench_endpoint'] for line in parent.lines if 'workbench_endpoint'in line),None),'Workbench API')
-    api=API(endpoint)
-    status=wait(lambda:(lambda s:s if s['runtime_client']['freshness']=='fresh' else None)(api.call('client_status',{})),'authoritative rebuild')
-    workbench_id=status['workbench_id'];scope=status['runtime_client']['hello']['scope']
-    before=api.call('presentation_get',{})
-    source=before['document']['plots'][0]['traces'][0]['source']
-    def replace(title,missing=False):
-        current=api.call('presentation_get',{})
-        revision=current.get('presentation_revision',current.get('revision'))
-        reply=api.call('ui_replace_document',dict(expected=dict(workbench_id=workbench_id,revision=revision),document=document(title,source,missing)))
-        return int(reply['presentation_revision'])
-    revision=replace('EFRAME-2 real Runtime live')
-    directory=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{workbench_id}-1'
-    child_ready=wait(lambda:read_json(directory/'ready.json'),'first real window')
-    first_path,first=wait(lambda:receipts(directory,lambda value:value['document_revision']==revision and value['display']['scalars'] and value['display']['scalars'][0]['freshness']=='Fresh' and value['display']['plots'] and value['display']['plots'][0]['points']>=2),'live scalar/plot pixels')
-    second_path,second=wait(lambda:receipts(directory,lambda value:value['document_revision']==revision and value['display']['plots'] and value['display']['plots'][0]['last']!=first['display']['plots'][0]['last'] and value['display']['plots'][0]['points']>first['display']['plots'][0]['points']),'changing real measurements')
-    missing=replace('EFRAME-2 unavailable selected source',True)
-    unavailable=wait(lambda:receipts(directory,lambda value:value['document_revision']==missing and value['display']['scalars'] and value['display']['scalars'][0]['freshness'].startswith('Unavailable')),'unavailable selected source')
-    latest=replace('EFRAME-2 API replaced document')
-    replaced=wait(lambda:receipts(directory,lambda value:value['document_revision']==latest and value['display']['heading']=='EFRAME-2 API replaced document' and value['display']['plots'] and value['display']['plots'][0]['points']>=2),'API replacement pixels')
-    wire_before=len(relay.requests);connections_before=relay.connections
-    terminal=restored=stale=None
-    directory2=directory;restarted_ready=child_ready
-    if SCENARIO=='fault':
-        # External test crash, directed at the exact child PID from its own HWND/receipt.
-        subprocess.run(['taskkill','/PID',str(child_ready['pid']),'/F'],check=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-        directory2=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{workbench_id}-2'
-        restarted_ready=wait(lambda:read_json(directory2/'ready.json'),'controlled same-renderer restart')
-        restored=wait(lambda:receipts(directory2,lambda value:value['document_revision']==latest and value['display']['heading']=='EFRAME-2 API replaced document' and value['display']['plots'] and value['display']['plots'][0]['points']>=2),'current Parent-approved restoration')
-        after=api.call('client_status',{})
-        assert after['workbench_id']==workbench_id and after['runtime_client']['hello']['scope']==scope
-        assert relay.connections==connections_before==1,(relay.connections,connections_before)
-        assert len(relay.requests)==wire_before,(relay.requests[wire_before:])
-        assert runtime.p.poll() is None,'Runtime died because of GUI crash'
-        terminal=wait(lambda:next((line for line in parent.lines if line.get('incarnation')==1 and line.get('phase')=='ExitedContained'),None),'original exit/IPC retirement')
-        assert terminal['objects']==[0,0,0] and terminal['ipc_handles']==0 and terminal['ipc_pending_io']==0 and terminal['ipc_retired']
-        # Independently injected virtual Runtime loss supplies the real stale state.
-        runtime.p.terminate();runtime.p.wait(timeout=10)
-        stale=wait(lambda:receipts(directory2,lambda value:value['display']['scalars'] and value['display']['scalars'][0]['freshness']=='Stale'),'actual Runtime-loss stale display')
-    original_window_close(restarted_ready)
-    parent_exit=parent.p.wait(timeout=15)
-    assert parent_exit==0,parent.lines
-    if SCENARIO=='normal':assert runtime.p.poll() is None,'normal GUI close stopped Runtime'
-    closed=read_json(directory2/'on-exit.json');returned=read_json(directory2/'returned.json')
-    assert closed['on_exit'] and closed['closed_write_completed'] and returned['run_native_returned'] and not returned['error']
-    final=wait(lambda:next((line for line in parent.lines if line.get('incarnation')==(2 if SCENARIO=='fault' else 1) and line.get('phase')=='ExitedHealthy'),None),'normal close original exit')
-    assert final['objects']==[0,0,0] and final['ipc_retired'] and final['ipc_handles']==0 and final['ipc_pending_io']==0
-    forbidden=[r for r in relay.requests if r.get('type')=='mutation' or 'seq'in r or r.get('op') in ('operation_status','exact_retry')]
-    assert not forbidden,forbidden
-    result.update(workbench_id=workbench_id,scope=scope,runtime_connections_during_gui_fault=connections_before,
-        runtime_requests_during_gui_fault=len(relay.requests)-wire_before,requests=relay.requests,first_window=child_ready,restarted_window=restarted_ready,
-        captures=[str(first_path),str(second_path),str(unavailable[0]),str(replaced[0])]+([str(restored[0]),str(stale[0])] if SCENARIO=='fault' else []),
-        crash_retirement=terminal,normal_retirement=final,child_directories=[str(directory),str(directory2)],parent_exit=parent_exit)
-    result['framebuffer_verification']=[verify_png(Path(path).with_suffix('.png')) for path in result['captures']]
-    result['passed']=True
-finally:
-    if api:
-        write(OUT/'workbench-api.json',api.transcript);api.close()
-    if parent and parent.p.poll() is None:parent.p.terminate();parent.p.wait(timeout=10)
-    if runtime and runtime.p.poll() is None:runtime.p.terminate();runtime.p.wait(timeout=10)
-    if relay:relay.close();result['relay_errors']=relay.errors
-    if parent:parent.finish()
-    if runtime:runtime.finish()
-    write(OUT/'result.json',result)
-print(json.dumps(dict(passed=result['passed'],output=str(OUT),profile=PROFILE,renderer=RENDERER)))
+if __name__ == "__main__":
+    runtime=parent=relay=api=None
+    result=dict(source=SOURCE,profile=PROFILE,renderer=RENDERER,scenario=SCENARIO,binaries=IDENTITIES,activation_qualified=False,passed=False)
+    try:
+        config=(ROOT/'examples/runtime.minimal.toml').read_text(encoding='utf-8').replace('path = "history.sqlite"','path = "'+str(OUT/'history.sqlite').replace('\\','/')+'"')
+        (OUT/'runtime.toml').write_text(config,encoding='utf-8')
+        runtime=Process('runtime',[RUNTIME,'--serve','--config',OUT/'runtime.toml'])
+        ready=wait(lambda:next((line for line in runtime.lines if line.get('state')=='ready' and 'port'in line),None),'real Runtime readiness')
+        relay=Relay(('127.0.0.1',int(ready['port'])))
+        parent=Process('parent',[PARENT,'--connect',f'127.0.0.1:{relay.port}','--workspace',OUT/'workspace','--workbench-listen','127.0.0.1:0',
+            '--experimental-eframe',RENDERER,'--experimental-eframe-child',CHILD,'--experimental-eframe-commit-limit','1073741824',
+            '--experimental-eframe-restart-limit','1','--experimental-eframe-capture'])
+        endpoint=wait(lambda:next((line['workbench_endpoint'] for line in parent.lines if 'workbench_endpoint'in line),None),'Workbench API')
+        api=API(endpoint)
+        status=wait(lambda:(lambda s:s if s['runtime_client']['freshness']=='fresh' else None)(api.call('client_status',{})),'authoritative rebuild')
+        workbench_id=status['workbench_id'];scope=status['runtime_client']['hello']['scope']
+        before=api.call('presentation_get',{})
+        source=before['document']['plots'][0]['traces'][0]['source']
+        def replace(title,missing=False):
+            current=api.call('presentation_get',{})
+            revision=current.get('presentation_revision',current.get('revision'))
+            reply=api.call('ui_replace_document',dict(expected=dict(workbench_id=workbench_id,revision=revision),document=document(title,source,missing)))
+            return int(reply['presentation_revision'])
+        revision=replace('EFRAME-2 real Runtime live')
+        directory=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{workbench_id}-1'
+        child_ready=wait(lambda:read_json(directory/'ready.json'),'first real window')
+        first_path,first=wait(lambda:receipts(directory,lambda value:value['document_revision']==revision and value['display']['scalars'] and value['display']['scalars'][0]['freshness']=='Fresh' and value['display']['plots'] and value['display']['plots'][0]['points']>=2),'live scalar/plot pixels')
+        second_path,second=wait(lambda:receipts(directory,lambda value:value['document_revision']==revision and value['display']['plots'] and value['display']['plots'][0]['last']!=first['display']['plots'][0]['last'] and value['display']['plots'][0]['points']>first['display']['plots'][0]['points']),'changing real measurements')
+        missing=replace('EFRAME-2 unavailable selected source',True)
+        unavailable=wait(lambda:receipts(directory,lambda value:value['document_revision']==missing and value['display']['scalars'] and value['display']['scalars'][0]['freshness'].startswith('Unavailable')),'unavailable selected source')
+        latest=replace('EFRAME-2 API replaced document')
+        replaced=wait(lambda:receipts(directory,lambda value:value['document_revision']==latest and value['display']['heading']=='EFRAME-2 API replaced document' and value['display']['plots'] and value['display']['plots'][0]['points']>=2),'API replacement pixels')
+        wire_before=len(relay.requests);connections_before=relay.connections
+        terminal=restored=stale=None
+        directory2=directory;restarted_ready=child_ready
+        if SCENARIO=='fault':
+            # External test crash, directed at the exact child PID from its own HWND/receipt.
+            subprocess.run(['taskkill','/PID',str(child_ready['pid']),'/F'],check=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+            directory2=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{workbench_id}-2'
+            restarted_ready=wait(lambda:read_json(directory2/'ready.json'),'controlled same-renderer restart')
+            restored=wait(lambda:receipts(directory2,lambda value:value['document_revision']==latest and value['display']['heading']=='EFRAME-2 API replaced document' and value['display']['plots'] and value['display']['plots'][0]['points']>=2),'current Parent-approved restoration')
+            after=api.call('client_status',{})
+            assert after['workbench_id']==workbench_id and after['runtime_client']['hello']['scope']==scope
+            assert relay.connections==connections_before==1,(relay.connections,connections_before)
+            assert len(relay.requests)==wire_before,(relay.requests[wire_before:])
+            assert runtime.p.poll() is None,'Runtime died because of GUI crash'
+            terminal=wait(lambda:next((line for line in parent.lines if line.get('incarnation')==1 and line.get('phase')=='ExitedContained'),None),'original exit/IPC retirement')
+            assert terminal['objects']==[0,0,0] and terminal['ipc_handles']==0 and terminal['ipc_pending_io']==0 and terminal['ipc_retired']
+            # Independently injected virtual Runtime loss supplies the real stale state.
+            runtime.p.terminate();runtime.p.wait(timeout=10)
+            stale=wait(lambda:receipts(directory2,lambda value:value['display']['scalars'] and value['display']['scalars'][0]['freshness']=='Stale'),'actual Runtime-loss stale display')
+        original_window_close(restarted_ready)
+        parent_exit=parent.p.wait(timeout=15)
+        assert parent_exit==0,parent.lines
+        if SCENARIO=='normal':assert runtime.p.poll() is None,'normal GUI close stopped Runtime'
+        closed=read_json(directory2/'on-exit.json');returned=read_json(directory2/'returned.json')
+        assert closed['on_exit'] and closed['closed_write_completed'] and returned['run_native_returned'] and not returned['error']
+        final=wait(lambda:next((line for line in parent.lines if line.get('incarnation')==(2 if SCENARIO=='fault' else 1) and line.get('phase')=='ExitedHealthy'),None),'normal close original exit')
+        assert final['objects']==[0,0,0] and final['ipc_retired'] and final['ipc_handles']==0 and final['ipc_pending_io']==0
+        forbidden=[r for r in relay.requests if r.get('type')=='mutation' or 'seq'in r or r.get('op') in ('operation_status','exact_retry')]
+        assert not forbidden,forbidden
+        result.update(workbench_id=workbench_id,scope=scope,runtime_connections_during_gui_fault=connections_before,
+            runtime_requests_during_gui_fault=len(relay.requests)-wire_before,requests=relay.requests,first_window=child_ready,restarted_window=restarted_ready,
+            captures=[str(first_path),str(second_path),str(unavailable[0]),str(replaced[0])]+([str(restored[0]),str(stale[0])] if SCENARIO=='fault' else []),
+            crash_retirement=terminal,normal_retirement=final,child_directories=[str(directory),str(directory2)],parent_exit=parent_exit)
+        result['framebuffer_verification']=[verify_png(Path(path).with_suffix('.png')) for path in result['captures']]
+        result['passed']=True
+    finally:
+        if api:
+            write(OUT/'workbench-api.json',api.transcript);api.close()
+        if parent and parent.p.poll() is None:parent.p.terminate();parent.p.wait(timeout=10)
+        if runtime and runtime.p.poll() is None:runtime.p.terminate();runtime.p.wait(timeout=10)
+        if relay:relay.close();result['relay_errors']=relay.errors
+        if parent:parent.finish()
+        if runtime:runtime.finish()
+        write(OUT/'result.json',result)
+    print(json.dumps(dict(passed=result['passed'],output=str(OUT),profile=PROFILE,renderer=RENDERER)))
