@@ -1,4 +1,13 @@
-# Project status and development map
+# Historical project status and development map
+
+Active development in this repository has stopped. The standalone Runtime is
+maintained in [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next);
+Workbench will be developed separately under a new user assignment. The results,
+plans and qualification limits below describe this historical project. Words such
+as "current", "approved", "pending" and "next" in older records refer to their
+original scope, not an active task. Unfinished or blocked work remains unfinished
+or blocked. Resuming development here requires an explicit new user assignment;
+see the [root agent instructions](../../AGENTS.md).
 
 ## Historical published baseline
 
@@ -32,18 +41,20 @@ identifies the historical published source, not a moving latest-release pointer.
 
 ## Implemented boundaries
 
-The current scoped Runtime change, [Draft PR #53](https://github.com/alexandervolkov1/lab-runtime/pull/53),
-is [manual actuator control and implementation review](runtime-manual-output-review.md), with the [API contract](../api/manual-output.md)
-and [validation](runtime-manual-output-validation.md). It adds explicit scope-owned
+The final scoped Runtime change, [PR #53](https://github.com/alexandervolkov1/lab-runtime/pull/53),
+was merged at `7f91e715051f2b0d0ba1cde24a61d7135e15c0fc`. See the
+[manual actuator control and implementation review](runtime-manual-output-review.md),
+[API contract](../api/manual-output.md) and
+[validation](runtime-manual-output-validation.md). It adds explicit scope-owned
 power acquisition, renewal, delivery and safe return through existing OutputAuthority,
 plus a direct external Babashka experiment. It also removes local validation/catalog
 duplication and fixes configuration paths that previously supplied simulated safe
 evidence for physical outputs. GUI/Workbench development is outside this change;
 the previous CONTROL-1 Draft PR #52 is preserved separately. Physical Arduino
-acceptance is not performed. `ACTIVATION_QUALIFIED=false`; no release or merge of
-the new Runtime work is authorized by these results.
+acceptance was not performed. `ACTIVATION_QUALIFIED=false` remains a historical
+qualification limit; the Runtime merge did not qualify GUI activation or hardware.
 
-The current GUI direction is **standard egui/eframe**, with stock WGPU preferred
+The last recorded GUI direction was **standard egui/eframe**, with stock WGPU preferred
 and stock Glow as the alternative. [EFRAME-1](eframe-1-standard-host.md) adds a
 separate test-only isolated native host and reuses a small standard egui_plot
 painting function. It does not connect to Runtime or change ordinary Workbench
@@ -148,9 +159,10 @@ with Windows Workbench. Programmable clients remain in the developer documentati
   evaluation was stopped by dependency-safety findings; any future proposal
   needs a fresh exact-version review, not a standing historical prohibition.
 
-Possible next directions are physical two-host qualification, investigation of
+Previously discussed directions were physical two-host qualification, investigation of
 the WSS fixture instability, and explicitly scoped device/automation integration.
-These are directions for discussion, not authorization to start another milestone.
+They are historical proposals. None authorizes another milestone or resumption
+of development without a new explicit user assignment.
 
 ## Source layout and verification
 
@@ -164,7 +176,7 @@ These are directions for discussion, not authorization to start another mileston
 | `test-data/` | Deterministic regression inputs, including internal Metakon deployments under `fixtures/metakon/` |
 | `scripts/` | Windows/Linux packaging, license evidence gates and their tests |
 | `third-party-licenses/` | Pinned redistribution evidence; not a disposable cache |
-| `docs/` | Current user, API, architecture and contributor documentation |
+| `docs/` | Preserved user, API, architecture and contributor documentation |
 
 Choose targeted tests from affected owners; `apps/lab-runtime/tests/README.md`
 maps Runtime integration suites. Keep `cargo fmt --all -- --check` and

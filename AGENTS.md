@@ -1,10 +1,23 @@
-# Agent rules
+# Historical repository: agent instructions
 
-`lab-runtime` is an architecture-first, headless laboratory automation Runtime.
-`v0.1.0-preview.4` is published. Read [project status](docs/developer/project-status.md)
-for current capabilities, qualification limits and possible next directions.
-The current user request defines task scope; historical reports are not standing
-authorization or a reason to resume an old milestone.
+`alexandervolkov1/lab-runtime` is preserved as a reproducible historical project.
+Active development in this repository has stopped. The standalone Runtime is
+maintained in [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next).
+Workbench will be developed separately under a new user assignment.
+
+Resuming development here requires an explicit new assignment from the user.
+Previous plans, unfinished milestones, approvals, proposed next steps and
+qualification limits are historical records, not instructions to continue work.
+Do not resume GUI, native-child, Windows Job, memory or other investigations from
+those records. Closure does not turn incomplete or blocked work into completed
+or qualified work; preserve the actual results and limits.
+
+Preserve sources, tests and fixtures, Cargo files, configurations, documentation,
+licenses, packaging tools, Git history, branches and published releases. Do not
+recreate build or diagnostic artifacts merely to inspect this historical project.
+The contracts below describe its preserved implementation and apply to explicitly
+requested maintenance; they do not authorize development on their own. Read the
+[historical project status](docs/developer/project-status.md) for recorded evidence.
 
 ## Ownership and contracts
 
@@ -80,7 +93,7 @@ authorization or a reason to resume an old milestone.
   New toolchains/dependencies need a corresponding license/safety review.
 - The `com_port_reader` donor is read-only, never a workspace dependency.
 
-## Current references
+## Historical references
 
 - [Architecture](docs/architecture.md) and [safety/failures](docs/safety-and-failures.md)
 - [Application API](docs/api/README.md) and [Workbench API](docs/workbench-api.md)

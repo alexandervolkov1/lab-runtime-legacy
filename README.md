@@ -1,5 +1,13 @@
 # lab-runtime
 
+> **Historical project — active development here has stopped.** The standalone
+> Runtime is maintained in [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next).
+> Workbench will be developed separately under a new user assignment. Earlier
+> plans, unfinished milestones and qualification limits are historical records,
+> not instructions to continue work. Resuming development here requires an
+> explicit user assignment. The sources and documentation below preserve the old
+> project; closure does not imply that unfinished work or qualification is complete.
+
 lab-runtime collects measurements from laboratory instruments, displays them in
 live plots, and records experiments in a local database. It also supports
 controlled changes to instrument settings and setpoints.

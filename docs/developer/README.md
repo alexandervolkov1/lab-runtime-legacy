@@ -1,5 +1,11 @@
 # Developer and API documentation
 
+This is the preserved documentation of a historical project; active development
+here has stopped. The [root agent instructions](../../AGENTS.md) govern any
+explicitly requested maintenance. Old plans and qualification limits do not
+authorize more work. Use [lab-runtime-next](https://github.com/alexandervolkov1/lab-runtime-next)
+for the standalone Runtime; Workbench needs a separate new user assignment.
+
 This section is for integrators, driver authors and maintainers. It is separate
 from the [User manual](../README.md); ordinary users need no source checkout.
 
