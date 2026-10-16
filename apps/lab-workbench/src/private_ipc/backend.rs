@@ -1,5 +1,6 @@
 //! One supervisor-owned Job and two pipe endpoints. No additional I/O thread.
 use super::{
+    controls::{Envelope, Feedback, Request},
     protocol::*,
     reads,
     transport::{Framed, failure},
@@ -19,6 +20,7 @@ use std::{
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub(crate) struct Status {
+    pub(crate) incarnation: u64,
     pub(crate) window_close_requested: bool,
     pub(crate) connected: bool,
     pub(crate) handshaken: bool,
@@ -44,6 +46,8 @@ pub(crate) struct Status {
 struct Shared {
     pool: Pool,
     status: Status,
+    intent: Option<Envelope>,
+    feedback: Option<Vec<u8>>,
 }
 /// Parent root holds this publication handle, not a Runtime socket/worker clone.
 #[derive(Clone)]
@@ -54,6 +58,38 @@ pub(crate) struct Bridge {
     wanted: Arc<[AtomicU64; 2]>,
 }
 impl Bridge {
+    #[cfg(test)]
+    pub(crate) fn control_test_incarnation(&self, incarnation: u64) {
+        let mut shared = self.shared.lock().unwrap();
+        shared.status.incarnation = incarnation;
+        shared.status.handshaken = true;
+        shared.status.connected = true;
+        shared.status.retiring = false;
+        shared.status.retired = false;
+        shared.intent = None;
+        shared.feedback = None;
+    }
+    #[cfg(test)]
+    pub(crate) fn control_test_request(&self, envelope: Envelope) {
+        let mut shared = self.shared.lock().unwrap();
+        assert!(shared.intent.is_none());
+        shared.intent = Some(envelope);
+    }
+    /// Capacity-one, take-once operator mailbox. No automatic replay on restart.
+    pub(crate) fn take_intent(&self) -> Result<Option<Envelope>> {
+        self.shared
+            .try_lock()
+            .map(|mut s| s.intent.take())
+            .map_err(|_| "IPC metadata busy")
+    }
+    pub(crate) fn control_feedback(&self, feedback: &Feedback) -> Result<()> {
+        let bytes = feedback.encode()?;
+        self.shared
+            .try_lock()
+            .map_err(|_| "IPC metadata busy")?
+            .feedback = Some(bytes);
+        Ok(())
+    }
     #[cfg(test)]
     pub(crate) fn trace_provenance(&self) -> Vec<(Option<u64>, Option<f64>, usize)> {
         let shared = self.shared.lock().unwrap();
@@ -122,6 +158,8 @@ impl Bridge {
             shared: Arc::new(Mutex::new(Shared {
                 pool: Pool::new(),
                 status: Status::default(),
+                intent: None,
+                feedback: None,
             })),
         }
     }
@@ -265,6 +303,7 @@ pub(crate) struct IpcBackend {
     child_read_current: bool,
     renderer: Option<super::renderer_progress::RendererProgress>,
     diagnostic_burst: usize,
+    sent_feedback: Option<Vec<u8>>,
     #[cfg(test)]
     retirement_gate: Option<Arc<AtomicBool>>,
     #[cfg(test)]
@@ -312,6 +351,7 @@ impl IpcBackend {
             child_read_current: false,
             renderer: None,
             diagnostic_burst: 0,
+            sent_feedback: None,
             #[cfg(test)]
             retirement_gate: None,
             #[cfg(test)]
@@ -327,6 +367,7 @@ impl IpcBackend {
             let credits = credit_counts(&shared.pool);
             let previous_error = shared.status.error;
             shared.status = Status {
+                incarnation: self.identity.incarnation,
                 window_close_requested: self.window_close_requested,
                 connected: self.connected == [true; 2],
                 handshaken: self.hello_ack,
@@ -412,6 +453,19 @@ impl IpcBackend {
                     }
                     Kind::WindowClose if self.hello_ack && payload.is_empty() => {
                         self.window_close_requested = true;
+                    }
+                    Kind::ControlIntent
+                        if self.hello_ack && !self.close_sent && !self.window_close_requested =>
+                    {
+                        let request = Request::decode(payload).map_err(failure)?;
+                        let mut shared = self.bridge.shared.lock().unwrap();
+                        if shared.intent.is_some() {
+                            return Err(failure("operator intent credit exhausted"));
+                        }
+                        shared.intent = Some(Envelope {
+                            identity: self.identity,
+                            request,
+                        });
                     }
                     Kind::Status | Kind::Closed if self.hello_ack && payload.len() == 32 => {
                         if payload[24] > 1 || payload[25..] != [0; 7] {
@@ -545,6 +599,22 @@ impl IpcBackend {
         }
         if self.control_failed || self.bulk_failed {
             return Ok(());
+        }
+        // Owner challenges/close/fences have priority over coalesced operator UI.
+        if control.idle() && self.hello_ack && !self.close_sent {
+            let shared = self.bridge.shared.lock().unwrap();
+            if let Some(bytes) = &shared.feedback
+                && self.sent_feedback.as_ref() != Some(bytes)
+            {
+                let mut header = Header::control(
+                    Kind::ControlFeedback,
+                    self.identity,
+                    self.sequences[0].next().map_err(failure)?,
+                );
+                header.bytes += bytes.len();
+                control.send(header, bytes)?;
+                self.sent_feedback = Some(bytes.clone());
+            }
         }
         self.in_bulk = true;
         // A bulk deadline never prevents the independent control path from
@@ -706,6 +776,12 @@ impl Backend for IpcBackend {
         self.retiring = false;
         self.pending_retirement = false;
         self.diagnostic_burst = 0;
+        self.sent_feedback = None;
+        {
+            let mut shared = self.bridge.shared.lock().unwrap();
+            shared.intent = None;
+            shared.feedback = None;
+        }
         self.publish(None);
         Ok(())
     }

@@ -41,6 +41,7 @@ pub(super) fn run(
         signal.callback(),
     )
     .map_err(|e| e.to_string())?;
+    owner.stock_control.enabled = options.controls && !observe;
     if let Some(problem) = problem {
         owner.dispatcher.set_client_error(problem);
     }

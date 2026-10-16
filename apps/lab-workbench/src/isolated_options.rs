@@ -7,6 +7,7 @@ pub(crate) struct ExperimentalGui {
     pub(crate) commit_limit: usize,
     pub(crate) restart_limit: u8,
     pub(crate) capture: bool,
+    pub(crate) controls: bool,
 }
 #[derive(Default)]
 pub(crate) struct Candidate {
@@ -15,6 +16,7 @@ pub(crate) struct Candidate {
     commit_limit: Option<usize>,
     restart_limit: Option<u8>,
     capture: bool,
+    controls: bool,
 }
 impl Candidate {
     pub(crate) fn argument(
@@ -58,6 +60,7 @@ impl Candidate {
                 self.restart_limit = Some(limit);
             }
             "--experimental-eframe-capture" if !self.capture => self.capture = true,
+            "--experimental-eframe-controls" if !self.controls => self.controls = true,
             _ => return Ok(false),
         }
         Ok(true)
@@ -68,6 +71,7 @@ impl Candidate {
                 || self.commit_limit.is_some()
                 || self.restart_limit.is_some()
                 || self.capture
+                || self.controls
             {
                 return Err("eframe options require explicit experimental opt-in");
             }
@@ -87,6 +91,7 @@ impl Candidate {
                 .ok_or("explicit experimental commit limit required; no deployment default")?,
             restart_limit: self.restart_limit.unwrap_or(0),
             capture: self.capture,
+            controls: self.controls,
         }))
     }
 }
@@ -117,6 +122,11 @@ mod tests {
         let options = args(&base).unwrap();
         assert_eq!(options.renderer, "wgpu");
         assert_eq!(options.restart_limit, 0);
+        assert!(!options.controls);
+        let mut controlled = base.to_vec();
+        controlled.push("--experimental-eframe-controls");
+        assert!(args(&controlled).unwrap().controls);
+        assert!(args(&["--experimental-eframe-controls"]).is_err());
         for bad in ["auto", "custom-glow", ""] {
             let mut changed = base;
             changed[1] = bad;

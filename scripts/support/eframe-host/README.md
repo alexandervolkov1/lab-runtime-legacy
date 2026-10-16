@@ -1,5 +1,9 @@
 # EFRAME-1 test-only standard host
 
+Current opt-in [CONTROL-1 workflow and launch](../../../docs/developer/control-1-reference-retune.md)
+adds only explicit ramp Reference retune through Parent. Matching private protocol
+version 2 binaries are required. The EFRAME-1/2/3 sections retain their stage scope.
+
 This independent Windows/MSVC test workspace selects stock
 `eframe::Renderer::Wgpu` or `eframe::Renderer::Glow` explicitly. One `eframe::App`
 paints the same deterministic read-only fixtures. eframe owns native graphics,

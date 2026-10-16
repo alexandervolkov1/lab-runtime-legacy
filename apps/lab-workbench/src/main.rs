@@ -33,7 +33,7 @@ use std::{io::Read, net::SocketAddrV4, path::PathBuf, process::ExitCode};
 
 fn usage() {
     eprintln!(
-        "usage: lab-workbench --connect ADDRESS|ws://HOST/application/v1|wss://HOST/application/v1 [--observe] [--allow-remote-tcp] [--allow-insecure-ws] [--ws-origin ORIGIN] [--ws-token-env NAME|--ws-token-file PATH] [--ws-ca-file PATH] [--scope SCOPE] [--workspace PATH] [--workbench-listen 127.0.0.1:PORT] [--experimental-eframe wgpu|glow --experimental-eframe-child ABSOLUTE_EXE --experimental-eframe-commit-limit BYTES [--experimental-eframe-restart-limit 0..3] [--experimental-eframe-capture]]"
+        "usage: lab-workbench --connect ADDRESS|ws://HOST/application/v1|wss://HOST/application/v1 [--observe] [--allow-remote-tcp] [--allow-insecure-ws] [--ws-origin ORIGIN] [--ws-token-env NAME|--ws-token-file PATH] [--ws-ca-file PATH] [--scope SCOPE] [--workspace PATH] [--workbench-listen 127.0.0.1:PORT] [--experimental-eframe wgpu|glow --experimental-eframe-child ABSOLUTE_EXE --experimental-eframe-commit-limit BYTES [--experimental-eframe-restart-limit 0..3] [--experimental-eframe-capture] [--experimental-eframe-controls]]"
     );
 }
 

@@ -1,7 +1,7 @@
-//! Private read-only framing shared with the no-GPU child fixture.
-//! No Application DTOs, command strings or Runtime request sequence exist here.
+//! Private framing shared with the no-GPU child fixture. Version 2 adds only
+//! closed CONTROL-1 intent/feedback, never arbitrary Application commands.
 
-pub(crate) const VERSION: u16 = 1;
+pub(crate) const VERSION: u16 = 2;
 pub(crate) const HEADER: usize = 96;
 pub(crate) const CONTROL: usize = 4096;
 pub(crate) const CHUNK: usize = 65536;
@@ -30,6 +30,8 @@ pub(crate) enum Kind {
     Fence,
     Skipped,
     WindowClose,
+    ControlIntent,
+    ControlFeedback,
     Document = 16,
     Observations,
     Applied,
@@ -47,6 +49,8 @@ impl Kind {
             8 => Self::Fence,
             9 => Self::Skipped,
             10 => Self::WindowClose,
+            11 => Self::ControlIntent,
+            12 => Self::ControlFeedback,
             16 => Self::Document,
             17 => Self::Observations,
             18 => Self::Applied,

@@ -37,6 +37,9 @@ pub(crate) struct ParentBridge {
     pub(crate) error: Option<&'static str>,
 }
 impl ParentBridge {
+    pub(crate) fn is_stock(&self) -> bool {
+        self.follow_document
+    }
     pub(crate) fn new<C: ParentClient>(
         dispatcher: &WorkbenchDispatcher<C>,
         references: Vec<RuntimeRef>,
@@ -121,7 +124,17 @@ impl ParentBridge {
                         }
                     }
                 }
-                crate::presentation::PanelKind::Controls { .. } => {}
+                crate::presentation::PanelKind::Controls { control_ids } => {
+                    for control in document
+                        .controls
+                        .iter()
+                        .filter(|c| control_ids.contains(&c.id))
+                    {
+                        if control.kind == crate::presentation::ControlKind::SetReference {
+                            add(&control.target)?;
+                        }
+                    }
+                }
             }
         }
         let mut selected = Vec::with_capacity(TRACES);
