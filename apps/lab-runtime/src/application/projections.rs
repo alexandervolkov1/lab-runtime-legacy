@@ -52,7 +52,13 @@ pub(crate) fn output_json(snapshot: OutputSnapshot) -> Value {
     };
     json!({"state":match snapshot.state {OutputState::Unverified=>"unverified",OutputState::SafePending=>"safe_pending",
             OutputState::Disarmed=>"disarmed",OutputState::ArmedManual=>"armed_manual",OutputState::ArmedAuto=>"armed_auto",OutputState::FaultLatched=>"fault_latched"},
-        "owner":owner,"instance":snapshot.lease.map(|lease|lease.instance().to_string()),"epoch":snapshot.epoch.to_string(),"lease_expires_at":snapshot.lease.map(|lease|nanos(lease.expires())),
+        "manual_supported":snapshot.manual_supported,
+        "owner":owner,"instance":snapshot.lease.map(|lease|lease.instance().to_string()),"authority_instance":snapshot.instance.to_string(),"epoch":snapshot.epoch.to_string(),"lease_expires_at":snapshot.lease.map(|lease|nanos(lease.expires())),
+        "profile":snapshot.profile.map(|profile|json!({"min":profile.min,"max":profile.max,
+            "safe_value":profile.safe_value,"max_lease_ns":nanos(profile.max_lease),
+            "max_proposal_ttl_ns":nanos(profile.max_proposal_ttl),
+            "required_evidence":match profile.required_evidence {lab_core::output::EvidenceLevel::Acknowledgement=>"acknowledgement",lab_core::output::EvidenceLevel::Readback=>"readback"}})),
+        "manual_attempt":snapshot.manual_attempt.map(manual_attempt_json),
         "fault_latched":snapshot.fault_latched,"safe_confirmed":snapshot.safe_confirmed,"pending":snapshot.pending,
         "in_flight":snapshot.in_flight.is_some(),"requested":snapshot.requested,"sent":observation(snapshot.sent),
         "acknowledged":observation(snapshot.acknowledged),"readback":observation(snapshot.readback),
@@ -62,6 +68,19 @@ pub(crate) fn output_json(snapshot: OutputSnapshot) -> Value {
             lab_core::output::OutputReadbackFailure::Unavailable=>"unavailable"}),
         "outcome":snapshot.outcome.map(|outcome|match outcome {DispatchOutcome::Acknowledged=>"acknowledged",DispatchOutcome::ReadbackVerified=>"readback_verified",
             DispatchOutcome::Failed=>"failed",DispatchOutcome::Ambiguous=>"ambiguous"})})
+}
+
+pub(super) fn manual_attempt_json(attempt: lab_core::output::ManualOutputAttempt) -> Value {
+    let observation = |value: Option<lab_core::output::OutputObservation>| {
+        value.map(|value| json!({"value":value.value,"at":nanos(value.at)}))
+    };
+    json!({"attempt_id":attempt.id.to_string(),"requested":attempt.requested,
+        "evidence_source":if attempt.virtual_simulation {"virtual_simulation"} else {"transport_protocol"},
+        "terminal":attempt.terminal,"dispatch":attempt.dispatch.map(|id| {let (instance,sequence)=id.diagnostic_parts();json!({"instance":instance.to_string(),"sequence":sequence.to_string()})}),
+        "outcome":attempt.outcome.map(|outcome|match outcome {DispatchOutcome::Acknowledged=>"acknowledged",DispatchOutcome::ReadbackVerified=>"readback_verified",DispatchOutcome::Failed=>"failed",DispatchOutcome::Ambiguous=>"ambiguous"}),
+        "sent":observation(attempt.sent),"acknowledged":observation(attempt.acknowledged),
+        "readback":observation(attempt.readback),"reported_readback":observation(attempt.reported_readback),
+        "readback_failure":attempt.readback_failure.map(|failure|match failure {lab_core::output::OutputReadbackFailure::Mismatch=>"mismatch",lab_core::output::OutputReadbackFailure::Unavailable=>"unavailable"})})
 }
 
 pub(crate) fn reference_json(id: u64, snapshot: ReferenceSnapshot) -> Value {

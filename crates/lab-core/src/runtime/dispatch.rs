@@ -12,6 +12,21 @@ impl Runtime {
     /// be revoked even when the requested producer action is then rejected.
     pub fn command(&mut self, command: Command) -> Result<CommandResult, Error> {
         match command {
+            Command::ManualOutput {
+                actuator,
+                owner,
+                expected_instance,
+                expected_epoch,
+                command,
+                at,
+            } => self.manual_output(
+                actuator,
+                owner,
+                expected_instance,
+                expected_epoch,
+                command,
+                at,
+            ),
             Command::StageComponent {
                 definition,
                 replaces,
@@ -63,6 +78,7 @@ impl Runtime {
                 let ordinary = matches!(
                     command,
                     OutputCommand::Acquire { .. }
+                        | OutputCommand::RenewManual { .. }
                         | OutputCommand::Propose(_)
                         | OutputCommand::AcknowledgeFault
                 ) || matches!(command, OutputCommand::BeginDispatch)
@@ -1326,12 +1342,7 @@ impl Runtime {
                 .get(&id)
                 .map(|component| QueryResult::Component(component.snapshot()))
                 .ok_or(ComponentError::Unknown.into()),
-            Query::Output(id) => self
-                .outputs
-                .get(&id)
-                .filter(|_| !self.prepared_simple_devices.contains(&id.instrument()))
-                .map(|authority| QueryResult::Output(authority.snapshot()))
-                .ok_or(OutputError::UnknownActuator.into()),
+            Query::Output(id) => self.output_snapshot(id).map(QueryResult::Output),
             Query::Transport(id) => self
                 .resources
                 .get(&id)

@@ -343,7 +343,9 @@ fn validate_nested_args(op: &str, args: &Map<String, Value>) -> Result<(), WireE
         "latest" | "measurement_window" => {
             nested.push(("signal", &["instrument", "parameter"] as &[&str]))
         }
-        "output" => nested.push(("actuator", &["instrument", "parameter"])),
+        "output" | "output_acquire" | "output_renew" | "output_write" | "output_safe" => {
+            nested.push(("actuator", &["instrument", "parameter"]))
+        }
         "operation_status" => nested.push(("request_id", &["scope", "seq"])),
         "subscribe" => {
             nested.push(("after", &["boot_id", "seq"]));

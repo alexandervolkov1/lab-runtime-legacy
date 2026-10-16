@@ -4,7 +4,7 @@
 //! stay centralized in `Application`. This module selects one semantic domain after
 //! the authoritative protocol registry and wire layer have validated request shape.
 
-use super::{controllers, references, virtuals};
+use super::{controllers, outputs, references, virtuals};
 use crate::{
     configuration_api, recorder_api,
     service::ServiceHost,
@@ -16,6 +16,9 @@ use serde_json::{Value, json};
 
 pub(super) fn decode(operation: &str, args: &Value) -> Result<Mutation, &'static str> {
     match operation {
+        "output_acquire" | "output_renew" | "output_write" | "output_safe" => {
+            outputs::decode(operation, args)
+        }
         "reference_configure" | "reference_retune" => references::decode(operation, args),
         "controller_configure_pid"
         | "controller_configure"
@@ -44,6 +47,9 @@ pub(super) fn dispatch(
     request_id: &WireRequestId,
 ) -> Result<Value, Error> {
     match &mutation {
+        Mutation::ManualOutput { .. } => Err(Error::InvalidConfiguration(
+            "manual output dispatch is correlated by Application",
+        )),
         Mutation::ConfigureReferenceFixed { .. }
         | Mutation::ConfigureReferenceRamp { .. }
         | Mutation::RetuneRamp { .. } => references::dispatch(service, mutation, request_id),
@@ -82,6 +88,7 @@ pub(super) fn dispatch(
 // safe evidence. History selections remain process-local to avoid recursion.
 pub(super) fn recorded_intent(mutation: &Mutation) -> Option<(&'static str, String)> {
     let (command, fields) = match mutation {
+        Mutation::ManualOutput { .. } => return Some(outputs::recorded_intent(mutation)),
         Mutation::ConfigureReferenceFixed {
             reference,
             expected_revision,

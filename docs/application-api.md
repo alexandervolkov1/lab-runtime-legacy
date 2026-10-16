@@ -28,7 +28,7 @@ A client that does not need Workbench presentation or client-recovery semantics
 should normally use the Runtime API directly. Workbench is neither a transparent
 Runtime proxy nor a Runtime event relay.
 
-The authoritative registry contains 43 operations (22 queries and 21 mutations) and
-26 structured capabilities. Clients must begin with `hello` and use the operations,
+The authoritative registry contains 47 operations (22 queries and 25 mutations) and
+27 structured capabilities. Clients must begin with `hello` and use the operations,
 capabilities, limits, scope, next sequence, and event cursors returned by that Runtime
 instead of assuming a static composition.

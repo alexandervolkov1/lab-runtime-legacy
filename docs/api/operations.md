@@ -3,8 +3,8 @@
 Applies to Application protocol v1 and the v0.1 product.
 
 The source authority is the single registry in
-`apps/lab-runtime/src/protocol.rs`. It contains exactly 43 unique operations: 22
-queries and 21 mutations.
+`apps/lab-runtime/src/protocol.rs`. It contains exactly 47 unique operations: 22
+queries and 25 mutations.
 
 ## Availability
 
@@ -47,6 +47,10 @@ on a mode/kind; operation-specific validation still applies.
 | `reference` | Query | `reference` | fixed/ramp state, revision, value/target/rate/unit | Always | inspect one Reference |
 | `component` | Query | `component` | implementation, binding, generation, state, diagnostics | Always | inspect one managed component |
 | `output` | Query | `actuator` | read-only output authority/evidence projection | Always | inspect output state without write authority |
+| `output_acquire` | Mutation | `actuator`, `expected_instance`, `expected_epoch`, `lease_lifetime_ns` | finite scope-owned authority | Always | acquire an operational declared actuator after safe verification |
+| `output_renew` | Mutation | `actuator`, `expected_instance`, `expected_epoch`, `lease_lifetime_ns` | explicitly extended finite lease | Always | renew only this scope's idle manual authority |
+| `output_write` | Mutation | `actuator`, `expected_instance`, `expected_epoch`, `value`, `proposal_ttl_ns` | correlated terminal delivery receipt; acceptance is not delivery | Always | set a declared actuator value through OutputAuthority |
+| `output_safe` | Mutation | `actuator`, `expected_instance`, `expected_epoch` | authority revoked, safe requested; query subsequent evidence | Always | explicitly return this scope's output to configured safe policy |
 | `operation_status` | Query | `request_id` | accepted/completed/failed, or outcome_unknown when no record is retained | Always | inspect retained state for current scope; unknown makes no high-water claim |
 | `subscribe` | Query | `after`, `filter` | aggregate subscription token and accepted cursor | Always | start connection-local event delivery |
 | `unsubscribe` | Query | `subscription` | `removed` boolean | Always | remove connection-local subscription |
@@ -118,6 +122,11 @@ Query-specific rules:
   by the terminal `history_read` result.
 
 Mutation-specific rules:
+
+- `output_acquire`, `output_renew`, `output_write` and `output_safe` use the compound
+  actuator and decimal-string authority instance/epoch fences. Lease/proposal
+  durations are decimal-string nanoseconds; `value` is a finite JSON number.
+  See [manual output](manual-output.md) for ownership, completion and recovery.
 
 - `reference_configure` uses either
   `{"reference":"1","expected_revision":"1","kind":"fixed","value":2.5}`
@@ -203,6 +212,7 @@ operation availability.
 | `controller_configuration` | `controller_configure` |
 | `controller_lifecycle` | `controller_start` |
 | `managed_components` | `component` |
+| `manual_output` | `output_acquire` |
 | `output_status` | `output` |
 | `runtime_shutdown` | `runtime_shutdown` |
 | `recording_status` | `recording_status` |

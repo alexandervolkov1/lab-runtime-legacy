@@ -34,6 +34,19 @@ pub(crate) const OUTCOME_SIZE_LIMIT: usize = 4_096;
 /// Complete typed mutation identity; connection/msg_id do not affect equality.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Mutation {
+    /// Scope-owned manual control of one declared actuator.
+    ManualOutput {
+        /// Instrument identity.
+        instrument: u64,
+        /// Actuator parameter identity.
+        parameter: u64,
+        /// Expected authority instance, never an authorization token.
+        expected_instance: u64,
+        /// Expected revocation epoch.
+        expected_epoch: u64,
+        /// Narrow typed action; no arbitrary bytes or register addressing.
+        action: lab_core::output::ManualOutputCommand,
+    },
     /// Replace a complete Reference policy while retaining its stable identity and unit.
     ConfigureReferenceFixed {
         /// Existing Reference identity.

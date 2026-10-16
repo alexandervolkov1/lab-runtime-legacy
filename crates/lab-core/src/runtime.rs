@@ -41,6 +41,7 @@
 mod controllers;
 mod dispatch;
 mod managed_components;
+mod manual_output;
 mod physical_io;
 
 use crate::control::{
@@ -103,6 +104,21 @@ pub const MAX_CONTROLLERS: usize = 64;
 #[derive(Clone, Debug, PartialEq)]
 /// Local mutation requests serialized by the Runtime owner; no networking or hidden query effects.
 pub enum Command {
+    /// Explicit manual control through the existing exclusive OutputAuthority.
+    ManualOutput {
+        /// Declared operational actuator, never an arbitrary register.
+        actuator: ActuatorId,
+        /// Trusted client-scope identity assigned by the Application owner.
+        owner: u64,
+        /// Expected process-local authority identity.
+        expected_instance: u64,
+        /// Expected revocation epoch.
+        expected_epoch: u64,
+        /// Narrow manual operation, with no transport or completion injection.
+        command: crate::output::ManualOutputCommand,
+        /// Runtime monotonic time.
+        at: Duration,
+    },
     /// Stage one bounded managed source/transform; init runs on a nonblocking worker.
     StageComponent {
         /// Immutable shape/source/config supplied by trusted local deployment.
@@ -401,6 +417,8 @@ pub enum Command {
 #[derive(Clone, Debug, PartialEq)]
 /// Completed local command outcomes, not a claim of physical hardware or durable storage success.
 pub enum CommandResult {
+    /// Manual transition or queued delivery; inspect the receipt for terminal evidence.
+    ManualOutput(OutputSnapshot),
     /// Candidate admitted for worker init, not yet installed as an instrument.
     ComponentStaged(ComponentId),
     /// Candidate init completed and remains outside the active graph.

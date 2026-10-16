@@ -23,6 +23,13 @@ A failed admitted mutation uses the same fields inside `type:"operation",
 state:"failed"`. In that context the request identity is terminal, even if the same
 code is also possible as a synchronous pre-admission rejection.
 
+Manual output retains at most one unresolved write per actuator under the existing
+64 global / 8 per-scope pending credits. Its completion wait is 30 seconds. A
+`timeout` or replaced-authority `instance_changed` result explicitly carries
+`outcome:"unknown"`; neither proves absence of effect or permits blind retry.
+Each actuator retains one latest manual receipt independently of safe observations.
+See [manual output](manual-output.md).
+
 ## Categories
 
 | Category | Meaning |
@@ -181,7 +188,7 @@ terminal Completed/Failed outcome, physical-state proof, or blind-retry permissi
 | `reference_result_records` / `controller_result_records` | 1 / 1 | result records |
 | `pid_configuration_fields` / `controller_configuration_fields` | 5 / 6 | policy groups |
 | `recorder.label_bytes` / `status_records` / `event_bytes` | 128 / 1 / 4,096 | Recorder API bounds |
-| `capabilities` | 32 | advertised capability capacity (26 currently registered) |
+| `capabilities` | 32 | advertised capability capacity (27 currently registered) |
 | `semantic_name_bytes` | 64 | operation/code/category/semantic name |
 | `error_message_bytes` / `error_details_bytes` | 256 / 2,048 | public error text/details |
 | `configuration.property_records` | 256 | property records |

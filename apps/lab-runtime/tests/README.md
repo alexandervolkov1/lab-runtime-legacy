@@ -9,8 +9,13 @@ importance.
   `m9b8_fault_acceptance`.
 - Runtime orchestration: `host_scheduler`, `runtime_startup`, `runtime_events`,
   `runtime_lifecycle_operations` and `runtime_shutdown`.
-- Control and virtual sources: `control_api`, `emulator_api`, `measurement_api` and
+- Control and virtual sources: `control_api`, `manual_output_api`, `emulator_api`, `measurement_api` and
   `milestone9a_native`.
+  `manual_output_api` includes a declarative physical byte fixture for accepted
+  work across detach/reattach, exact-ID deduplication, owner/PID conflict, invalid
+  values/fences and finite explicit renewal. Core `milestone9d_physical_output`
+  additionally covers manual no-send/ambiguous/mismatching-readback receipts and
+  Required Recorder gating through the same physical path.
 - Configuration/resources/transport: `configuration_*`, `configured_physical*`,
   `resource_configuration_api`, `definitions` and `com_recorder_shutdown`.
 - Recorder/SQLite: every `recorder_*` binary covers a distinct durability,

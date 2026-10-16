@@ -26,7 +26,9 @@ directly when Workbench presentation semantics are unnecessary.
 
 - [Protocol and sessions](protocol-and-sessions.md): transports, envelopes, hello,
   scopes, IDs, and versioning.
-- [Operations](operations.md): the exact 43-operation registry, availability, and 26
+- [Manual output](manual-output.md): explicit scope-owned power, finite leases,
+  delivery evidence, safe return and a direct Clojure example.
+- [Operations](operations.md): the exact 47-operation registry, availability, and 27
   capabilities.
 - [Events, mutations, and recovery](events-mutations-and-recovery.md): subscriptions,
   frozen projections, operation lifecycle, sequencing, and deduplication.

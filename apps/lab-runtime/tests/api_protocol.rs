@@ -190,8 +190,8 @@ fn unknown_bounded_names_reach_application_rejection_without_raw_core_authority(
     assert_eq!(request.op, "hello");
     for prohibited in [
         "call",
-        "output_acquire",
-        "output_renew",
+        "output_raw_write",
+        "output_complete",
         "complete_dispatch",
         "raw_transport",
         "lua_deploy",
@@ -201,5 +201,23 @@ fn unknown_bounded_names_reach_application_rejection_without_raw_core_authority(
         let request = decode_frame(frame.as_bytes()).unwrap();
         assert_eq!(request.op, prohibited);
         assert!(request.request_id.is_none());
+    }
+}
+
+#[test]
+fn manual_output_wire_shape_cannot_supply_owner_bytes_or_completion_evidence() {
+    for field in ["owner", "lease", "bytes", "register", "ReadbackVerified"] {
+        let mut args = json!({"actuator":{"instrument":"1","parameter":"2"},
+            "expected_instance":"1","expected_epoch":"3","value":20.0,
+            "proposal_ttl_ns":"200000000"});
+        args[field] = json!(true);
+        let request = json!({"v":1,"msg_id":"manual","op":"output_write",
+            "request_id":{"scope":"abc","seq":"1"},"args":args});
+        assert_eq!(
+            decode_frame(&encode_frame(&request).unwrap())
+                .unwrap_err()
+                .code,
+            "invalid_args"
+        );
     }
 }

@@ -60,14 +60,26 @@ At the baseline, `protocol.rs` registers 43 operations. `output` is a query;
 `reference_retune` changes a Reference, and configuration properties do not set
 heater power. The public direct manual-power scenario is therefore incomplete.
 Core already has `OutputOwner::Manual`, finite leases/proposals, safe release,
-physical WRITE/ACK/readback and immutable Recorder attempt correlation. Reuse those
-mechanisms; add only typed Application operations and bounded completion correlation.
-Do not expose arbitrary bytes/registers or turn API admission into device success.
+physical WRITE/ACK/readback and immutable Recorder attempt correlation. The change
+reuses them through `output_acquire`, `output_renew`, `output_write` and `output_safe`.
+The current registry has 47 operations and 27 capabilities. No raw byte/register,
+client-supplied owner or completion-evidence operation was added.
 
 An output operation must retain the result of its own attempt even if a later safe
 transition changes the current output snapshot. Recorder facts cannot be used as the
-operation's completion channel: recording may be disabled. Lease expiry must remain
-effective after client loss, with no automatic renewal or rearm on reattachment.
+operation's completion channel: recording may be disabled. One retained receipt per
+actuator solves that problem without another worker or event bus. Application keeps
+only bounded delivery correlation and uses the existing SessionStore. Even a host
+publication failure after Core delivery preserves the actual attempt result.
+Lease expiry remains effective after client loss; renew is an explicit mutation.
+
+Manual scopes conflict with PID and other owners. Accepted physical writes remain
+pending until the configured ACK/readback path settles. Safe completion means
+revocation/request only, with later actual safety evidence queried independently.
+The [API contract](../api/manual-output.md) specifies these distinctions, unknown
+results, limits, compatibility and recovery. The [validation report](runtime-manual-output-validation.md)
+records actual runs and source/evidence identities. No additional Runtime process,
+client broker, GUI feature, transport layer, Recorder schema or dependency was added.
 
 No identified Arduino configuration or physical port was supplied. The checked-in
 SimpleDevice writable example is a generic fixture with placeholder `COM256`, not

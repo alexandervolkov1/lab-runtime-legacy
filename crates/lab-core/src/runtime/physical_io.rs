@@ -38,11 +38,18 @@ impl Runtime {
         proposal: OutputProposal,
         at: Duration,
     ) -> Result<(), Error> {
+        let manual = matches!(proposal.lease.owner(), OutputOwner::Manual(_));
         let attempt_id = self.allocate_output_attempt()?;
         self.outputs
             .get_mut(&actuator)
             .ok_or(OutputError::UnknownActuator)?
             .command(OutputCommand::Propose(proposal), at)?;
+        if manual {
+            self.outputs
+                .get_mut(&actuator)
+                .expect("validated proposal")
+                .track_manual_attempt(attempt_id, false);
+        }
         self.output_attempts.insert(actuator, attempt_id);
         self.recording_facts.output_correlated(
             actuator,
@@ -91,11 +98,19 @@ impl Runtime {
         proposal: OutputProposal,
         at: Duration,
     ) -> Result<(), Error> {
+        let manual = matches!(proposal.lease.owner(), OutputOwner::Manual(_));
         let attempt_id = self.allocate_output_attempt()?;
         self.outputs
             .get_mut(&actuator)
             .ok_or(OutputError::UnknownActuator)?
             .command(OutputCommand::Propose(proposal), at)?;
+        if manual {
+            self.outputs
+                .get_mut(&actuator)
+                .expect("validated proposal")
+                .track_manual_attempt(attempt_id, true);
+        }
+        self.output_attempts.insert(actuator, attempt_id);
         self.recording_facts.output_correlated(
             actuator,
             crate::recording::OutputStage::Requested,
@@ -907,6 +922,14 @@ impl Runtime {
                     if let Some(authority) = self.outputs.get_mut(&intent.actuator) {
                         authority.fail_transport_before_send(intent);
                     }
+                    self.recording_facts.output_transport(
+                        intent,
+                        resource,
+                        crate::recording::OutputStage::RejectedBeforeSend,
+                        at,
+                        crate::recording::OutputEvidenceSource::TransportProtocol,
+                        None,
+                    );
                     return Ok(());
                 };
                 let current_binding = self
