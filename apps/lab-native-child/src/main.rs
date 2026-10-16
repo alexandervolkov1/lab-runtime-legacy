@@ -19,6 +19,9 @@ mod entry;
 #[cfg(windows)]
 mod fault;
 #[cfg(windows)]
+#[path = "../../lab-workbench/src/time_context.rs"]
+mod time_context;
+#[cfg(windows)]
 pub(crate) use consumer::{
     presentation, private_ipc, readonly_limits, readonly_v2, readonly_values,
 };

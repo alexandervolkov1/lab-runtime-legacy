@@ -199,6 +199,7 @@ fn plots(dto: &DocumentDto, budget: &mut Budget) -> Result<Vec<v1::Plot>> {
             title: budget.text(plot.title.0.as_str())?,
             time_window_seconds: plot.time_window_seconds.0,
             axes: v1::AxisOptions {
+                time_mode: plot.axes.time_mode,
                 y_min: plot.axes.y_min.map(|n| n.0),
                 y_max: plot.axes.y_max.map(|n| n.0),
             },

@@ -421,6 +421,7 @@ mod tests {
         let mut model = WorkbenchModel::new(PresentationDocument::empty("status-test"));
         model.connection = ConnectionState::Ready;
         model.hello = Some(HelloState {
+            time_anchor: None,
             boot_id: "boot-a".into(),
             scope: "scope-a".into(),
             next_seq: 9,

@@ -601,3 +601,14 @@ inspection, followed by exact readback. Protocol success and a native window han
 alone are not visual-smoke evidence. See the smoke README for the observed Windows
 result and limits. The applied configuration remains in memory; this acceptance
 check does not exercise operator Controls or presentation persistence.
+
+
+TIME-1 extends plot axis configuration with optional `axes.time_mode`:
+`local_calendar`, `utc`, `runtime_elapsed`, or `experiment_elapsed`. Omission
+(v1 null also normalizes to omission) means local calendar with a usable
+boot-matched UTC binding, otherwise Runtime elapsed with an explanation.
+Experiment elapsed currently falls back because no authoritative experiment
+start is exposed. Stock WGPU and Glow share this read-only display behavior.
+Older Parents reject the new field; omit it for older versions. Reconfigure
+through existing `ui_replace_document` or other ordinary presentation operations;
+no Runtime request is needed. See the [TIME-1 contract](developer/time-1-time-axis.md).

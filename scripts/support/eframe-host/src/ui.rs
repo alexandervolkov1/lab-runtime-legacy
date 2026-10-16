@@ -52,6 +52,10 @@ struct ScalarReport {
 }
 #[derive(Serialize)]
 struct PlotReport {
+    time_mode: String,
+    time_note: String,
+    time_label: String,
+    time_tooltip: String,
     label: String,
     points: usize,
     last: Option<[f64; 2]>,
@@ -586,6 +590,19 @@ fn plot(
         return;
     };
     ui.label(label);
+    let anchor = reads.and_then(|r| r.time_anchor.as_ref()).filter(|a| {
+        // Do not apply a new boot mapping to any retained old-boot trace.
+        plot.traces.0.iter().filter(|t| t.visible).all(|t| {
+            data(document, &t.data_id)
+                .map(|b| v2::read_target::target(&b.target))
+                .and_then(|target| reads.and_then(|r| r.selected(&target)))
+                .is_none_or(|r| {
+                    r.fields.trace.len() == 0 || r.fields.origin.boot == Some(a.boot_id.as_str())
+                })
+        })
+    });
+    let axis = crate::time_axis::Axis::new(plot.axes.time_mode, anchor);
+    ui.label(axis.note);
     let mut owned = Vec::with_capacity(plot.traces.0.len());
     let mut states = Vec::with_capacity(plot.traces.0.len());
     let mut units = Vec::with_capacity(plot.traces.0.len());
@@ -633,6 +650,14 @@ fn plot(
             .map_or("", |u| u.symbol)
             .to_owned();
         report.plots.push(PlotReport {
+            time_mode: format!("{:?}", axis.mode),
+            time_note: axis.note.into(),
+            time_label: points.last().map_or_else(String::new, |p| {
+                axis.tick(p.x, &(p.x - plot.time_window_seconds.0..=p.x))
+            }),
+            time_tooltip: points
+                .last()
+                .map_or_else(String::new, |p| axis.tooltip(p.x)),
             label: trace.display_label.as_str().into(),
             points: points.len(),
             last: points.last().map(|p| [p.x, p.y]),
@@ -668,7 +693,8 @@ fn plot(
     let plot_id = ui.id().with(id.as_str());
     let mut view = Plot::new(plot_id)
         .id(plot_id)
-        .x_axis_label("Runtime monotonic time (s)")
+        .x_axis_label(axis.label())
+        .x_axis_formatter(|mark, range| axis.tick(mark.value, range))
         .y_axis_label(y_label)
         .height(245.)
         .legend(egui_plot::Legend::default());
@@ -680,8 +706,11 @@ fn plot(
     }
     plot_ui::show(ui, view, &curves, |name, index, point| {
         Some(format!(
-            "{name}: {:.3} {} at {:.3} s · {}",
-            point.y, units[index], point.x, states[index]
+            "{name}: {:.3} {} at {} · {}",
+            point.y,
+            units[index],
+            axis.tooltip(point.x),
+            states[index]
         ))
     });
     if let Some(memory) = egui_plot::PlotMemory::load(ui.ctx(), plot_id) {

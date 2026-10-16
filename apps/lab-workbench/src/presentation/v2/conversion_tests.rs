@@ -741,3 +741,31 @@ fn property_drafts_remain_independent_for_equal_names_and_repeated_targets() {
         );
     }
 }
+
+#[test]
+fn optional_plot_time_modes_round_trip_through_the_canonical_pipeline() {
+    for mode in [
+        None,
+        Some(TimeAxisMode::LocalCalendar),
+        Some(TimeAxisMode::Utc),
+        Some(TimeAxisMode::RuntimeElapsed),
+        Some(TimeAxisMode::ExperimentElapsed),
+    ] {
+        let mut source = fixtures::mixed();
+        source.plots[0].axes.time_mode = mode;
+        let converted = convert(&source);
+        assert_eq!(converted.dto().plots.0[0].axes.time_mode, mode);
+        let admitted = admit(converted.canonical_bytes()).unwrap();
+        assert_eq!(export_v1(&admitted).unwrap(), source);
+        let encoded = value(&converted);
+        assert_eq!(
+            encoded["plots"][0]["axes"].get("time_mode").is_none(),
+            mode.is_none()
+        );
+        let mut invalid = encoded;
+        invalid["plots"][0]["axes"]["time_mode"] = json!("unix_monotonic");
+        assert!(admit(&serde_json::to_vec(&invalid).unwrap()).is_err());
+        invalid["plots"][0]["axes"]["time_mode"] = json!({"utc":null});
+        assert!(admit(&serde_json::to_vec(&invalid).unwrap()).is_err());
+    }
+}

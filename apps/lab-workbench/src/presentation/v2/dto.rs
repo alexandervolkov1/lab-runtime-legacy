@@ -63,6 +63,12 @@ closed_enum!(Selector {
     ControllerState,
     RecorderState
 });
+closed_enum!(TimeAxisMode {
+    LocalCalendar,
+    Utc,
+    RuntimeElapsed,
+    ExperimentElapsed
+});
 closed_enum!(Density {
     Comfortable,
     Compact
@@ -387,6 +393,8 @@ pub(crate) struct Plot {
 #[derive(Debug, Deserialize)]
 #[serde(remote = "Self", deny_unknown_fields)]
 pub(crate) struct Axes {
+    #[serde(default, deserialize_with = "optional")]
+    pub(crate) time_mode: Option<TimeAxisMode>,
     #[serde(deserialize_with = "nullable")]
     pub(crate) y_min: Option<Number>,
     #[serde(deserialize_with = "nullable")]

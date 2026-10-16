@@ -1,0 +1,131 @@
+{
+  "capture_api": "stock eframe Screenshot",
+  "display": {
+    "heading": "TIME-1 runtime_elapsed",
+    "panels": [
+      "Temperature",
+      "Measurement time"
+    ],
+    "plots": [
+      {
+        "freshness": "Fresh",
+        "label": "Temperature",
+        "last": [
+          6.5027816,
+          76.83646934109944
+        ],
+        "points": 56,
+        "time_label": "T+00:00:06",
+        "time_mode": "RuntimeElapsed",
+        "time_note": "Elapsed since Runtime monotonic origin",
+        "time_tooltip": "T+00:00:06 (Runtime monotonic 6.503 s)",
+        "unit": "°C"
+      }
+    ],
+    "scalars": [
+      {
+        "freshness": "Fresh",
+        "generation": 1,
+        "label": "Temperature",
+        "unit": "°C",
+        "value": "76.836"
+      }
+    ],
+    "views": [
+      {
+        "auto": [
+          true,
+          true
+        ],
+        "bounds": [
+          [
+            0.7293642609033036,
+            76.70322543503215
+          ],
+          [
+            6.777706239096696,
+            79.63459132880283
+          ]
+        ],
+        "hidden": 0,
+        "id": "plot",
+        "occurrence": 7953002297292486988,
+        "rect": [
+          56.640625,
+          317.78125,
+          1085.0,
+          528.609375
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "enabled": false,
+        "label": "Previous window",
+        "rect": [
+          8.0,
+          26.1875,
+          114.28125,
+          44.1875
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Next window",
+        "rect": [
+          403.53125,
+          26.1875,
+          488.125,
+          44.1875
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Previous tab",
+        "rect": [
+          8.0,
+          71.0,
+          87.71875,
+          89.0
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "All panels",
+        "rect": [
+          334.84375,
+          92.0,
+          398.375,
+          110.0
+        ]
+      }
+    ]
+  },
+  "document_id": "time-1",
+  "document_revision": 5,
+  "incarnation": 1,
+  "observation_snapshot": 77,
+  "owner_counter": 266,
+  "runtime_clients": 0,
+  "ui_counter": 266
+}

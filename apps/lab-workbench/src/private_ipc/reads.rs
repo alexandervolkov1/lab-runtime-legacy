@@ -3,7 +3,7 @@
 use super::protocol::*;
 use super::read_decode::{BOOT, PROJECTION, ReadMeta, TEXT, check_successor};
 pub(super) use super::read_decode::{REFERENCE, decode_freshness, inspect_with};
-pub(crate) use super::read_decode::{inspect, successor, validate};
+pub(crate) use super::read_decode::{inspect, successor, time_anchor, validate};
 use crate::model::{
     Freshness, ReadAbsence, ReadBinding, ReadPayload, ReadQuality, RuntimeObservations, ScalarKind,
     ScalarValue, resolve_read,
@@ -193,9 +193,22 @@ fn encode_into(
         limit,
         used: 0,
     };
-    writer.put(b"LRD1")?;
+    writer.put(if observations.time_anchor.is_some() {
+        b"LRD2"
+    } else {
+        b"LRD1"
+    })?;
     writer.byte(selected.len() as u8)?;
     writer.byte(freshness(observations.freshness))?;
+    if let Some(anchor) = &observations.time_anchor {
+        if anchor.boot_id.is_empty() || anchor.before_ns > anchor.after_ns {
+            return Err("invalid display time anchor");
+        }
+        writer.text(&anchor.boot_id, BOOT)?;
+        writer.put(&anchor.before_ns.to_le_bytes())?;
+        writer.put(&anchor.after_ns.to_le_bytes())?;
+        writer.put(&anchor.utc_us.to_le_bytes())?;
+    }
     let mut points = 0usize;
     for (index, selection) in selected.iter().enumerate() {
         if selected[..index]

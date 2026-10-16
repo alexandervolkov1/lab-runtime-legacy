@@ -33,7 +33,7 @@ try {
     $sourceRoot = (Join-Path $repo 'apps/lab-workbench/src').Replace('\','/')
     $support = (Join-Path $repo 'scripts/support').Replace('\','/')
     $modules = @()
-    foreach ($name in @('client','dispatcher','external','readonly_limits','readonly_values','readonly_cache','model','ownership','presentation','recovery','storage')) {
+    foreach ($name in @('client','dispatcher','external','readonly_limits','readonly_values','readonly_cache','model','ownership','presentation','recovery','storage','time_context')) {
         $path = "$sourceRoot/$name.rs"
         if (-not (Test-Path -LiteralPath $path)) { $path = "$sourceRoot/$name/mod.rs" }
         $modules += "#[path = `"$path`"] mod $name;"

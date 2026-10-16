@@ -37,6 +37,7 @@ fn presentation() -> PresentationDocument {
 
 fn hello(boot: &str) -> HelloState {
     HelloState {
+        time_anchor: None,
         boot_id: boot.into(),
         scope: "scope".into(),
         next_seq: 1,
@@ -1154,4 +1155,36 @@ fn resource_events_preserve_full_reconnect_detail_and_stale_changed_generation()
         model.observations.entities[&resource].value["binding_generation"],
         "5"
     );
+}
+
+#[test]
+fn runtime_reboot_replaces_time_binding_and_legacy_hello_clears_it() {
+    let mut model = WorkbenchModel::new(presentation());
+    let mut first = hello("a");
+    first.time_anchor = Some(crate::time_context::TimeAnchor {
+        boot_id: "a".into(),
+        before_ns: 1,
+        after_ns: 2,
+        utc_us: 42,
+    });
+    model.apply_client_update(ClientUpdate::Hello(first));
+    assert_eq!(
+        model.observations.time_anchor.as_ref().unwrap().boot_id,
+        "a"
+    );
+    let mut next = hello("b");
+    next.time_anchor = Some(crate::time_context::TimeAnchor {
+        boot_id: "b".into(),
+        before_ns: 3,
+        after_ns: 4,
+        utc_us: 1_000,
+    });
+    model.apply_client_update(ClientUpdate::Hello(next));
+    assert_eq!(
+        model.observations.time_anchor.as_ref().unwrap().boot_id,
+        "b"
+    );
+    assert!(model.observations.live.is_empty());
+    model.apply_client_update(ClientUpdate::Hello(hello("legacy")));
+    assert!(model.observations.time_anchor.is_none());
 }

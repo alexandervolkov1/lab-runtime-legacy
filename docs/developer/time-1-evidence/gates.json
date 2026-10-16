@@ -1,0 +1,602 @@
+{
+  "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+  "final_gates": [
+    {
+      "log": "time-1-runtime-dev-full.log",
+      "exit_code": 0,
+      "sha256": "d5a5d23f9258b8cbd1fb4f0d2b0df6d240ec829f65785489444c6a2656f444f2",
+      "test_suites": [
+        {
+          "passed": 160,
+          "failed": 0,
+          "ignored": 1
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 6,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 12,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 15,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 1
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 11,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 6,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 18,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 6,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 13,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-runtime-release-targeted.log",
+      "exit_code": 0,
+      "sha256": "53dd78da679439a17a62d90c6ff7db8b1407435f05f95522ccaebd46132b02b8",
+      "test_suites": [
+        {
+          "passed": 6,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-workbench-final-dev.log",
+      "exit_code": 0,
+      "sha256": "ed06a626a9630b573888eb40434bf61949769c147707dad9d28e6772732cec7e",
+      "test_suites": [
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 547,
+          "failed": 0,
+          "ignored": 58
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-workbench-final-release.log",
+      "exit_code": 0,
+      "sha256": "4ebb94d6b3a6693ad9d56331cfd07397415e617c09e9d653ff1223967a0222a3",
+      "test_suites": [
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 547,
+          "failed": 0,
+          "ignored": 58
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-host-final-dev.log",
+      "exit_code": 0,
+      "sha256": "685c2597e41ef83ca89cdda3a844fe7781b4fabb3ec81e7a8b1cf1f1ee752492",
+      "test_suites": [
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-host-final-release.log",
+      "exit_code": 0,
+      "sha256": "b91757bcdf3f96e321ff13e36cc328c1b5ded0f59cf8e2019ad0e1b4d501bf46",
+      "test_suites": [
+        {
+          "passed": 9,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-ipc-dev.log",
+      "exit_code": 0,
+      "sha256": "679915918720180829fea8b703fb2518b66222f492e5c250da795a0fa8e49dfb",
+      "test_suites": [
+        {
+          "passed": 22,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-ipc-release.log",
+      "exit_code": 0,
+      "sha256": "e3b53da16bce6b00e511da40a05bf2e15a45eecf03844abd1f49bbdec6b908b2",
+      "test_suites": [
+        {
+          "passed": 22,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-supervisor-dev.log",
+      "exit_code": 0,
+      "sha256": "159237835a8a3579c8fdd49588bee0e9940c482a3864422bfb3749e0a1db7361",
+      "test_suites": [
+        {
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-supervisor-release.log",
+      "exit_code": 0,
+      "sha256": "f573366bd52db83b598353e076a7f149d7b66b8dd85bfe05492fdde8f483d0f8",
+      "test_suites": [
+        {
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-legacy-child-dev.log",
+      "exit_code": 0,
+      "sha256": "4e696031b50450829c5b688673a0b132efb78d8c8dee5b0f8a6259a983dad3b0",
+      "test_suites": [
+        {
+          "passed": 13,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-legacy-child-release.log",
+      "exit_code": 0,
+      "sha256": "88f3b3475efb1cc8fdd2436438c4352b8f4c62397d22317878902d2d9237cd7e",
+      "test_suites": [
+        {
+          "passed": 13,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-allocation-release.log",
+      "exit_code": 0,
+      "sha256": "2f4104f1d24a686aafacca13161fb11bea4db034c01d3aba6887ab57e220ffc1",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 10
+    },
+    {
+      "log": "time-1-clippy-root-dev.log",
+      "exit_code": 0,
+      "sha256": "fcab019cdd56c48b18b1a1a14ef39c692bad88cbdbc627dca6a1f579b7384a4a",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-clippy-root-release.log",
+      "exit_code": 0,
+      "sha256": "5f9c3fa9d45744268308a80685dda3df7c51332b94f63b68d4235c331b749aa7",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-clippy-host-dev.log",
+      "exit_code": 0,
+      "sha256": "2bc421b19225c4a1d60e35422a35bb68992a859aad8e1eedf0df373de523e805",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-clippy-host-release.log",
+      "exit_code": 0,
+      "sha256": "74e7a88befecd56168f7f3eb80bcabf5cd738a48c3f211284b25ccbc4dcadab6",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-fmt-root.log",
+      "exit_code": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 0
+    },
+    {
+      "log": "time-1-fmt-host.log",
+      "exit_code": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "test_suites": [],
+      "ownership_compile_fail_passes": 0
+    }
+  ],
+  "native_runs": [
+    {
+      "Started": "2026-10-16T09:15:12.8271844Z",
+      "Finished": "2026-10-16T09:16:16.7015719Z",
+      "Exit": 0,
+      "Name": "ipc-dev",
+      "Source": "85f1464631338d892efdf50d614e1a8c7e898440"
+    },
+    {
+      "Started": "2026-10-16T09:16:16.7459743Z",
+      "Finished": "2026-10-16T09:18:42.4077859Z",
+      "Exit": 0,
+      "Name": "ipc-release",
+      "Source": "85f1464631338d892efdf50d614e1a8c7e898440"
+    },
+    {
+      "Started": "2026-10-16T09:18:42.4135264Z",
+      "Finished": "2026-10-16T09:18:58.4544498Z",
+      "Exit": 0,
+      "Name": "supervisor-dev",
+      "Source": "85f1464631338d892efdf50d614e1a8c7e898440"
+    },
+    {
+      "Started": "2026-10-16T09:18:58.4565439Z",
+      "Finished": "2026-10-16T09:19:14.0648856Z",
+      "Exit": 0,
+      "Name": "supervisor-release",
+      "Source": "85f1464631338d892efdf50d614e1a8c7e898440"
+    },
+    {
+      "Started": "2026-10-16T09:19:14.0665866Z",
+      "Finished": "2026-10-16T09:22:52.4993764Z",
+      "Exit": 0,
+      "Name": "legacy-child-dev",
+      "Source": "85f1464631338d892efdf50d614e1a8c7e898440"
+    },
+    {
+      "Started": "2026-10-16T09:22:52.5013661Z",
+      "Finished": "2026-10-16T09:24:48.5849625Z",
+      "Exit": 0,
+      "Name": "legacy-child-release",
+      "Source": "85f1464631338d892efdf50d614e1a8c7e898440"
+    },
+    {
+      "Started": "2026-10-16T09:24:48.5865191Z",
+      "Finished": "2026-10-16T09:27:29.6196948Z",
+      "Exit": 0,
+      "Name": "allocation-release",
+      "Source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f"
+    }
+  ],
+  "source_reuse": "See source-reuse.json; first failed/preliminary logs remain in raw evidence, not final gate passes."
+}

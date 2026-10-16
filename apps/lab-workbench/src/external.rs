@@ -2168,6 +2168,7 @@ mod tests {
             FakeClient::default(),
         );
         dispatcher.apply_client_update(ClientUpdate::Hello(HelloState {
+            time_anchor: None,
             boot_id: "0123456789abcdef0123456789abcdef".into(),
             scope: "scope".into(),
             next_seq: 1,
@@ -3362,6 +3363,7 @@ mod tests {
             client,
         );
         dispatcher.apply_client_update(ClientUpdate::Hello(HelloState {
+            time_anchor: None,
             boot_id: "0123456789abcdef0123456789abcdef".into(),
             scope: "scope".into(),
             next_seq: 1,

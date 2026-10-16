@@ -163,13 +163,28 @@ fn sample_boundary_json(sample: &Sample) -> serde_json::Value {
 #[derive(Clone, Copy)]
 pub struct SystemClock {
     origin: Instant,
+    display_anchor: Option<(Duration, i64, Duration)>,
 }
 impl SystemClock {
     /// Create one process-local monotonic origin before host startup.
     pub fn new() -> Self {
+        let origin = Instant::now();
+        let anchor = crate::recorder::TimeAnchor::capture(
+            || origin.elapsed(),
+            || Ok(std::time::SystemTime::now()),
+        )
+        .ok();
         Self {
-            origin: Instant::now(),
+            origin,
+            display_anchor: anchor.and_then(|a| Some((a.before(), a.wall_us()?, a.after()))),
         }
+    }
+    /// Fixed display-only OS UTC mapping, independent of Recorder activity.
+    /// The bracket bounds sampling uncertainty, not absolute OS clock accuracy.
+    pub fn time_anchor(&self) -> Option<crate::recorder::TimeAnchor> {
+        self.display_anchor.and_then(|(before, utc, after)| {
+            crate::recorder::TimeAnchor::valid(before, utc, after).ok()
+        })
     }
 }
 impl Default for SystemClock {

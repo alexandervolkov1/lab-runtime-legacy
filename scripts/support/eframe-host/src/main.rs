@@ -4,11 +4,16 @@
 #[cfg(windows)]
 mod consumer;
 #[cfg(windows)]
+#[path = "../../../../apps/lab-workbench/src/time_context.rs"]
+mod time_context;
+#[cfg(windows)]
 pub(crate) use consumer::{presentation, readonly_limits, readonly_values};
 #[cfg(windows)]
 mod ipc_app;
 #[cfg(windows)]
 mod private_ipc;
+#[cfg(windows)]
+mod time_axis;
 #[cfg(windows)]
 mod ui;
 #[cfg(windows)]

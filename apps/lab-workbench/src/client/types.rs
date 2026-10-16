@@ -78,6 +78,7 @@ pub(crate) struct QuarantinedRecoveryRecord {
 /// Runtime-advertised hello/session data consumed by the client owner.
 #[derive(Clone, Debug, PartialEq)]
 pub(crate) struct HelloState {
+    pub(crate) time_anchor: Option<crate::time_context::TimeAnchor>,
     pub(crate) boot_id: String,
     pub(crate) scope: String,
     pub(crate) next_seq: u64,

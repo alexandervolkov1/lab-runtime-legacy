@@ -337,6 +337,7 @@ fn unconfirmed_stop_retains_same_join_and_owner_until_later_observation() {
 }
 fn hello() -> ClientUpdate {
     ClientUpdate::Hello(HelloState {
+        time_anchor: None,
         boot_id: "boot".into(),
         scope: "scope".into(),
         next_seq: 9,
@@ -751,10 +752,25 @@ pub(crate) fn assert_native_private_ipc_shutdown() {
     );
     assert_eq!(stops.load(Ordering::SeqCst), 1);
     assert!(!pump.supervisor().unwrap().worker_finished());
+    // Status deliberately uses try_lock: a busy metadata poll is not evidence
+    // that retained handles or original I/O receipts have disappeared.
+    let observed_status = || {
+        let deadline = Instant::now() + Duration::from_secs(2);
+        loop {
+            if let Ok(status) = bridge.status() {
+                break status;
+            }
+            assert!(
+                Instant::now() < deadline,
+                "IPC metadata observation deadline"
+            );
+            thread::yield_now();
+        }
+    };
+    let held = observed_status();
     assert!(
-        bridge
-            .status()
-            .is_ok_and(|s| !s.retired && s.handles == 6 && s.pending_io > 0)
+        !held.retired && held.handles == 6 && held.pending_io > 0,
+        "{held:?}"
     );
     io_gate.store(true, Ordering::Release);
     retire_gate.store(true, Ordering::Release);
@@ -770,10 +786,10 @@ pub(crate) fn assert_native_private_ipc_shutdown() {
     pump.shutdown().unwrap();
     assert_eq!(stops.load(Ordering::SeqCst), 1);
     assert!(rx.try_recv().is_err());
+    let retired = observed_status();
     assert!(
-        bridge
-            .status()
-            .is_ok_and(|s| s.retired && s.handles == 0 && s.pending_io == 0)
+        retired.retired && retired.handles == 0 && retired.pending_io == 0,
+        "{retired:?}"
     );
     println!(
         "PARENT_SHUTDOWN original_process_proof_preceded_ipc_retirement=true client_stopped_once=true repeated_shutdown_pending_then_confirmed=true"

@@ -1,0 +1,9 @@
+{
+  "crates/lab-core": [],
+  "apps/lab-runtime/src/recorder": [],
+  "Cargo.toml": [],
+  "Cargo.lock": [],
+  "scripts/support/native-glow-backend.rs": [],
+  "scripts/support/native-glow-device.rs": [],
+  "apps/lab-workbench/src/gui/plot_ui.rs": []
+}

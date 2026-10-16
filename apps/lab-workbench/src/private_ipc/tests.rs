@@ -558,3 +558,40 @@ fn selected_scalar_kinds_units_exact_integer_and_nonfinite_wire_rejection() {
         }
     }
 }
+
+#[test]
+fn boot_time_metadata_round_trips_without_changing_selected_values_and_rejects_rebinding() {
+    let (mut observations, references) = maximum_reads();
+    let selections = selected(&references);
+    let mut bytes = vec![0; SNAPSHOT];
+    let legacy_len = reads::encode(&mut bytes, &observations, &selections).unwrap();
+    let legacy = bytes[..legacy_len].to_vec();
+    assert!(reads::time_anchor(&legacy).unwrap().is_none());
+    let anchor = crate::time_context::TimeAnchor {
+        boot_id: "boot".into(),
+        before_ns: 4,
+        after_ns: 8,
+        utc_us: -1_000_000,
+    };
+    observations.time_anchor = Some(anchor.clone());
+    let length = reads::encode(&mut bytes, &observations, &selections).unwrap();
+    let current = bytes[..length].to_vec();
+    reads::validate(&current).unwrap();
+    assert_eq!(reads::time_anchor(&current).unwrap(), Some(anchor));
+    // LRD2 adds only a bounded prefix; the original scalar/trace records are exact.
+    assert_eq!(&legacy[6..], &current[6 + 2 + 4 + 24..]);
+    assert_eq!(
+        reads::inspect(&legacy).unwrap()[0].unwrap().points,
+        reads::inspect(&current).unwrap()[0].unwrap().points
+    );
+    observations.time_anchor.as_mut().unwrap().utc_us += 1;
+    let changed = reads::encode(&mut bytes, &observations, &selections).unwrap();
+    assert!(reads::successor(&current, &bytes[..changed], true).is_err());
+    observations.time_anchor.as_mut().unwrap().boot_id = "next".into();
+    let changed = reads::encode(&mut bytes, &observations, &selections).unwrap();
+    assert!(reads::successor(&current, &bytes[..changed], true).is_ok());
+    assert!(reads::successor(&current, &bytes[..changed], false).is_err());
+    for end in 0..34 {
+        assert!(reads::validate(&current[..end]).is_err());
+    }
+}

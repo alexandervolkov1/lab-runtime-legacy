@@ -269,3 +269,12 @@ Runtime WebSocket regression. See the canonical
 [Runtime Application API](../../docs/api/README.md) and
 [Workbench API](../../docs/workbench-api.md) for the two surfaces; this README and
 the scripts are not competing protocol specifications.
+
+
+For TIME-1, `bb time1.clj PORT MODE NEW_RESULT.json` configures the existing
+Workbench Parent with live virtual Scalar/Plot and a time-axis mode. MODE is
+`default`, `local_calendar`, `utc`, `runtime_elapsed`, `experiment_elapsed`, or
+`verify`. The script uses only hello/status/presentation-get/document-replacement
+on the loopback Workbench API and checks exact readback. It opens no Runtime
+socket. Experiment elapsed currently explains its fallback to Runtime elapsed.
+See [TIME-1 reproduction and evidence](../../docs/developer/time-1-validation.md).

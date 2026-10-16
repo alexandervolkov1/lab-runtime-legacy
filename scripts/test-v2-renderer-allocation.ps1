@@ -79,7 +79,7 @@ try {
     $sourceRoot = (Join-Path $repo 'apps/lab-workbench/src').Replace('\', '/')
     $support = (Join-Path $repo 'scripts/support').Replace('\', '/')
     $rootModules = @()
-    foreach ($name in @('client', 'dispatcher', 'external', 'readonly_limits','readonly_values', 'readonly_cache', 'model', 'ownership', 'parent', 'presentation', 'recovery', 'storage', 'supervisor', 'private_ipc')) {
+    foreach ($name in @('client', 'dispatcher', 'external', 'readonly_limits','readonly_values', 'readonly_cache', 'model', 'ownership', 'parent', 'presentation', 'recovery', 'storage','time_context', 'supervisor', 'private_ipc')) {
         if ($name -eq 'supervisor') {
             $path = (Join-Path $repo 'apps/lab-workbench/src/supervisor/mod.rs').Replace('\','/')
             $rootModules += "#[path = `"$path`"] mod supervisor;"

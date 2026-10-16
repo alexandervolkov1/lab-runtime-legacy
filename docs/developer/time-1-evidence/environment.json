@@ -1,0 +1,9 @@
+{
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.95.0\nLLVM version: 22.1.2",
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "babashka": "babashka v1.13.220",
+  "timezone": "Russian Standard Time",
+  "source": "85f1464631338d892efdf50d614e1a8c7e898440",
+  "python": "3.14.6",
+  "platform": "Windows-10-10.0.19045-SP0"
+}

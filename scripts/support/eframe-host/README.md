@@ -88,3 +88,12 @@ See the [reproduction/ownership guide](../../../docs/developer/eframe-3-readonly
 and [qualification evidence](../../../docs/developer/eframe-3-validation.md).
 Custom Glow remains separate and unchanged; v1 remains default. No public API,
 Runtime mutation, renderer fallback, release or activation is introduced.
+
+
+TIME-1 adds configurable read-only measurement time labels through optional
+`plots[].axes.time_mode`. See the [contract](../../../docs/developer/time-1-time-axis.md)
+and [Windows virtual validation](../../../docs/developer/time-1-validation.md).
+The real experiment uses `t1.py dev|release wgpu|glow UNIQUE-RUN` and the external
+Babashka client. Calendar labels use a fixed boot-matched OS UTC estimate;
+missing bindings and unknown experiment starts show relative time explicitly.
+No GPU integration, instrument command or extra Runtime request is added.

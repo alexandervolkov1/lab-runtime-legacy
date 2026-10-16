@@ -1,0 +1,64 @@
+[
+  {
+    "profile": "dev",
+    "path": "target\\debug\\lab-runtime.exe",
+    "bytes": 16024576,
+    "sha256": "5a85a5b82c5e4dd4993d87bad94b3d4388b925751c905c61291d8a370c22810a",
+    "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+    "build_source": "85f1464631338d892efdf50d614e1a8c7e898440"
+  },
+  {
+    "profile": "dev",
+    "path": "target\\debug\\lab-workbench.exe",
+    "bytes": 46337536,
+    "sha256": "03b1dbcae50003e0dd84373672c58d2171434f19a7cbc03b2abcbc3218cdfbe5",
+    "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+    "build_source": "85f1464631338d892efdf50d614e1a8c7e898440"
+  },
+  {
+    "profile": "dev",
+    "path": "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe",
+    "bytes": 51499520,
+    "sha256": "f0da8ae43f102415b52e6fd7b4e89bdb11448b545c70f5eca75c065a42bfa8aa",
+    "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+    "build_source": "806d6b6286a3305f2a56322751d616ef46e06cef"
+  },
+  {
+    "profile": "release",
+    "path": "target\\release\\lab-runtime.exe",
+    "bytes": 7703552,
+    "sha256": "657cfff79f8ff285fb4ac84c5075b2e5b6ab908aa9e7fb30a2c271a290c1a6a6",
+    "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+    "build_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f"
+  },
+  {
+    "profile": "release",
+    "path": "target\\release\\lab-workbench.exe",
+    "bytes": 13592064,
+    "sha256": "f8f737ab96eda2baa4ccff68bd178d508b20b4faab0547d11aae5db8c59c3176",
+    "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+    "build_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f"
+  },
+  {
+    "profile": "release",
+    "path": "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe",
+    "bytes": 15972864,
+    "sha256": "90ae51052ce1da855c086915bb7c11218fea53bbdfbb89076987c39043f07b41",
+    "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+    "build_source": "806d6b6286a3305f2a56322751d616ef46e06cef"
+  },
+  {
+    "profile": "dev",
+    "path": "target\\time-1\\compat-old\\lab-runtime.exe",
+    "bytes": 16015872,
+    "sha256": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b",
+    "source": "EFRAME-3 qualified binaries; root inputs 2a2af37e6d9d99b079408a8921a12649164527bf"
+  },
+  {
+    "profile": "dev",
+    "path": "target\\time-1\\compat-old\\lab-workbench.exe",
+    "bytes": 46309376,
+    "sha256": "85c982213ee243bd08f00e09ee5730c58edd0d4035efb1d8a09084235ee0d88b",
+    "source": "EFRAME-3 qualified binaries; root inputs 2a2af37e6d9d99b079408a8921a12649164527bf"
+  }
+]

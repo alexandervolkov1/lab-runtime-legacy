@@ -15,6 +15,7 @@ struct Entry<'a> {
     fields: Fields<'a>,
 }
 pub(crate) struct SelectedSnapshot<'a> {
+    pub(crate) time_anchor: Option<crate::time_context::TimeAnchor>,
     header: Header,
     freshness: Freshness,
     current: bool,
@@ -35,7 +36,10 @@ impl<'a> SelectedSnapshot<'a> {
         if target_bytes > TRACES * reads::REFERENCE {
             return Err("selected target allocation bound");
         }
+        let time_anchor = reads::time_anchor(bytes)?;
+        target_bytes += time_anchor.as_ref().map_or(0, |a| a.boot_id.capacity());
         Ok(Self {
+            time_anchor,
             header,
             freshness: reads::decode_freshness(bytes[5]),
             current,

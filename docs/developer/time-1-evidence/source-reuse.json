@@ -1,0 +1,11 @@
+{
+  "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+  "differences_since_host_build": [
+    "apps/lab-workbench/src/parent/tests.rs",
+    "scripts/support/eframe-host/t1.py"
+  ],
+  "differences_since_root_dev_build": [
+    "scripts/support/eframe-host/t1.py"
+  ],
+  "explanation": "Only parent/tests.rs (cfg(test), not a host input) and t1.py changed after the stock host build. Only the test driver changed after the root dev build. Runtime/Workbench production Rust and Cargo inputs are identical. No byte-reproducible relinking claim."
+}

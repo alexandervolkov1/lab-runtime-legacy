@@ -104,6 +104,7 @@ inline!(
     Purpose,
     Selector,
     Density,
+    TimeAxisMode,
     Layout,
     V1PanelKind,
     V1ControlKind,
@@ -162,7 +163,11 @@ object!(Plot {
     axes,
     traces
 });
-object!(Axes { y_min, y_max });
+object!(Axes {
+    y_min,
+    y_max,
+    time_mode
+});
 object!(Trace {
     id,
     data_id,

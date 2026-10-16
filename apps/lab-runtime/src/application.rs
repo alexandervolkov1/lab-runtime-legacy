@@ -356,6 +356,15 @@ impl Application {
                                     "version":protocol::PROTOCOL_VERSION},
                                 "application":{"api_version":protocol::APPLICATION_API_VERSION,
                                     "package_version":env!("CARGO_PKG_VERSION")},
+                                "time_anchor":service.clock().time_anchor().map(|anchor| json!({
+                                    "boot_id":service.boot_id(),
+                                    "source":"system_clock",
+                                    "monotonic_before_ns":anchor.before().as_nanos().to_string(),
+                                    "monotonic_after_ns":anchor.after().as_nanos().to_string(),
+                                    "utc_unix_us":anchor.wall_us().expect("valid display anchor").to_string(),
+                                    "bracket_uncertainty_ns":anchor.uncertainty_ns().to_string(),
+                                    "utc_accuracy_ns":null
+                                })),
                                 "scope":opened.scope,
                                 "next_seq":opened.next_seq.to_string(),"state":"ready",
                                 "capabilities":protocol::capabilities(features),

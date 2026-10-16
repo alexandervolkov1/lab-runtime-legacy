@@ -1781,6 +1781,7 @@ mod tests {
     fn recovery_model(records: Vec<RecoveryRecord>) -> WorkbenchModel {
         let mut model = WorkbenchModel::new(PresentationDocument::empty("recovery-gui"));
         model.apply_client_update(ClientUpdate::Hello(HelloState {
+            time_anchor: None,
             boot_id: "boot".into(),
             scope: "scope".into(),
             next_seq: 9,
@@ -1959,6 +1960,7 @@ mod tests {
     #[test]
     fn stale_confirmation_is_visible_to_the_gui_before_submission() {
         let hello = |boot: &str| HelloState {
+            time_anchor: None,
             boot_id: boot.into(),
             scope: "scope".into(),
             next_seq: 1,
