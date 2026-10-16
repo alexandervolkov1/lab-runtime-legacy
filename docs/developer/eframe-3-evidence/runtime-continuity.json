@@ -1,0 +1,31 @@
+{
+  "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+  "cases": 4,
+  "external_client": "Babashka 1.13.220",
+  "real_executables": true,
+  "runtime_connections_before_independent_runtime_loss": 1,
+  "initial_runtime_requests": 9,
+  "request_operations": [
+    "hello",
+    "discover",
+    "measurements_current",
+    "reference",
+    "controller",
+    "recording_status",
+    "configuration_properties",
+    "discover",
+    "subscribe"
+  ],
+  "additional_runtime_requests_for_navigation_minimize_three_replacements_gui_crash_restart": 0,
+  "runtime_mutations": 0,
+  "operation_status": 0,
+  "exact_retry": 0,
+  "next_sequence": "1",
+  "recovery_summary_unchanged": true,
+  "canonical_large_document_bytes": 979038,
+  "large_replacement_revision": 5,
+  "disabled_editor_action_widgets": 12,
+  "independent_runtime_loss_only_after_gui_continuity_assertions": true,
+  "activation_qualified": false,
+  "mp_1": "OPEN"
+}

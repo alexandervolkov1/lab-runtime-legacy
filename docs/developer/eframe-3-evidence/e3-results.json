@@ -1,0 +1,1302 @@
+[
+  {
+    "passed": true,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "dirty": " M docs/developer/project-status.md\n?? docs/developer/eframe-3-evidence/\n?? docs/developer/eframe-3-readonly-workbench.md\n?? docs/developer/eframe-3-validation.md\n",
+    "binaries": {
+      "lab-runtime.exe": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b",
+      "lab-workbench.exe": "85c982213ee243bd08f00e09ee5730c58edd0d4035efb1d8a09084235ee0d88b",
+      "lab-eframe-host.exe": "7d9fccbab3419dcbe8ce15eba20042aa0637fbb5d13c66d865242620677a2902"
+    },
+    "activation_qualified": false,
+    "large_document": {
+      "canonical_bytes": 979038,
+      "admission_observed_seconds": 1.7878328000660986,
+      "revision": "5"
+    },
+    "workbench_id": "0000000000003af418def36e4343fbed",
+    "runtime_connections_before_independent_runtime_loss": 1,
+    "runtime_attachment": {
+      "boot_id": "579d188c335197272a44ff4fc4328350",
+      "scope": "579d188c335197272a44ff4fc4328350:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "579d188c335197272a44ff4fc4328350",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "minimized_before": {
+      "canonical_document_bytes": 13871,
+      "document_revision": 3,
+      "minimized": true,
+      "observation_snapshot": 350,
+      "owner_counter": 1613,
+      "ui_counter": 1592
+    },
+    "minimized_after": {
+      "canonical_document_bytes": 979038,
+      "document_revision": 5,
+      "minimized": true,
+      "observation_snapshot": 1579,
+      "owner_counter": 2704,
+      "ui_counter": 1592
+    },
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 450445312,
+      "peak_process_commit": 443961344,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 449990656,
+      "peak_process_commit": 443424768,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "first_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 2753362,
+      "incarnation": 1,
+      "parent_pid": 15092,
+      "pid": 7996,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000003af418def36e4343fbed"
+    },
+    "restarted_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 5571012,
+      "incarnation": 2,
+      "parent_pid": 15092,
+      "pid": 3260,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000003af418def36e4343fbed"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-2"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-09.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-14.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-18.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-21.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-24.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-29.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-33.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-37.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-1\\frame-40.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-2\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15092-0000000000003af418def36e4343fbed-2\\frame-08.json"
+    ],
+    "actions": [
+      {
+        "pan": true,
+        "zoom": true,
+        "zoom_input": "stock secondary-button box",
+        "legend": true,
+        "bounds_before": [
+          [
+            0.2939872533628967,
+            78.66727254459997
+          ],
+          [
+            2.7109984466371033,
+            79.86092241884147
+          ]
+        ],
+        "bounds_pan": [
+          [
+            -0.04411677210011117,
+            78.13535149521613
+          ],
+          [
+            3.915467873263744,
+            80.07946010626158
+          ]
+        ],
+        "bounds_zoom": [
+          [
+            1.6291063431981638,
+            78.74047036155449
+          ],
+          [
+            2.245168741869073,
+            79.47817406633125
+          ]
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "All panels",
+        "rect": [
+          334.84375,
+          92.0,
+          398.375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next window",
+        "rect": [
+          403.53125,
+          26.1875,
+          488.125,
+          44.1875
+        ]
+      },
+      {
+        "native_click": "Previous window",
+        "rect": [
+          8.0,
+          26.1875,
+          114.28125,
+          44.1875
+        ]
+      },
+      {
+        "minimized_seconds": 121.95754600001965,
+        "logic_before": {
+          "canonical_document_bytes": 13871,
+          "document_revision": 3,
+          "minimized": true,
+          "observation_snapshot": 350,
+          "owner_counter": 1613,
+          "ui_counter": 1592
+        },
+        "logic_after": {
+          "canonical_document_bytes": 979038,
+          "document_revision": 5,
+          "minimized": true,
+          "observation_snapshot": 1579,
+          "owner_counter": 2704,
+          "ui_counter": 1592
+        },
+        "same_child_pid": 7996,
+        "same_incarnation": 1
+      }
+    ],
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ]
+  },
+  {
+    "passed": true,
+    "profile": "dev",
+    "renderer": "glow",
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "dirty": " M docs/developer/project-status.md\n?? docs/developer/eframe-3-evidence/\n?? docs/developer/eframe-3-readonly-workbench.md\n?? docs/developer/eframe-3-validation.md\n",
+    "binaries": {
+      "lab-runtime.exe": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b",
+      "lab-workbench.exe": "85c982213ee243bd08f00e09ee5730c58edd0d4035efb1d8a09084235ee0d88b",
+      "lab-eframe-host.exe": "7d9fccbab3419dcbe8ce15eba20042aa0637fbb5d13c66d865242620677a2902"
+    },
+    "activation_qualified": false,
+    "large_document": {
+      "canonical_bytes": 979038,
+      "admission_observed_seconds": 2.3562845999840647,
+      "revision": "5"
+    },
+    "workbench_id": "000000000000178018def39587196f9d",
+    "runtime_connections_before_independent_runtime_loss": 1,
+    "runtime_attachment": {
+      "boot_id": "0f1b183e594f8a161b752d1937b52970",
+      "scope": "0f1b183e594f8a161b752d1937b52970:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "0f1b183e594f8a161b752d1937b52970",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "minimized_before": {
+      "canonical_document_bytes": 13871,
+      "document_revision": 3,
+      "minimized": true,
+      "observation_snapshot": 289,
+      "owner_counter": 1531,
+      "ui_counter": 1514
+    },
+    "minimized_after": {
+      "canonical_document_bytes": 979038,
+      "document_revision": 5,
+      "minimized": true,
+      "observation_snapshot": 1526,
+      "owner_counter": 2633,
+      "ui_counter": 1514
+    },
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 182591488,
+      "peak_process_commit": 176046080,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 183123968,
+      "peak_process_commit": 176553984,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "first_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 2753494,
+      "incarnation": 1,
+      "parent_pid": 6016,
+      "pid": 4920,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000178018def39587196f9d"
+    },
+    "restarted_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 8258406,
+      "incarnation": 2,
+      "parent_pid": 6016,
+      "pid": 9468,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000178018def39587196f9d"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-2"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-10.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-12.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-15.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-18.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-20.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-23.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-27.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-31.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-1\\frame-34.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-2\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\6016-000000000000178018def39587196f9d-2\\frame-08.json"
+    ],
+    "actions": [
+      {
+        "pan": true,
+        "zoom": true,
+        "zoom_input": "stock secondary-button box",
+        "legend": true,
+        "bounds_before": [
+          [
+            0.33061903895663025,
+            79.07996950329873
+          ],
+          [
+            1.8710449610433697,
+            79.84326263046071
+          ]
+        ],
+        "bounds_pan": [
+          [
+            0.06194889178174817,
+            78.54887152616026
+          ],
+          [
+            3.035175195809432,
+            80.01417703105534
+          ]
+        ],
+        "bounds_zoom": [
+          [
+            1.3322391059115732,
+            79.00495921638691
+          ],
+          [
+            1.7948363459517387,
+            79.5609782029031
+          ]
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "All panels",
+        "rect": [
+          334.84375,
+          92.0,
+          398.375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next window",
+        "rect": [
+          403.53125,
+          26.1875,
+          488.125,
+          44.1875
+        ]
+      },
+      {
+        "native_click": "Previous window",
+        "rect": [
+          8.0,
+          26.1875,
+          114.28125,
+          44.1875
+        ]
+      },
+      {
+        "minimized_seconds": 122.52399559994228,
+        "logic_before": {
+          "canonical_document_bytes": 13871,
+          "document_revision": 3,
+          "minimized": true,
+          "observation_snapshot": 289,
+          "owner_counter": 1531,
+          "ui_counter": 1514
+        },
+        "logic_after": {
+          "canonical_document_bytes": 979038,
+          "document_revision": 5,
+          "minimized": true,
+          "observation_snapshot": 1526,
+          "owner_counter": 2633,
+          "ui_counter": 1514
+        },
+        "same_child_pid": 4920,
+        "same_incarnation": 1
+      }
+    ],
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ]
+  },
+  {
+    "passed": true,
+    "profile": "release",
+    "renderer": "wgpu",
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "dirty": " M docs/developer/project-status.md\n?? docs/developer/eframe-3-evidence/\n?? docs/developer/eframe-3-readonly-workbench.md\n?? docs/developer/eframe-3-validation.md\n",
+    "binaries": {
+      "lab-runtime.exe": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79",
+      "lab-workbench.exe": "3229927130b9cc21898f8563e98bd3df9c423f954dd2417e5ff0c5f7409e6a7a",
+      "lab-eframe-host.exe": "35fe0dda06de8a510538245b433afc90f246d1de395026230631a9229691ecb4"
+    },
+    "activation_qualified": false,
+    "large_document": {
+      "canonical_bytes": 979038,
+      "admission_observed_seconds": 1.8447531999554485,
+      "revision": "5"
+    },
+    "workbench_id": "000000000000475818def3bb4f41544d",
+    "runtime_connections_before_independent_runtime_loss": 1,
+    "runtime_attachment": {
+      "boot_id": "770cb6cd26d69a7ecb867f1102e8cd84",
+      "scope": "770cb6cd26d69a7ecb867f1102e8cd84:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "770cb6cd26d69a7ecb867f1102e8cd84",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "minimized_before": {
+      "canonical_document_bytes": 13871,
+      "document_revision": 3,
+      "minimized": true,
+      "observation_snapshot": 126,
+      "owner_counter": 570,
+      "ui_counter": 549
+    },
+    "minimized_after": {
+      "canonical_document_bytes": 979038,
+      "document_revision": 5,
+      "minimized": true,
+      "observation_snapshot": 1350,
+      "owner_counter": 1670,
+      "ui_counter": 549
+    },
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 438882304,
+      "peak_process_commit": 432398336,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 439095296,
+      "peak_process_commit": 432533504,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "first_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 5767620,
+      "incarnation": 1,
+      "parent_pid": 18264,
+      "pid": 12680,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000475818def3bb4f41544d"
+    },
+    "restarted_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 7603018,
+      "incarnation": 2,
+      "parent_pid": 18264,
+      "pid": 19360,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000475818def3bb4f41544d"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-2"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-04.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-05.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-07.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-08.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-09.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-10.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-11.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-1\\frame-12.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-2\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\18264-000000000000475818def3bb4f41544d-2\\frame-05.json"
+    ],
+    "actions": [
+      {
+        "pan": true,
+        "zoom": true,
+        "zoom_input": "stock secondary-button box",
+        "legend": true,
+        "bounds_before": [
+          [
+            0.220967183808269,
+            79.02409903332938
+          ],
+          [
+            1.980432916191731,
+            79.89590139918401
+          ]
+        ],
+        "bounds_pan": [
+          [
+            0.08620013710828606,
+            79.05857280259822
+          ],
+          [
+            1.9596954996462184,
+            79.98647605727169
+          ]
+        ],
+        "bounds_zoom": [
+          [
+            0.8755352751143582,
+            79.34738987914918
+          ],
+          [
+            1.1700439948513661,
+            79.69948834975824
+          ]
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "All panels",
+        "rect": [
+          334.84375,
+          92.0,
+          398.375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next window",
+        "rect": [
+          403.53125,
+          26.1875,
+          488.125,
+          44.1875
+        ]
+      },
+      {
+        "native_click": "Previous window",
+        "rect": [
+          8.0,
+          26.1875,
+          114.28125,
+          44.1875
+        ]
+      },
+      {
+        "minimized_seconds": 121.98274789995048,
+        "logic_before": {
+          "canonical_document_bytes": 13871,
+          "document_revision": 3,
+          "minimized": true,
+          "observation_snapshot": 126,
+          "owner_counter": 570,
+          "ui_counter": 549
+        },
+        "logic_after": {
+          "canonical_document_bytes": 979038,
+          "document_revision": 5,
+          "minimized": true,
+          "observation_snapshot": 1350,
+          "owner_counter": 1670,
+          "ui_counter": 549
+        },
+        "same_child_pid": 12680,
+        "same_incarnation": 1
+      }
+    ],
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ]
+  },
+  {
+    "passed": true,
+    "profile": "release",
+    "renderer": "glow",
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "dirty": " M docs/developer/project-status.md\n?? docs/developer/eframe-3-evidence/\n?? docs/developer/eframe-3-readonly-workbench.md\n?? docs/developer/eframe-3-validation.md\n",
+    "binaries": {
+      "lab-runtime.exe": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79",
+      "lab-workbench.exe": "3229927130b9cc21898f8563e98bd3df9c423f954dd2417e5ff0c5f7409e6a7a",
+      "lab-eframe-host.exe": "35fe0dda06de8a510538245b433afc90f246d1de395026230631a9229691ecb4"
+    },
+    "activation_qualified": false,
+    "large_document": {
+      "canonical_bytes": 979038,
+      "admission_observed_seconds": 1.9613635999849066,
+      "revision": "5"
+    },
+    "workbench_id": "000000000000260418def3dc01c39845",
+    "runtime_connections_before_independent_runtime_loss": 1,
+    "runtime_attachment": {
+      "boot_id": "d7de3707aa9a9b872d5c7be836f886e5",
+      "scope": "d7de3707aa9a9b872d5c7be836f886e5:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "d7de3707aa9a9b872d5c7be836f886e5",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "minimized_before": {
+      "canonical_document_bytes": 13871,
+      "document_revision": 3,
+      "minimized": true,
+      "observation_snapshot": 125,
+      "owner_counter": 572,
+      "ui_counter": 550
+    },
+    "minimized_after": {
+      "canonical_document_bytes": 979038,
+      "document_revision": 5,
+      "minimized": true,
+      "observation_snapshot": 1349,
+      "owner_counter": 1671,
+      "ui_counter": 550
+    },
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 147374080,
+      "peak_process_commit": 140812288,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 147476480,
+      "peak_process_commit": 140931072,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "first_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 3408728,
+      "incarnation": 1,
+      "parent_pid": 9732,
+      "pid": 23124,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000260418def3dc01c39845"
+    },
+    "restarted_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 3474264,
+      "incarnation": 2,
+      "parent_pid": 9732,
+      "pid": 10036,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000260418def3dc01c39845"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-2"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-04.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-05.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-07.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-08.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-09.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-10.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-11.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-1\\frame-12.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-2\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9732-000000000000260418def3dc01c39845-2\\frame-05.json"
+    ],
+    "actions": [
+      {
+        "pan": true,
+        "zoom": true,
+        "zoom_input": "stock secondary-button box",
+        "legend": true,
+        "bounds_before": [
+          [
+            0.23415942395852846,
+            79.127397524711
+          ],
+          [
+            1.7717828760414716,
+            79.88990471563038
+          ]
+        ],
+        "bounds_pan": [
+          [
+            0.10214474189370758,
+            79.104921543148
+          ],
+          [
+            1.8636531742799367,
+            79.97771431298021
+          ]
+        ],
+        "bounds_zoom": [
+          [
+            0.8442979008387661,
+            79.37658505434719
+          ],
+          [
+            1.1212025591589483,
+            79.70777152003613
+          ]
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "All panels",
+        "rect": [
+          334.84375,
+          92.0,
+          398.375,
+          110.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "native_click": "Next window",
+        "rect": [
+          403.53125,
+          26.1875,
+          488.125,
+          44.1875
+        ]
+      },
+      {
+        "native_click": "Previous window",
+        "rect": [
+          8.0,
+          26.1875,
+          114.28125,
+          44.1875
+        ]
+      },
+      {
+        "minimized_seconds": 122.11434369999915,
+        "logic_before": {
+          "canonical_document_bytes": 13871,
+          "document_revision": 3,
+          "minimized": true,
+          "observation_snapshot": 125,
+          "owner_counter": 572,
+          "ui_counter": 550
+        },
+        "logic_after": {
+          "canonical_document_bytes": 979038,
+          "document_revision": 5,
+          "minimized": true,
+          "observation_snapshot": 1349,
+          "owner_counter": 1671,
+          "ui_counter": 550
+        },
+        "same_child_pid": 23124,
+        "same_incarnation": 1
+      }
+    ],
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ]
+  }
+]

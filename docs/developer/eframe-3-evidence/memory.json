@@ -1,0 +1,52 @@
+{
+  "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+  "mp_1": "OPEN",
+  "activation_qualified": false,
+  "scope": "Original Windows Job/process peak commit, max across final furnace incarnations and corresponding final normal case",
+  "samples": [
+    {
+      "profile": "dev",
+      "renderer": "wgpu",
+      "peak_process_commit": 443961344,
+      "peak_job_commit": 450445312,
+      "furnace_peak_process_commit": 443961344,
+      "furnace_peak_job_commit": 450445312,
+      "normal_peak_process_commit": 442011648,
+      "normal_peak_job_commit": 448548864,
+      "explicit_fixture_cap": 1073741824
+    },
+    {
+      "profile": "dev",
+      "renderer": "glow",
+      "peak_process_commit": 176553984,
+      "peak_job_commit": 183123968,
+      "furnace_peak_process_commit": 176553984,
+      "furnace_peak_job_commit": 183123968,
+      "normal_peak_process_commit": 175443968,
+      "normal_peak_job_commit": 182005760,
+      "explicit_fixture_cap": 1073741824
+    },
+    {
+      "profile": "release",
+      "renderer": "wgpu",
+      "peak_process_commit": 432533504,
+      "peak_job_commit": 439095296,
+      "furnace_peak_process_commit": 432533504,
+      "furnace_peak_job_commit": 439095296,
+      "normal_peak_process_commit": 431214592,
+      "normal_peak_job_commit": 437772288,
+      "explicit_fixture_cap": 1073741824
+    },
+    {
+      "profile": "release",
+      "renderer": "glow",
+      "peak_process_commit": 140931072,
+      "peak_job_commit": 147476480,
+      "furnace_peak_process_commit": 140931072,
+      "furnace_peak_job_commit": 147476480,
+      "normal_peak_process_commit": 140288000,
+      "normal_peak_job_commit": 146862080,
+      "explicit_fixture_cap": 1073741824
+    }
+  ]
+}

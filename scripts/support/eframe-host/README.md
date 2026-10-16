@@ -67,3 +67,24 @@ start a real, exclusively virtual Runtime and real Workbench, then use the exist
 Workbench API to replace the document. Each normal/fault case uses a unique output
 directory and checks complete PNG CRC/pixels, client traffic and original process/
 IPC retirement. `ACTIVATION_QUALIFIED=false`; MP-1 remains open.
+
+## EFRAME-3 configurable read-only experiment
+
+The stock adapter now visits every admitted root/group occurrence, with named
+window/tab/panel navigation and standard plots. Every instrument control stays
+disabled. The stock child's bounded IPC service also progresses during eframe's
+hidden-window logic callbacks, without counting painting as required liveness.
+
+`e3.py dev|release wgpu|glow NEW_RUN_NAME` launches a real virtual furnace and the
+existing Parent, then invokes the external `clients/babashka-smoke/eframe3.clj`
+client for document creation/replacement/readback. It exercises native pan,
+boxed zoom, legend, navigation, two-minute minimize, a 979,038-byte canonical
+document replacement, GUI crash/recovery and close.
+It requires committed executable inputs, built binaries, Python, Babashka and an
+interactive Windows desktop. The finite capture diagnostic permits 128 screenshot
+requests per child; the existing capacity-one CPU capture queue is unchanged.
+
+See the [reproduction/ownership guide](../../../docs/developer/eframe-3-readonly-workbench.md)
+and [qualification evidence](../../../docs/developer/eframe-3-validation.md).
+Custom Glow remains separate and unchanged; v1 remains default. No public API,
+Runtime mutation, renderer fallback, release or activation is introduced.

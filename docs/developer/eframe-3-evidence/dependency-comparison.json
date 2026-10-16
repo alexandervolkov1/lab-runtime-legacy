@@ -1,0 +1,10 @@
+{
+  "packages_equal": true,
+  "packages": 168,
+  "same_remaining_inventory": true,
+  "canonical_lock_unchanged": true,
+  "canonical_lock_sha256": "04ac60047d20f4f238c9bcf1df20b601b1a487a111ddd4941905560dd25a25b0",
+  "working_lock_sha256": "661c6b63bbbda2a9a6bdd7fd76ae8f647196601622fd623ed088ed38c19c3ae0",
+  "normalized_working_matches_canonical": true,
+  "baseline_recorded_working_lock_sha256": "04ac60047d20f4f238c9bcf1df20b601b1a487a111ddd4941905560dd25a25b0"
+}

@@ -12,7 +12,7 @@ publish = false
 [[bin]]
 name = "lab-eframe-host"
 path = "src/main.rs"
-test = false
+test = true
 bench = false
 
 [target.'cfg(windows)'.dependencies]

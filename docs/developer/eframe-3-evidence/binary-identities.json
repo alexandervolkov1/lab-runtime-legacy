@@ -1,0 +1,50 @@
+[
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "dev",
+    "path": "target\\debug\\lab-runtime.exe",
+    "bytes": 16015872,
+    "sha256": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b",
+    "root_input_source": "2a2af37e6d9d99b079408a8921a12649164527bf"
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "dev",
+    "path": "target\\debug\\lab-workbench.exe",
+    "bytes": 46309376,
+    "sha256": "85c982213ee243bd08f00e09ee5730c58edd0d4035efb1d8a09084235ee0d88b",
+    "root_input_source": "2a2af37e6d9d99b079408a8921a12649164527bf"
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "dev",
+    "path": "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe",
+    "bytes": 51430400,
+    "sha256": "7d9fccbab3419dcbe8ce15eba20042aa0637fbb5d13c66d865242620677a2902",
+    "root_input_source": "f3a8445b054efa4190cfd847275fb5964b6561d4"
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "release",
+    "path": "target\\release\\lab-runtime.exe",
+    "bytes": 7692800,
+    "sha256": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79",
+    "root_input_source": "2a2af37e6d9d99b079408a8921a12649164527bf"
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "release",
+    "path": "target\\release\\lab-workbench.exe",
+    "bytes": 13612032,
+    "sha256": "3229927130b9cc21898f8563e98bd3df9c423f954dd2417e5ff0c5f7409e6a7a",
+    "root_input_source": "2a2af37e6d9d99b079408a8921a12649164527bf"
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "release",
+    "path": "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe",
+    "bytes": 15949312,
+    "sha256": "35fe0dda06de8a510538245b433afc90f246d1de395026230631a9229691ecb4",
+    "root_input_source": "f3a8445b054efa4190cfd847275fb5964b6561d4"
+  }
+]
