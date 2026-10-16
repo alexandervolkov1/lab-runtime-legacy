@@ -17,6 +17,9 @@ type Handle = *mut c_void;
 type Result<T> = std::result::Result<T, Error>;
 const FLAGS: u32 = 0x2000 | 0x100 | 0x200 | 0x8;
 
+#[cfg(feature = "accounting-probes")]
+pub mod accounting;
+
 #[repr(C)]
 #[derive(Default)]
 struct Basic {
@@ -191,6 +194,9 @@ impl Drop for Owned {
 }
 /// Unique Job and at most one original process/primary-thread record.
 /// Construct/use on the supervisor worker; deliberately not Send/Sync.
+/// ACTIVE_PROCESS=1 does not prove a single accounting member: Windows 10 can
+/// attach a console host to CREATE_NO_WINDOW children (MP-1). Exit/retirement
+/// always use the original process handle, never Job counts or peak counters.
 pub struct Job {
     handle: Owned,
     limits: Limits,

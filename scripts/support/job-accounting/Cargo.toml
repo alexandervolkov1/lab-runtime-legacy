@@ -1,0 +1,26 @@
+[package]
+name = "lab-job-accounting"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[features]
+windowed = []
+
+[dependencies]
+lab-windows-job = { path = "../../../crates/lab-windows-job", features = ["accounting-probes"] }
+serde_json = "=1.0.151"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
