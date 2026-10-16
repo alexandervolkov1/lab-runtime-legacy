@@ -192,7 +192,7 @@ pub(crate) fn run() -> std::result::Result<(), lab_windows_job::Error> {
                         match mode {
                             "wrong-incarnation" => bytes[32..40]
                                 .copy_from_slice(&(identity.incarnation + 1).to_le_bytes()),
-                            "version" => bytes[4..6].copy_from_slice(&2u16.to_le_bytes()),
+                            "version" => bytes[4..6].copy_from_slice(&u16::MAX.to_le_bytes()),
                             "variant" => bytes[6..8].copy_from_slice(&255u16.to_le_bytes()),
                             "oversize" => {
                                 bytes[8..12].copy_from_slice(&((CONTROL + 1) as u32).to_le_bytes())
