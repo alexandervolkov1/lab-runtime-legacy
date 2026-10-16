@@ -1,0 +1,74 @@
+[
+  {
+    "profile": "dev",
+    "role": "lab-runtime",
+    "path": "target/debug/lab-runtime.exe",
+    "exists": true,
+    "bytes": 16014848,
+    "sha256": "e88128f918e7931e1c59ef85fc1041ff0016057db5f1638bf44b830d5541da0f",
+    "built_by_this_task": false,
+    "executed_by_this_task": false,
+    "build_source_head": null,
+    "qualification": "inspection-only; no source attestation or B3B5 run"
+  },
+  {
+    "profile": "dev",
+    "role": "lab-workbench",
+    "path": "target/debug/lab-workbench.exe",
+    "exists": true,
+    "bytes": 45949440,
+    "sha256": "d3de300ebf046b7351d80d918e53260033bc0e628765b6de5d543805638cd548",
+    "built_by_this_task": false,
+    "executed_by_this_task": false,
+    "build_source_head": null,
+    "qualification": "inspection-only; no source attestation or B3B5 run"
+  },
+  {
+    "profile": "dev",
+    "role": "lab-native-child",
+    "path": "target/debug/lab-native-child.exe",
+    "exists": false,
+    "bytes": null,
+    "sha256": null,
+    "built_by_this_task": false,
+    "executed_by_this_task": false,
+    "build_source_head": null,
+    "qualification": "inspection-only; no source attestation or B3B5 run"
+  },
+  {
+    "profile": "release",
+    "role": "lab-runtime",
+    "path": "target/release/lab-runtime.exe",
+    "exists": true,
+    "bytes": 7697408,
+    "sha256": "e9b1a2da0fd779767d23b4cfca8eec4a5f3212df01b20b5883b61208c23ccded",
+    "built_by_this_task": false,
+    "executed_by_this_task": false,
+    "build_source_head": null,
+    "qualification": "inspection-only; no source attestation or B3B5 run"
+  },
+  {
+    "profile": "release",
+    "role": "lab-workbench",
+    "path": "target/release/lab-workbench.exe",
+    "exists": true,
+    "bytes": 13476352,
+    "sha256": "601badbd7062d191b34bab46c736932552637697720b720fbe13935be07b93d6",
+    "built_by_this_task": false,
+    "executed_by_this_task": false,
+    "build_source_head": null,
+    "qualification": "inspection-only; no source attestation or B3B5 run"
+  },
+  {
+    "profile": "release",
+    "role": "lab-native-child",
+    "path": "target/release/lab-native-child.exe",
+    "exists": false,
+    "bytes": null,
+    "sha256": null,
+    "built_by_this_task": false,
+    "executed_by_this_task": false,
+    "build_source_head": null,
+    "qualification": "inspection-only; no source attestation or B3B5 run"
+  }
+]

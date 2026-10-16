@@ -1,0 +1,11 @@
+{
+  "merge": "d96111f488d8535c294879e767832d537219108a",
+  "parents": [
+    "1890fafb15a53c4517a3dc7295d74d1a1756b5ea",
+    "2dd4af1edc7f6ec0bb09ca9a4d28fc3c56670a1c"
+  ],
+  "local_main_clean": true,
+  "documentation_only_paths": 42,
+  "canonical_sha256_rows_verified": 400,
+  "qualified_source": "f444da9322e9db75d9bcb7e6ae908833a6a17b67"
+}

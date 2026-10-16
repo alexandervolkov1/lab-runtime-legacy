@@ -1,0 +1,48 @@
+{
+  "verdict": "BLOCKED",
+  "evidence_base_head": "d96111f488d8535c294879e767832d537219108a",
+  "branch": "feature/dgui-4c7b3b5-virtual-isolated-host",
+  "change_scope": "documentation/evidence only",
+  "format": {
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "diff_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "raw_archive_members_verified": 10,
+  "qualified_source_hashes_verified": 359,
+  "reviewed_head_inventory_entries_verified_before_merge": 400,
+  "qualified_to_reviewed_documentation_only_paths": 42,
+  "qualified_to_merge_code_build_script_delta": [],
+  "source_check_scope": "canonical Git source equivalence; no new binary qualification",
+  "b3b5_dev_regression": "NOT RUN; no Rust changes; integration/native admission BLOCKED by hardware/driver mismatch",
+  "b3b5_release_regression": "NOT RUN; no Rust changes; integration/native admission BLOCKED by hardware/driver mismatch",
+  "clippy": "NOT RUN; unchanged Rust inputs; historical B3B4C receipts preserved",
+  "historical_b3b4c_gates": "48 PASS at their exact recorded sources/profiles; no claim of new B3B5 execution",
+  "activation_qualified": false,
+  "limits": {
+    "historical_hello_only": "UNQUALIFIED",
+    "m17_4_recorder_overlap": "BLOCKED",
+    "general_terminal_gpu_lifecycle": "BLOCKED",
+    "whole_host_rust_budget": "BLOCKED",
+    "final_wgl_destruction": "LIMITED",
+    "other_gpu_dpi_driver": "UNQUALIFIED"
+  }
+}

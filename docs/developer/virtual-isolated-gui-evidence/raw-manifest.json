@@ -1,0 +1,52 @@
+[
+  {
+    "member": "actual-windows-profile.json",
+    "bytes": 1556,
+    "sha256": "a8a7906c4f4246fd849769f5b3056cd96cf33a98844826166842b2ea21e0a1f4"
+  },
+  {
+    "member": "collection-notes.json",
+    "bytes": 1050,
+    "sha256": "37d14ec2d097238dc4b40bc286ab6349f6a0cd71b17316f7b77e760ff0eb6b28"
+  },
+  {
+    "member": "commands.json",
+    "bytes": 120256,
+    "sha256": "b5036436ee96ad08518c7669a86addeba6226e55a00928e95dcbe44553971204"
+  },
+  {
+    "member": "merge-api.json",
+    "bytes": 128,
+    "sha256": "5bf77289515e531f78ee048d15a22fcead9bd85e9b8f02d35005f9d29d601be1"
+  },
+  {
+    "member": "merge-verified.json",
+    "bytes": 353,
+    "sha256": "0d2fe5bc44c9b344a8da80e6f6f369911ec4b34b3310917d0044c8fa407ea083"
+  },
+  {
+    "member": "merged-pr.json",
+    "bytes": 310,
+    "sha256": "49aa321a1d06f4239a2fa819c2ff3895c10f98bb143b30aa498da549947181e1"
+  },
+  {
+    "member": "preflight.json",
+    "bytes": 1415,
+    "sha256": "995ff65059e9a1bacc117547f64332f6dd2d03d93ce70a595103fdbbefae61c4"
+  },
+  {
+    "member": "premerge.json",
+    "bytes": 341,
+    "sha256": "9d3ea8731be3f04dc7ba25ec4fa50deab63c66febabb2d23de2fe70d07544947"
+  },
+  {
+    "member": "qualified-windows-profile.json",
+    "bytes": 1069,
+    "sha256": "f0cc704d7faf1cfaaea89277ab0f44322ce08e4f0347758fb070fcebf0de02dd"
+  },
+  {
+    "member": "seal.py",
+    "bytes": 8140,
+    "sha256": "66538526f48806cc6ea8341a2ce0ffc295964e4e199659088a0358e09b102ecc"
+  }
+]
