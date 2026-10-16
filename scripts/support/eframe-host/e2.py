@@ -166,7 +166,9 @@ def verify_png(path):
             r,g,b=row[x:x+3];bright+=r>180 and g>180 and b>180
             blue+=y>250 and b>r+15 and g>r+10 and b>80
         prior=row
-    assert blue>30 and bright>100,(path,blue,bright)
+    receipt=read_json(path.with_suffix('.json'))
+    expected_curve=any(plot['points']>=2 for plot in receipt['display']['plots'])
+    assert bright>100 and (not expected_curve or blue>30),(path,blue,bright,receipt)
     return dict(path=str(path),width=width,height=height,blue_plot_pixels=blue,bright_pixels=bright,sha256=hashlib.sha256(data).hexdigest())
 
 def receipts(directory,predicate):
