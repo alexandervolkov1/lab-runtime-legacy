@@ -239,6 +239,31 @@ disk persistence, Arduino integration, and physical-device qualification remain
 outside this check. The older operator GUI smoke deliberately submits a virtual
 Runtime mutation and is a different scenario, not part of this read-only run.
 
+### EFRAME-3 isolated standard GUI experiment
+
+[`eframe3.clj`](eframe3.clj) configures the existing Workbench Parent through its
+loopback API. `initial` installs the virtual furnace document, `updated` changes
+its title/plot configuration, `boundary` adds admitted large-document metadata,
+and `verify` reads it back without replacement:
+
+```powershell
+bb clients/babashka-smoke/eframe3.clj PORT initial NEW_INITIAL.json
+bb clients/babashka-smoke/eframe3.clj PORT updated NEW_UPDATED.json
+bb clients/babashka-smoke/eframe3.clj PORT boundary NEW_BOUNDARY.json
+bb clients/babashka-smoke/eframe3.clj PORT verify NEW_READBACK.json
+```
+
+The client uses only hello, client_status, presentation_get and
+ui_replace_document. It opens no Runtime connection and submits no instrument
+command or recovery operation. The complete [Windows experiment driver and
+reproduction guide](../../docs/developer/eframe-3-readonly-workbench.md) launch a
+passively cooling virtual furnace, exercise standard WGPU/Glow windows with
+native input, apply a 979,038-byte canonical replacement while minimized for two
+minutes, and check
+GUI crash/recovery against the same Parent/scope. The six configured control
+groups remain disabled. The explicit fixture memory cap is not deployment policy;
+MP-1 is OPEN and `ACTIVATION_QUALIFIED=false`.
+
 The separate [browser smoke](../clojurescript-smoke/README.md) remains the real-browser
 Runtime WebSocket regression. See the canonical
 [Runtime Application API](../../docs/api/README.md) and

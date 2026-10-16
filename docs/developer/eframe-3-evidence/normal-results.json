@@ -1,0 +1,702 @@
+[
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "dev",
+    "renderer": "wgpu",
+    "scenario": "normal",
+    "binaries": {
+      "lab-runtime.exe": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b",
+      "lab-workbench.exe": "85c982213ee243bd08f00e09ee5730c58edd0d4035efb1d8a09084235ee0d88b",
+      "lab-eframe-host.exe": "7d9fccbab3419dcbe8ce15eba20042aa0637fbb5d13c66d865242620677a2902"
+    },
+    "activation_qualified": false,
+    "passed": true,
+    "workbench_id": "000000000000170c18def3fc9a089d65",
+    "scope": "91436e80154006d5666ebaae1cbe2f7c:1",
+    "runtime_connections_during_gui_fault": 1,
+    "runtime_requests_during_gui_fault": 0,
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "5",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "91436e80154006d5666ebaae1cbe2f7c",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "8",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "first_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 6422634,
+      "incarnation": 1,
+      "parent_pid": 5900,
+      "pid": 23168,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000170c18def3fc9a089d65"
+    },
+    "restarted_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 6422634,
+      "incarnation": 1,
+      "parent_pid": 5900,
+      "pid": 23168,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000170c18def3fc9a089d65"
+    },
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-06.json"
+    ],
+    "crash_retirement": null,
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 448548864,
+      "peak_process_commit": 442011648,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1"
+    ],
+    "parent_exit": 0,
+    "framebuffer_verification": [
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-00.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3213,
+        "bright_pixels": 1220090,
+        "sha256": "dfb1a48b3f07b64eb87fe16e4340edb057419e51ba191fedf2ca9994db0cde38"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-01.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3246,
+        "bright_pixels": 1219587,
+        "sha256": "b7bfec3b84ec3da822c8596ae854353b85bad09fe39efb456936132e27d79031"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-03.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3241,
+        "bright_pixels": 1218486,
+        "sha256": "e0acd981c6a9b04dd0e6ed805977b981f7f7eb770171b93a1566bd7d3a9ae4f6"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5900-000000000000170c18def3fc9a089d65-1\\frame-06.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3244,
+        "bright_pixels": 1222596,
+        "sha256": "d39b644b7e993f1e27ca7214e2f01e310cfd069789fd881f8c921b211d80c618"
+      }
+    ],
+    "relay_errors": []
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "dev",
+    "renderer": "glow",
+    "scenario": "normal",
+    "binaries": {
+      "lab-runtime.exe": "4cbf0d751c20541bfbbe7ad70e453f7e89dda1529f8b5a4c438daa0605cfb45b",
+      "lab-workbench.exe": "85c982213ee243bd08f00e09ee5730c58edd0d4035efb1d8a09084235ee0d88b",
+      "lab-eframe-host.exe": "7d9fccbab3419dcbe8ce15eba20042aa0637fbb5d13c66d865242620677a2902"
+    },
+    "activation_qualified": false,
+    "passed": true,
+    "workbench_id": "000000000000148c18def4004a744269",
+    "scope": "e8277ec7f11c573842f28585069df6fa:1",
+    "runtime_connections_during_gui_fault": 1,
+    "runtime_requests_during_gui_fault": 0,
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "5",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "e8277ec7f11c573842f28585069df6fa",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "8",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "first_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 9699426,
+      "incarnation": 1,
+      "parent_pid": 5260,
+      "pid": 22328,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000148c18def4004a744269"
+    },
+    "restarted_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 9699426,
+      "incarnation": 1,
+      "parent_pid": 5260,
+      "pid": 22328,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000148c18def4004a744269"
+    },
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-06.json"
+    ],
+    "crash_retirement": null,
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 182005760,
+      "peak_process_commit": 175443968,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1"
+    ],
+    "parent_exit": 0,
+    "framebuffer_verification": [
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-00.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3211,
+        "bright_pixels": 1220443,
+        "sha256": "986d430956c8b641881d21fe169f57fbc80eafa416a26b9d2407ab2febd4a6a1"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-01.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3245,
+        "bright_pixels": 1219607,
+        "sha256": "b63d322c5ab6c8572a0ea3695e49618d6870b24ca9eabc4c2674ebb16e338ff7"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-03.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3241,
+        "bright_pixels": 1218615,
+        "sha256": "14edbb6f30756c6dc235614ac3c3ad97391eb124641519b2b0251711cf739ee1"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\5260-000000000000148c18def4004a744269-1\\frame-06.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3242,
+        "bright_pixels": 1221020,
+        "sha256": "d9bdd7407b4cc8fbf5439ecc9a79d6ab9bd907ae854514d365b86c83374fb5aa"
+      }
+    ],
+    "relay_errors": []
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "release",
+    "renderer": "wgpu",
+    "scenario": "normal",
+    "binaries": {
+      "lab-runtime.exe": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79",
+      "lab-workbench.exe": "3229927130b9cc21898f8563e98bd3df9c423f954dd2417e5ff0c5f7409e6a7a",
+      "lab-eframe-host.exe": "35fe0dda06de8a510538245b433afc90f246d1de395026230631a9229691ecb4"
+    },
+    "activation_qualified": false,
+    "passed": true,
+    "workbench_id": "0000000000004a6418def403d943664d",
+    "scope": "31eedc1b81a8aa46cb8c93e98c529371:1",
+    "runtime_connections_during_gui_fault": 1,
+    "runtime_requests_during_gui_fault": 0,
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "5",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "31eedc1b81a8aa46cb8c93e98c529371",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "8",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "first_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 6291908,
+      "incarnation": 1,
+      "parent_pid": 19044,
+      "pid": 8324,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000004a6418def403d943664d"
+    },
+    "restarted_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 6291908,
+      "incarnation": 1,
+      "parent_pid": 19044,
+      "pid": 8324,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000004a6418def403d943664d"
+    },
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-03.json"
+    ],
+    "crash_retirement": null,
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 437772288,
+      "peak_process_commit": 431214592,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1"
+    ],
+    "parent_exit": 0,
+    "framebuffer_verification": [
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-00.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3209,
+        "bright_pixels": 1220444,
+        "sha256": "843402540ac135c3167380b4bdf250b5b8ab60ea7ed643a208ad35e1caa07915"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-01.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3245,
+        "bright_pixels": 1222750,
+        "sha256": "781de88ed4fd5902ff43ae9a526e80fab0679fb0574052ab5fb03e1faf2d8a48"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-02.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3243,
+        "bright_pixels": 1220034,
+        "sha256": "ae412cdefb0122b00ec7f168ec0726fb33aa2bac30b7b60f0f81fdec23ddcefb"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19044-0000000000004a6418def403d943664d-1\\frame-03.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3238,
+        "bright_pixels": 1220003,
+        "sha256": "9dd279b181af0cd24caed023eb87fc46577803455d9c42782c0fa4f170e2ba8a"
+      }
+    ],
+    "relay_errors": []
+  },
+  {
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "profile": "release",
+    "renderer": "glow",
+    "scenario": "normal",
+    "binaries": {
+      "lab-runtime.exe": "95e94193d86734dae28947e077620c894f5aa1371e94cf0ed5dd216830e10f79",
+      "lab-workbench.exe": "3229927130b9cc21898f8563e98bd3df9c423f954dd2417e5ff0c5f7409e6a7a",
+      "lab-eframe-host.exe": "35fe0dda06de8a510538245b433afc90f246d1de395026230631a9229691ecb4"
+    },
+    "activation_qualified": false,
+    "passed": true,
+    "workbench_id": "0000000000004c2018def40698238271",
+    "scope": "e566a2f769f35bdad9b716a07135abd1:1",
+    "runtime_connections_during_gui_fault": 1,
+    "runtime_requests_during_gui_fault": 0,
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "5",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "e566a2f769f35bdad9b716a07135abd1",
+            "seq": "4"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "8",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "first_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 9306570,
+      "incarnation": 1,
+      "parent_pid": 19488,
+      "pid": 16276,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000004c2018def40698238271"
+    },
+    "restarted_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 9306570,
+      "incarnation": 1,
+      "parent_pid": 19488,
+      "pid": 16276,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000004c2018def40698238271"
+    },
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-03.json"
+    ],
+    "crash_retirement": null,
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 146862080,
+      "peak_process_commit": 140288000,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1"
+    ],
+    "parent_exit": 0,
+    "framebuffer_verification": [
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-00.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3207,
+        "bright_pixels": 1220032,
+        "sha256": "12a04b212850e32d367538d6eab2007b775b25cc1f46c02a036fd22c6dc8b171"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-01.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3238,
+        "bright_pixels": 1218750,
+        "sha256": "2740ebf79c665e4f6ab2173f22e9dbfaa88012931d922ecdd12e3931b84b9908"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-02.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3243,
+        "bright_pixels": 1219293,
+        "sha256": "9cf82181e3ff4e9a4dcab0111b727387983fe8f0a1d56ce545116d21095e7e3b"
+      },
+      {
+        "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\19488-0000000000004c2018def40698238271-1\\frame-03.png",
+        "width": 1375,
+        "height": 900,
+        "blue_plot_pixels": 3245,
+        "bright_pixels": 1219306,
+        "sha256": "0b09aa5d49005f1ed58d81dd1c66e4a1703d1ba77d08efc1e47978f6aa0b8481"
+      }
+    ],
+    "relay_errors": []
+  }
+]

@@ -1,0 +1,59 @@
+{
+  "qualified_source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+  "production_commit": "165524aa1909ae7c1b3e74741f820aeafff0b489",
+  "fixture_commit": "2a2af37e6d9d99b079408a8921a12649164527bf",
+  "qualification": "All eight final real-window runs and gates use committed executable inputs. Documentation may be dirty while final gates run; gate receipts retain source at start and completion. Final documentation/evidence changes do not affect binaries.",
+  "dependency_lock_note": "The raw working independent lock hash differs from EFRAME-2 because git checkout introduced CRLF. Canonical git bytes are identical, normalized worktree equals canonical, and all 168 exact package/features/archive/source/license records are equal.",
+  "exploratory_runs": [
+    {
+      "run": "dev-wgpu-explore-1",
+      "qualified": false,
+      "note": "Wheel alone is stock scroll, not zoom; fixture assertion corrected."
+    },
+    {
+      "run": "dev-wgpu-explore-2",
+      "qualified": false,
+      "note": "Native disabled-control click immediately followed by navigation lacked a UI tick; input pacing corrected."
+    },
+    {
+      "run": "dev-wgpu-explore-3",
+      "qualified": false,
+      "note": "Actual minimized-window HeartbeatDeadline reproduced with original one-step IPC service; production fix drives four bounded nonblocking steps sharing original allowances."
+    },
+    {
+      "run": "dev-wgpu-explore-4",
+      "qualified": false,
+      "note": "Native navigation used a pre-transition ComboBox rectangle; fixed-width/truncated selectors keep adjacent buttons stable."
+    },
+    {
+      "run": "dev-wgpu-explore-5",
+      "qualified": false,
+      "note": "Desktop focus changed during a gesture; driver refused input to a foreign HWND."
+    },
+    {
+      "run": "dev-wgpu-explore-6",
+      "qualified": false,
+      "note": "AttachThreadInput resets keyboard state; fixture now uses the standard secondary-button boxed zoom and preserves existing focus."
+    },
+    {
+      "run": "dev-wgpu-explore-7",
+      "qualified": false,
+      "note": "30-second exploratory pass on uncommitted inputs; excluded from final qualification."
+    }
+  ],
+  "exploratory_provenance": "These runs contain dirty-tree flags and exact binary hashes, logs and API transcripts. An exact snapshot of each intermediate uncommitted source tree was not retained. They diagnose development failures and are not qualified-source evidence.",
+  "reused_evidence": "Separate Custom Glow native/CPU allocation/compile-fail renderer probes and EFRAME-1 resize/input/licensing evidence remain at their original sources. Core, Custom Glow, shared plotting/admission/IPC/Supervisor code and root manifests are unchanged. Full Workbench unit regressions plus native IPC and Supervisor gates are repeated here in both profiles.",
+  "activation_qualified": false,
+  "mp_1": "OPEN",
+  "workbench_binary_variants": "The previous stage records different Workbench-only/joint-build hashes and further relink variants, without claiming byte reproducibility. The final phase uses one fixed six-artifact set; all final Clojure and normal-close case hashes match it. No subsequent root executable build is performed.",
+  "root_gate_source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+  "production_commits": [
+    "165524aa1909ae7c1b3e74741f820aeafff0b489",
+    "f3a8445b054efa4190cfd847275fb5964b6561d4"
+  ],
+  "root_reuse": "The entire apps/crates/root-manifest input set is identical between old and final. Root gates are reused; the final stock host tests, Clippy/fmt, four large-document Clojure experiments and four normal closes are new.",
+  "previous_stage": "The 32-gate small-document stage is retained as previous/raw-evidence.zip and its original manifest/verification. It passed its tested scenarios, but the later hidden large-document probe exposed a bulk-service defect; it is not the final qualification.",
+  "large_boundary_failure": "hidden-document-boundary: a legal 818711-byte pretty v1 replacement while minimized caused Parent/child shutdown with OsFailure. The original complete error operation was not exposed in Parent logs; source inspection and the controlled scheduling correction diagnose bulk transfer budget/deadline starvation. No binary hash was separately captured in this diagnostic probe.",
+  "large_boundary_fixed_probe": "boundary-release-glow-explore-fixed admitted 989633 canonical bytes while hidden in about 1.12s. This probe ran on uncommitted corrected child source, so it is exploratory. Final committed Clojure runs independently repeat 979038-byte admission in every profile/backend.",
+  "final_case_identity": "All eight final case hashes match the same final qualified-binary-identities.json set. Earlier Workbench-only/joint rebuild variants remain in previous-stage evidence. No bit reproducibility claim is made."
+}

@@ -46,7 +46,12 @@ that stock host to the existing ParentPump, ParentBridge, private IPC and Window
 Job Supervisor. It retains one Runtime client/scope, dispatcher, recovery journal
 and PresentationDocument owner. Renderer, memory limit and bounded restart policy
 are explicit opt-ins; v1 remains the default. See the [actual virtual Runtime/API/
-window/fault evidence](eframe-2-validation.md). EFRAME-2 awaits independent review;
+window/fault evidence](eframe-2-validation.md). EFRAME-2 was independently reviewed
+within its scope and merged through PR #48. The experimental
+[EFRAME-3 read-only adapter](eframe-3-readonly-workbench.md) extends complete
+document navigation and stock plotting and corrects bounded IPC progress while
+minimized. Its external Babashka virtual-furnace experiment and
+[validation](eframe-3-validation.md) require separate EFRAME-3 review.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
 The optional Custom Glow renderer has a separate, test-only

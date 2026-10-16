@@ -1,0 +1,12 @@
+{
+  "final_source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+  "root_gate_source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+  "root_apps_crates_manifests_identical": true,
+  "root_binary_source_reused": true,
+  "changed_executable_paths": [
+    "clients/babashka-smoke/eframe3.clj",
+    "scripts/support/eframe-host/e3.py",
+    "scripts/support/eframe-host/src/ipc_app.rs"
+  ],
+  "final_canonical_source_input_files": 476
+}

@@ -1,0 +1,137 @@
+{
+  "capture_api": "stock eframe Screenshot",
+  "display": {
+    "heading": "EFRAME-3 API updated furnace",
+    "panels": [
+      "Furnace temperature",
+      "Temperature history"
+    ],
+    "plots": [
+      {
+        "freshness": "Fresh",
+        "label": "Furnace",
+        "last": [
+          155.4050623,
+          36.43544630022544
+        ],
+        "points": 200,
+        "unit": "°C"
+      },
+      {
+        "freshness": "Fresh",
+        "label": "Furnace",
+        "last": [
+          155.4050623,
+          36.43544630022544
+        ],
+        "points": 200,
+        "unit": "°C"
+      }
+    ],
+    "scalars": [
+      {
+        "freshness": "Fresh",
+        "generation": 1,
+        "label": "Furnace temperature",
+        "unit": "°C",
+        "value": "36.435"
+      }
+    ],
+    "views": [
+      {
+        "auto": [
+          true,
+          true
+        ],
+        "bounds": [
+          [
+            134.50706548017124,
+            17.94999998435378
+          ],
+          [
+            156.40020501982877,
+            41.05000001564622
+          ]
+        ],
+        "hidden": 0,
+        "id": "temperature-plot",
+        "occurrence": 9962132276762913214,
+        "rect": [
+          29.0,
+          299.59375,
+          1085.0,
+          530.59375
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "enabled": false,
+        "label": "Previous window",
+        "rect": [
+          8.0,
+          26.1875,
+          114.28125,
+          44.1875
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "Next window",
+        "rect": [
+          410.875,
+          26.1875,
+          495.46875,
+          44.1875
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Previous tab",
+        "rect": [
+          8.0,
+          71.0,
+          87.71875,
+          89.0
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "Next tab",
+        "rect": [
+          376.96875,
+          71.0,
+          435.03125,
+          89.0
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "Next panel",
+        "rect": [
+          256.0,
+          92.0,
+          326.84375,
+          110.0
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "All panels",
+        "rect": [
+          334.84375,
+          92.0,
+          398.375,
+          110.0
+        ]
+      }
+    ]
+  },
+  "document_id": "eframe-3-virtual-furnace",
+  "document_revision": 5,
+  "incarnation": 1,
+  "observation_snapshot": 1584,
+  "owner_counter": 2708,
+  "runtime_clients": 0,
+  "ui_counter": 1593
+}

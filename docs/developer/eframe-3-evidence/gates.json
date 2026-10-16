@@ -1,0 +1,807 @@
+[
+  {
+    "name": "current-dev-glow-normal",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/eframe-host/e2.py",
+      "dev",
+      "glow",
+      "eframe3-final-dev-glow-normal",
+      "normal"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 15.25693529995624,
+    "utc": "2026-10-16T08:06:38.680534+00:00",
+    "log_sha256": "babc70bfbb78c08ab219fe423b3a502e76d9be234bc8b26edb8a1e49c262a970"
+  },
+  {
+    "name": "current-dev-wgpu-normal",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/eframe-host/e2.py",
+      "dev",
+      "wgpu",
+      "eframe3-final-dev-wgpu-normal",
+      "normal"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 15.745149799971841,
+    "utc": "2026-10-16T08:06:23.322208+00:00",
+    "log_sha256": "8870cb4140d29496a0ee6476b1e377c466eefbc1afd47db0be43e8c70a026551"
+  },
+  {
+    "name": "current-release-glow-normal",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/eframe-host/e2.py",
+      "release",
+      "glow",
+      "eframe3-final-release-glow-normal",
+      "normal"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 11.49510379997082,
+    "utc": "2026-10-16T08:07:02.068034+00:00",
+    "log_sha256": "73659f9ed8ce8735c4594c5f4dfb700e87e5def96e3f67e497ead70cc1b2a0e4"
+  },
+  {
+    "name": "current-release-wgpu-normal",
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "scripts/support/eframe-host/e2.py",
+      "release",
+      "wgpu",
+      "eframe3-final-release-wgpu-normal",
+      "normal"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 11.690551599953324,
+    "utc": "2026-10-16T08:06:50.470612+00:00",
+    "log_sha256": "150b8a26a559ded4814b133ab3bda7c45eb50e453b45837c6c3706728b7de2a8"
+  },
+  {
+    "name": "dependencies",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/audit.py",
+      "target/eframe-3/dependencies"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 5.455097500002012,
+    "utc": "2026-10-16T07:25:21.554103+00:00",
+    "log_sha256": "56be7cf0054e06c68735c7c7b18ab202c4d67fb9007c81f510ec7a3d603324ac"
+  },
+  {
+    "name": "dev-glow-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "dev",
+      "glow",
+      "dev-glow-qualified"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 157.94948449998628,
+    "utc": "2026-10-16T07:29:04.577693+00:00",
+    "log_sha256": "698243849bdcc69015f2b52e85d46987cb2dec12f0bb5178e9041001ae8f12c7"
+  },
+  {
+    "name": "dev-glow-normal-final",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "dev",
+      "glow",
+      "eframe3-dev-glow-normal-final",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 15.098910099943168,
+    "utc": "2026-10-16T07:41:48.166040+00:00",
+    "log_sha256": "464112016e15889469fdf36d6802dab0ef539577d78cabd31bf8f1d21862d328"
+  },
+  {
+    "name": "dev-glow-normal",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "dev",
+      "glow",
+      "eframe3-dev-glow-normal",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 15.883042700006627,
+    "utc": "2026-10-16T07:35:30.635605+00:00",
+    "log_sha256": "a84f31058b43bd5075b296d86e97f5df36ea727c7a84523c9c8bbf9e654c60a1"
+  },
+  {
+    "name": "dev-wgpu-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "dev",
+      "wgpu",
+      "dev-wgpu-qualified"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 164.38679889997002,
+    "utc": "2026-10-16T07:25:37.555863+00:00",
+    "log_sha256": "92e7a2da8655d6a4f09088a853b3f1cabbba184164887ece38df2ea6b9115813"
+  },
+  {
+    "name": "dev-wgpu-normal-final",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "dev",
+      "wgpu",
+      "eframe3-dev-wgpu-normal-final",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 16.218077300000004,
+    "utc": "2026-10-16T07:41:32.863199+00:00",
+    "log_sha256": "7178c59f71857f3dfcec0c4035112bb99b67465af00f1e03d5eada03084c4e3c"
+  },
+  {
+    "name": "dev-wgpu-normal",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "dev",
+      "wgpu",
+      "eframe3-dev-wgpu-normal",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 22.25434139999561,
+    "utc": "2026-10-16T07:35:14.559792+00:00",
+    "log_sha256": "9fee51f5c7697f870ee3c4d32ee2d23b07aba885519280589df9ac0677a26a56"
+  },
+  {
+    "name": "final-dev-glow-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "dev",
+      "glow",
+      "final-dev-glow-qualified"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 162.17066379997414,
+    "utc": "2026-10-16T08:01:26.930565+00:00",
+    "log_sha256": "63e3ebbe1675e16b65ff5dce3314903b33bab89bca8c0d653ea6fbdfb22cad1e"
+  },
+  {
+    "name": "final-dev-wgpu-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "dev",
+      "wgpu",
+      "final-dev-wgpu-qualified"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 168.42296639992855,
+    "utc": "2026-10-16T07:58:44.559128+00:00",
+    "log_sha256": "d2038c271aed2a0e6693c8fef07527906cf10c765488b5c1dfd14d06645622bd"
+  },
+  {
+    "name": "final-host-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 0.8119678000221029,
+    "utc": "2026-10-16T07:56:23.305174+00:00",
+    "log_sha256": "7ea9ff7442106040f95bc079f85de985b086e1fed897d88dec87dd8425c35ee1"
+  },
+  {
+    "name": "final-host-dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 5.6089911999879405,
+    "utc": "2026-10-16T07:55:25.652673+00:00",
+    "log_sha256": "7fc3351df834ac5dddacea4c730eef4cf9cc8a26ae0836a96d806cf5ee68b019"
+  },
+  {
+    "name": "final-host-dev-tests",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 0.9966455999528989,
+    "utc": "2026-10-16T07:56:07.385035+00:00",
+    "log_sha256": "ddc72dcbd015d94994cdd5f84fb3874ff6bd78b6152c165143355cda9956e9ff"
+  },
+  {
+    "name": "final-host-fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--",
+      "--check"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 0.37143240007571876,
+    "utc": "2026-10-16T07:56:23.878517+00:00",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "final-host-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 0.5315811999607831,
+    "utc": "2026-10-16T07:55:26.396258+00:00",
+    "log_sha256": "2c3bb0023b2f0bcd8ddac4ccfc2d291671dc96207527857910397ad5e4a6123e"
+  },
+  {
+    "name": "final-host-release-tests",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 14.676483399933204,
+    "utc": "2026-10-16T07:56:22.280444+00:00",
+    "log_sha256": "1c01bbc4d2d8f56bb97d6db5b0abb1cf06748dbea9c89370a7118ff7995a8dfd"
+  },
+  {
+    "name": "final-release-glow-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "release",
+      "glow",
+      "final-release-glow-qualified"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 139.89326469996013,
+    "utc": "2026-10-16T08:06:07.480486+00:00",
+    "log_sha256": "a20fdb1e35339b5d3d7fbb9d26158d890556bd226edb5ad50c94f3c59d8956ff"
+  },
+  {
+    "name": "final-release-wgpu-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "release",
+      "wgpu",
+      "final-release-wgpu-qualified"
+    ],
+    "source": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "source_at_completion": "f3a8445b054efa4190cfd847275fb5964b6561d4",
+    "exit_code": 0,
+    "elapsed_seconds": 140.27359550003894,
+    "utc": "2026-10-16T08:03:47.393590+00:00",
+    "log_sha256": "cbca6c920e6ca3c96caaed076166826aee187c3f17f72a071146719d0b5d4bd4"
+  },
+  {
+    "name": "final-root-dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 5.851273600012064,
+    "utc": "2026-10-16T07:39:31.649284+00:00",
+    "log_sha256": "31a01f263782f4aacbd7c4596afdc5ddc72f357b56514efd055fafb959a964d7"
+  },
+  {
+    "name": "final-root-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 24.31998220004607,
+    "utc": "2026-10-16T07:39:56.171415+00:00",
+    "log_sha256": "2e5f6d0261f466a7c05cf5a0f74b039f4ffdb98675b2d9349ab9a7ee5373ed76"
+  },
+  {
+    "name": "fmt-host",
+    "command": [
+      "cargo",
+      "fmt",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--",
+      "--check"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 0.33073779998812824,
+    "utc": "2026-10-16T07:26:06.538472+00:00",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "fmt-root",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 3.36957480001729,
+    "utc": "2026-10-16T07:26:06.019692+00:00",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "host-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 0.7852623000508174,
+    "utc": "2026-10-16T07:25:03.931874+00:00",
+    "log_sha256": "80a72ab0b6d57f57833fbff08eb4f1c216d4bb98fd0953be701bdd8ef1a25c8e"
+  },
+  {
+    "name": "host-dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 7.294955900055356,
+    "utc": "2026-10-16T07:22:48.080875+00:00",
+    "log_sha256": "0ac661250a42f92ec747ac4a16b176fc8fe8b2903938211d2e580bea7f07c9e5"
+  },
+  {
+    "name": "host-dev-tests",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 0.9338722999673337,
+    "utc": "2026-10-16T07:24:49.761441+00:00",
+    "log_sha256": "beb8b2b0e9e8fe02d49ab944808f3c4d154bf9edad4dc8b8aa8455e2bffcbf00"
+  },
+  {
+    "name": "host-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 16.70401370001491,
+    "utc": "2026-10-16T07:24:48.613210+00:00",
+    "log_sha256": "e6fa8af910821ffdcbfdadb19ce6c2d072d3acfa96db2a2c62352fc5d72a58e5"
+  },
+  {
+    "name": "host-release-tests",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "scripts/support/eframe-host/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 12.985280000022613,
+    "utc": "2026-10-16T07:25:02.949373+00:00",
+    "log_sha256": "a51e4346e1b91f9f1588c68e7e2cb3a20fa8df91a3c8475e81af80911ebcd86a"
+  },
+  {
+    "name": "ipc-dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 54.156732300063595,
+    "utc": "2026-10-16T07:33:41.332727+00:00",
+    "log_sha256": "b0b8377b62110104680dab0544bbdf29f45e0dbdcd56bed38c4335c2d120fa53"
+  },
+  {
+    "name": "ipc-release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-private-ipc.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 73.25503489992116,
+    "utc": "2026-10-16T07:37:01.898569+00:00",
+    "log_sha256": "0e73edb571c2a1ff78ee38861759447e88ab472c72891b9d87d7d3f602576657"
+  },
+  {
+    "name": "release-glow-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "release",
+      "glow",
+      "release-glow-qualified"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 141.42174820008222,
+    "utc": "2026-10-16T07:34:50.539219+00:00",
+    "log_sha256": "88939ba589c1ddbee2336dc32b108c2d29cfe071796f1f714101550964a9b257"
+  },
+  {
+    "name": "release-glow-normal-final",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "release",
+      "glow",
+      "eframe3-release-glow-normal-final",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 11.536272500059567,
+    "utc": "2026-10-16T07:42:12.074486+00:00",
+    "log_sha256": "5e5a76a9ca25e066da44f0b0b3c387678e94823a1c06cdef7421309c8ce54719"
+  },
+  {
+    "name": "release-glow-normal",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "release",
+      "glow",
+      "eframe3-release-glow-normal",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 11.683880600030534,
+    "utc": "2026-10-16T07:35:54.613137+00:00",
+    "log_sha256": "28fdffe99372c5e18a295d75ad223ded9ec1798553d21aaf44a669c678f1f96a"
+  },
+  {
+    "name": "release-wgpu-experiment",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e3.py",
+      "release",
+      "wgpu",
+      "release-wgpu-qualified"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 138.7641926999204,
+    "utc": "2026-10-16T07:32:28.919421+00:00",
+    "log_sha256": "d06ceb40795e34515766eda3163fae37a1e930c2b8843629e6c805389015c831"
+  },
+  {
+    "name": "release-wgpu-normal-final",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "release",
+      "wgpu",
+      "eframe3-release-wgpu-normal-final",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 11.978611800004728,
+    "utc": "2026-10-16T07:42:00.341294+00:00",
+    "log_sha256": "bf1ffa5cb56048aa0544d4c688a98a2ac8a0d437263de12d16f748534baaba6b"
+  },
+  {
+    "name": "release-wgpu-normal",
+    "command": [
+      "python",
+      "scripts/support/eframe-host/e2.py",
+      "release",
+      "wgpu",
+      "eframe3-release-wgpu-normal",
+      "normal"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 11.882229499984533,
+    "utc": "2026-10-16T07:35:42.713919+00:00",
+    "log_sha256": "5eebd21fd67d364bdcfa8670b60b955a6cea93468d1e7a971dcc7a1c613780d0"
+  },
+  {
+    "name": "root-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "lab-workbench",
+      "--all-targets",
+      "--all-features",
+      "--offline",
+      "--locked",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 8.415061900042929,
+    "utc": "2026-10-16T07:26:15.137709+00:00",
+    "log_sha256": "ad7c69bcab815d512aab566e0e5b20bd969754b5633781f2053d76d186144818"
+  },
+  {
+    "name": "root-dev-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 7.299107099999674,
+    "utc": "2026-10-16T07:22:40.526009+00:00",
+    "log_sha256": "e4b4b1c5ba8a5bf04ad8854d0a33930926b8dab9782eebf2786140c936c4a02f"
+  },
+  {
+    "name": "root-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 0.6686483999947086,
+    "utc": "2026-10-16T07:33:57.739053+00:00",
+    "log_sha256": "058601355273cf5b5e04dac59bf04dc3b51f11799bc251a1c98373d587220dc6"
+  },
+  {
+    "name": "root-release-early-build",
+    "command": [
+      "cargo",
+      "build",
+      "-p",
+      "lab-runtime",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 25.103207899956033,
+    "utc": "2026-10-16T07:30:09.956792+00:00",
+    "log_sha256": "77256c425223dc798c38b93800d68c74b62850c34c97c4964a7a9d45ea4f746a"
+  },
+  {
+    "name": "supervisor-dev",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "dev"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 15.351136400015093,
+    "utc": "2026-10-16T07:33:56.877087+00:00",
+    "log_sha256": "b79fdbd14b7ede29fffd011095e89d577b060189714506c10f2e99998519773b"
+  },
+  {
+    "name": "supervisor-release",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "scripts/test-windows-supervisor.ps1",
+      "-BuildProfile",
+      "release"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 15.551872099982575,
+    "utc": "2026-10-16T07:37:17.650071+00:00",
+    "log_sha256": "02fe47bc816188b3368c453116eb1aae39847fd197a9011e24e7a226e390a2d5"
+  },
+  {
+    "name": "workbench-dev",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked",
+      "--",
+      "--test-threads=1"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 505.3927548000356,
+    "utc": "2026-10-16T07:32:46.976186+00:00",
+    "log_sha256": "e3dd96feeff7aa8f30a15458f34e34a4216f4461288c20ede910758b13e9927f"
+  },
+  {
+    "name": "workbench-release",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "lab-workbench",
+      "--offline",
+      "--locked",
+      "--release",
+      "--",
+      "--test-threads=1"
+    ],
+    "source": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "source_at_completion": "2a2af37e6d9d99b079408a8921a12649164527bf",
+    "exit_code": 0,
+    "elapsed_seconds": 110.50968559994362,
+    "utc": "2026-10-16T07:35:48.448513+00:00",
+    "log_sha256": "713f69428bef5e48c6ca6bac8640d1c113cec29c1d9feddc15cad298022f891e"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "pr": 48,
+  "reviewed_head": "2ac7971f79f3a5aded0c6282b0f09a8e204bac02",
+  "checked_remote_base": "6205d6c1751420ecce4ae85c6d52a21b2d6c8264",
+  "merge_commit": "fcf340c74efac9e422635d5b736c606b8f4a674d",
+  "parents": [
+    "6205d6c1751420ecce4ae85c6d52a21b2d6c8264",
+    "2ac7971f79f3a5aded0c6282b0f09a8e204bac02"
+  ],
+  "merge_tree": "9e53cc2b3ca76d739d347394d3567903c97a90fd",
+  "reviewed_tree": "9e53cc2b3ca76d739d347394d3567903c97a90fd",
+  "canonical_e2_sha256_records_verified": 80,
+  "post_qualification_deltas": "14db fixture only, 51d test observer only, e86 CLI unit fixture only, 2ac evidence/docs only",
+  "main_synced_clean_before_branch": true,
+  "pr43": {
+    "state": "OPEN",
+    "draft": true,
+    "head": "04c0e5180a4bc45ae12c7b62fdb3b86ad8f10e7c",
+    "historical_verdict": "BLOCKED"
+  }
+}
