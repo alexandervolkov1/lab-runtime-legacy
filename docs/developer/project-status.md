@@ -32,6 +32,17 @@ identifies the historical published source, not a moving latest-release pointer.
 
 ## Implemented boundaries
 
+The current scoped Runtime change, [Draft PR #53](https://github.com/alexandervolkov1/lab-runtime/pull/53),
+is [manual actuator control and implementation review](runtime-manual-output-review.md), with the [API contract](../api/manual-output.md)
+and [validation](runtime-manual-output-validation.md). It adds explicit scope-owned
+power acquisition, renewal, delivery and safe return through existing OutputAuthority,
+plus a direct external Babashka experiment. It also removes local validation/catalog
+duplication and fixes configuration paths that previously supplied simulated safe
+evidence for physical outputs. GUI/Workbench development is outside this change;
+the previous CONTROL-1 Draft PR #52 is preserved separately. Physical Arduino
+acceptance is not performed. `ACTIVATION_QUALIFIED=false`; no release or merge of
+the new Runtime work is authorized by these results.
+
 The current GUI direction is **standard egui/eframe**, with stock WGPU preferred
 and stock Glow as the alternative. [EFRAME-1](eframe-1-standard-host.md) adds a
 separate test-only isolated native host and reuses a small standard egui_plot
@@ -62,14 +73,16 @@ elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
 The subsequent [MP-1 Job accounting investigation](mp-1-job-accounting.md)
-([Draft PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51))
+([PR #51](https://github.com/alexandervolkov1/lab-runtime/pull/51), merged before the
+current Runtime branch at `2426fc0823e1d6a5e28425cc8ebc2e5f079953cb`)
 reproduces over-limit peak accounting without GPU and in the historical-source
 DX12 negative control. The current Windows build accounts an OS console helper
 and advances high-water counters on a denied Job commit. Exact historical
 attribution and undocumented Windows helper/accounting details remain unverified:
 **MP-1 stays OPEN**. New bounded probes and native Supervisor/IPC dev/release
 evidence support independent review; no product launch policy, memory cap or
-renderer is automatically changed.
+renderer is automatically changed. This research is outside the current Runtime
+control task and is not being resumed.
 
 The optional Custom Glow renderer has a separate, test-only
 [PORT-1 capability contract](gl-capability-contract.md) and

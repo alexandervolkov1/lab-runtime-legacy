@@ -1,7 +1,7 @@
 //! Accepted local Application API facade and bounded delivery owner.
 //!
 //! `server` decodes bounded NDJSON with [`crate::wire`]; [`crate::protocol`] supplies
-//! the fixed 43-operation registry, capabilities, limits and public error taxonomy.
+//! the fixed 47-operation registry, capabilities, limits and public error taxonomy.
 //! [`crate::application::Application`] owns sessions, deduplication, connection delivery and asynchronous
 //! operation correlation, then routes semantic work to focused modules:
 //!
@@ -27,6 +27,7 @@ mod controllers;
 mod delivery;
 mod discovery;
 mod operations;
+mod outputs;
 pub(crate) mod projections;
 mod recording;
 mod references;
@@ -139,6 +140,7 @@ pub struct Application {
     pending_shutdown: Option<PendingShutdown>,
     pending_simple_apply: Option<PendingSimpleApply>,
     pending_recording: Option<PendingRecording>,
+    pending_outputs: BTreeMap<lab_core::output::ActuatorId, outputs::PendingOutput>,
     pending_history: BTreeMap<u64, PendingHistory>,
     history_pages: BTreeMap<u64, HistoryCache>,
     history_cursors: BTreeMap<String, HistoryContinuation>,
@@ -156,6 +158,7 @@ impl Application {
             pending_shutdown: None,
             pending_simple_apply: None,
             pending_recording: None,
+            pending_outputs: BTreeMap::new(),
             pending_history: BTreeMap::new(),
             history_pages: BTreeMap::new(),
             history_cursors: BTreeMap::new(),
@@ -558,6 +561,9 @@ impl Application {
                 outcome_basis: "application_admission",
                 at: now,
             });
+        }
+        if matches!(&payload, Mutation::ManualOutput { .. }) {
+            return self.handle_output_mutation(service, connection, payload, rid, msg);
         }
         if matches!(&payload, Mutation::Shutdown) {
             match service.request_shutdown() {

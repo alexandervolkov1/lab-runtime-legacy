@@ -74,7 +74,7 @@ pub enum OutputState {
     FaultLatched,
 }
 
-/// Producer identity and mode. Automatic is only an identity in M2, not a controller.
+/// Producer identity and mode under the same exclusive authority checks.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum OutputOwner {
     /// A manually driven producer with a local ID.
@@ -92,7 +92,7 @@ pub enum EvidenceLevel {
     Readback,
 }
 
-/// Explicit simulated safe policy. Zero has no privileged meaning in this type.
+/// Configured operating limits and safe evidence policy. Zero has no privileged meaning.
 #[derive(Clone, Debug, PartialEq)]
 pub struct SafeProfile {
     /// Inclusive operating lower bound in the trusted actuator descriptor's unit.
@@ -216,7 +216,7 @@ impl DispatchId {
     }
 }
 
-/// Terminal simulated outcomes. Ambiguous never means success or absence of effect.
+/// Terminal delivery outcomes. Ambiguous never means success or absence of effect.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DispatchOutcome {
     /// The operation was acknowledged, without a readback claim.
@@ -247,9 +247,47 @@ pub struct OutputObservation {
     pub at: Duration,
 }
 
+/// One retained manual delivery, independent of subsequent safe-output observations.
+/// Runtime retains at most one per actuator; a terminal receipt is replaced only
+/// by the next explicit manual write, never by safety service or a query.
+#[derive(Clone, Debug, PartialEq)]
+pub struct ManualOutputAttempt {
+    /// True only for the trusted native thermal model; false for transport delivery.
+    pub virtual_simulation: bool,
+    /// Boot-local attempt identity shared with Recorder output facts.
+    pub id: u64,
+    /// Requested engineering value, not evidence of delivery.
+    pub requested: f64,
+    /// Exact send identity, absent when no send boundary was crossed.
+    pub dispatch: Option<DispatchId>,
+    /// Whether the attempt has settled, including rejection before send.
+    pub terminal: bool,
+    /// Terminal delivery evidence; absent while pending.
+    pub outcome: Option<DispatchOutcome>,
+    /// Send-boundary observation for this attempt only.
+    pub sent: Option<OutputObservation>,
+    /// Protocol ACK for this attempt only.
+    pub acknowledged: Option<OutputObservation>,
+    /// Matching readback for this attempt only.
+    pub readback: Option<OutputObservation>,
+    /// Reported register value, including a mismatch; not physical-effect proof.
+    pub reported_readback: Option<OutputObservation>,
+    /// Failure of the separate readback phase, if any.
+    pub readback_failure: Option<OutputReadbackFailure>,
+}
+
 /// Bounded owned inspection view. Querying it does not expire or renew a lease.
 #[derive(Clone, Debug, PartialEq)]
 pub struct OutputSnapshot {
+    /// Whether this composition has an executable manual adapter for the actuator.
+    /// Permission still requires a current exclusive lease and all authority checks.
+    pub manual_supported: bool,
+    /// Process-local authority identity, present even when disarmed.
+    pub instance: u64,
+    /// Installed operating policy, if configured; not permission to write.
+    pub profile: Option<SafeProfile>,
+    /// Bounded receipt for the latest explicit manual delivery.
+    pub manual_attempt: Option<ManualOutputAttempt>,
     /// Current permission/lifecycle state.
     pub state: OutputState,
     /// Current owner, if any; old tokens do not imply current ownership.
@@ -295,11 +333,18 @@ pub enum OutputCommand {
         /// Requested finite lease duration within the profile maximum.
         lifetime: Duration,
     },
+    /// Explicitly extend an idle manual lease; never performed by a query or reconnect.
+    RenewManual {
+        /// Exact current manual token.
+        lease: OutputLease,
+        /// New finite duration, subject to the same profile maximum.
+        lifetime: Duration,
+    },
     /// Release only this current owner; physical safety still requires a safe completion.
     Release(OutputLease),
     /// Latch a fault notification, revoke authority and request safe output.
-    /// M2 has no persistent interlock input; a successful explicit safe recovery
-    /// resolves the simulated cause, and acknowledgement still cannot rearm.
+    /// This notification is not an independent persistent hardware interlock;
+    /// successful safe recovery and acknowledgement still cannot rearm.
     Trip,
     /// Clear a latch only after explicit recovery has produced valid safe evidence.
     AcknowledgeFault,
@@ -316,6 +361,30 @@ pub enum OutputCommand {
     },
     /// Explicit watchdog step; queries never perform this mutation.
     Tick,
+}
+
+/// Narrow manual operations on a declared operational actuator.
+#[derive(Clone, Debug, PartialEq)]
+pub enum ManualOutputCommand {
+    /// Acquire finite exclusive authority after safe verification.
+    Acquire {
+        /// Duration within the installed profile maximum.
+        lifetime: Duration,
+    },
+    /// Explicitly renew the current idle manual lease.
+    Renew {
+        /// New duration measured from this explicit request.
+        lifetime: Duration,
+    },
+    /// Deliver one typed value in the actuator's declared engineering unit.
+    Write {
+        /// Candidate checked against descriptor and installed operating limits.
+        value: Value,
+        /// Finite proposal lifetime, additionally clipped to lease expiry.
+        ttl: Duration,
+    },
+    /// Revoke this owner's authority and request the configured safe procedure.
+    Safe,
 }
 
 /// Completed local authority operation; Queued is deliberately distinct from Dispatched.

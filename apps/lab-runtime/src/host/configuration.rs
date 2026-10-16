@@ -1274,8 +1274,8 @@ impl HostCore {
         Ok(())
     }
 
-    /// Revoke every configured authority and prove the existing virtual safe
-    /// policy before configuration replacement. This method exposes no rearm.
+    /// Revoke configured authority and progress the existing safe policy through
+    /// the normal adapter. Physical safety remains pending until real evidence.
     pub(crate) fn enter_configuration_safe_barrier(&mut self, at: Duration) -> Result<bool, Error> {
         let controllers: Vec<_> = self.plan.controllers.iter().map(|(id, _, _)| *id).collect();
         for controller in controllers {
@@ -1293,10 +1293,6 @@ impl HostCore {
             }
         }
         for actuator in self.outputs.clone() {
-            let physical = self
-                .runtime
-                .metakon_binding(actuator.instrument())
-                .is_some();
             let QueryResult::Output(before) = self.runtime.query(Query::Output(actuator))? else {
                 unreachable!()
             };
@@ -1308,30 +1304,10 @@ impl HostCore {
                     command: OutputCommand::RequestSafe,
                 })?;
             }
-            if physical {
-                continue;
-            }
-            if before.safe_confirmed {
-                continue;
-            }
-            let CommandResult::Output(OutputResult::Dispatched(dispatch)) =
-                self.runtime.command(Command::Output {
-                    actuator,
-                    at,
-                    command: OutputCommand::BeginDispatch,
-                })?
-            else {
-                return Ok(false);
-            };
-            self.runtime.command(Command::Output {
-                actuator,
-                at,
-                command: OutputCommand::Complete {
-                    dispatch_id: dispatch.id(),
-                    outcome: DispatchOutcome::ReadbackVerified,
-                },
-            })?;
         }
+        // Core selects native simulation or physical WRITE/ACK/readback. The
+        // configuration owner must never manufacture transport evidence.
+        self.runtime.command(Command::ServiceSafety { at })?;
         self.observe(at, None)?;
         Ok(self.outputs.iter().all(|actuator| {
             matches!(self.runtime.query(Query::Output(*actuator)),
@@ -1427,23 +1403,6 @@ impl HostCore {
                 at,
                 command: OutputCommand::RequestSafe,
             })?;
-            let CommandResult::Output(OutputResult::Dispatched(dispatch)) =
-                self.runtime.command(Command::Output {
-                    actuator,
-                    at,
-                    command: OutputCommand::BeginDispatch,
-                })?
-            else {
-                return Err(Error::InvalidConfiguration("new safe dispatch absent"));
-            };
-            self.runtime.command(Command::Output {
-                actuator,
-                at,
-                command: OutputCommand::Complete {
-                    dispatch_id: dispatch.id(),
-                    outcome: DispatchOutcome::ReadbackVerified,
-                },
-            })?;
             if let Some((_, current)) = self
                 .active_safety_profiles
                 .iter_mut()
@@ -1453,6 +1412,9 @@ impl HostCore {
             }
         }
 
+        // Applying a profile commits policy, not physical safety. A physical
+        // output stays unarmed while its new safe value awaits real evidence.
+        self.runtime.command(Command::ServiceSafety { at })?;
         for (old_controller, controller) in old.controllers.iter().zip(&new.controllers) {
             let id = ControllerId::new(controller.id);
             if old_controller != controller {

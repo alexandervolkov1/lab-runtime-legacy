@@ -1,5 +1,63 @@
 # Minimal Babashka boundary smoke
 
+## Manual heater power: direct Runtime
+
+[`manual-output.clj`](manual-output.clj) connects directly to Runtime, discovers
+the instrument/parameters, records temperature and output, explicitly acquires a
+finite manual lease, delivers 10%, 20%, then 15% power, explicitly renews between
+steps, requests safe output and waits for evidence, then seals its Recorder run.
+Acceptance and terminal delivery are printed separately. It does not start PID,
+retune a Reference, retry a mutation or reconnect. Workbench is not involved.
+See the [API contract](../../docs/api/manual-output.md).
+
+Build and start the virtual fixture in one PowerShell terminal:
+
+```powershell
+cargo build -p lab-runtime --locked
+New-Item -ItemType Directory -Force target/manual-example | Out-Null
+$manualDb = Join-Path (Get-Location) ("target/manual-example/" + [guid]::NewGuid().ToString('N') + '.sqlite')
+./target/debug/lab-runtime.exe --serve --profile virtual-demo --port 7420 --record-db $manualDb --record-policy required
+```
+
+In another terminal:
+
+```powershell
+bb clients/babashka-smoke/manual-output.clj 7420
+```
+
+The Runtime continues after the client exits. For an isolated virtual test process
+only, append `--shutdown-fixture` to request and check its graceful shutdown.
+The JSON transcript preserves every request identity and response. Keep it after a
+failure; the script deliberately performs no automatic recovery mutation. Lease
+expiry remains Runtime-owned. `recording_stop` confirms a committed sealed run;
+it does not close the archive writer. Fixture shutdown separately checks cleanup.
+
+No Arduino firmware, USB identity, verified COM binding or physical configuration
+was supplied for this change, and no physical run was performed. The writable
+SimpleDevice example uses placeholder `COM256`; do not treat it as a detected port
+or a firmware specification. Once an operator has independently identified an
+Arduino **thermal emulator**, use its verified SimpleDevice definition/configuration
+with a temperature measurement, percent actuator, safe profile, finite lease and
+Required Recorder. Do not connect a real heater. The exact launch interface is:
+
+```powershell
+# These files/IDs must belong to the already identified emulator and its firmware.
+$arduinoConfig = 'D:\lab\identified-arduino-emulator\runtime.toml'
+./target/debug/lab-runtime.exe --serve --config $arduinoConfig
+# Use that configuration's readiness port and declared instrument/parameter IDs.
+bb clients/babashka-smoke/manual-output.clj 7420 --identified-emulator 1001 1 2
+```
+
+The final command assumes the verified configuration declares port 7420,
+instrument 1001, temperature parameter 1 and heater parameter 2; substitute its
+actual declared IDs, never a guessed COM port or raw register. The example checks
+physical identity class and declared operating limits. That check is not hardware
+identity verification. Exact transport encoding and ACK/readback must match the
+verified firmware. The implementation is qualified here with the native plant and
+existing byte-transport fixtures, separately from future Arduino acceptance.
+
+## Existing boundary smokes
+
 [`distributed.clj`](distributed.clj) is an explicit bounded virtual-demo
 WS/WSS acceptance example. It uses Java WebSocket with normal TLS verification,
 performs one direct Runtime mutation and confirms its authoritative result, then

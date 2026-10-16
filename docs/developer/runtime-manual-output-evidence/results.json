@@ -1,0 +1,413 @@
+{
+  "source_head": "100a533e306edd8487e6b32f0af74fb33d791eeb",
+  "base": "2426fc0823e1d6a5e28425cc8ebc2e5f079953cb",
+  "activation_qualified": false,
+  "physical_arduino_tested": false,
+  "platform": "Windows 10 Pro 10.0.19045 AMD64",
+  "runs": [
+    {
+      "folder": "debug-e2e-20261016-163159",
+      "binary_sha256": "d6e536a218672f7ccef5ac04f1f4bfc69dcf7522f5b4900239d79747e8cdf0d5",
+      "canonical_input_count": 100,
+      "boot_id": "814c0ff9fb0bb56c6bbef2c81acdc890",
+      "scope": "814c0ff9fb0bb56c6bbef2c81acdc890:1",
+      "client_exit": 0,
+      "runtime_exit": 0,
+      "temperature_before": 20.0,
+      "temperature_after": 22.435475228974724,
+      "safe_confirmed": true,
+      "archive": {
+        "archive": "history.sqlite",
+        "sha256": "8b538f16d6018aef9e263f93b12d6eed68a5ffe61f36337490dc299f72ef70bd",
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "operations": [
+          [
+            "output_acquire",
+            "accepted",
+            1
+          ],
+          [
+            "output_acquire",
+            "completed",
+            1
+          ],
+          [
+            "output_renew",
+            "accepted",
+            3
+          ],
+          [
+            "output_renew",
+            "completed",
+            3
+          ],
+          [
+            "output_safe",
+            "accepted",
+            1
+          ],
+          [
+            "output_safe",
+            "completed",
+            1
+          ],
+          [
+            "output_write",
+            "accepted",
+            3
+          ],
+          [
+            "output_write",
+            "completed",
+            3
+          ],
+          [
+            "recording_start",
+            "accepted",
+            1
+          ],
+          [
+            "recording_start",
+            "completed",
+            1
+          ],
+          [
+            "recording_stop",
+            "accepted",
+            1
+          ],
+          [
+            "recording_stop",
+            "completed",
+            1
+          ]
+        ],
+        "outputs": [
+          [
+            "authorized",
+            10.0,
+            "none",
+            1
+          ],
+          [
+            "authorized",
+            15.0,
+            "none",
+            1
+          ],
+          [
+            "authorized",
+            20.0,
+            "none",
+            1
+          ],
+          [
+            "readback_verified",
+            10.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "readback_verified",
+            15.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "readback_verified",
+            20.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "requested",
+            10.0,
+            "none",
+            1
+          ],
+          [
+            "requested",
+            15.0,
+            "none",
+            1
+          ],
+          [
+            "requested",
+            20.0,
+            "none",
+            1
+          ],
+          [
+            "revoked",
+            null,
+            "none",
+            1
+          ],
+          [
+            "safe_readback_verified",
+            0.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "safe_requested",
+            null,
+            "none",
+            1
+          ],
+          [
+            "safe_send_started",
+            0.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "send_started",
+            10.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "send_started",
+            15.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "send_started",
+            20.0,
+            "virtual_simulation",
+            1
+          ]
+        ],
+        "measurements": [
+          [
+            "good",
+            36,
+            20.033563655115586,
+            22.435475228974724
+          ]
+        ],
+        "runs": [
+          [
+            "sealed",
+            "complete"
+          ]
+        ],
+        "boots": [
+          [
+            "sealed"
+          ]
+        ],
+        "gaps": 0,
+        "status": "PASS"
+      }
+    },
+    {
+      "folder": "release-e2e-20261016-163327",
+      "binary_sha256": "0508c69e2b9abbb281dcf85c94195f5305944a536be92ea252eb2f0b7239d8a6",
+      "canonical_input_count": 100,
+      "boot_id": "e3dcb9b9ab870cb1dc0e606aad8ae8b1",
+      "scope": "e3dcb9b9ab870cb1dc0e606aad8ae8b1:1",
+      "client_exit": 0,
+      "runtime_exit": 0,
+      "temperature_before": 20.0,
+      "temperature_after": 22.440787417499514,
+      "safe_confirmed": true,
+      "archive": {
+        "archive": "history.sqlite",
+        "sha256": "56e7dd1c763c9bf0e1c672484ed6a4d05fc7dabff4ac160c1a82cd1d628a7212",
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "operations": [
+          [
+            "output_acquire",
+            "accepted",
+            1
+          ],
+          [
+            "output_acquire",
+            "completed",
+            1
+          ],
+          [
+            "output_renew",
+            "accepted",
+            3
+          ],
+          [
+            "output_renew",
+            "completed",
+            3
+          ],
+          [
+            "output_safe",
+            "accepted",
+            1
+          ],
+          [
+            "output_safe",
+            "completed",
+            1
+          ],
+          [
+            "output_write",
+            "accepted",
+            3
+          ],
+          [
+            "output_write",
+            "completed",
+            3
+          ],
+          [
+            "recording_start",
+            "accepted",
+            1
+          ],
+          [
+            "recording_start",
+            "completed",
+            1
+          ],
+          [
+            "recording_stop",
+            "accepted",
+            1
+          ],
+          [
+            "recording_stop",
+            "completed",
+            1
+          ]
+        ],
+        "outputs": [
+          [
+            "authorized",
+            10.0,
+            "none",
+            1
+          ],
+          [
+            "authorized",
+            15.0,
+            "none",
+            1
+          ],
+          [
+            "authorized",
+            20.0,
+            "none",
+            1
+          ],
+          [
+            "readback_verified",
+            10.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "readback_verified",
+            15.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "readback_verified",
+            20.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "requested",
+            10.0,
+            "none",
+            1
+          ],
+          [
+            "requested",
+            15.0,
+            "none",
+            1
+          ],
+          [
+            "requested",
+            20.0,
+            "none",
+            1
+          ],
+          [
+            "revoked",
+            null,
+            "none",
+            1
+          ],
+          [
+            "safe_readback_verified",
+            0.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "safe_requested",
+            null,
+            "none",
+            1
+          ],
+          [
+            "safe_send_started",
+            0.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "send_started",
+            10.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "send_started",
+            15.0,
+            "virtual_simulation",
+            1
+          ],
+          [
+            "send_started",
+            20.0,
+            "virtual_simulation",
+            1
+          ]
+        ],
+        "measurements": [
+          [
+            "good",
+            36,
+            20.033822838436397,
+            22.440787417499514
+          ]
+        ],
+        "runs": [
+          [
+            "sealed",
+            "complete"
+          ]
+        ],
+        "boots": [
+          [
+            "sealed"
+          ]
+        ],
+        "gaps": 0,
+        "status": "PASS"
+      }
+    }
+  ]
+}

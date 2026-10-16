@@ -45,7 +45,6 @@ pub(crate) struct OutputAuthority {
     instance: u64,
     limits: ValueSpec,
     unit: Unit,
-    profile: Option<SafeProfile>,
     snapshot: OutputSnapshot,
     pending: Option<Pending>,
     transport_reserved: Option<OutputIntent>,
@@ -70,8 +69,11 @@ impl OutputAuthority {
             instance,
             limits,
             unit,
-            profile: None,
             snapshot: OutputSnapshot {
+                manual_supported: false,
+                instance,
+                profile: None,
+                manual_attempt: None,
                 state: OutputState::Unverified,
                 lease: None,
                 epoch: 0,
@@ -115,6 +117,7 @@ impl OutputAuthority {
         !gap.is_zero()
             && gap < lifetime
             && self
+                .snapshot
                 .profile
                 .as_ref()
                 .is_some_and(|profile| lifetime <= profile.max_lease)
@@ -125,6 +128,7 @@ impl OutputAuthority {
         self.can_prepare()
             && matches!(self.limits, ValueSpec::Float { min: low, max: high } if min >= low && max <= high)
             && self
+                .snapshot
                 .profile
                 .as_ref()
                 .is_some_and(|profile| min >= profile.min && max <= profile.max)
@@ -138,9 +142,23 @@ impl OutputAuthority {
         lifetime: Duration,
         at: Duration,
     ) -> Result<OutputLease, Error> {
+        if !matches!(lease.owner, OutputOwner::Automatic(_)) {
+            return Err(OutputError::InvalidState.into());
+        }
+        self.renew(lease, lifetime, at)
+    }
+
+    fn renew(
+        &mut self,
+        lease: OutputLease,
+        lifetime: Duration,
+        at: Duration,
+    ) -> Result<OutputLease, Error> {
         self.check_lease(lease, at)?;
-        if self.snapshot.state != OutputState::ArmedAuto
-            || self.snapshot.fault_latched
+        if !matches!(
+            self.snapshot.state,
+            OutputState::ArmedAuto | OutputState::ArmedManual
+        ) || self.snapshot.fault_latched
             || self.safe_obligation_pending
         {
             return Err(OutputError::InvalidState.into());
@@ -186,6 +204,12 @@ impl OutputAuthority {
                 Ok(OutputResult::Updated)
             }
             OutputCommand::Acquire { owner, lifetime } => self.acquire(owner, lifetime, at),
+            OutputCommand::RenewManual { lease, lifetime } => {
+                if !matches!(lease.owner, OutputOwner::Manual(_)) {
+                    return Err(OutputError::InvalidState.into());
+                }
+                self.renew(lease, lifetime, at).map(OutputResult::Lease)
+            }
             OutputCommand::Release(lease) => {
                 self.check_lease(lease, at)?;
                 self.request_safe(false)?;
@@ -220,7 +244,8 @@ impl OutputAuthority {
     }
 
     fn profile(&self) -> Result<&SafeProfile, Error> {
-        self.profile
+        self.snapshot
+            .profile
             .as_ref()
             .ok_or(OutputError::InvalidProfile.into())
     }
@@ -242,7 +267,7 @@ impl OutputAuthority {
         self.limits.validate(&Value::Float(profile.min))?;
         self.limits.validate(&Value::Float(profile.max))?;
         self.bump_epoch()?;
-        self.profile = Some(profile);
+        self.snapshot.profile = Some(profile);
         self.snapshot.state = OutputState::Unverified;
         self.snapshot.safe_confirmed = false;
         self.clear_pending();
@@ -382,6 +407,7 @@ impl OutputAuthority {
         self.snapshot.reported_readback = None;
         self.snapshot.readback_failure = None;
         self.snapshot.outcome = None;
+        self.manual_send_started(dispatch);
         Ok(OutputResult::Dispatched(dispatch))
     }
 
@@ -413,6 +439,7 @@ impl OutputAuthority {
         if outcome == DispatchOutcome::ReadbackVerified {
             self.snapshot.readback = Some(observation);
         }
+        self.capture_manual_delivery(dispatch.id, true);
 
         if matches!(
             outcome,
@@ -446,6 +473,7 @@ impl OutputAuthority {
     }
 
     fn request_safe(&mut self, fault: bool) -> Result<(), Error> {
+        self.fail_manual_before_send();
         self.bump_epoch()?;
         self.snapshot.lease = None;
         self.snapshot.fault_latched |= fault;
@@ -596,6 +624,7 @@ impl OutputAuthority {
         self.snapshot.reported_readback = None;
         self.snapshot.readback_failure = None;
         self.snapshot.outcome = None;
+        self.manual_send_started(dispatch);
         Ok(dispatch.id)
     }
 
@@ -605,6 +634,7 @@ impl OutputAuthority {
             self.transport_reserved = None;
             if !intent.safe {
                 self.clear_pending();
+                self.fail_manual_before_send();
             }
         }
     }
@@ -652,7 +682,60 @@ impl OutputAuthority {
             at,
         });
         self.snapshot.outcome = Some(DispatchOutcome::Acknowledged);
+        self.capture_manual_delivery(id, false);
         Ok(())
+    }
+
+    /// Start bounded manual correlation only after a validated proposal exists.
+    pub(crate) fn track_manual_attempt(&mut self, id: u64, virtual_simulation: bool) {
+        self.snapshot.manual_attempt = Some(ManualOutputAttempt {
+            virtual_simulation,
+            id,
+            requested: self.snapshot.requested.expect("validated manual proposal"),
+            dispatch: None,
+            terminal: false,
+            outcome: None,
+            sent: None,
+            acknowledged: None,
+            readback: None,
+            reported_readback: None,
+            readback_failure: None,
+        });
+    }
+
+    pub(crate) fn fail_manual_before_send(&mut self) {
+        if let Some(attempt) = &mut self.snapshot.manual_attempt
+            && !attempt.terminal
+            && attempt.dispatch.is_none()
+        {
+            attempt.terminal = true;
+            attempt.outcome = Some(DispatchOutcome::Failed);
+        }
+    }
+
+    fn manual_send_started(&mut self, dispatch: Dispatch) {
+        if !dispatch.safe
+            && let Some(attempt) = &mut self.snapshot.manual_attempt
+            && !attempt.terminal
+            && attempt.dispatch.is_none()
+        {
+            attempt.dispatch = Some(dispatch.id);
+            attempt.sent = self.snapshot.sent;
+        }
+    }
+
+    fn capture_manual_delivery(&mut self, id: DispatchId, terminal: bool) {
+        if let Some(attempt) = &mut self.snapshot.manual_attempt
+            && !attempt.terminal
+            && attempt.dispatch == Some(id)
+        {
+            attempt.terminal = terminal;
+            attempt.outcome = terminal.then_some(self.snapshot.outcome).flatten();
+            attempt.acknowledged = self.snapshot.acknowledged;
+            attempt.readback = self.snapshot.readback;
+            attempt.reported_readback = self.snapshot.reported_readback;
+            attempt.readback_failure = self.snapshot.readback_failure;
+        }
     }
 
     /// Complete physical output only when the separately read register matches
@@ -667,21 +750,7 @@ impl OutputAuthority {
             .snapshot
             .in_flight
             .ok_or(OutputError::UnknownDispatch)?;
-        if dispatch.id != id || !reported.is_finite() {
-            return Err(OutputError::UnknownDispatch.into());
-        }
-        self.snapshot.reported_readback = Some(OutputObservation {
-            value: reported,
-            at,
-        });
-        if reported == dispatch.value {
-            self.complete(id, DispatchOutcome::ReadbackVerified, at)?;
-            Ok(true)
-        } else {
-            self.snapshot.readback_failure = Some(OutputReadbackFailure::Mismatch);
-            self.complete(id, DispatchOutcome::Failed, at)?;
-            Ok(false)
-        }
+        self.complete_transport_readback_exact(id, reported, reported == dispatch.value, at)
     }
 
     /// Complete a protocol-specific exact raw readback comparison.

@@ -97,6 +97,42 @@ pub const OPERATIONS: &[OperationSpec] = &[
     operation!("reference", Query, ["reference"]),
     operation!("component", Query, ["component"]),
     operation!("output", Query, ["actuator"]),
+    operation!(
+        "output_acquire",
+        Mutation,
+        [
+            "actuator",
+            "expected_instance",
+            "expected_epoch",
+            "lease_lifetime_ns"
+        ]
+    ),
+    operation!(
+        "output_renew",
+        Mutation,
+        [
+            "actuator",
+            "expected_instance",
+            "expected_epoch",
+            "lease_lifetime_ns"
+        ]
+    ),
+    operation!(
+        "output_write",
+        Mutation,
+        [
+            "actuator",
+            "expected_instance",
+            "expected_epoch",
+            "value",
+            "proposal_ttl_ns"
+        ]
+    ),
+    operation!(
+        "output_safe",
+        Mutation,
+        ["actuator", "expected_instance", "expected_epoch"]
+    ),
     operation!("operation_status", Query, ["request_id"]),
     operation!("subscribe", Query, ["after", "filter"]),
     operation!("unsubscribe", Query, ["subscription"]),
@@ -309,6 +345,11 @@ const CAPABILITIES: &[CapabilitySpec] = &[
         name: "managed_components",
         stability: "stable",
         operation: "component",
+    },
+    CapabilitySpec {
+        name: "manual_output",
+        stability: "stable",
+        operation: "output_acquire",
     },
     CapabilitySpec {
         name: "output_status",
@@ -978,6 +1019,10 @@ mod tests {
             "history_release",
         ];
         let mutations = [
+            "output_acquire",
+            "output_renew",
+            "output_write",
+            "output_safe",
             "reference_configure",
             "reference_retune",
             "controller_configure_pid",
@@ -1009,7 +1054,7 @@ mod tests {
         };
         assert_eq!(projected(OperationKind::Query), queries);
         assert_eq!(projected(OperationKind::Mutation), mutations);
-        assert_eq!(OPERATIONS.len(), 43);
+        assert_eq!(OPERATIONS.len(), 47);
         let capabilities = [
             "operation_lifecycle",
             "structured_discovery",
@@ -1022,6 +1067,7 @@ mod tests {
             "controller_configuration",
             "controller_lifecycle",
             "managed_components",
+            "manual_output",
             "output_status",
             "runtime_shutdown",
             "recording_status",
@@ -1045,7 +1091,7 @@ mod tests {
                 .collect::<Vec<_>>(),
             capabilities
         );
-        assert_eq!(CAPABILITIES.len(), 26);
+        assert_eq!(CAPABILITIES.len(), 27);
         assert!(CAPABILITIES.iter().all(|capability| {
             matches!(capability.stability, "stable" | "transitional")
                 && operation_spec(capability.operation).is_some()
@@ -1090,6 +1136,10 @@ mod tests {
                 "reference|Query|Always|reference\n",
                 "component|Query|Always|component\n",
                 "output|Query|Always|actuator\n",
+                "output_acquire|Mutation|Always|actuator,expected_instance,expected_epoch,lease_lifetime_ns\n",
+                "output_renew|Mutation|Always|actuator,expected_instance,expected_epoch,lease_lifetime_ns\n",
+                "output_write|Mutation|Always|actuator,expected_instance,expected_epoch,value,proposal_ttl_ns\n",
+                "output_safe|Mutation|Always|actuator,expected_instance,expected_epoch\n",
                 "operation_status|Query|Always|request_id\n",
                 "subscribe|Query|Always|after,filter\n",
                 "unsubscribe|Query|Always|subscription\n",
@@ -1143,6 +1193,7 @@ mod tests {
                 "controller_configuration|stable|controller_configure\n",
                 "controller_lifecycle|stable|controller_start\n",
                 "managed_components|stable|component\n",
+                "manual_output|stable|output_acquire\n",
                 "output_status|stable|output\n",
                 "runtime_shutdown|stable|runtime_shutdown\n",
                 "recording_status|stable|recording_status\n",

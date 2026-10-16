@@ -19,6 +19,9 @@ use lab_core::{
 };
 use std::{cell::RefCell, collections::VecDeque, rc::Rc, time::Duration};
 
+#[path = "support/manual_output.rs"]
+mod manual_output;
+
 const METAKON: InstrumentId = InstrumentId::new(50);
 const INPUT: InstrumentId = InstrumentId::new(51);
 const OUTPUT: ParameterId = ParameterId::new(3);
