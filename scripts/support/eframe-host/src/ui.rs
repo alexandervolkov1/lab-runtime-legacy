@@ -20,6 +20,7 @@ pub(super) struct Navigation {
 }
 #[derive(Default, Serialize)]
 pub(super) struct Report {
+    pointer: Option<[f32; 2]>,
     pub(super) controls: Vec<crate::controls::Report>,
     pub(super) control_state: Option<crate::private_ipc::controls::Feedback>,
     heading: String,
@@ -138,6 +139,9 @@ pub(super) fn paint(
             && reads.incarnation() == Some(header.identity.incarnation)
     });
     let mut report = Report::default();
+    report.pointer = ui
+        .ctx()
+        .input(|i| i.pointer.latest_pos().map(|p| [p.x, p.y]));
     controls.status(ui, &mut report);
     ui.label(format!(
         "Parent-approved revision {} · {:?}",

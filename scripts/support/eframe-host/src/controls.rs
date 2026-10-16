@@ -28,6 +28,8 @@ pub(super) struct Report {
     target: String,
     rate: String,
     valid: bool,
+    queued_nonce: u64,
+    waiting: Option<u64>,
 }
 impl Controls {
     pub(super) fn receive(&mut self, feedback: Feedback) {
@@ -189,6 +191,8 @@ impl Controls {
             target: draft.target.clone(),
             rate: draft.rate.clone(),
             valid: candidate.is_some(),
+            queued_nonce: self.nonce,
+            waiting: self.waiting,
         });
         if candidate.is_none() {
             ui.label("Enter a finite target and a finite, positive rate (maximum 64 bytes each)");
@@ -281,6 +285,86 @@ mod tests {
         );
         controls.begin_frame(header(2));
         assert!(controls.drafts.is_empty());
+        assert!(!controls.has_request());
+    }
+    #[test]
+    fn real_egui_button_release_queues_one_proposal() {
+        let mut controls = Controls::default();
+        controls.begin_frame(header(1));
+        controls.receive(Feedback {
+            revision: 1,
+            enabled: true,
+            ..Default::default()
+        });
+        controls.drafts.insert(
+            "tune".into(),
+            Draft {
+                target: "42".into(),
+                rate: "2".into(),
+            },
+        );
+        let ctx = egui::Context::default();
+        fn draw(
+            ctx: &egui::Context,
+            controls: &mut Controls,
+            events: Vec<egui::Event>,
+        ) -> serde_json::Value {
+            let mut report = crate::ui::Report::default();
+            let mut output = ctx.run_ui(
+                egui::RawInput {
+                    screen_rect: Some(egui::Rect::from_min_size(
+                        egui::Pos2::ZERO,
+                        egui::vec2(1100., 720.),
+                    )),
+                    events,
+                    ..Default::default()
+                },
+                |ctx| {
+                    egui::CentralPanel::default()
+                        .show(ctx, |ui| controls.show(ui, "tune", "1", true, &mut report));
+                },
+            );
+            output.textures_delta.clear();
+            serde_json::to_value(report).unwrap()
+        }
+        let frame = draw(&ctx, &mut controls, vec![]);
+        let widget = frame["widgets"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|w| w["label"] == "tune: Apply retune")
+            .unwrap();
+        let rect = widget["rect"].as_array().unwrap();
+        let pos = egui::pos2(
+            ((rect[0].as_f64().unwrap() + rect[2].as_f64().unwrap()) / 2.) as f32,
+            ((rect[1].as_f64().unwrap() + rect[3].as_f64().unwrap()) / 2.) as f32,
+        );
+        draw(
+            &ctx,
+            &mut controls,
+            vec![
+                egui::Event::PointerMoved(pos),
+                egui::Event::PointerButton {
+                    pos,
+                    button: egui::PointerButton::Primary,
+                    pressed: true,
+                    modifiers: Default::default(),
+                },
+            ],
+        );
+        draw(
+            &ctx,
+            &mut controls,
+            vec![egui::Event::PointerButton {
+                pos,
+                button: egui::PointerButton::Primary,
+                pressed: false,
+                modifiers: Default::default(),
+            }],
+        );
+        assert!(controls.has_request());
+        assert_eq!(controls.take_request().unwrap().nonce, 1);
+        draw(&ctx, &mut controls, vec![]);
         assert!(!controls.has_request());
     }
     #[test]
