@@ -1,0 +1,10 @@
+# SHA-256: text uses canonical LF; ZIP uses exact binary bytes.
+5705942267d9bf80433d8337b56d24f8bd4964365ca9592a4bf5e21eb95a39e3  docs/developer/runtime-manual-output-evidence/check_archive.py
+c5ea26fc25ee76cf62d6e5097ad615dd369d3f7387e20ba0a9957d62868163d0  docs/developer/runtime-manual-output-evidence/raw-evidence.zip
+75cb64a692125eb0fe748b890f6ff69fd2c9380703c35e3a0e90344be783ff1f  docs/developer/runtime-manual-output-evidence/raw-manifest.json
+9620ddc9717e46912068957904996a508f8e8f3e394eb753b933e540e7404fce  docs/developer/runtime-manual-output-evidence/results.json
+f3223df6a1be5207666e2b3981bf49a7daaabca08d212f6c8e767b3fc5407713  docs/developer/runtime-manual-output-evidence/run_e2e.py
+f073435c5393de258f34c26adc4a63124017b768636480e1104280608d26bbe0  docs/developer/runtime-manual-output-review.md
+5f40e97092b5c96030e17da392830b3672223ca3c5e27700ba13224e60a73583  docs/developer/runtime-manual-output-validation.md
+fad6dfd2c55606e6e60509ff75911582fa818c18cb77d7efeae028042102eb25  docs/api/manual-output.md
+633964223e6a814fd2102793a46541a3fe5ccb19c726652aa96c6478e593d405  clients/babashka-smoke/manual-output.clj
