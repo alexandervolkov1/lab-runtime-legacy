@@ -19,6 +19,9 @@ use std::{
     time::{Duration, Instant},
 };
 
+// Opt-in diagnostic files are finite; the screenshot queue remains capacity one.
+const CAPTURE_LIMIT: usize = 128;
+
 struct Channels {
     identity: Identity,
     control: Framed<CONTROL>,
@@ -48,52 +51,68 @@ impl Channels {
             return Ok(());
         }
         let now = Instant::now();
-        let mut bytes = 0;
-        if let Some((header, payload)) = self
-            .control
-            .receive(self.identity, now)
-            .map_err(|e| format!("{e:?}"))?
-        {
-            bytes += header.bytes;
-            match header.kind {
-                Kind::Hello if !self.hello && payload.is_empty() => self.hello = true,
-                Kind::Challenge | Kind::Close if self.acknowledged && payload.len() == 8 => {
-                    replica.parent_progress(now);
-                    self.challenge = Some(u64::from_le_bytes(payload.try_into().unwrap()));
-                    if header.kind == Kind::Close {
-                        self.closing = true;
-                        replica.stop();
-                    }
-                }
-                Kind::Fence if self.acknowledged && payload.len() == 16 => replica
-                    .fence(
-                        u64::from_le_bytes(payload[..8].try_into().unwrap()),
-                        u64::from_le_bytes(payload[8..].try_into().unwrap()),
-                        now,
-                    )
-                    .map_err(str::to_owned)?,
-                _ => return Err("stock child control direction/order".into()),
-            }
-        }
-        if !self.closing {
-            replica.expire(now).map_err(str::to_owned)?;
-            if self.acknowledged
+        let mut bytes = OWNER_BYTES;
+        let mut messages = OWNER_MESSAGES;
+        // eframe deliberately throttles hidden-window logic to about 100 ms.
+        // A framed read needs separate header/payload completion steps. Drive
+        // up to four nonblocking steps here so challenges do not wait several
+        // hidden ticks. All steps SHARE the original byte/message allowance;
+        // this is neither a worker nor fabricated paint/GPU progress.
+        for _ in 0..OWNER_MESSAGES {
+            if messages > 0
                 && let Some((header, payload)) = self
-                    .snapshot
-                    .receive_bounded(self.identity, now, OWNER_BYTES - bytes)
+                    .control
+                    .receive_bounded(self.identity, now, bytes)
                     .map_err(|e| format!("{e:?}"))?
-                && replica.chunk(header, payload, now).map_err(str::to_owned)?
             {
-                if header.kind == Kind::Document {
-                    let decision = replica.admit_ui_document(document).map_err(str::to_owned)?;
-                    self.pending[0] = Some((decision.header, decision.applied));
-                } else {
-                    self.pending[1] = Some((
-                        header,
-                        replica
-                            .accepted(1)
-                            .is_some_and(|h| h.snapshot == header.snapshot),
-                    ));
+                bytes -= header.bytes;
+                messages -= 1;
+                match header.kind {
+                    Kind::Hello if !self.hello && payload.is_empty() => self.hello = true,
+                    Kind::Challenge | Kind::Close if self.acknowledged && payload.len() == 8 => {
+                        replica.parent_progress(now);
+                        self.challenge = Some(u64::from_le_bytes(payload.try_into().unwrap()));
+                        if header.kind == Kind::Close {
+                            self.closing = true;
+                            replica.stop();
+                        }
+                    }
+                    Kind::Fence if self.acknowledged && payload.len() == 16 => replica
+                        .fence(
+                            u64::from_le_bytes(payload[..8].try_into().unwrap()),
+                            u64::from_le_bytes(payload[8..].try_into().unwrap()),
+                            now,
+                        )
+                        .map_err(str::to_owned)?,
+                    _ => return Err("stock child control direction/order".into()),
+                }
+            }
+            if !self.closing {
+                replica.expire(now).map_err(str::to_owned)?;
+                if messages > 0
+                    && self.acknowledged
+                    && let Some((header, payload)) = self
+                        .snapshot
+                        .receive_bounded(self.identity, now, bytes)
+                        .map_err(|e| format!("{e:?}"))?
+                {
+                    bytes -= header.bytes;
+                    messages -= 1;
+                    if !replica.chunk(header, payload, now).map_err(str::to_owned)? {
+                        continue;
+                    }
+                    if header.kind == Kind::Document {
+                        let decision =
+                            replica.admit_ui_document(document).map_err(str::to_owned)?;
+                        self.pending[0] = Some((decision.header, decision.applied));
+                    } else {
+                        self.pending[1] = Some((
+                            header,
+                            replica
+                                .accepted(1)
+                                .is_some_and(|h| h.snapshot == header.snapshot),
+                        ));
+                    }
                 }
             }
         }
@@ -206,6 +225,8 @@ struct Host {
     captures: usize,
     last_capture: Instant,
     counter: u64,
+    ui_counter: u64,
+    last_lifecycle: Instant,
     navigation: ui::Navigation,
     fatal: Option<String>,
     closing_since: Option<Instant>,
@@ -229,6 +250,17 @@ impl eframe::App for Host {
             );
             self.fatal = Some(error);
         }
+        if self.capture && self.last_lifecycle.elapsed() >= Duration::from_secs(1) {
+            write(
+                &self.directory.join("lifecycle.json"),
+                &json!({
+                "owner_counter":self.counter,"ui_counter":self.ui_counter,
+                "minimized":ctx.input(|i|i.viewport().minimized),
+                "document_revision":self.document.identity().map(|h|h.epoch.revision),
+                "observation_snapshot":self.replica.accepted(1).map(|h|h.snapshot)}),
+            );
+            self.last_lifecycle = Instant::now();
+        }
         if self.io.borrow().closing {
             self.closing_since.get_or_insert_with(Instant::now);
         }
@@ -244,6 +276,10 @@ impl eframe::App for Host {
         }
     }
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        self.ui_counter = self
+            .ui_counter
+            .checked_add(1)
+            .expect("paint counter exhausted");
         let ctx = ui.ctx().clone();
         let events = ctx.input(|i| i.events.clone());
         for event in events {
@@ -259,7 +295,7 @@ impl eframe::App for Host {
                 else {
                     continue;
                 };
-                if index < 12 && image.size[0] <= 3200 && image.size[1] <= 2000 {
+                if index < CAPTURE_LIMIT && image.size[0] <= 3200 && image.size[1] <= 2000 {
                     match self.capture_sender.try_send(Capture { image, index }) {
                         Ok(()) | Err(TrySendError::Full(_)) => {}
                         Err(TrySendError::Disconnected(_)) => {
@@ -290,7 +326,7 @@ impl eframe::App for Host {
             }
         });
         if self.capture
-            && self.captures < 12
+            && self.captures < CAPTURE_LIMIT
             && self.document.document().is_some()
             && self.last_capture.elapsed() >= Duration::from_millis(750)
         {
@@ -299,7 +335,7 @@ impl eframe::App for Host {
                 &self.directory.join(format!("frame-{index:02}.json")),
                 &json!({"incarnation":self.io.borrow().identity.incarnation,
                 "document_revision":self.document.identity().map(|h|h.epoch.revision),"document_id":self.document.document().map(|d|d.dto().document_id.as_str()),
-                "observation_snapshot":self.replica.accepted(1).map(|h|h.snapshot),"owner_counter":self.counter,"display":report,
+                "observation_snapshot":self.replica.accepted(1).map(|h|h.snapshot),"owner_counter":self.counter,"ui_counter":self.ui_counter,"display":report,
                 "capture_api":"stock eframe Screenshot", "runtime_clients":0}),
             );
             ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(egui::UserData::new(
@@ -428,6 +464,8 @@ pub(super) fn run(
                 captures: 0,
                 last_capture: Instant::now(),
                 counter: 0,
+                ui_counter: 0,
+                last_lifecycle: Instant::now(),
                 navigation: Default::default(),
                 fatal: None,
                 closing_since: None,
