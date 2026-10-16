@@ -378,7 +378,11 @@ impl Reservation {
     }
     /// Commit the next bounded, page-aligned region without touching it.
     pub fn commit(&mut self, bytes: usize) -> Result<()> {
-        if bytes == 0 || !bytes.is_multiple_of(65536) || bytes > self.bytes - self.committed {
+        if self.address.is_null()
+            || bytes == 0
+            || !bytes.is_multiple_of(65536)
+            || bytes > self.bytes - self.committed
+        {
             return Err(Error {
                 operation: "commit bound",
                 code: 0,
@@ -420,6 +424,7 @@ impl Reservation {
     }
     /// Write one byte per system page, only within successfully committed memory.
     pub fn touch(&mut self) {
+        assert!(!self.address.is_null(), "touch after reservation release");
         // SAFETY: zero-initialized SDK output, then GetSystemInfo fills it.
         let mut info: SystemInfo = unsafe { zeroed() };
         // SAFETY: exact writable SYSTEM_INFO buffer.
@@ -451,6 +456,7 @@ impl Reservation {
                 "VirtualFree MEM_RELEASE",
             )?;
             self.address = null_mut();
+            self.committed = 0;
         }
         Ok(())
     }
