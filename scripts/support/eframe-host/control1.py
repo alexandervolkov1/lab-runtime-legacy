@@ -74,7 +74,7 @@ def focus(ready):
     assert user.GetForegroundWindow() == ready['hwnd']
 
 def inject(ready, event):
-    owner(ready); assert user.GetForegroundWindow() == ready['hwnd']
+    focus(ready); owner(ready); assert user.GetForegroundWindow() == ready['hwnd']
     assert user.SendInput(1,c.byref(event),c.sizeof(Input)) == 1
 
 def key(ready, virtual, up=False):
@@ -177,6 +177,11 @@ try:
     configured=bb(endpoint,'configure','bb-configure');wid=configured['workbench_id']
     directory=CHILD.parent/'target/eframe-2-parent'/f'{parent.p.pid}-{wid}-1'
     child=common.wait(lambda:common.read_json(directory/'ready.json'),'native stock window')
+    # As in the existing native fixture, clear only input addressed to this
+    # original foreground window; an interrupted driver can leave a button held.
+    focus(child)
+    for flags in (4,16):
+        event=Input();event.payload.mouse=Mouse(0,0,0,flags,0,0);inject(child,event)
     frame=capture(directory,lambda v:live(v) and v['display']['controls'] and state(v).get('revision')==int(configured['presentation_revision']))
     initial_wire=len(relay.requests);assert not mutations(relay)
     replace_text(child,widget(frame,'retune: Target')['rect'],'NaN')
@@ -242,7 +247,10 @@ try:
 finally:
     if relay:relay.release.set()
     if child and parent and parent.p.poll() is None:
-        try:key(child,0x11,True)
+        try:
+            key(child,0x11,True)
+            for flags in (4,16):
+                event=Input();event.payload.mouse=Mouse(0,0,0,flags,0,0);inject(child,event)
         except AssertionError:pass
     if api:common.write(OUT/'observer-api.json',api.transcript);api.close()
     if parent and parent.p.poll() is None:parent.p.terminate();parent.p.wait(timeout=10)
