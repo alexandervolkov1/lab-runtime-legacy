@@ -170,11 +170,10 @@ kinds before publication, never silently replace them with another widget.
 | `plot` | `plot_id:Ref<Plot>` | None | Existing plot renderer and shared source buffers |
 
 `StatusSource` is exactly `{ "kind":"data", "data_id":Ref<DataBinding> }` or
-`{ "kind":"entity", "target":RuntimeRef }`. Entity mode preserves the existing
-v1 Status dispatch: the five supported target categories use their closed typed
-read semantics; Instrument/Resource/Component use existing bounded projection
-text. It invents neither a scalar nor a configurable field selector, adds no
-sixth DataBinding and never requests missing detail.
+`{ "kind":"entity", "target":RuntimeRef }`. Entity mode preserves v1 Status for
+Instrument/Resource/Component and other cached projections; it displays existing
+bounded status text, not an invented scalar or configurable field selector. It
+does not add a sixth DataBinding or request missing detail.
 
 `matching_type` is one fixed metadata predicate: render this input only if the
 editor's currently resolved candidate kind matches the widget. It cannot refer
@@ -778,10 +777,9 @@ hello capabilities may claim unavailable metadata is implemented.
 ## 10. Safety and error semantics
 
 Widgets have presentation authority only. Read resolution cannot construct or
-submit an OperatorIntent. The trusted action adapter can emit one of the four
-allowed families into the workflow only on deliberate activation. Eligibility
-previews reuse existing preparation checks without beginning another workflow or
-submitting anything. It never resolves a free-form operation name. A read_write
+submit an OperatorIntent. The trusted action adapter can create one of the four
+allowed families only on deliberate activation and passes it to the existing
+OperatorWorkflow. It never resolves a free-form operation name. A read_write
 descriptor, declared candidate kind, Boolean display or Toggle is not authority.
 
 Preparation captures original full target, candidate, arguments and existing
