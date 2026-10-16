@@ -1,0 +1,44 @@
+{
+  "qualified_source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+  "gui_runs_passed": 6,
+  "current_profile_backend_matrix_passed": 4,
+  "compatibility_directions_passed": 2,
+  "connections_per_gui_run": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "display_caused_runtime_requests": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "runtime_mutations_status_retry": 0,
+  "selected_pngs_verified": 58,
+  "representative_original_pngs": 18,
+  "archive_members_verified": 387,
+  "archive_crc_lengths_sha256_verified": true,
+  "no_scientific_database_in_recorder_disabled_runs": true,
+  "no_remaining_task_runtime_parent_child_processes": true,
+  "hash_domains": {
+    "source": "raw canonical Git blobs",
+    "executable_png_archive": "raw file bytes",
+    "registry_and_licenses": "original registry archive/source bytes",
+    "audit_lock_files": "checked-out lock bytes; canonical hashes are in source-inputs"
+  },
+  "limitations": [
+    "OS UTC absolute accuracy unverified",
+    "No authoritative experiment start; explicit relative fallback",
+    "DST and multiday tests synthetic; Windows zone unchanged",
+    "Hovered tooltip screenshot not claimed",
+    "Windows/MSVC virtual scope only",
+    "MP-1 OPEN; 1 GiB cap test-only"
+  ],
+  "activation_qualified": false
+}

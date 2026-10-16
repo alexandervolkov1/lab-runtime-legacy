@@ -51,7 +51,13 @@ within its scope and merged through PR #48. The experimental
 [EFRAME-3 read-only adapter](eframe-3-readonly-workbench.md) extends complete
 document navigation and stock plotting and corrects bounded IPC progress while
 minimized. Its external Babashka virtual-furnace experiment and
-[validation](eframe-3-validation.md) require separate EFRAME-3 review.
+[validation](eframe-3-validation.md) were independently reviewed within the
+EFRAME-3 read-only scope and merged through PR #49.
+Experimental [TIME-1](time-1-time-axis.md) adds boot-scoped read-only clock
+metadata and configurable stock plot time labels, with
+[Windows virtual/API/compatibility evidence](time-1-validation.md) pending
+independent TIME-1 review. OS UTC accuracy remains unverified, and experiment
+elapsed falls back until an authoritative experiment start is available.
 `ACTIVATION_QUALIFIED=false`, MP-1 remains OPEN, and no release is implied.
 
 The optional Custom Glow renderer has a separate, test-only

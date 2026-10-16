@@ -1,0 +1,62 @@
+[
+  {
+    "run": "time1-dev-wgpu-q2",
+    "profile": "dev",
+    "renderer": "wgpu",
+    "compatibility": "current",
+    "peak_process_commit": 442556416,
+    "peak_job_commit": 449097728,
+    "test_only_cap": 1073741824,
+    "mp_1": "OPEN"
+  },
+  {
+    "run": "time1-dev-glow-q1",
+    "profile": "dev",
+    "renderer": "glow",
+    "compatibility": "current",
+    "peak_process_commit": 185339904,
+    "peak_job_commit": 191897600,
+    "test_only_cap": 1073741824,
+    "mp_1": "OPEN"
+  },
+  {
+    "run": "time1-release-wgpu-q1",
+    "profile": "release",
+    "renderer": "wgpu",
+    "compatibility": "current",
+    "peak_process_commit": 432779264,
+    "peak_job_commit": 439345152,
+    "test_only_cap": 1073741824,
+    "mp_1": "OPEN"
+  },
+  {
+    "run": "time1-release-glow-q1",
+    "profile": "release",
+    "renderer": "glow",
+    "compatibility": "current",
+    "peak_process_commit": 140120064,
+    "peak_job_commit": 146690048,
+    "test_only_cap": 1073741824,
+    "mp_1": "OPEN"
+  },
+  {
+    "run": "time1-compat-old-runtime-q1",
+    "profile": "dev",
+    "renderer": "wgpu",
+    "compatibility": "old-runtime",
+    "peak_process_commit": 442523648,
+    "peak_job_commit": 449093632,
+    "test_only_cap": 1073741824,
+    "mp_1": "OPEN"
+  },
+  {
+    "run": "time1-compat-old-parent-q1",
+    "profile": "dev",
+    "renderer": "glow",
+    "compatibility": "old-parent",
+    "peak_process_commit": 165203968,
+    "peak_job_commit": 171778048,
+    "test_only_cap": 1073741824,
+    "mp_1": "OPEN"
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "name": "dev-wgpu-current-utc",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23056-0000000000005a1018def86c540f5cfd-1\\frame-05.json",
+    "png_sha256": "1fb3f98321ad462ab2a3c5dc6b4f2cd3c4835b76b6237d99f6fbc8fa0cc48820"
+  },
+  {
+    "name": "dev-wgpu-current-runtime_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23056-0000000000005a1018def86c540f5cfd-1\\frame-09.json",
+    "png_sha256": "cbe9aad6221ce347840fdcf648e28ad8b1a2fdf4ba92c1c32d941fc3113829c5"
+  },
+  {
+    "name": "dev-wgpu-current-local_calendar",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23056-0000000000005a1018def86c540f5cfd-1\\frame-15.json",
+    "png_sha256": "fb794653dbe79d70bc7a440c41c4af84b57335c28366426f1d5387f903dcfc90"
+  },
+  {
+    "name": "dev-wgpu-current-experiment_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23056-0000000000005a1018def86c540f5cfd-1\\frame-19.json",
+    "png_sha256": "faa9ab0348c04138327ddfed637c29839a2f430ee559390ddad67553103257d6"
+  },
+  {
+    "name": "dev-glow-current-utc",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\4908-000000000000132c18def88d86d55ef5-1\\frame-05.json",
+    "png_sha256": "c850ed08d63e91c26965643dd0fc27eff56b434b058fbfefb39c5a93b9d56208"
+  },
+  {
+    "name": "dev-glow-current-runtime_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\4908-000000000000132c18def88d86d55ef5-1\\frame-10.json",
+    "png_sha256": "d5bba98d314c60a49c4be94197fdfbadbce7dc92a4d01acbef57ec7d979a6b1f"
+  },
+  {
+    "name": "dev-glow-current-local_calendar",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\4908-000000000000132c18def88d86d55ef5-1\\frame-14.json",
+    "png_sha256": "01f7348f9788dc3d687be604c0b832880582037e0d00f2b005ef361b7051c4f6"
+  },
+  {
+    "name": "dev-glow-current-experiment_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\4908-000000000000132c18def88d86d55ef5-1\\frame-22.json",
+    "png_sha256": "d23ce3e1f57710ebdaa468db48a0c21da234c65b17258f826935720ca48a375f"
+  },
+  {
+    "name": "release-wgpu-current-utc",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9888-00000000000026a018def8a64a7f0ded-1\\frame-03.json",
+    "png_sha256": "f6ecf9bd3a5704ce0fcade9d0edbec8a49877ceeb6f883807fb2ef5db121015c"
+  },
+  {
+    "name": "release-wgpu-current-runtime_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9888-00000000000026a018def8a64a7f0ded-1\\frame-05.json",
+    "png_sha256": "c045939608c8c1b7d820c74f1b6636601f518760415d6126c8de617cdd4278df"
+  },
+  {
+    "name": "release-wgpu-current-local_calendar",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9888-00000000000026a018def8a64a7f0ded-1\\frame-07.json",
+    "png_sha256": "d12c7bed15a13528446399889ac61d67696ff0d3400093114f200554ed620712"
+  },
+  {
+    "name": "release-wgpu-current-experiment_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9888-00000000000026a018def8a64a7f0ded-1\\frame-09.json",
+    "png_sha256": "5b70d9534fa17a9265c2e8ed2179a127301b83db03d8ecfcc9883f3c53aad837"
+  },
+  {
+    "name": "release-glow-current-utc",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21856-000000000000556018def8adbded9275-1\\frame-03.json",
+    "png_sha256": "72e6a13707c380b9986d5b8dcb976dac7ed7d964846e0dbdee200456b454d978"
+  },
+  {
+    "name": "release-glow-current-runtime_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21856-000000000000556018def8adbded9275-1\\frame-05.json",
+    "png_sha256": "da66a43c0af8a3be6531967a55fa089da7324509b1a0fbf1c47f79e65ea4c124"
+  },
+  {
+    "name": "release-glow-current-local_calendar",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21856-000000000000556018def8adbded9275-1\\frame-07.json",
+    "png_sha256": "d6a4ccb84a21df4dc0ad48ec32349d940ddfecfde8b0f4a82135a07a417c0d82"
+  },
+  {
+    "name": "release-glow-current-experiment_elapsed",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21856-000000000000556018def8adbded9275-1\\frame-09.json",
+    "png_sha256": "fc48788b6dbe96c8c409c38e763edd481fae94fa0f52b86e4b68669ae93e1c14"
+  },
+  {
+    "name": "dev-wgpu-old-runtime-default",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\17364-00000000000043d418def8b511e7389d-1\\frame-01.json",
+    "png_sha256": "c1856289d8047b720bdf2418cf0a3a8dc63c40f4b89ba2f3d43c0976662823c6"
+  },
+  {
+    "name": "dev-glow-old-parent-default",
+    "original": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19744-0000000000004d2018def8be611b451d-1\\frame-01.json",
+    "png_sha256": "00af50fc2b08d8d40f8bc549a9696836a0c38dfb2b87168b2a8eb6ea050278d3"
+  }
+]

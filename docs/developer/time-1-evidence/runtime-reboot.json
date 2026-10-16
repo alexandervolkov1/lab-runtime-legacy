@@ -1,0 +1,513 @@
+{
+  "passed": true,
+  "source": "5eaef186b6a7cf5582e77dafd90b3cd5351e7b5f",
+  "binary_sha256": "5a85a5b82c5e4dd4993d87bad94b3d4388b925751c905c61291d8a370c22810a",
+  "recorder_enabled": false,
+  "boots": [
+    {
+      "request": {
+        "v": 1,
+        "msg_id": "time-boot-probe",
+        "op": "hello",
+        "args": {
+          "scope": null
+        }
+      },
+      "response": {
+        "msg_id": "time-boot-probe",
+        "result": {
+          "application": {
+            "api_version": "0.1-pre",
+            "package_version": "0.1.0"
+          },
+          "boot_id": "78c27e08ddfbd1c0e176b691222c2923",
+          "capabilities": [
+            {
+              "name": "operation_lifecycle",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "structured_discovery",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "live_subscriptions",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "current_measurements",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "recent_measurement_history",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "instrument_queries",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "reference_read_write",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "controller_status",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "controller_configuration",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "controller_lifecycle",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "managed_components",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "output_status",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "runtime_shutdown",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "recording_status",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "configuration_read",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "configuration_properties",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "configuration_write",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "deployment_configuration",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "virtual_instruments",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "virtual_model_lifecycle",
+              "stability": "stable",
+              "version": 1
+            }
+          ],
+          "event_latest": {
+            "boot_id": "78c27e08ddfbd1c0e176b691222c2923",
+            "seq": "2"
+          },
+          "event_oldest": {
+            "boot_id": "78c27e08ddfbd1c0e176b691222c2923",
+            "seq": "0"
+          },
+          "limits": {
+            "capabilities": 32,
+            "client_deadline_ms": 2000,
+            "client_event_queue": 16,
+            "client_pending_requests": 8,
+            "client_reply_queue": 8,
+            "clients": 8,
+            "configuration": {
+              "candidate_retention_seconds": 30,
+              "page_bytes": 8192,
+              "page_records": 64,
+              "property_records": 256,
+              "runtime_overrides": 32,
+              "simple_device_candidate_bytes": 8192,
+              "simple_device_candidate_depth": 8,
+              "simple_device_candidate_values": 900,
+              "simple_device_provisioning_retained_bytes": 524288,
+              "staged_candidates": 1
+            },
+            "controller_configuration_fields": 6,
+            "controller_result_records": 1,
+            "current_page_bytes": 8192,
+            "current_page_entries": 64,
+            "detached_scope_retention_seconds": 1800,
+            "discovery_page_bytes": 8192,
+            "discovery_page_entries": 64,
+            "durable_history_records": 128,
+            "emulator": {
+              "metadata_bytes": 0,
+              "pending_per_scope": 8,
+              "records_per_request": 1,
+              "targets": 64
+            },
+            "error_details_bytes": 2048,
+            "error_message_bytes": 256,
+            "event_bytes": 4096,
+            "event_replay_records": 1024,
+            "frame_bytes": 16384,
+            "history_cursors": 8,
+            "history_jobs": 8,
+            "history_page_bytes": 8192,
+            "json_depth": 16,
+            "json_string_bytes": 512,
+            "json_values": 1024,
+            "network_sweep_bytes": 8192,
+            "owner_reactor_mailbox": 64,
+            "pending_operations": 64,
+            "pending_operations_per_scope": 8,
+            "pid_configuration_fields": 5,
+            "recent_history_records": 128,
+            "recorder": {
+              "event_bytes": 4096,
+              "label_bytes": 128,
+              "status_records": 1
+            },
+            "reference_result_records": 1,
+            "scopes": 16,
+            "semantic_name_bytes": 64,
+            "subscription_kinds": 8,
+            "subscription_targets": 16,
+            "subscriptions_per_client": 1,
+            "terminal_operations": 256,
+            "terminal_operations_per_scope": 32,
+            "terminal_result_bytes": 4096,
+            "terminal_retention_seconds": 600
+          },
+          "next_seq": "1",
+          "operations": [
+            "hello",
+            "discover",
+            "discovery_page",
+            "describe",
+            "configuration_status",
+            "configuration_properties",
+            "configuration_page",
+            "latest",
+            "measurements_current",
+            "measurements_page",
+            "measurement_window",
+            "controller",
+            "reference",
+            "component",
+            "output",
+            "operation_status",
+            "subscribe",
+            "unsubscribe",
+            "reference_configure",
+            "reference_retune",
+            "controller_configure_pid",
+            "controller_configure",
+            "controller_start",
+            "controller_pause",
+            "controller_resume",
+            "controller_reset_failed",
+            "runtime_shutdown",
+            "stage_configuration",
+            "apply_configuration",
+            "reload_configuration",
+            "property_configure",
+            "virtual_models_restart",
+            "recording_status"
+          ],
+          "protocol": {
+            "id": "lab-runtime.application",
+            "version": 1
+          },
+          "scope": "78c27e08ddfbd1c0e176b691222c2923:1",
+          "state": "ready",
+          "time_anchor": {
+            "boot_id": "78c27e08ddfbd1c0e176b691222c2923",
+            "bracket_uncertainty_ns": "400",
+            "monotonic_after_ns": "1500",
+            "monotonic_before_ns": "1100",
+            "source": "system_clock",
+            "utc_accuracy_ns": null,
+            "utc_unix_us": "1792143067050066"
+          },
+          "v": 1
+        },
+        "type": "result",
+        "v": 1
+      },
+      "runtime_clients": 1,
+      "runtime_mutations": 0
+    },
+    {
+      "request": {
+        "v": 1,
+        "msg_id": "time-boot-probe",
+        "op": "hello",
+        "args": {
+          "scope": null
+        }
+      },
+      "response": {
+        "msg_id": "time-boot-probe",
+        "result": {
+          "application": {
+            "api_version": "0.1-pre",
+            "package_version": "0.1.0"
+          },
+          "boot_id": "a98e60e1d8708a1d2173a97e0543e382",
+          "capabilities": [
+            {
+              "name": "operation_lifecycle",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "structured_discovery",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "live_subscriptions",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "current_measurements",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "recent_measurement_history",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "instrument_queries",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "reference_read_write",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "controller_status",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "controller_configuration",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "controller_lifecycle",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "managed_components",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "output_status",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "runtime_shutdown",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "recording_status",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "configuration_read",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "configuration_properties",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "configuration_write",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "deployment_configuration",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "virtual_instruments",
+              "stability": "stable",
+              "version": 1
+            },
+            {
+              "name": "virtual_model_lifecycle",
+              "stability": "stable",
+              "version": 1
+            }
+          ],
+          "event_latest": {
+            "boot_id": "a98e60e1d8708a1d2173a97e0543e382",
+            "seq": "2"
+          },
+          "event_oldest": {
+            "boot_id": "a98e60e1d8708a1d2173a97e0543e382",
+            "seq": "0"
+          },
+          "limits": {
+            "capabilities": 32,
+            "client_deadline_ms": 2000,
+            "client_event_queue": 16,
+            "client_pending_requests": 8,
+            "client_reply_queue": 8,
+            "clients": 8,
+            "configuration": {
+              "candidate_retention_seconds": 30,
+              "page_bytes": 8192,
+              "page_records": 64,
+              "property_records": 256,
+              "runtime_overrides": 32,
+              "simple_device_candidate_bytes": 8192,
+              "simple_device_candidate_depth": 8,
+              "simple_device_candidate_values": 900,
+              "simple_device_provisioning_retained_bytes": 524288,
+              "staged_candidates": 1
+            },
+            "controller_configuration_fields": 6,
+            "controller_result_records": 1,
+            "current_page_bytes": 8192,
+            "current_page_entries": 64,
+            "detached_scope_retention_seconds": 1800,
+            "discovery_page_bytes": 8192,
+            "discovery_page_entries": 64,
+            "durable_history_records": 128,
+            "emulator": {
+              "metadata_bytes": 0,
+              "pending_per_scope": 8,
+              "records_per_request": 1,
+              "targets": 64
+            },
+            "error_details_bytes": 2048,
+            "error_message_bytes": 256,
+            "event_bytes": 4096,
+            "event_replay_records": 1024,
+            "frame_bytes": 16384,
+            "history_cursors": 8,
+            "history_jobs": 8,
+            "history_page_bytes": 8192,
+            "json_depth": 16,
+            "json_string_bytes": 512,
+            "json_values": 1024,
+            "network_sweep_bytes": 8192,
+            "owner_reactor_mailbox": 64,
+            "pending_operations": 64,
+            "pending_operations_per_scope": 8,
+            "pid_configuration_fields": 5,
+            "recent_history_records": 128,
+            "recorder": {
+              "event_bytes": 4096,
+              "label_bytes": 128,
+              "status_records": 1
+            },
+            "reference_result_records": 1,
+            "scopes": 16,
+            "semantic_name_bytes": 64,
+            "subscription_kinds": 8,
+            "subscription_targets": 16,
+            "subscriptions_per_client": 1,
+            "terminal_operations": 256,
+            "terminal_operations_per_scope": 32,
+            "terminal_result_bytes": 4096,
+            "terminal_retention_seconds": 600
+          },
+          "next_seq": "1",
+          "operations": [
+            "hello",
+            "discover",
+            "discovery_page",
+            "describe",
+            "configuration_status",
+            "configuration_properties",
+            "configuration_page",
+            "latest",
+            "measurements_current",
+            "measurements_page",
+            "measurement_window",
+            "controller",
+            "reference",
+            "component",
+            "output",
+            "operation_status",
+            "subscribe",
+            "unsubscribe",
+            "reference_configure",
+            "reference_retune",
+            "controller_configure_pid",
+            "controller_configure",
+            "controller_start",
+            "controller_pause",
+            "controller_resume",
+            "controller_reset_failed",
+            "runtime_shutdown",
+            "stage_configuration",
+            "apply_configuration",
+            "reload_configuration",
+            "property_configure",
+            "virtual_models_restart",
+            "recording_status"
+          ],
+          "protocol": {
+            "id": "lab-runtime.application",
+            "version": 1
+          },
+          "scope": "a98e60e1d8708a1d2173a97e0543e382:1",
+          "state": "ready",
+          "time_anchor": {
+            "boot_id": "a98e60e1d8708a1d2173a97e0543e382",
+            "bracket_uncertainty_ns": "600",
+            "monotonic_after_ns": "1700",
+            "monotonic_before_ns": "1100",
+            "source": "system_clock",
+            "utc_accuracy_ns": null,
+            "utc_unix_us": "1792143067116547"
+          },
+          "v": 1
+        },
+        "type": "result",
+        "v": 1
+      },
+      "runtime_clients": 1,
+      "runtime_mutations": 0
+    }
+  ],
+  "activation_qualified": false
+}

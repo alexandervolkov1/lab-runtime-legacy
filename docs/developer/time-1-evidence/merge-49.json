@@ -1,0 +1,18 @@
+{
+  "headRefOid": "d51792f216091037281a6b9a96a1608e241aa8b7",
+  "mergeCommit": {
+    "oid": "5c0730c8f827de9b326cabaf4176ae21d2e3308b"
+  },
+  "mergedAt": "2026-10-16T08:53:22Z",
+  "number": 49,
+  "state": "MERGED",
+  "url": "https://github.com/alexandervolkov1/lab-runtime/pull/49",
+  "base_verified_before_merge": "fcf340c74efac9e422635d5b736c606b8f4a674d",
+  "raw_git_blob_checksums_verified": 66,
+  "post_qualification_executable_changes": 0,
+  "merge_parents": [
+    "fcf340c74efac9e422635d5b736c606b8f4a674d",
+    "d51792f216091037281a6b9a96a1608e241aa8b7"
+  ],
+  "reviewed_tree_equals_merge_tree": true
+}
