@@ -4,6 +4,8 @@
 #[cfg(windows)]
 mod consumer;
 #[cfg(windows)]
+mod controls;
+#[cfg(windows)]
 #[path = "../../../../apps/lab-workbench/src/time_context.rs"]
 mod time_context;
 #[cfg(windows)]

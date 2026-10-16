@@ -1,0 +1,23 @@
+{
+  "selection": "Original stock-host directories created since the memory-policy commit; includes all failed and successful CONTROL-1 native window attempts.",
+  "directories": [
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-2",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15304-0000000000003bc818deff99a6ff3db9-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\17068-00000000000042ac18deff654aa35b51-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\22072-000000000000563818deffc2ec0a75d5-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23264-0000000000005ae018deffe671257215-1",
+    "scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1",
+    "scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1",
+    "scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2",
+    "scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1",
+    "scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1",
+    "scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1",
+    "scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2"
+  ]
+}

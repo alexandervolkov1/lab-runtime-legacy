@@ -1,0 +1,147 @@
+{
+  "pr": {
+    "baseRefOid": "30a20e3867e1bb08e2aff3405a7015266add70ed",
+    "headRefOid": "ec4818aa86da48f4a790b954fdbd3c78e2144142",
+    "mergeCommit": {
+      "oid": "2426fc0823e1d6a5e28425cc8ebc2e5f079953cb"
+    },
+    "mergedAt": "2026-10-16T11:07:30Z",
+    "number": 51,
+    "state": "MERGED",
+    "url": "https://github.com/alexandervolkov1/lab-runtime/pull/51"
+  },
+  "new_branch_base": "2426fc0823e1d6a5e28425cc8ebc2e5f079953cb",
+  "branch": "feature/control-1-reference-retune",
+  "pre_merge": "Remote HEAD/base and clean working tree checked before authorized ordinary merge; main fast-forward synchronized clean before branching.",
+  "merge_parents_and_reviewed_tree_equal": true,
+  "canonical_mp1_checksums_rechecked": [
+    {
+      "path": "crates/lab-windows-job/Cargo.toml",
+      "sha256": "b5ce98fda858ed6ba5cb2252c622f1b6a433508f454f1c222e4ebb2764cadf04"
+    },
+    {
+      "path": "crates/lab-windows-job/src/lib.rs",
+      "sha256": "ad00d4260de012891aecfbf0bfac65e33e84028fe5e85eeb5109e754f2b41767"
+    },
+    {
+      "path": "crates/lab-windows-job/src/windows.rs",
+      "sha256": "a9fe1cc7d96aed819bb51ed069e1adafd547ed29c8436d0a0899952477194ca0"
+    },
+    {
+      "path": "crates/lab-windows-job/src/windows/accounting.rs",
+      "sha256": "59abfac0d6f47f021270c0981b94c7c34c21c8304666fba50c03d32c859e727f"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/abi-environment.json",
+      "sha256": "0ea28129085c7a5c16e306c35c2113bc67580f005ada85920ffe3853067cabf8"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/abi.json",
+      "sha256": "9cecb5a61afbed33162e997e3ef35b6a86f85951086d346816b77f06a7ed5b0c"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/binary-identities.json",
+      "sha256": "b5720a69593ff99fdb6a81b5902822602351c1a101e5c5dc4adac06a9eb9a020"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/dependency-review.json",
+      "sha256": "a3345354d4a0180dcfe3e618904ae81f1a42ecbb394422d77e9ffa76215203ce"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/dev-environment.json",
+      "sha256": "558b1bb0896f30f769a69639847ccd600a03154b27047f2ab5ac603fba341a93"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/dev-verification.json",
+      "sha256": "60045626110927224c3a6077f1c85acacd51b9d0e5295021b4461706af295047"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/gates.json",
+      "sha256": "40fc409227756db3948118b4e6af0ce4b6f14abf2cfe394e3553ab2b6db80dba"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/historical-control.json",
+      "sha256": "562a4f9a3e3b5a1f0be5399efdb42d4125e74c7d7b6ab941ea21b56687fc0a81"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/pr-50-merged.json",
+      "sha256": "94616475851ae41ae12259b7c575c83e0d734c0a308d73f7c7fcac62295c081a"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/preliminary-attempts.json",
+      "sha256": "a7613b417b521a11a8dfdc9698df3330581ff1b555e5b47e1781b471df720727"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/raw-evidence.zip",
+      "sha256": "ad57b6aa1bd1acdaf70c7c85913db5b9cdcbfee702561765700f2c12cf8cc77c"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/raw-manifest.json",
+      "sha256": "a8ac92cfc41bb87f574768963a2a45b519118d4893b22eeca8b3c35be15edcb3"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/release-environment.json",
+      "sha256": "817ac3a1c6da392f2f1c26ea948a2da63485bd2a63edc4f86281c6c53d721803"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/release-verification.json",
+      "sha256": "c374709bb1b95ae0bac10cfd678cb918dd4cc0cd804e43a9dd13d0eeb0764726"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/sdk-environment.txt",
+      "sha256": "8a7bbaa39ad1a36324c0a15f08c6e40db82126cdef1e7da998108e3a0ebb278b"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/source-inputs.json",
+      "sha256": "fa31b4e97c4955cce9ac01243e001d52a6b943f000f9c13f23ab2482e02a99c1"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/time-1-merge.json",
+      "sha256": "ec0eb2d84bd027bce89a6d49f9cc61ffaef1db890f8eb8c5436b28ada77dff05"
+    },
+    {
+      "path": "docs/developer/mp-1-evidence/unchanged-source.json",
+      "sha256": "9f9effbe672cc8565b4cecfe3406d291d4c8f3100f8520402e5a8a46779f878f"
+    },
+    {
+      "path": "docs/developer/mp-1-job-accounting.md",
+      "sha256": "1fd7eb2ce8cfdf89bae24b36d56afed3e7897814b361ac791da21a45ea45e75c"
+    },
+    {
+      "path": "docs/developer/project-status.md",
+      "sha256": "efe01733cbf997aede00ba1b9ecd27671d4897f9c4c86664936d483d86408d0f"
+    },
+    {
+      "path": "scripts/support/job-accounting/.gitignore",
+      "sha256": "306fd52e74fca6746e12acc750f232de15e71da917756a1270d74c91f5eb7368"
+    },
+    {
+      "path": "scripts/support/job-accounting/Cargo.lock",
+      "sha256": "4fa2c6ba095f2f68dbe9263b4210cc8d2679d403cfa9b521a16358a64949101d"
+    },
+    {
+      "path": "scripts/support/job-accounting/Cargo.toml",
+      "sha256": "e682fa1da752bf11bdca49e5dd3b297d6f24397a55329e6b4e791fb924f38012"
+    },
+    {
+      "path": "scripts/support/job-accounting/README.md",
+      "sha256": "344ba04b6ffd2132764561d7f8a11ff05ff98f7aa63afdc18cc4a81f805f2997"
+    },
+    {
+      "path": "scripts/support/job-accounting/abi.cpp",
+      "sha256": "e398384d3fb86ae988e60ed67b42531482ae476935c89d6dc4f426a3019e05b9"
+    },
+    {
+      "path": "scripts/support/job-accounting/qualify.ps1",
+      "sha256": "c3b2e3175de99cad5c42550db7ccf48f965d05477d3ae7e2d37a1a3cb1e13d66"
+    },
+    {
+      "path": "scripts/support/job-accounting/src/main.rs",
+      "sha256": "7d09e88e31a212d0893d754f14bef495c61be546286dc7e052ea2b4667e8e55c"
+    },
+    {
+      "path": "scripts/support/job-accounting/verify.py",
+      "sha256": "8c081a2cb217a9a89b1fe956854ec7afe97d1755bc39a81cc16b99fee211fc11"
+    }
+  ]
+}

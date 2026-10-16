@@ -1,0 +1,188 @@
+{
+  "capture_api": "stock eframe Screenshot",
+  "display": {
+    "control_state": {
+      "accepted_observed": true,
+      "can_confirm": false,
+      "detail": "Accepted / in progress; Runtime observation remains authoritative",
+      "enabled": true,
+      "problem": null,
+      "receipt": 2,
+      "result": null,
+      "revision": 4,
+      "stage": "accepted",
+      "summary": "Reference 1; revision 1; Retune Reference target 65, rate 3",
+      "ticket": 1
+    },
+    "controls": [
+      {
+        "id": "retune",
+        "queued_nonce": 2,
+        "rate": "3",
+        "target": "65",
+        "valid": true,
+        "waiting": null
+      }
+    ],
+    "heading": "CONTROL-1 API replacement",
+    "panels": [
+      "Runtime Reference and explicit retune",
+      "Live virtual furnace"
+    ],
+    "plots": [
+      {
+        "freshness": "Fresh",
+        "label": "Temperature",
+        "last": [
+          6.8028507,
+          45.69618724634854
+        ],
+        "points": 62,
+        "time_label": "T+00:00:06",
+        "time_mode": "RuntimeElapsed",
+        "time_note": "Elapsed since Runtime monotonic origin",
+        "time_tooltip": "T+00:00:06 (Runtime monotonic 6.803 s)",
+        "unit": "°C"
+      }
+    ],
+    "pointer": [
+      63.20000076293945,
+      102.4000015258789
+    ],
+    "scalars": [
+      {
+        "freshness": "Fresh",
+        "generation": null,
+        "label": "Observed Runtime Reference",
+        "unit": "°C",
+        "value": "33.638"
+      }
+    ],
+    "views": [
+      {
+        "auto": [
+          true,
+          true
+        ],
+        "bounds": [
+          [
+            0.398703505455751,
+            44.227122095092234
+          ],
+          [
+            7.107810094544249,
+            76.54655498491556
+          ]
+        ],
+        "hidden": 0,
+        "id": "temperature",
+        "occurrence": 15992098051014622319,
+        "rect": [
+          56.640625,
+          552.53125,
+          1085.0,
+          783.53125
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "enabled": false,
+        "label": "Previous window",
+        "rect": [
+          8.0,
+          131.96875,
+          114.28125,
+          149.96875
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Next window",
+        "rect": [
+          403.53125,
+          131.96875,
+          488.125,
+          149.96875
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Previous tab",
+        "rect": [
+          8.0,
+          176.78125,
+          87.71875,
+          194.78125
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "Next tab",
+        "rect": [
+          376.96875,
+          176.78125,
+          435.03125,
+          194.78125
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "Next panel",
+        "rect": [
+          256.0,
+          197.78125,
+          326.84375,
+          215.78125
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "All panels",
+        "rect": [
+          334.84375,
+          197.78125,
+          398.375,
+          215.78125
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "retune: Target",
+        "rect": [
+          67.75,
+          387.78125,
+          227.75,
+          406.96875
+        ]
+      },
+      {
+        "enabled": true,
+        "label": "retune: Rate",
+        "rect": [
+          56.8125,
+          409.96875,
+          216.8125,
+          429.15625
+        ]
+      },
+      {
+        "enabled": false,
+        "label": "retune: Apply retune",
+        "rect": [
+          22.0,
+          432.15625,
+          104.875,
+          450.15625
+        ]
+      }
+    ]
+  },
+  "document_id": "control-1-virtual-furnace",
+  "document_revision": 4,
+  "incarnation": 1,
+  "observation_snapshot": 81,
+  "owner_counter": 330,
+  "runtime_clients": 0,
+  "ui_counter": 330
+}

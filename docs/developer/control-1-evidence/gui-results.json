@@ -1,0 +1,1946 @@
+{
+  "dev-observe-q2": {
+    "passed": true,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "observe",
+    "source": "0d3f3a4e6bb187cb0e9523dd697d7ac0d98fa7cd",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "7b3a1ba3d301cc2fcc1726d47d5c11cf27be8ae88867b4b25f9e611ce7d48aa8",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "a32adc11e91a8c50cedd48817137ed2f18b5004dc6e541005ac3f2b906581dd7"
+    },
+    "activation_qualified": false,
+    "observation_blocked": true,
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "1b139128491f5c1955504cf01b47f205",
+      "scope": "1b139128491f5c1955504cf01b47f205:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "1b139128491f5c1955504cf01b47f205",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 450535424,
+      "peak_process_commit": 443969536,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 2425844,
+      "incarnation": 1,
+      "parent_pid": 3432,
+      "pid": 13240,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000000d6818df00c8cba27255"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-09.json"
+    ],
+    "actions": []
+  },
+  "dev-observe-qualified": {
+    "passed": true,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "observe",
+    "source": "000a6548f6bd88ef72c682347a2643de4383b48c",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "7b3a1ba3d301cc2fcc1726d47d5c11cf27be8ae88867b4b25f9e611ce7d48aa8",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "a32adc11e91a8c50cedd48817137ed2f18b5004dc6e541005ac3f2b906581dd7"
+    },
+    "activation_qualified": false,
+    "observation_blocked": true,
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "24c728a1cdb48890e31572252c1dd9f9",
+      "scope": "24c728a1cdb48890e31572252c1dd9f9:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "24c728a1cdb48890e31572252c1dd9f9",
+            "seq": "20"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 450498560,
+      "peak_process_commit": 443953152,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 25952714,
+      "incarnation": 1,
+      "parent_pid": 14216,
+      "pid": 4064,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000378818df009695786df1"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-10.json"
+    ],
+    "actions": []
+  },
+  "dev-wgpu-attempt-1": {
+    "passed": false,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "a6c91a72dd026abea20cb0b462d3948e8610857c",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "b1e71ffa674f4a457535b667023acdbc04ac186c11fa7c42ffba228a13ac016f"
+    },
+    "activation_qualified": false,
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ],
+    "captures": [],
+    "actions": []
+  },
+  "dev-wgpu-attempt-2": {
+    "passed": false,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "ce7086c7ee9c19376fa185129bad2729a988b6b3",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "b1e71ffa674f4a457535b667023acdbc04ac186c11fa7c42ffba228a13ac016f"
+    },
+    "activation_qualified": false,
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\17068-00000000000042ac18deff654aa35b51-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\17068-00000000000042ac18deff654aa35b51-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\17068-00000000000042ac18deff654aa35b51-1\\frame-08.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\17068-00000000000042ac18deff654aa35b51-1\\frame-12.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      }
+    ]
+  },
+  "dev-wgpu-attempt-3": {
+    "passed": false,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "4fff48dfdf4cf3c23051d3da4ec28df2400b459a",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "5af2e954f087db3857b621f79a400b4b8058d1d475eda08c081e0889a4c0223a"
+    },
+    "activation_qualified": false,
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15304-0000000000003bc818deff99a6ff3db9-1\\frame-00.json"
+    ],
+    "actions": []
+  },
+  "dev-wgpu-attempt-4": {
+    "passed": false,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "dcd704fdbcec1e4fdf85ba3847706375d497e7c6",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "5af2e954f087db3857b621f79a400b4b8058d1d475eda08c081e0889a4c0223a"
+    },
+    "activation_qualified": false,
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 450150400,
+      "peak_process_commit": 443617280,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "original_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 3671020,
+      "incarnation": 1,
+      "parent_pid": 10796,
+      "pid": 13996,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000002a2c18deffae990337b9"
+    },
+    "relay_errors": [
+      "[WinError 10054] \u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0439 \u0445\u043e\u0441\u0442 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0430\u0437\u043e\u0440\u0432\u0430\u043b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435"
+    ],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1\\frame-10.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1\\frame-13.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-1\\frame-17.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\10796-0000000000002a2c18deffae990337b9-2\\frame-00.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      }
+    ]
+  },
+  "dev-wgpu-final": {
+    "passed": false,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "462967e7531ec130d77de2a376e8476585209d06",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "5af2e954f087db3857b621f79a400b4b8058d1d475eda08c081e0889a4c0223a"
+    },
+    "activation_qualified": false,
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\22072-000000000000563818deffc2ec0a75d5-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\22072-000000000000563818deffc2ec0a75d5-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\22072-000000000000563818deffc2ec0a75d5-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\22072-000000000000563818deffc2ec0a75d5-1\\frame-10.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\22072-000000000000563818deffc2ec0a75d5-1\\frame-14.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      }
+    ]
+  },
+  "dev-wgpu-final-2": {
+    "passed": false,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "0267850edefcdb6a5ea186448cfb47252652653f",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "5af2e954f087db3857b621f79a400b4b8058d1d475eda08c081e0889a4c0223a"
+    },
+    "activation_qualified": false,
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23264-0000000000005ae018deffe671257215-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\23264-0000000000005ae018deffe671257215-1\\frame-03.json"
+    ],
+    "actions": []
+  },
+  "dev-wgpu-q2": {
+    "passed": true,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "0d3f3a4e6bb187cb0e9523dd697d7ac0d98fa7cd",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "7b3a1ba3d301cc2fcc1726d47d5c11cf27be8ae88867b4b25f9e611ce7d48aa8",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "a32adc11e91a8c50cedd48817137ed2f18b5004dc6e541005ac3f2b906581dd7"
+    },
+    "activation_qualified": false,
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 449044480,
+      "peak_process_commit": 442478592,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "original_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 7537640,
+      "incarnation": 1,
+      "parent_pid": 19592,
+      "pid": 16520,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000004c8818df00ba88c36cf9"
+    },
+    "operation": {
+      "args": {
+        "expected_revision": "1",
+        "rate": 3.0,
+        "reference": "1",
+        "target": 65.0
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "0703cfd245bb23b3c0f4e3dd23679f3e:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    "operation_result": {
+      "rate": 3.0,
+      "reference": "1",
+      "revision": "2",
+      "target": 65.0,
+      "value": 44.442042000000015
+    },
+    "accepted_observed": true,
+    "observed_before": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "53.389"
+    },
+    "observed_after": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "55.797"
+    },
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "0703cfd245bb23b3c0f4e3dd23679f3e",
+      "scope": "0703cfd245bb23b3c0f4e3dd23679f3e:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "0703cfd245bb23b3c0f4e3dd23679f3e",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 3.0,
+          "reference": "1",
+          "target": 65.0
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "0703cfd245bb23b3c0f4e3dd23679f3e:1",
+          "seq": "1"
+        },
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 448675840,
+      "peak_process_commit": 442138624,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 26083786,
+      "incarnation": 2,
+      "parent_pid": 19592,
+      "pid": 16860,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000004c8818df00ba88c36cf9"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-09.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-12.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-15.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2\\frame-04.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      },
+      {
+        "click": "Acknowledge result",
+        "rect": [
+          15.0,
+          138.375,
+          137.625,
+          156.375
+        ]
+      }
+    ]
+  },
+  "dev-wgpu-qualified": {
+    "passed": true,
+    "profile": "dev",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "aeba4c0ff760fd25de543b4a75c442b2cc28c809",
+    "binaries": {
+      "target\\debug\\lab-runtime.exe": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1",
+      "target\\debug\\lab-workbench.exe": "ca120540bccba6cbd0ab7afb250ffbd6835423f8d7018790df812c69fc6dc5b7",
+      "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe": "5af2e954f087db3857b621f79a400b4b8058d1d475eda08c081e0889a4c0223a"
+    },
+    "activation_qualified": false,
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 450560000,
+      "peak_process_commit": 444002304,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "original_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 7144424,
+      "incarnation": 1,
+      "parent_pid": 15072,
+      "pid": 22144,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000003ae018deffffbd278225"
+    },
+    "operation": {
+      "args": {
+        "expected_revision": "1",
+        "rate": 3.0,
+        "reference": "1",
+        "target": 65.0
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "0da6b8bdbf12aca7393ef95de8194f40:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    "operation_result": {
+      "rate": 3.0,
+      "reference": "1",
+      "revision": "2",
+      "target": 65.0,
+      "value": 46.445317800000005
+    },
+    "accepted_observed": true,
+    "observed_before": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "55.687"
+    },
+    "observed_after": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "57.789"
+    },
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "0da6b8bdbf12aca7393ef95de8194f40",
+      "scope": "0da6b8bdbf12aca7393ef95de8194f40:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "0da6b8bdbf12aca7393ef95de8194f40",
+            "seq": "4"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 3.0,
+          "reference": "1",
+          "target": 65.0
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "0da6b8bdbf12aca7393ef95de8194f40:1",
+          "seq": "1"
+        },
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 447565824,
+      "peak_process_commit": 441032704,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 7209960,
+      "incarnation": 2,
+      "parent_pid": 15072,
+      "pid": 6228,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "0000000000003ae018deffffbd278225"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-09.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-13.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-16.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2\\frame-03.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      },
+      {
+        "click": "Acknowledge result",
+        "rect": [
+          15.0,
+          138.375,
+          137.625,
+          156.375
+        ]
+      }
+    ]
+  },
+  "release-glow-q2": {
+    "passed": true,
+    "profile": "release",
+    "renderer": "glow",
+    "mode": "smoke",
+    "source": "0d3f3a4e6bb187cb0e9523dd697d7ac0d98fa7cd",
+    "binaries": {
+      "target\\release\\lab-runtime.exe": "3839f4400c0b336b79bfa1c9e0b50ac14dcf2767547f8b5a8f177a0f6cfe409b",
+      "target\\release\\lab-workbench.exe": "26a78e03ca01ffa4e0f62978960a634df6a12e1770342990a1d858ad987f5dd4",
+      "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe": "717b3743acd9b070b7abebc919779657c16e8767010772cabf144fc49776bd6f"
+    },
+    "activation_qualified": false,
+    "operation": {
+      "args": {
+        "expected_revision": "1",
+        "rate": 3.0,
+        "reference": "1",
+        "target": 65.0
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "a35b265d0f3e7f08e9646733c0e532d4:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    "operation_result": {
+      "rate": 3.0,
+      "reference": "1",
+      "revision": "2",
+      "target": 65.0,
+      "value": 31.635596599999996
+    },
+    "accepted_observed": true,
+    "observed_before": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "32.787"
+    },
+    "observed_after": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "35.188"
+    },
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "a35b265d0f3e7f08e9646733c0e532d4",
+      "scope": "a35b265d0f3e7f08e9646733c0e532d4:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "a35b265d0f3e7f08e9646733c0e532d4",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 3.0,
+          "reference": "1",
+          "target": 65.0
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "a35b265d0f3e7f08e9646733c0e532d4:1",
+          "seq": "1"
+        },
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 147763200,
+      "peak_process_commit": 141189120,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 26280394,
+      "incarnation": 1,
+      "parent_pid": 22052,
+      "pid": 2040,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000562418df00c5a5bd276d"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-05.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-07.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-08.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-09.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      },
+      {
+        "click": "Acknowledge result",
+        "rect": [
+          15.0,
+          138.375,
+          137.625,
+          156.375
+        ]
+      }
+    ]
+  },
+  "release-glow-qualified": {
+    "passed": true,
+    "profile": "release",
+    "renderer": "glow",
+    "mode": "smoke",
+    "source": "000a6548f6bd88ef72c682347a2643de4383b48c",
+    "binaries": {
+      "target\\release\\lab-runtime.exe": "3839f4400c0b336b79bfa1c9e0b50ac14dcf2767547f8b5a8f177a0f6cfe409b",
+      "target\\release\\lab-workbench.exe": "26a78e03ca01ffa4e0f62978960a634df6a12e1770342990a1d858ad987f5dd4",
+      "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe": "717b3743acd9b070b7abebc919779657c16e8767010772cabf144fc49776bd6f"
+    },
+    "activation_qualified": false,
+    "operation": {
+      "args": {
+        "expected_revision": "1",
+        "rate": 3.0,
+        "reference": "1",
+        "target": 65.0
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "2a12b84688bb57140c79030dfb53e724:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    "operation_result": {
+      "rate": 3.0,
+      "reference": "1",
+      "revision": "2",
+      "target": 65.0,
+      "value": 31.62505480000001
+    },
+    "accepted_observed": true,
+    "observed_before": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "32.798"
+    },
+    "observed_after": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "35.200"
+    },
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "2a12b84688bb57140c79030dfb53e724",
+      "scope": "2a12b84688bb57140c79030dfb53e724:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "2a12b84688bb57140c79030dfb53e724",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 3.0,
+          "reference": "1",
+          "target": 65.0
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "2a12b84688bb57140c79030dfb53e724:1",
+          "seq": "1"
+        },
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "glow",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 146403328,
+      "peak_process_commit": 139829248,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": null,
+      "graphics_owner": "stock eframe",
+      "hwnd": 2687998,
+      "incarnation": 1,
+      "parent_pid": 21416,
+      "pid": 6896,
+      "renderer": "Glow",
+      "runtime_clients": 0,
+      "workbench_id": "00000000000053a818df00930e9f9271"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-05.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-07.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-08.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-09.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      },
+      {
+        "click": "Acknowledge result",
+        "rect": [
+          15.0,
+          138.375,
+          137.625,
+          156.375
+        ]
+      }
+    ]
+  },
+  "release-wgpu-q2": {
+    "passed": true,
+    "profile": "release",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "0d3f3a4e6bb187cb0e9523dd697d7ac0d98fa7cd",
+    "binaries": {
+      "target\\release\\lab-runtime.exe": "3839f4400c0b336b79bfa1c9e0b50ac14dcf2767547f8b5a8f177a0f6cfe409b",
+      "target\\release\\lab-workbench.exe": "26a78e03ca01ffa4e0f62978960a634df6a12e1770342990a1d858ad987f5dd4",
+      "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe": "717b3743acd9b070b7abebc919779657c16e8767010772cabf144fc49776bd6f"
+    },
+    "activation_qualified": false,
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 438919168,
+      "peak_process_commit": 432365568,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "original_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 4785132,
+      "incarnation": 1,
+      "parent_pid": 9628,
+      "pid": 15156,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000259c18df00c0dd624f1d"
+    },
+    "operation": {
+      "args": {
+        "expected_revision": "1",
+        "rate": 3.0,
+        "reference": "1",
+        "target": 65.0
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "28693a112f3f68dbc797100dedbae658:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    "operation_result": {
+      "rate": 3.0,
+      "reference": "1",
+      "revision": "2",
+      "target": 65.0,
+      "value": 31.827850800000004
+    },
+    "accepted_observed": true,
+    "observed_before": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "36.887"
+    },
+    "observed_after": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "39.294"
+    },
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "28693a112f3f68dbc797100dedbae658",
+      "scope": "28693a112f3f68dbc797100dedbae658:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "28693a112f3f68dbc797100dedbae658",
+            "seq": "2"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 3.0,
+          "reference": "1",
+          "target": 65.0
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "28693a112f3f68dbc797100dedbae658:1",
+          "seq": "1"
+        },
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 438554624,
+      "peak_process_commit": 431984640,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 7734248,
+      "incarnation": 2,
+      "parent_pid": 9628,
+      "pid": 4980,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "000000000000259c18df00c0dd624f1d"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-05.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-07.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2\\frame-02.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      },
+      {
+        "click": "Acknowledge result",
+        "rect": [
+          15.0,
+          138.375,
+          137.625,
+          156.375
+        ]
+      }
+    ]
+  },
+  "release-wgpu-qualified": {
+    "passed": true,
+    "profile": "release",
+    "renderer": "wgpu",
+    "mode": "fault",
+    "source": "000a6548f6bd88ef72c682347a2643de4383b48c",
+    "binaries": {
+      "target\\release\\lab-runtime.exe": "3839f4400c0b336b79bfa1c9e0b50ac14dcf2767547f8b5a8f177a0f6cfe409b",
+      "target\\release\\lab-workbench.exe": "26a78e03ca01ffa4e0f62978960a634df6a12e1770342990a1d858ad987f5dd4",
+      "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe": "717b3743acd9b070b7abebc919779657c16e8767010772cabf144fc49776bd6f"
+    },
+    "activation_qualified": false,
+    "crash_retirement": {
+      "activation_qualified": false,
+      "exit_code": 1,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 1,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 440786944,
+      "peak_process_commit": 434216960,
+      "phase": "ExitedContained",
+      "reason": "Some(OsFailure)"
+    },
+    "original_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 25756106,
+      "incarnation": 1,
+      "parent_pid": 21180,
+      "pid": 12444,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "00000000000052bc18df008ddedbec3d"
+    },
+    "operation": {
+      "args": {
+        "expected_revision": "1",
+        "rate": 3.0,
+        "reference": "1",
+        "target": 65.0
+      },
+      "msg_id": "10",
+      "op": "reference_retune",
+      "request_id": {
+        "scope": "fe6e4c8e02516b69cedc8492fd5d316a:1",
+        "seq": "1"
+      },
+      "v": 1
+    },
+    "operation_result": {
+      "rate": 3.0,
+      "reference": "1",
+      "revision": "2",
+      "target": 65.0,
+      "value": 33.63849859999999
+    },
+    "accepted_observed": true,
+    "observed_before": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "38.986"
+    },
+    "observed_after": {
+      "freshness": "Fresh",
+      "generation": null,
+      "label": "Observed Runtime Reference",
+      "unit": "\u00b0C",
+      "value": "41.084"
+    },
+    "runtime_connections": 1,
+    "runtime_attachment": {
+      "boot_id": "fe6e4c8e02516b69cedc8492fd5d316a",
+      "scope": "fe6e4c8e02516b69cedc8492fd5d316a:1",
+      "next_seq": "1"
+    },
+    "requests": [
+      {
+        "args": {
+          "scope": null
+        },
+        "msg_id": "1",
+        "op": "hello",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "2",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "3",
+        "op": "measurements_current",
+        "v": 1
+      },
+      {
+        "args": {
+          "reference": "1"
+        },
+        "msg_id": "4",
+        "op": "reference",
+        "v": 1
+      },
+      {
+        "args": {
+          "controller": "1"
+        },
+        "msg_id": "5",
+        "op": "controller",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "6",
+        "op": "recording_status",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "7",
+        "op": "configuration_properties",
+        "v": 1
+      },
+      {
+        "args": {},
+        "msg_id": "8",
+        "op": "discover",
+        "v": 1
+      },
+      {
+        "args": {
+          "after": {
+            "boot_id": "fe6e4c8e02516b69cedc8492fd5d316a",
+            "seq": "10"
+          },
+          "filter": {
+            "kinds": [
+              "signal",
+              "reference",
+              "controller",
+              "resource",
+              "recorder",
+              "configuration"
+            ],
+            "targets": []
+          }
+        },
+        "msg_id": "9",
+        "op": "subscribe",
+        "v": 1
+      },
+      {
+        "args": {
+          "expected_revision": "1",
+          "rate": 3.0,
+          "reference": "1",
+          "target": 65.0
+        },
+        "msg_id": "10",
+        "op": "reference_retune",
+        "request_id": {
+          "scope": "fe6e4c8e02516b69cedc8492fd5d316a:1",
+          "seq": "1"
+        },
+        "v": 1
+      }
+    ],
+    "normal_retirement": {
+      "activation_qualified": false,
+      "exit_code": 0,
+      "experimental_commit_limit": 1073741824,
+      "experimental_eframe": "wgpu",
+      "incarnation": 2,
+      "ipc_handles": 0,
+      "ipc_pending_io": 0,
+      "ipc_retired": true,
+      "objects": [
+        0,
+        0,
+        0
+      ],
+      "peak_job_commit": 439574528,
+      "peak_process_commit": 433029120,
+      "phase": "ExitedHealthy",
+      "reason": "Some(ExplicitStop)"
+    },
+    "final_window": {
+      "adapter": "AdapterInfo { name: \"AMD Radeon(TM) Graphics\", vendor: 4098, device: 5761, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"AMD proprietary driver\", driver_info: \"25.10.30.02 (AMD proprietary shader compiler)\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 64, transient_saves_memory: Some(false), limit_bucket: None }",
+      "graphics_owner": "stock eframe",
+      "hwnd": 14418372,
+      "incarnation": 2,
+      "parent_pid": 21180,
+      "pid": 9628,
+      "renderer": "Wgpu",
+      "runtime_clients": 0,
+      "workbench_id": "00000000000052bc18df008ddedbec3d"
+    },
+    "child_directories": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2"
+    ],
+    "relay_errors": [],
+    "captures": [
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-02.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-03.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-05.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-06.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-07.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2\\frame-00.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2\\frame-01.json",
+      "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2\\frame-02.json"
+    ],
+    "actions": [
+      {
+        "click": "retune: Apply retune",
+        "rect": [
+          22.0,
+          418.5625,
+          104.875,
+          436.5625
+        ]
+      },
+      {
+        "click": "Confirm retune",
+        "rect": [
+          15.0,
+          93.375,
+          111.84375,
+          111.375
+        ]
+      },
+      {
+        "click": "Acknowledge result",
+        "rect": [
+          15.0,
+          138.375,
+          137.625,
+          156.375
+        ]
+      }
+    ]
+  }
+}

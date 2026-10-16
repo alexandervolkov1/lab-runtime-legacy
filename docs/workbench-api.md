@@ -316,7 +316,14 @@ OperatorWorkflow requires a separate Confirm even when `confirm` is false. Acces
 type, advertised constraints, property revision, readiness and recovery fences
 are rechecked before submission through the existing ClientHandle. Runtime
 mutation-class warnings are preserved; conflicts are never retried automatically.
-Reference Ramp/Retune and remaining declarative kinds remain inactive.
+In ordinary GUI v1, declarative Reference Ramp/Retune and remaining kinds stay inactive.
+The separately opt-in **standard isolated eframe** CONTROL-1 adapter supports
+`set_reference` on a ramp Reference through the existing `reference_retune`
+workflow, with target/rate drafts and mandatory separate confirmation. Its Parent
+checks the current document/incarnation/binding and existing Runtime/recovery
+guards. It adds no public API or document fields; the v1 fixed-value behavior
+above and other stock control kinds are unchanged. See
+[CONTROL-1 launch and contract](developer/control-1-reference-retune.md).
 Reference/property input is bounded local GUI state keyed by Control ID/full target,
 cleared on presentation revision change; it is not part of this document or recovery.
 The existing Runtime revision/freshness/recovery guards apply, and values use the

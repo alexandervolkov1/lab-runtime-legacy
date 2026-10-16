@@ -43,6 +43,7 @@ impl Channels {
         replica: &mut Replica,
         document: &mut UiDocument,
         counter: u64,
+        controls: &mut crate::controls::Controls,
     ) -> Result<()> {
         if self.control.poll_send().map_err(|e| format!("{e:?}"))? && self.closed_sent {
             self.closed_complete = true;
@@ -77,6 +78,7 @@ impl Channels {
                         self.challenge = Some(u64::from_le_bytes(payload.try_into().unwrap()));
                         if header.kind == Kind::Close {
                             self.closing = true;
+                            controls.stop();
                             replica.stop();
                         }
                     }
@@ -87,6 +89,10 @@ impl Channels {
                             now,
                         )
                         .map_err(str::to_owned)?,
+                    Kind::ControlFeedback if self.acknowledged => controls.receive(
+                        crate::private_ipc::controls::Feedback::decode(payload)
+                            .map_err(str::to_owned)?,
+                    ),
                     _ => return Err("stock child control direction/order".into()),
                 }
             }
@@ -127,6 +133,7 @@ impl Channels {
             || self.pending.iter().any(Option::is_some)
             || self.window_close && !self.window_close_sent && self.acknowledged
             || self.challenge.is_some() && !self.closed_sent)
+            && !controls.has_request()
         {
             return Ok(());
         }
@@ -166,6 +173,17 @@ impl Channels {
             header.source = decision.source;
             self.control
                 .send(header, &[index as u8])
+                .map_err(|e| format!("{e:?}"))?;
+        } else if !self.closing
+            && !self.window_close
+            && self.acknowledged
+            && let Some(request) = controls.take_request()
+        {
+            let payload = request.encode().map_err(str::to_owned)?;
+            header.kind = Kind::ControlIntent;
+            header.bytes += payload.len();
+            self.control
+                .send(header, &payload)
                 .map_err(|e| format!("{e:?}"))?;
         }
         Ok(())
@@ -219,6 +237,7 @@ fn capture_worker(directory: PathBuf) -> Result<SyncSender<Capture>> {
     Ok(sender)
 }
 struct Host {
+    controls: crate::controls::Controls,
     capture_sender: SyncSender<Capture>,
     io: Rc<RefCell<Channels>>,
     replica: Replica,
@@ -242,11 +261,12 @@ impl eframe::App for Host {
             self.io.borrow_mut().window_close = true;
             self.closing_since.get_or_insert_with(Instant::now);
         }
-        if let Err(error) =
-            self.io
-                .borrow_mut()
-                .service(&mut self.replica, &mut self.document, self.counter)
-        {
+        if let Err(error) = self.io.borrow_mut().service(
+            &mut self.replica,
+            &mut self.document,
+            self.counter,
+            &mut self.controls,
+        ) {
             write(
                 &self.directory.join("failure.json"),
                 &json!({"error":error}),
@@ -318,8 +338,14 @@ impl eframe::App for Host {
                 let header = self.document.identity().unwrap();
                 match self.replica.selected_provider(Instant::now()) {
                     Ok(reads) => {
-                        report =
-                            ui::paint(ui, document, header, reads.as_ref(), &mut self.navigation)
+                        report = ui::paint(
+                            ui,
+                            document,
+                            header,
+                            reads.as_ref(),
+                            &mut self.navigation,
+                            &mut self.controls,
+                        )
                     }
                     Err(error) => {
                         ui.label(format!("Unavailable: {error}"));
@@ -459,6 +485,7 @@ pub(super) fn run(
             cc.egui_ctx.set_visuals(egui::Visuals::dark());
             let (replica, document) = Replica::stock_ui();
             Ok(Box::new(Host {
+                controls: Default::default(),
                 capture_sender,
                 io: channels,
                 replica,

@@ -54,6 +54,8 @@ pub(crate) struct ParentOwner<C: ParentClient> {
     stopped: bool,
     #[cfg(windows)]
     pub(crate) private_bridge: Option<crate::private_ipc::parent_bridge::ParentBridge>,
+    #[cfg(windows)]
+    pub(crate) stock_control: controls::StockControl,
     shutdown_error: Option<&'static str>,
 }
 
@@ -80,6 +82,8 @@ impl<C: ParentClient> ParentOwner<C> {
             stopped: false,
             #[cfg(windows)]
             private_bridge: None,
+            #[cfg(windows)]
+            stock_control: Default::default(),
             shutdown_error: None,
         }
     }
@@ -130,6 +134,10 @@ impl<C: ParentClient> ParentOwner<C> {
         }
         #[cfg(windows)]
         if let Some(bridge) = &mut self.private_bridge {
+            if bridge.is_stock() {
+                self.stock_control
+                    .turn(&bridge.bridge, &mut self.dispatcher, &mut self.operator);
+            }
             bridge.turn(&self.dispatcher);
         }
         report
@@ -177,6 +185,13 @@ impl<C: ParentClient> ParentOwner<C> {
         self.shutdown_error.map_or(Ok(()), Err)
     }
 }
+
+#[cfg(all(test, windows))]
+#[path = "parent/control_tests.rs"]
+mod control_tests;
+#[cfg(windows)]
+#[path = "parent/controls.rs"]
+mod controls;
 impl<C: ParentClient> Drop for ParentOwner<C> {
     fn drop(&mut self) {
         let _ = self.shutdown();

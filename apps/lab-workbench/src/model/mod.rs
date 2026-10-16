@@ -19,7 +19,6 @@ pub(crate) use exact_retry::{
     EXACT_RETRY_WARNING, ExactRetryError, ExactRetryState, ExactRetrySubmitter, ExactRetryWorkflow,
     PreparedExactRetry,
 };
-#[cfg(test)]
 pub(crate) use operator::MutationSubmitter;
 pub(crate) use operator::{
     ControllerLifecycleIntent, OperatorIntent, OperatorIntentError, OperatorWarning,

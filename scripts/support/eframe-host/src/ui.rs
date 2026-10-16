@@ -20,6 +20,9 @@ pub(super) struct Navigation {
 }
 #[derive(Default, Serialize)]
 pub(super) struct Report {
+    pointer: Option<[f32; 2]>,
+    pub(super) controls: Vec<crate::controls::Report>,
+    pub(super) control_state: Option<crate::private_ipc::controls::Feedback>,
     heading: String,
     panels: Vec<String>,
     scalars: Vec<ScalarReport>,
@@ -65,7 +68,7 @@ struct PlotReport {
 fn rect(rect: egui::Rect) -> [f32; 4] {
     [rect.min.x, rect.min.y, rect.max.x, rect.max.y]
 }
-fn widget(report: &mut Report, label: &str, response: &egui::Response) {
+pub(super) fn widget(report: &mut Report, label: &str, response: &egui::Response) {
     report.widgets.push(WidgetReport {
         label: label.into(),
         enabled: response.enabled(),
@@ -118,7 +121,9 @@ pub(super) fn paint(
     header: Header,
     reads: Option<&SelectedSnapshot<'_>>,
     state: &mut Navigation,
+    controls: &mut crate::controls::Controls,
 ) -> Report {
+    controls.begin_frame(header);
     let epoch = (header.identity.incarnation, header.epoch.revision);
     if state.epoch != Some(epoch) {
         *state = Navigation {
@@ -133,9 +138,15 @@ pub(super) fn paint(
         reads.epoch() == Some(header.epoch)
             && reads.incarnation() == Some(header.identity.incarnation)
     });
-    let mut report = Report::default();
+    let mut report = Report {
+        pointer: ui
+            .ctx()
+            .input(|i| i.pointer.latest_pos().map(|p| [p.x, p.y])),
+        ..Default::default()
+    };
+    controls.status(ui, &mut report);
     ui.label(format!(
-        "Parent-approved revision {} · read-only · {:?}",
+        "Parent-approved revision {} · {:?}",
         header.epoch.revision,
         reads
             .map(ReadOnlyProvider::display_freshness)
@@ -208,7 +219,14 @@ pub(super) fn paint(
                         ui.group(|ui| {
                             ui.set_min_width(ui.available_width());
                             ui.heading(panel.title.as_str());
-                            components(ui, &panel.components.0, document, reads, &mut report);
+                            components(
+                                ui,
+                                &panel.components.0,
+                                document,
+                                reads,
+                                &mut report,
+                                controls,
+                            );
                         });
                     });
                 }
@@ -224,6 +242,7 @@ fn components(
     document: &v2::AdmittedV2Document,
     reads: Option<&SelectedSnapshot<'_>>,
     report: &mut Report,
+    controls: &mut crate::controls::Controls,
 ) {
     for (index, id) in ids.iter().enumerate() {
         let component = document
@@ -240,19 +259,44 @@ fn components(
                     help,
                     layout,
                     children,
+                    v1_control,
                     ..
                 } => {
                     ui.group(|ui| {
                         ui.label(label.as_str())
                             .on_hover_text(help.as_ref().map_or("", |h| h.as_str()));
+                        if let Some(origin) = v1_control
+                            && origin.kind == v2::V1ControlKind::SetReference
+                            && let v2::RuntimeRef::Reference { reference } = &origin.target
+                        {
+                            let target = RuntimeRef::Reference {
+                                reference: reference.as_str().into(),
+                            };
+                            scalar(
+                                ui,
+                                "Observed Runtime Reference",
+                                &target,
+                                None,
+                                None,
+                                reads,
+                                report,
+                            );
+                            let fresh = reads.is_some_and(|r| {
+                                r.display_freshness() == Freshness::Fresh
+                                    && r.selected(&target)
+                                        .is_some_and(|r| r.display_freshness() == Freshness::Fresh)
+                            });
+                            controls.show(ui, id.as_str(), reference.as_str(), fresh, report);
+                            return;
+                        }
                         match layout {
                             v2::Layout::Row => {
                                 ui.horizontal_wrapped(|ui| {
-                                    components(ui, &children.0, document, reads, report)
+                                    components(ui, &children.0, document, reads, report, controls)
                                 });
                             }
                             v2::Layout::Column => {
-                                components(ui, &children.0, document, reads, report)
+                                components(ui, &children.0, document, reads, report, controls)
                             }
                         }
                     });

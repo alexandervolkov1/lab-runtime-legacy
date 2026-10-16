@@ -41,8 +41,16 @@ fn draw(
             ..Default::default()
         },
         |ctx| {
-            egui::CentralPanel::default()
-                .show(ctx, |ui| report = paint(ui, document, h, None, state));
+            egui::CentralPanel::default().show(ctx, |ui| {
+                report = paint(
+                    ui,
+                    document,
+                    h,
+                    None,
+                    state,
+                    &mut crate::controls::Controls::default(),
+                )
+            });
         },
     );
     // CPU-only traversal does not upload font images. Explicitly discard the

@@ -1,0 +1,168 @@
+[
+  {
+    "run": "dev-wgpu-q2",
+    "plot_first": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        1.1019122,
+        72.39433630600787
+      ],
+      "points": 8,
+      "time_label": "T+00:00:01",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:01 (Runtime monotonic 1.102 s)",
+      "unit": "\u00b0C"
+    },
+    "plot_last": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        18.2005402,
+        26.18093775174038
+      ],
+      "points": 179,
+      "time_label": "T+00:00:18",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:18 (Runtime monotonic 18.201 s)",
+      "unit": "\u00b0C"
+    },
+    "retirement_before_restart": true,
+    "stages": [
+      "idle",
+      "idle",
+      "idle",
+      "idle",
+      "confirmation",
+      "accepted",
+      "completed",
+      "completed",
+      "idle"
+    ]
+  },
+  {
+    "run": "release-wgpu-q2",
+    "plot_first": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        1.0041657,
+        73.01354846091941
+      ],
+      "points": 8,
+      "time_label": "T+00:00:01",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:01 (Runtime monotonic 1.004 s)",
+      "unit": "\u00b0C"
+    },
+    "plot_last": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        9.1032931,
+        39.262430396543394
+      ],
+      "points": 89,
+      "time_label": "T+00:00:09",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:09 (Runtime monotonic 9.103 s)",
+      "unit": "\u00b0C"
+    },
+    "retirement_before_restart": true,
+    "stages": [
+      "idle",
+      "idle",
+      "idle",
+      "idle",
+      "confirmation",
+      "accepted",
+      "completed",
+      "completed",
+      "idle"
+    ]
+  },
+  {
+    "run": "release-glow-q2",
+    "plot_first": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        1.0049815,
+        73.0133536364868
+      ],
+      "points": 7,
+      "time_label": "T+00:00:01",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:01 (Runtime monotonic 1.005 s)",
+      "unit": "\u00b0C"
+    },
+    "plot_last": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        7.7047654,
+        42.94433005880941
+      ],
+      "points": 74,
+      "time_label": "T+00:00:07",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:07 (Runtime monotonic 7.705 s)",
+      "unit": "\u00b0C"
+    },
+    "retirement_before_restart": null,
+    "stages": [
+      "idle",
+      "idle",
+      "idle",
+      "idle",
+      "confirmation",
+      "completed",
+      "completed",
+      "idle"
+    ]
+  },
+  {
+    "run": "dev-observe-q2",
+    "plot_first": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        1.1032076,
+        72.3790721301743
+      ],
+      "points": 8,
+      "time_label": "T+00:00:01",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:01 (Runtime monotonic 1.103 s)",
+      "unit": "\u00b0C"
+    },
+    "plot_last": {
+      "freshness": "Fresh",
+      "label": "Temperature",
+      "last": [
+        8.0006708,
+        42.11650637918276
+      ],
+      "points": 77,
+      "time_label": "T+00:00:08",
+      "time_mode": "RuntimeElapsed",
+      "time_note": "Elapsed since Runtime monotonic origin",
+      "time_tooltip": "T+00:00:08 (Runtime monotonic 8.001 s)",
+      "unit": "\u00b0C"
+    },
+    "retirement_before_restart": null,
+    "stages": [
+      "idle",
+      "idle",
+      "idle",
+      "idle"
+    ]
+  }
+]

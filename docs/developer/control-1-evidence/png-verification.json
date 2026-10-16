@@ -1,0 +1,542 @@
+[
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2231,
+    "bright_pixels": 1215612,
+    "sha256": "c381865fb2721331870d594ba1c7c95bbaa6e73d6692724b60d7ca9d942906bb",
+    "run": "dev-observe-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3042,
+    "bright_pixels": 1213928,
+    "sha256": "f250e3265a7b1edcea19d435a45229823832658f6614641f88ab51833e2cd872",
+    "run": "dev-observe-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1976,
+    "bright_pixels": 1213893,
+    "sha256": "5a7357ebfbf5165f3f14f4e88c54f11df008087a6ca8579e26c0711e89642575",
+    "run": "dev-observe-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\3432-0000000000000d6818df00c8cba27255-1\\frame-09.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3126,
+    "bright_pixels": 1215066,
+    "sha256": "09799e2ae173f0a04b113da900a41e622bcc0c12c211148b0ef3d1ed5de1844d",
+    "run": "dev-observe-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2183,
+    "bright_pixels": 1213611,
+    "sha256": "b5447b59bd6c68b8a1ad58db5d2197105f040fb16557eabeba7eab9e35db796f",
+    "run": "dev-observe-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3005,
+    "bright_pixels": 1213809,
+    "sha256": "98eae0f3ece08f496ea6aca08cfd6949d385e31d5536756f53517f976d391b24",
+    "run": "dev-observe-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1941,
+    "bright_pixels": 1212272,
+    "sha256": "1b82e57512e2b02919e485e8c61109d72615d24ca22332837ef1f54e49ccbace",
+    "run": "dev-observe-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\14216-000000000000378818df009695786df1-1\\frame-10.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2991,
+    "bright_pixels": 1214637,
+    "sha256": "3a79fc37eda8d5a26ddcebce36ff4d6f9b1f4a330e655e912d54e504451a0b5b",
+    "run": "dev-observe-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2551,
+    "bright_pixels": 1215417,
+    "sha256": "f8a36283f8d9346dfc505bbaa69a1e0c4c98fd4b45329f3f4b361670bb618c6b",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3376,
+    "bright_pixels": 1214881,
+    "sha256": "75715363487e87c97dde186125e199811cac36106837f0cf720e9a555875aa90",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2314,
+    "bright_pixels": 1214568,
+    "sha256": "a6b9f2d43a44b1d7d1334c194e7d57052527c6f9869e3c4e5a3340c1ad4cc386",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-09.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3504,
+    "bright_pixels": 1215550,
+    "sha256": "fa72a3882d4caa097f1dc1bbaa43d749fa8882d00adb8359e6aa7fcb58151ee9",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-12.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1639,
+    "bright_pixels": 1215288,
+    "sha256": "895a129db3b4df73c232be127aa3864252fa65437a35346941d2b37858bbf279",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-1\\frame-15.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2063,
+    "bright_pixels": 1214976,
+    "sha256": "5c9a0c5c9bcf4e861fcb156485bfb02714617d24da3439343770847fbef5c641",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 854,
+    "bright_pixels": 1212905,
+    "sha256": "e6e786ced49dc6c39333c10d73f2e42ef97f1876cef642f9a1fa94becceff52d",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2\\frame-01.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 828,
+    "bright_pixels": 1214098,
+    "sha256": "ad9206e7f550d6bead41f86872466925e7f64db7b6db07d36b65820f9cbb833f",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\19592-0000000000004c8818df00ba88c36cf9-2\\frame-04.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1688,
+    "bright_pixels": 1218302,
+    "sha256": "e4948842ba7d493f000fd16b5389abd9ba4ad1898d61d21d5bcb61e813473a95",
+    "run": "dev-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2547,
+    "bright_pixels": 1216402,
+    "sha256": "c6e1ac5a6d445e00a9303843cadd6ca90b2fb0427fc850c8ff1ff2861d7b222d",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3384,
+    "bright_pixels": 1214848,
+    "sha256": "4d211b3b152e5492a41617e02c2da8dda03eca1fd7141d88d5360d63d8ac9d98",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2312,
+    "bright_pixels": 1214622,
+    "sha256": "83eb8867f18c95f2706e501119e6cd800494a4249b79eb4a618d91e1ce39ed69",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-09.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3502,
+    "bright_pixels": 1215708,
+    "sha256": "f4a4e5814cf4e2db04a35a483d5aa0103d757af62417487d6d99f21e84874773",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-13.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1602,
+    "bright_pixels": 1215385,
+    "sha256": "3662a7f66d8619aa6c055711e0145064993bbf01d9e357511fe72449a0cf5f85",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-1\\frame-16.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2013,
+    "bright_pixels": 1214849,
+    "sha256": "b4c939f7f5be8d80dc2135b6b6c24223f203023f93629d278b4c0fe27e6ed6c7",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 827,
+    "bright_pixels": 1214048,
+    "sha256": "ec8659417501b22fcb0d815243eebe2e5e176ddfb466042e7b2136ee0d8fd4bb",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2\\frame-01.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 806,
+    "bright_pixels": 1214006,
+    "sha256": "69eecf26dba3d9a8f96a274f0563181674eb9bf360f17e6061fe57ee0fc61144",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\debug\\target\\eframe-2-parent\\15072-0000000000003ae018deffffbd278225-2\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1677,
+    "bright_pixels": 1218340,
+    "sha256": "9b95f4679e1ba0c654fdd833c5a88139388d006316e65bb259d709fcc5780c5b",
+    "run": "dev-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2557,
+    "bright_pixels": 1216576,
+    "sha256": "8ffe3ce89471e3383785808d332d79f1148fc11e917f5da0a14354e19fe846af",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-02.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3361,
+    "bright_pixels": 1214897,
+    "sha256": "5872ab0368499c8a9a44933ee4a0be42bf2f8242f1780ca78e1369c6d5a284a3",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2452,
+    "bright_pixels": 1213744,
+    "sha256": "499ea543960317ed96cc9b1f5d35eb402c17fa0724bb5b6700e42e186da9320e",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-05.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3598,
+    "bright_pixels": 1215443,
+    "sha256": "e314afb367679de8426a25b4aeb7889d7783269c9a4408067c6212418a63c8bc",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1878,
+    "bright_pixels": 1214965,
+    "sha256": "5c821d31d685fc1282596b303523349ad0ac83b083192b300624c8234d9e4314",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-07.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1439,
+    "bright_pixels": 1213079,
+    "sha256": "852e39b636cf4b857c0092bffc0c64cd04abe34d4bf761a3036c9430f91273b7",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-08.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1401,
+    "bright_pixels": 1212942,
+    "sha256": "1405c70aab119ae0cb736500025ad518b3e0069a7a931a6ed3e8762aca51a998",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\22052-000000000000562418df00c5a5bd276d-1\\frame-09.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2583,
+    "bright_pixels": 1215146,
+    "sha256": "2fa5f672dc8d3d28ae4b8485ff1ce37d43723f4ba468d8bda45d4f7b2ce1580c",
+    "run": "release-glow-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2558,
+    "bright_pixels": 1216588,
+    "sha256": "bbd7774a295c1d0191f5f1105e511036357bb053706809a30fee474479881af6",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-02.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3355,
+    "bright_pixels": 1214903,
+    "sha256": "aea2636fa578621e7cd71c5faafdba5839e649d83058536b1af89b224f05aa6f",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2450,
+    "bright_pixels": 1213745,
+    "sha256": "7551401566a602cbc8f3db53b4686f73c5a0c79287671a2efe53df175d50ccc4",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-05.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3596,
+    "bright_pixels": 1215418,
+    "sha256": "4e97ee4c9d977e32bb5fefa97a201eaa23483601c8fa5be75d297ef285c7c981",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1873,
+    "bright_pixels": 1214944,
+    "sha256": "6e0965a9024dbc8d713b32d28b898b6144b32c1a7cdb0c77815c9b0589baa9b7",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-07.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1438,
+    "bright_pixels": 1213064,
+    "sha256": "28150116a329d7bcc29783407f58c14a5b0ef53b9a24e4b9b418e7772491743b",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-08.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1402,
+    "bright_pixels": 1212970,
+    "sha256": "0df05ff9ae2bf939e7dcbd0e1e4d21ad7385e9bc6bf9962e173f57b5b5b14eac",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21416-00000000000053a818df00930e9f9271-1\\frame-09.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2580,
+    "bright_pixels": 1215110,
+    "sha256": "dab8a04277b33b4ed2dfd1a42ee36a0bbd267fa05334341538f24de8317e2b8c",
+    "run": "release-glow-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2544,
+    "bright_pixels": 1216396,
+    "sha256": "4296eba07f6d455a70e9fe3971681339c4a097fbfd73d3409c436b75170e091c",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-02.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3334,
+    "bright_pixels": 1214889,
+    "sha256": "7c13f724f6336dae121d47d5dca38e47595def843f6af79f69caf5d7e169a27c",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2441,
+    "bright_pixels": 1214965,
+    "sha256": "106f3b219ca4d6565617db4091a490c58e9ca7af98a6ca663a290f005730ceca",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-05.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3590,
+    "bright_pixels": 1215247,
+    "sha256": "8c6344d4a11804f80979e3fda653e6425d0cf2e307bd9a19fd9585f384848cca",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1872,
+    "bright_pixels": 1214992,
+    "sha256": "88ebacbda045478fbd5dbb452ceee566edf0f26de49950a7540ee656cae17ac2",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-1\\frame-07.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2390,
+    "bright_pixels": 1213354,
+    "sha256": "b20f49f0ee95531a7e854010421fb2ad4d45ea39d1e3aa9a0935856e87864372",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1097,
+    "bright_pixels": 1212989,
+    "sha256": "5adf5567b01d41ed69817a48e19a57024f8a6bc224eb8a863276100a6df39994",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2\\frame-01.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1060,
+    "bright_pixels": 1212932,
+    "sha256": "a94938be23ea27b9c279b89e2ea6389ea9920749e92e469c698ff029332a42cb",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\9628-000000000000259c18df00c0dd624f1d-2\\frame-02.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2128,
+    "bright_pixels": 1216479,
+    "sha256": "11bad456195889c5edc89bfe698495221309571c5d5d59456decd6525838fdc8",
+    "run": "release-wgpu-q2"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2507,
+    "bright_pixels": 1212085,
+    "sha256": "c721db0593c121bad81a5dcc251f018e29a99b22a69f1b47d5fd0aebf62852bc",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-02.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3335,
+    "bright_pixels": 1214827,
+    "sha256": "329018f0871835563b2216cda35f37fba511f4f8d044a752a48875613c128171",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-03.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2418,
+    "bright_pixels": 1214810,
+    "sha256": "3181368664e1dbf0a02e9b837915dec8e4169eeeb56dad22bc85e8e6f21f78dd",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-05.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 3567,
+    "bright_pixels": 1214125,
+    "sha256": "ff6fae90412d149d545dcb41cc51e3b478b64bd0f1e5dc8a1a7c0e8c8fc2d178",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-06.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1839,
+    "bright_pixels": 1214756,
+    "sha256": "09cefb25f6667a9eb830c42565a18c1c608beb3b32c19c30b9d7f7ac12cf21cd",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-1\\frame-07.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2355,
+    "bright_pixels": 1212992,
+    "sha256": "87bc50789ee59d5005b7b6bf3fa176e340f4d73c4b93ab07d823229edb4b841a",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2\\frame-00.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1075,
+    "bright_pixels": 1212963,
+    "sha256": "860a71cb60e64c35ca574e700e1af4be94a7e730e055a1d95e68ff6e73c3b8e9",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2\\frame-01.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 1050,
+    "bright_pixels": 1213129,
+    "sha256": "d6db117d206d6a98747ec72706d1edefaa16ec09321306809135773cadfd3304",
+    "run": "release-wgpu-qualified"
+  },
+  {
+    "path": "D:\\rust_projects\\lab-runtime\\scripts\\support\\eframe-host\\target\\release\\target\\eframe-2-parent\\21180-00000000000052bc18df008ddedbec3d-2\\frame-02.png",
+    "width": 1375,
+    "height": 900,
+    "blue_plot_pixels": 2096,
+    "bright_pixels": 1216388,
+    "sha256": "a0243f92800779e307214cbab8f997fcddc116a69193c4560270c1593ecd22c8",
+    "run": "release-wgpu-qualified"
+  }
+]

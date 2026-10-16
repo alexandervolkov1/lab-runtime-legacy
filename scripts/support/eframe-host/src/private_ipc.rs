@@ -1,5 +1,7 @@
 //! Original bounded private protocol and admission, without Custom Glow pairing.
 #![allow(dead_code, reason = "shared bounded protocol surface")]
+#[path = "../../../../apps/lab-workbench/src/private_ipc/controls.rs"]
+pub(crate) mod controls;
 #[path = "../../../../apps/lab-workbench/src/private_ipc/protocol.rs"]
 pub(crate) mod protocol;
 #[path = "../../../../apps/lab-workbench/src/private_ipc/read_decode.rs"]

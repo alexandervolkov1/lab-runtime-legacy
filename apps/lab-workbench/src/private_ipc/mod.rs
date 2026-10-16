@@ -5,6 +5,7 @@
 )]
 
 mod backend;
+pub(crate) mod controls;
 mod document_owner;
 pub(crate) mod fixture;
 pub(crate) mod parent_bridge;
@@ -17,9 +18,11 @@ mod replica;
 mod selected_provider;
 mod transport;
 mod ui_document;
+pub(crate) use backend::Bridge;
 #[cfg(test)]
 pub(crate) use backend::{Bridge as TestBridge, Status as TestStatus};
 pub(crate) use document_owner::DocumentOwner;
+pub(crate) use protocol::Identity;
 pub(crate) use replica::Replica;
 
 #[cfg(test)]

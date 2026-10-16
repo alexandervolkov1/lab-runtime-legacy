@@ -1,0 +1,32 @@
+[
+  {
+    "path": "target\\debug\\lab-runtime.exe",
+    "bytes": 16024576,
+    "sha256": "e6c6a6441fb64682de5d357041aa0a88dcab91ffbcc0b78004efa12c11e7fcc1"
+  },
+  {
+    "path": "target\\debug\\lab-workbench.exe",
+    "bytes": 46487552,
+    "sha256": "7b3a1ba3d301cc2fcc1726d47d5c11cf27be8ae88867b4b25f9e611ce7d48aa8"
+  },
+  {
+    "path": "target\\release\\lab-runtime.exe",
+    "bytes": 7703552,
+    "sha256": "3839f4400c0b336b79bfa1c9e0b50ac14dcf2767547f8b5a8f177a0f6cfe409b"
+  },
+  {
+    "path": "target\\release\\lab-workbench.exe",
+    "bytes": 13667328,
+    "sha256": "26a78e03ca01ffa4e0f62978960a634df6a12e1770342990a1d858ad987f5dd4"
+  },
+  {
+    "path": "scripts\\support\\eframe-host\\target\\debug\\lab-eframe-host.exe",
+    "bytes": 51649024,
+    "sha256": "a32adc11e91a8c50cedd48817137ed2f18b5004dc6e541005ac3f2b906581dd7"
+  },
+  {
+    "path": "scripts\\support\\eframe-host\\target\\release\\lab-eframe-host.exe",
+    "bytes": 16052736,
+    "sha256": "717b3743acd9b070b7abebc919779657c16e8767010772cabf144fc49776bd6f"
+  }
+]

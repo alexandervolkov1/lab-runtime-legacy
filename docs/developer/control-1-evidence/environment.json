@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-16T11:58:35.7497269Z",
+  "source": "000a6548f6bd88ef72c682347a2643de4383b48c",
+  "windows": {
+    "product": "Windows 10 Pro",
+    "build": "19045",
+    "ubr": 6691,
+    "version": "22H2"
+  },
+  "architecture": "X64",
+  "rustc": [
+    "rustc 1.95.0 (59807616e 2026-04-14)",
+    "binary: rustc",
+    "commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860",
+    "commit-date: 2026-04-14",
+    "host: x86_64-pc-windows-msvc",
+    "release: 1.95.0",
+    "LLVM version: 22.1.2"
+  ],
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "babashka": "babashka v1.13.220",
+  "python": "Python 3.14.6",
+  "timezone": "Russian Standard Time",
+  "activation_qualified": false
+}

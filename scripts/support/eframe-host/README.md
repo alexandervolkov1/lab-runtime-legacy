@@ -1,11 +1,20 @@
 # EFRAME-1 test-only standard host
 
+Current opt-in [CONTROL-1 workflow and launch](../../../docs/developer/control-1-reference-retune.md)
+adds only explicit ramp Reference retune through Parent. Matching private protocol
+version 2 binaries are required. The EFRAME-1/2/3 sections retain their stage scope.
+
 This independent Windows/MSVC test workspace selects stock
 `eframe::Renderer::Wgpu` or `eframe::Renderer::Glow` explicitly. One `eframe::App`
 paints the same deterministic read-only fixtures. eframe owns native graphics,
 tessellation, submission and screenshot readback. The shared `gui/plot_ui.rs`
 function also paints the existing Workbench v1 plots with `egui_plot`; it owns
 neither a document nor a client. Custom Glow and its Preview remain separate.
+
+Current desktop acceptance follows the [scoped memory requirements](../../../docs/developer/project-status.md#current-desktop-memory-requirements).
+Our structure/queue/history budgets do not bound all eframe resources or the whole
+GUI process. MP-1 remains deferred research and does not alone block user preview;
+the historical tests and fixture caps below remain evidence, not universal bounds.
 
 ```
 python scripts/support/eframe-host/audit.py
